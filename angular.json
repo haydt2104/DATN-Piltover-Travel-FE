@@ -18,6 +18,11 @@
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
             "outputPath": "dist/datn-piltover-travel-fe",
+            "allowedCommonJsDependencies": [
+              "ng-apexcharts",
+              "apexcharts"
+            ],
+            "outputPath": "dist/DATN-Piltover-Travel-FE",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": [
@@ -30,6 +35,7 @@
               "src/assets"
             ],
             "styles": [
+              "src/assets/scss/style.scss",
               "src/styles.scss"
             ],
             "scripts": []

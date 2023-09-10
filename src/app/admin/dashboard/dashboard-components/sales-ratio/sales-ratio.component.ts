@@ -41,13 +41,17 @@ export class SalesRatioComponent implements OnInit {
     this.salesChartOptions = {
       series: [
         {
-          name: "Iphone 13",
-          data: [0, 31, 40, 28, 51, 42, 109, 100],
+          name: "Tour",
+          data: [0, 31, 40, 28, 51, 42, 109, 100, 105, 111, 150, 300],
         },
         {
-          name: "Oneplue 9",
-          data: [0, 11, 32, 45, 32, 34, 52, 41],
-        },
+          name: "Khách Sạn",
+          data: [0, 11, 32, 45, 32, 34, 52, 41, 55, 81, 100, 150],
+        }, 
+        {
+          name: "Máy Bay",
+          data: [0, 71, 75, 94, 102, 134, 152, 141, 125, 181, 220, 140],
+        }
       ],
       chart: {
         fontFamily: 'Rubik,sans-serif',
@@ -60,7 +64,7 @@ export class SalesRatioComponent implements OnInit {
       dataLabels: {
         enabled: false
       },
-      colors: ["#0d6efd", "#009efb", "#6771dc"],
+      colors: ["red", "yellow", "blue"],
       stroke: {
         curve: "smooth",
         width: 1,
@@ -81,6 +85,10 @@ export class SalesRatioComponent implements OnInit {
           "June",
           "July",
           "Aug",
+          "Sep",
+          "Oct",
+          "Nov",
+          "Dec"
         ],
       },
       tooltip: {

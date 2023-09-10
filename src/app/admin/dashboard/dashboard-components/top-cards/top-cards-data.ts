@@ -11,25 +11,25 @@ export const topcards: topcard[] = [
         bgcolor: 'success',
         icon: 'bi bi-wallet',
         title: '$21k',
-        subtitle: 'Yearly Earning'
+        subtitle: 'Doanh Thu Tổng'
     },
     {
         bgcolor: 'danger',
         icon: 'bi bi-coin',
         title: '$1k',
-        subtitle: 'Refund given'
+        subtitle: 'Doanh Thu Tour'
     },
     {
         bgcolor: 'warning',
         icon: 'bi bi-basket3',
         title: '456',
-        subtitle: 'Yearly Project'
+        subtitle: 'Doanh Thu Khách Sạn'
     },
     {
         bgcolor: 'info',
         icon: 'bi bi-bag',
         title: '210',
-        subtitle: 'Weekly Sales'
+        subtitle: 'Doanh Thu Máy Bay'
     },
 
 ] 
