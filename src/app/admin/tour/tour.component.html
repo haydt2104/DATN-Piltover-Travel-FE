@@ -1,0 +1,47 @@
+<div class="row">
+  <div class="col-12">
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title">Danh sách Tour</h4>
+        <h5 class="card-subtitle text-muted">Overview of the projects</h5>
+        <div class="table-responsive">
+          <table class="table align-middle text-nowrap">
+            <thead>
+              <tr>
+                <th class="text-dark font-medium fs-4">Tên Tour</th>
+                <th class="text-dark font-medium fs-4">Điểm đến</th>
+                <th class="text-dark font-medium fs-4">Trạng thái</th>
+                <th class="text-dark font-medium fs-4">Số lượng</th>
+                <th class="text-dark font-medium fs-4"></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor='let tour of tourList'>
+                <td>
+                  <div class="d-flex align-items-center">
+                    <div class="ms-3">
+                      <h5 class="mb-0 font-medium">{{tour.tourName}}</h5>
+                    </div>
+                  </div>
+                </td>
+                <td class="fs-4">{{tour.destination}}</td>
+                <td>
+                  <h5 class="mb-0 fw-normal">{{tour.status}}</h5>
+                </td>
+                <td>
+                  <h5 class="mb-0 fw-normal">{{tour.availability}}</h5>
+                </td>
+                <td>
+                  <button [routerLink]="['/admin/tour/details/'+tour.tourID]" routerLinkActive="router-link-active"
+                    class="btn btn-primary">Chi tiết</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<ngb-pagination class="d-flex justify-content-center" [collectionSize]="120" [(page)]="currentPage" [maxSize]="7"
+  [rotate]="true" [boundaryLinks]="true"></ngb-pagination>

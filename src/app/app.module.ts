@@ -25,7 +25,7 @@ import { AppComponent } from './app.component';
 @NgModule({
   declarations: [
     AppComponent,
-    SpinnerComponent,
+    SpinnerComponent
   ],
   imports: [
     CommonModule,
