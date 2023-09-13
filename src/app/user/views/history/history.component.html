@@ -1,0 +1,48 @@
+<main>
+    <section class="hero-wrap hero-wrap-2 js-fullheight" style="background-image: url(../assets/images/bg_1.jpg);">
+        <div class="overlay"></div>
+        <div class="container">
+            <div class="row no-gutters slider-text js-fullheight align-items-end justify-content-center">
+                <div class="col-md-9 ftco-animate pb-5 text-center">
+                  <p class="breadcrumbs">
+                      <span class="mr-2"><a href="/">Trang chủ <i class="fa fa-chevron-right"></i></a></span> 
+                      <span class="mr-2"><a href=""> Lịch sử đặt tour<i class="fa fa-chevron-right"></i></a></span>
+                  </p>
+                  <h1 class="mb-0 bread">Lịch sử đặt tour</h1>
+                </div>
+              </div>
+        </div>
+    </section>
+    <section class="ftco-section services-section">
+        <div class="tab-pane fade show active container">
+            <div class="cart_inner text-dark" style="min-height: 360px !important;">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr class="table-info">
+                                <th class="col-sm-1 text-center">STT</th>
+                                <th scope="col" class="text-center">Mã tour</th>
+                                <th scope="col" class="text-center">Tổng tiền</th>
+                                <th scope="col" class="text-center">Ngày đặt</th>
+                                <th scope="col" class="text-center">Trạng thái</th>
+                                <th scope="col"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="order in itemsAll">
+                                <td class="text-center">1</td>
+                                <td class="text-center">MH001</td>
+                                <td class="text-center">5,900,000 VNĐ</td>
+                                <td class="text-center">11:23:00 05-09-2023</td>
+                                <td class="text-center">Chờ xác nhận</td>
+                                <td><a href="/history-detail" class="btn btn-info" title="Chi tiết hóa đơn"><i
+                                            class="fa fa-search"></i></a></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <!-- <nav class="row justify-content-center mt-3"> <ul class="pagination"> <li class="page-item"> <a class="page-link" href="" ng-click="firstOderShip()"> <span aria-hidden="true">&laquo;</span> </a> </li> <li class="page-item"> <a class="page-link" href="" ng-click="prevOderShip()"> <span aria-hidden="true">&lsaquo;</span> </a> </li> <li class="page-item"> <a class="page-link" href="" ng-click="nextOderShip()"> <span aria-hidden="true">&rsaquo;</span> </a> </li> <li class="page-item"> <a class="page-link" href="" ng-click="lastOderShip()"> <span aria-hidden="true">&raquo;</span> </a> </li> </ul> </nav> -->
+        </div>
+    </section>
+    </main>

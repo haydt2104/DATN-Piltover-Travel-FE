@@ -20,12 +20,20 @@ import { SidebarComponent } from './admin/shared/sidebar/sidebar.component';
 import { SpinnerComponent } from './admin/shared/spinner.component';
 import { Approutes } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { LayoutComponent } from './user/layouts/layout/layout.component';
+import { HeaderComponent } from './user/layouts/header/header.component';
+import { FooterComponent } from './user/layouts/footer/footer.component';
+import { AuthorizationsComponent } from './user/authorizations/authorizations.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
     SpinnerComponent,
+    LayoutComponent,
+    HeaderComponent,
+    FooterComponent,
+    AuthorizationsComponent,
   ],
   imports: [
     CommonModule,
