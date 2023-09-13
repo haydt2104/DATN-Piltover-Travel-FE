@@ -1,5 +1,5 @@
 export interface Tour {
-  tourID: number;
+  tourId: number;
   tourName: string;
   destination: string;
   availability: number;
@@ -8,32 +8,44 @@ export interface Tour {
 }
 
 export interface TourPlan {
-  tourPlanID: number;
+  tourPlanId: number;
   startName: string;
   startAddress: string;
   startDate: Date;
-  tourID: number;
+  tourId: number;
+  planDetailList: TourPlanDetail[];
+}
+
+export interface TourPlanDetail {
+  tourPlanDetailID: number;
+  start_time: Date;
+  end_time: Date;
+  Description: string;
+  tourPlanId: number;
 }
 
 export const TourList: Tour[] = [
   {
-    tourID: 1,
+    tourId: 1,
     tourName: 'Tour đến Disneyland',
     destination: 'Disneyland, Ohio, USA',
     status: 'Chưa bắt đầu',
     availability: 35,
     planList: [
       {
-        tourPlanID: 1,
+        tourPlanId: 1,
         startName: 'ABC',
         startAddress: 'DEF',
         startDate: new Date(),
-        tourID: 1,
+        tourId: 1,
+        planDetailList:[
+          
+        ]
       },
     ],
   },
 ];
 
 export function getTourByID(id: number) {
-  return TourList.find((tourPlanID) => tourPlanID.tourID == id);
+  return TourList.find((Tour) => Tour.tourId == id);
 }

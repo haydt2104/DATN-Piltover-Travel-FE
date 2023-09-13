@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
-import { TourComponent } from './tour.component';
+import { TourDetailPlanComponent } from './tour-detail-plan/tour-detail-plan.component';
 import { TourDetailComponent } from './tour-detail/tour-detail.component';
+import { TourComponent } from './tour.component';
 
 export const TourRoutes: Routes = [
 	{
@@ -13,6 +14,10 @@ export const TourRoutes: Routes = [
       {
         path: 'details/:id',
         component: TourDetailComponent
+      },
+      {
+        path: 'details/:id/plan',
+        component: TourDetailPlanComponent
       }
 		]
 	}

@@ -4,18 +4,17 @@
       <table class="table table-hover align-middle text-nowrap table-bordered">
         <thead>
           <tr>
-            <th class="text-dark font-medium fs-4">Mã kế hoạch</th>
-            <th class="text-dark font-medium fs-4">Vị trí khởi hành</th>
-            <th class="text-dark font-medium fs-4">Địa chỉ khởi hành</th>
-            <th class="text-dark font-medium fs-4">Ngày khởi hành</th>
-            <th class="text-dark font-medium fs-4">Phương tiện di chuyển</th>
-            <th class="text-dark font-medium fs-4">Trạng thái</th>
+            <th class="text-dark font-medium fs-4">Ngày</th>
+            <th class="text-dark font-medium fs-4">Từ</th>
+            <th class="text-dark font-medium fs-4">Đến</th>
+            <th class="text-dark font-medium fs-4">Mô tả</th>
+            <th class="text-dark font-medium fs-4"></th>
           </tr>
         </thead>
-        <tbody>
+        <!-- <tbody>
           <tr *ngFor='let plan of tour.planList'>
             <td>
-              {{plan.tourPlanId}}
+              {{plan.tourPlanID}}
             </td>
             <td>
               {{plan.startName}}
@@ -30,12 +29,12 @@
             <td></td>
             <td>
               <div class="button-group">
-                <button [routerLink]="['/admin/tour/details/'+plan.tourId+'/plan']" class="btn btn-success">Chi tiết</button>
+                <button [routerLink]="['/admin/tour/details/'+plan.tourID+'/plan']" class="btn btn-success">Chi tiết</button>
                 <button class="btn btn-danger">Hủy</button>
               </div>
             </td>
           </tr>
-        </tbody>
+        </tbody> -->
       </table>
     </div>
   </div>
