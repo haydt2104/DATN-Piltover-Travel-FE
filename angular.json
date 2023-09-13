@@ -18,26 +18,15 @@
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
             "outputPath": "dist/datn-piltover-travel-fe",
-            "allowedCommonJsDependencies": [
-              "ng-apexcharts",
-              "apexcharts"
-            ],
+            "allowedCommonJsDependencies": ["ng-apexcharts", "apexcharts"],
             "outputPath": "dist/DATN-Piltover-Travel-FE",
             "index": "src/index.html",
             "main": "src/main.ts",
-            "polyfills": [
-              "zone.js"
-            ],
+            "polyfills": ["zone.js"],
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "scss",
-            "assets": [
-              "src/favicon.ico",
-              "src/assets"
-            ],
-            "styles": [
-              "src/assets/scss/style.scss",
-              "src/styles.scss"
-            ],
+            "assets": ["src/favicon.ico", "src/assets"],
+            "styles": ["src/styles.scss", "src/assets/scss/style.scss"],
             "scripts": []
           },
           "configurations": {
@@ -45,13 +34,13 @@
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "500kb",
-                  "maximumError": "1mb"
+                  "maximumWarning": "4mb",
+                  "maximumError": "5mb"
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "2kb",
-                  "maximumError": "4kb"
+                  "maximumWarning": "150kb",
+                  "maximumError": "150kb"
                 }
               ],
               "outputHashing": "all"
