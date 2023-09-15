@@ -13,9 +13,9 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor='let plan of tour.planList'>
+          <tr *ngFor='let plan of planList'>
             <td>
-              {{plan.tourPlanId}}
+              {{plan.id}}
             </td>
             <td>
               {{plan.startName}}
@@ -24,13 +24,17 @@
               {{plan.startAddress}}
             </td>
             <td>
-              {{plan.startDate}}
+              {{plan.startTime}}
             </td>
-            <td></td>
-            <td></td>
+            <td>
+              {{plan.transport.name}}
+            </td>
+            <td>
+              {{plan.status.name}}
+            </td>
             <td>
               <div class="button-group">
-                <button [routerLink]="['/admin/tour/details/'+plan.tourId+'/plan']" class="btn btn-success">Chi tiết</button>
+                <button [routerLink]="['/admin/tour/details/'+plan.tour.id+'/plan/'+plan.id]" class="btn btn-success">Chi tiết</button>
                 <button class="btn btn-danger">Hủy</button>
               </div>
             </td>

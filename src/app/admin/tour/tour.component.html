@@ -20,19 +20,19 @@
                 <td>
                   <div class="d-flex align-items-center">
                     <div class="ms-3">
-                      <h5 class="mb-0 font-medium">{{tour.tourName}}</h5>
+                      <h5 class="mb-0 font-medium">{{tour.name}}</h5>
                     </div>
                   </div>
                 </td>
-                <td class="fs-4">{{tour.destination}}</td>
+                <td class="fs-4">{{tour.destinationAddress}}</td>
                 <td>
-                  <h5 class="mb-0 fw-normal">{{tour.status}}</h5>
+                  <h5 class="mb-0 fw-normal">{{tour.active}}</h5>
                 </td>
                 <td>
-                  <h5 class="mb-0 fw-normal">{{tour.availability}}</h5>
+                  <h5 class="mb-0 fw-normal">{{tour.availableSpaces}}</h5>
                 </td>
                 <td>
-                  <button [routerLink]="['/admin/tour/details/'+tour.tourId]" routerLinkActive="router-link-active"
+                  <button [routerLink]="['/admin/tour/details/'+tour.id]" routerLinkActive="router-link-active"
                     class="btn btn-primary">Chi tiết</button>
                 </td>
               </tr>

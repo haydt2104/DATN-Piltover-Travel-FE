@@ -18,10 +18,14 @@ export interface TourPlan {
 
 export interface TourPlanDetail {
   tourPlanDetailID: number;
-  start_time: Date;
-  end_time: Date;
-  Description: string;
+  startTime: Date;
+  endTime: Date;
+  description: string;
   tourPlanId: number;
+}
+
+export interface Creator {
+
 }
 
 export const TourList: Tour[] = [
@@ -38,9 +42,15 @@ export const TourList: Tour[] = [
         startAddress: 'DEF',
         startDate: new Date(),
         tourId: 1,
-        planDetailList:[
-          
-        ]
+        planDetailList: [
+          {
+            tourPlanDetailID: 1,
+            startTime: new Date(),
+            endTime: new Date(),
+            description: 'abc',
+            tourPlanId: 1,
+          },
+        ],
       },
     ],
   },
@@ -49,3 +59,7 @@ export const TourList: Tour[] = [
 export function getTourByID(id: number) {
   return TourList.find((Tour) => Tour.tourId == id);
 }
+
+// export function getTourPlanByID(id) {
+//   return TourList.find((Tour) => Tour.planList.tourPlanId == id);
+// }

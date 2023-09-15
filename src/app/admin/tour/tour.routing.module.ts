@@ -16,7 +16,7 @@ export const TourRoutes: Routes = [
         component: TourDetailComponent
       },
       {
-        path: 'details/:id/plan',
+        path: 'details/:id/plan/:id2',
         component: TourDetailPlanComponent
       }
 		]
