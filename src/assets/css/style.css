@@ -5070,6 +5070,7 @@ input[type="button"].btn-block {
 }
 
 .navbar {
+  padding: 0;
   position: relative;
   display: -webkit-box;
   display: -ms-flexbox;
