@@ -9,13 +9,14 @@ import { CommonModule, NgIf } from '@angular/common';
 @Component({
   selector: 'app-sidebar',
   standalone: true,
-  imports:[RouterModule, CommonModule, NgIf],
-  templateUrl: './sidebar.component.html'
+  imports: [RouterModule, CommonModule, NgIf],
+  templateUrl: './sidebar.component.html',
+  styleUrls: ['./sidebar.component.scss'],
 })
 export class SidebarComponent implements OnInit {
   showMenu = '';
   showSubMenu = '';
-  public sidebarnavItems:RouteInfo[]=[];
+  public sidebarnavItems: RouteInfo[] = [];
   // this is for the open close
   addExpandClass(element: string) {
     if (element === this.showMenu) {
@@ -33,6 +34,6 @@ export class SidebarComponent implements OnInit {
 
   // End open close
   ngOnInit() {
-    this.sidebarnavItems = ROUTES.filter(sidebarnavItem => sidebarnavItem);
+    this.sidebarnavItems = ROUTES.filter((sidebarnavItem) => sidebarnavItem);
   }
 }
