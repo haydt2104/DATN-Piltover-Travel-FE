@@ -1,9 +1,7 @@
-import { TourModule } from './admin/tour/tour.module';
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
-import { FullComponent } from './admin/layouts/full/full.component';
-import { TourComponent } from './admin/tour/tour.component';
+import { FullComponent } from './components/admin/layouts/full/full.component';
 
 export const Approutes: Routes = [
   {
@@ -13,24 +11,34 @@ export const Approutes: Routes = [
       { path: '', redirectTo: '/admin/dashboard', pathMatch: 'full' },
       {
         path: 'dashboard',
-        loadChildren: () => import('./admin/dashboard/dashboard.module').then(m => m.DashboardModule)
+        loadChildren: () =>
+          import('./components/admin/dashboard/dashboard.module').then(
+            (m) => m.DashboardModule
+          ),
       },
       {
         path: 'tour',
-        loadChildren: () => import('./admin/tour/tour.module').then(m => m.TourModule)
+        loadChildren: () =>
+          import('./components/admin/tour/tour.module').then(
+            (m) => m.TourModule
+          ),
       },
       {
         path: 'about',
-        loadChildren: () => import('./admin/about/about.module').then(m => m.AboutModule)
+        loadChildren: () =>
+          import('./components/admin/about/about.module').then((m) => m.AboutModule),
       },
       {
         path: 'component',
-        loadChildren: () => import('./admin/component/component.module').then(m => m.ComponentsModule)
-      }
-    ]
+        loadChildren: () =>
+          import('./components/admin/component/component.module').then(
+            (m) => m.ComponentsModule
+          ),
+      },
+    ],
   },
   {
     path: '**',
-    redirectTo: '/starter'
-  }
+    redirectTo: '/starter',
+  },
 ];

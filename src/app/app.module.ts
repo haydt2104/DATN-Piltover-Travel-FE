@@ -11,13 +11,13 @@ import { RouterModule } from '@angular/router';
 
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
-import { FullComponent } from './admin/layouts/full/full.component';
+import { FullComponent } from './components/admin/layouts/full/full.component';
 
 
-import { NavigationComponent } from './admin/shared/header/navigation.component';
-import { SidebarComponent } from './admin/shared/sidebar/sidebar.component';
+import { NavigationComponent } from './components/admin/shared/header/navigation.component';
+import { SidebarComponent } from './components/admin/shared/sidebar/sidebar.component';
 
-import { SpinnerComponent } from './admin/shared/spinner.component';
+import { SpinnerComponent } from './components/admin/shared/spinner.component';
 import { Approutes } from './app-routing.module';
 import { AppComponent } from './app.component';
 
