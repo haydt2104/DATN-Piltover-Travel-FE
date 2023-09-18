@@ -24,9 +24,7 @@ export interface TourPlanDetail {
   tourPlanId: number;
 }
 
-export interface Creator {
-
-}
+export interface Creator {}
 
 export const TourList: Tour[] = [
   {

@@ -2,7 +2,9 @@ import { NgFor } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
-import { TourPlan, TourService } from './../../service/tour.service';
+import { TourPlan } from '../../entity/tour-plan.entity';
+import { TourService } from '../../service/tour.service';
+import { TourPlanService } from '../../service/tour-plan.service';
 
 @Component({
   selector: 'app-tour-detail',
@@ -14,7 +16,7 @@ export class TourDetailComponent implements OnInit {
   planList: TourPlan[];
   constructor(
     private route: ActivatedRoute,
-    private tourService: TourService
+    private tourPlanService: TourPlanService
   ) {}
   ngOnInit(): void {
     this.route.params.subscribe((params) => {
@@ -24,7 +26,7 @@ export class TourDetailComponent implements OnInit {
   }
 
   public getTourPlanByTourId(tourId: number): void {
-    this.tourService.getTourPlansByPlanID(tourId).subscribe(
+    this.tourPlanService.getTourPlansByPlanID(tourId).subscribe(
       (response: TourPlan[]) => {
         this.planList = response;
         console.log(this.planList);

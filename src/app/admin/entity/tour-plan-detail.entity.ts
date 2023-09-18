@@ -1,0 +1,9 @@
+import { TourPlan } from './tour-plan.entity';
+
+export interface TourPlanDetail {
+  tourPlanDetailID: number;
+  startTime: Date;
+  endTime: Date;
+  description: string;
+  tourPlan: TourPlan;
+}

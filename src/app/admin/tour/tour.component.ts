@@ -2,8 +2,9 @@ import { NgFor } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { NgbPaginationModule } from '@ng-bootstrap/ng-bootstrap';
-import { Tour, TourService } from './../service/tour.service';
+import { Tour } from '../entity/tour.entity';
 import { HttpErrorResponse } from '@angular/common/http';
+import { TourService } from '../service/tour.service';
 @Component({
   selector: 'app-tour',
   templateUrl: './tour.component.html',

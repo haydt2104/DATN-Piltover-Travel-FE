@@ -1,7 +1,9 @@
-import { TourPlan } from './../../service/tour.service';
 import { NgFor } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
+import { TourPlanDetailService } from './../../service/tour-plan-detail.service';
+import { TourPlanDetail } from './../../service/tour.data';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-tour-detail-plan',
@@ -10,12 +12,26 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
   imports: [NgFor, RouterLink],
 })
 export class TourDetailPlanComponent implements OnInit {
-  tourPlan: TourPlan;
-  constructor(private route: ActivatedRoute) {}
+  planDetailList: TourPlanDetail[];
+  constructor(
+    private route: ActivatedRoute,
+    private tourPlanDetailService: TourPlanDetailService
+  ) {}
   ngOnInit(): void {
     this.route.params.subscribe((params) => {
       let id = params['id2'];
-      console.log(id);
+      this.getTourPlanByTourId(id);
     });
+  }
+  public getTourPlanByTourId(planId: number): void {
+    this.tourPlanDetailService.getTourPlanDetailsByTourPlanId(planId).subscribe(
+      (response: TourPlanDetail[]) => {
+        this.planDetailList = response;
+        console.log(this.planDetailList);
+      },
+      (error: HttpErrorResponse) => {
+        console.log(error.message);
+      }
+    );
   }
 }
