@@ -24,6 +24,7 @@ import { LayoutComponent } from './components/user/layouts/layout/layout.compone
 import { HeaderComponent } from './components/user/layouts/header/header.component';
 import { FooterComponent } from './components/user/layouts/footer/footer.component';
 import { AuthorizationsComponent } from './components/user/authorizations/authorizations.component';
+import { TestPipePipe } from './pipes/test-pipe.pipe';
 
 @NgModule({
   declarations: [
@@ -33,6 +34,7 @@ import { AuthorizationsComponent } from './components/user/authorizations/author
     HeaderComponent,
     FooterComponent,
     AuthorizationsComponent,
+    TestPipePipe,
   ],
   imports: [
     CommonModule,
