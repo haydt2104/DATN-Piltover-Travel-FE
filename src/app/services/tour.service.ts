@@ -10,5 +10,5 @@ export class TourService {
   constructor(private http: HttpClient) {}
   public getTourList(): Observable<Tour[]> {
     return this.http.get<Tour[]>(`http://localhost:8080/api/tour/all`);
-  }
+  } 
 }

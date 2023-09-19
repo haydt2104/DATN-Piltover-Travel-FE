@@ -2,8 +2,8 @@ import { NgFor } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
-import { TourPlanDetail } from 'src/app/services/tour.data';
 import { TourPlanDetailService } from 'src/app/services/tour-plan-detail.service';
+import { TourPlanDetail } from 'src/app/models/tour-plan-detail.entity';
 
 @Component({
   selector: 'app-tour-detail-plan',
