@@ -2,3 +2,8 @@
   max-width: 1440px;
   margin: 0 auto;
 }
+app-sidebar {
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0;
+}
