@@ -1,21 +1,22 @@
 import { RouteInfo } from './sidebar.metadata';
 
 export const ROUTES: RouteInfo[] = [
+
   {
     path: '/admin/dashboard',
     title: 'Doanh thu',
     icon: 'bi bi-speedometer2',
     class: '',
     extralink: false,
-    submenu: [],
+    submenu: []
   },
   {
-    path: '/admin/tour',
+    path: '/admin/manage/tour',
     title: 'Tour',
     icon: 'bi bi-book',
     class: '',
     extralink: false,
-    submenu: [],
+    submenu: []
   },
   {
     path: '/admin/manage/user',
@@ -23,7 +24,7 @@ export const ROUTES: RouteInfo[] = [
     icon: 'bi bi-people',
     class: '',
     extralink: false,
-    submenu: [],
+    submenu: []
   },
   {
     path: '/admin/component/alert',
@@ -31,7 +32,7 @@ export const ROUTES: RouteInfo[] = [
     icon: 'bi bi-bell',
     class: '',
     extralink: false,
-    submenu: [],
+    submenu: []
   },
   {
     path: '/admin/component/badges',
@@ -39,7 +40,7 @@ export const ROUTES: RouteInfo[] = [
     icon: 'bi bi-patch-check',
     class: '',
     extralink: false,
-    submenu: [],
+    submenu: []
   },
   {
     path: '/admin/component/buttons',
@@ -47,7 +48,7 @@ export const ROUTES: RouteInfo[] = [
     icon: 'bi bi-hdd-stack',
     class: '',
     extralink: false,
-    submenu: [],
+    submenu: []
   },
   {
     path: '/admin/component/card',
@@ -55,7 +56,7 @@ export const ROUTES: RouteInfo[] = [
     icon: 'bi bi-card-text',
     class: '',
     extralink: false,
-    submenu: [],
+    submenu: []
   },
   {
     path: '/admin/component/dropdown',
@@ -63,7 +64,7 @@ export const ROUTES: RouteInfo[] = [
     icon: 'bi bi-menu-app',
     class: '',
     extralink: false,
-    submenu: [],
+    submenu: []
   },
   {
     path: '/admin/component/pagination',
@@ -71,7 +72,7 @@ export const ROUTES: RouteInfo[] = [
     icon: 'bi bi-dice-1',
     class: '',
     extralink: false,
-    submenu: [],
+    submenu: []
   },
   {
     path: '/admin/component/nav',
@@ -79,7 +80,7 @@ export const ROUTES: RouteInfo[] = [
     icon: 'bi bi-pause-btn',
     class: '',
     extralink: false,
-    submenu: [],
+    submenu: []
   },
   {
     path: '/admin/component/table',
@@ -87,7 +88,7 @@ export const ROUTES: RouteInfo[] = [
     icon: 'bi bi-layout-split',
     class: '',
     extralink: false,
-    submenu: [],
+    submenu: []
   },
   {
     path: '/admin/about',
@@ -95,6 +96,6 @@ export const ROUTES: RouteInfo[] = [
     icon: 'bi bi-people',
     class: '',
     extralink: false,
-    submenu: [],
-  },
+    submenu: []
+  }
 ];
