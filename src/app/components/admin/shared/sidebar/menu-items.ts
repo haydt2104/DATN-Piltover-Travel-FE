@@ -11,7 +11,7 @@ export const ROUTES: RouteInfo[] = [
     submenu: []
   },
   {
-    path: '/admin/manage/tour',
+    path: '/admin/tour',
     title: 'Tour',
     icon: 'bi bi-book',
     class: '',
