@@ -3,22 +3,24 @@
     <div class="card">
       <div class="card-body">
         <h4 class="card-title">Danh sách Tour</h4>
-        <button class="btn btn-outline-success" (click)="open(content)">Thêm Tour</button>
+
+        <button class="btn btn-success mb-3" (click)="open(content)">Thêm Tour</button>
         <ng-template #content let-modal>
           <div class="modal-header">
-            <h4 class="modal-title" id="modal-basic-title">Profile update</h4>
+            <h4 class="modal-title" id="modal-basic-title">Thêm Tour</h4>
             <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
           </div>
           <div class="modal-body">
-            <form>
+            <form class="form">
               <div class="mb-3">
-                <label for="dateOfBirth">Date of birth</label>
+
+                <!-- <label for="dateOfBirth">Date of birth</label>
                 <div class="input-group">
                   <input id="dateOfBirth" class="form-control" placeholder="yyyy-mm-dd" name="dp" ngbDatepicker
                     #dp="ngbDatepicker" />
                   <button class="btn btn-outline-secondary bi bi-calendar3" (click)="dp.toggle()"
                     type="button"></button>
-                </div>
+                </div> -->
               </div>
             </form>
           </div>
@@ -27,9 +29,9 @@
           </div>
         </ng-template>
 
-
         <div class="table-responsive">
-          <table class="table align-middle text-nowrap">
+          <table datatable [dtOptions]="dtOptions" class="row-border hover"></table>
+          <!-- <table class="table align-middle text-nowrap">
             <thead>
               <tr>
                 <th class="text-dark font-medium fs-4">Tên Tour</th>
@@ -61,11 +63,27 @@
                 </td>
               </tr>
             </tbody>
-          </table>
+          </table> -->
         </div>
+
+        <form class="form mb-3" action="">
+
+        </form>
+
+        <form class="form" action="">
+          <select (change)="provinceChange()" name="" id="province">
+          </select>
+          <select (change)="districtChange()" name="" id="district">
+            <option value="">chọn quận</option>
+          </select>
+          <select (change)="wardChange()" name="" id="ward">
+            <option value="">chọn phường</option>
+          </select>
+        </form>
+
       </div>
     </div>
   </div>
 </div>
-<ngb-pagination class="d-flex justify-content-center" [collectionSize]="120" [(page)]="currentPage" [maxSize]="7"
-  [rotate]="true" [boundaryLinks]="true"></ngb-pagination>
+<!-- <ngb-pagination class="d-flex justify-content-center" [collectionSize]="120" [(page)]="currentPage" [maxSize]="7"
+  [rotate]="true" [boundaryLinks]="true"></ngb-pagination> -->

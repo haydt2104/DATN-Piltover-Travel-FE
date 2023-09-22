@@ -17,12 +17,11 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/datn-piltover-travel-fe",
+            "outputPath": "dist/DATN-Piltover-Travel-FE",
             "allowedCommonJsDependencies": [
               "ng-apexcharts",
               "apexcharts"
             ],
-            "outputPath": "dist/DATN-Piltover-Travel-FE",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": [
@@ -36,9 +35,13 @@
             ],
             "styles": [
               "src/assets/scss/style.scss",
-              "src/styles.scss"
+              "src/styles.scss",
+              "node_modules/datatables.net-dt/css/jquery.dataTables.min.css"
             ],
-            "scripts": []
+            "scripts": [
+              "node_modules/jquery/dist/jquery.min.js",
+              "node_modules/datatables.net/js/jquery.dataTables.min.js"
+            ]
           },
           "configurations": {
             "production": {

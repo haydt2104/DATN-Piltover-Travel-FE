@@ -9,7 +9,7 @@ import { TourRoutes } from './tour.routing.module';
     CommonModule,
     RouterModule.forChild(TourRoutes),
     FormsModule,
-    NgIf,
+    NgIf
   ],
 })
 export class TourModule {}
