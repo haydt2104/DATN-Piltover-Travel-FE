@@ -1,0 +1,31 @@
+.mega-dropdown-menu {
+    width: 100vw;
+    /* Sử dụng chiều rộng toàn màn hình */
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 0;
+    /* Loại bỏ bo tròn nếu có */
+    display: none;
+    transition: all .3s;
+}
+
+/* Hiển thị menu khi di chuột qua */
+.mega-dropdown:hover .mega-dropdown-menu {
+    display: block;
+}
+
+.mega-dropdown-menu ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.mega-dropdown-menu ul li {
+    padding: 1px 15px;
+}
+.dropdown-item:hover{
+    color:#27822a;
+}
