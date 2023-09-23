@@ -25,6 +25,11 @@ import { HeaderComponent } from './components/user/layouts/header/header.compone
 import { FooterComponent } from './components/user/layouts/footer/footer.component';
 import { AuthorizationsComponent } from './components/user/authorizations/authorizations.component';
 import { TestPipePipe } from './pipes/test-pipe.pipe';
+import { AccountComponent } from './components/admin/account/account.component';
+
+import { environment } from './../environments/environment';
+
+import { CheckStatusAccountPipe } from './pipes/check-status-account.pipe';
 
 @NgModule({
   declarations: [
@@ -35,6 +40,8 @@ import { TestPipePipe } from './pipes/test-pipe.pipe';
     FooterComponent,
     AuthorizationsComponent,
     TestPipePipe,
+    AccountComponent,
+    CheckStatusAccountPipe,
   ],
   imports: [
     CommonModule,
@@ -53,6 +60,10 @@ import { TestPipePipe } from './pipes/test-pipe.pipe';
     {
       provide: LocationStrategy,
       useClass: PathLocationStrategy,
+    },
+    {
+      provide: 'BASE_URL',
+      useValue: environment.apiUrl,
     },
   ],
   bootstrap: [AppComponent],

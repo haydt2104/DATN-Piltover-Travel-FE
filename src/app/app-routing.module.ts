@@ -39,6 +39,13 @@ export const Approutes: Routes = [
           ),
       },
       {
+        path: 'manage/account',
+        loadChildren: () =>
+          import('./components/admin/account/account.module').then(
+            (m) => m.AccountModule
+          ),
+      },
+      {
         path: 'component',
         loadChildren: () =>
           import('./components/admin/component/component.module').then(
