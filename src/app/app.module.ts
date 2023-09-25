@@ -26,10 +26,12 @@ import { FooterComponent } from './components/user/layouts/footer/footer.compone
 import { AuthorizationsComponent } from './components/user/authorizations/authorizations.component';
 import { TestPipePipe } from './pipes/test-pipe.pipe';
 import { AccountComponent } from './components/admin/account/account.component';
+import { BookingComponent } from './components/admin/booking/booking.component';
 
 import { environment } from './../environments/environment';
 
 import { CheckStatusAccountPipe } from './pipes/check-status-account.pipe';
+import { BookingdetailComponent } from './components/admin/bookingdetail/bookingdetail.component';
 
 @NgModule({
   declarations: [
@@ -42,6 +44,8 @@ import { CheckStatusAccountPipe } from './pipes/check-status-account.pipe';
     TestPipePipe,
     AccountComponent,
     CheckStatusAccountPipe,
+    BookingComponent,
+    BookingdetailComponent,
   ],
   imports: [
     CommonModule,

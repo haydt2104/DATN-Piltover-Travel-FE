@@ -46,6 +46,20 @@ export const Approutes: Routes = [
           ),
       },
       {
+        path: 'manage/booking',
+        loadChildren: () =>
+          import('./components/admin/booking/booking.module').then(
+            (m) => m.BookingModule
+          ),
+      },
+      {
+        path: 'manage/bookingdetail',
+        loadChildren: () =>
+          import('./components/admin/bookingdetail/bookingdetail.module').then(
+            (m) => m.BookingdetailModule
+          ),
+      },
+      {
         path: 'component',
         loadChildren: () =>
           import('./components/admin/component/component.module').then(

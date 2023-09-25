@@ -26,6 +26,14 @@ export const ROUTES: RouteInfo[] = [
     submenu: [],
   },
   {
+    path: '/admin/manage/booking',
+    title: 'Booking',
+    icon: 'bi bi-clipboard-check',
+    class: '',
+    extralink: false,
+    submenu: [],
+  },
+  {
     path: '/admin/component/alert',
     title: 'Alert',
     icon: 'bi bi-bell',
