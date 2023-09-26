@@ -1,6 +1,6 @@
-import { Status } from "./status.entity";
-import { Tour } from "./tour.entity";
-import { Transportation } from "./transportation.entity";
+import { Status } from "./status.model";
+import { Tour } from "./tour.model";
+import { Transportation } from "./transportation.model";
 
 export interface TourPlan {
   id: number;

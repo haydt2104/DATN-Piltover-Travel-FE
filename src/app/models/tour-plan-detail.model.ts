@@ -1,4 +1,4 @@
-import { TourPlan } from './tour-plan.entity';
+import { TourPlan } from './tour-plan.model';
 
 export interface TourPlanDetail {
   tourPlanDetailID: number;

@@ -1,4 +1,4 @@
-import { NgFor } from '@angular/common';
+import { NgFor, NgIf } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
 import {
   AfterViewInit,
@@ -6,7 +6,9 @@ import {
   OnDestroy,
   OnInit,
   Renderer2,
+  ViewChild,
 } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import {
   ModalDismissReasons,
@@ -14,15 +16,15 @@ import {
   NgbModal,
   NgbPaginationModule,
 } from '@ng-bootstrap/ng-bootstrap';
-import { Tour } from '../../../models/tour.entity';
-import { CurdService } from './../../../services/curd.service';
-import { Subject } from 'rxjs';
-import { DataTablesModule } from 'angular-datatables';
+import { DataTableDirective, DataTablesModule } from 'angular-datatables';
 import axios from 'axios';
-
+import { Subject } from 'rxjs';
+import { Tour } from 'src/app/models/tour.model';
+import { CurdService } from './../../../services/curd.service';
 @Component({
   selector: 'app-tour',
   templateUrl: './tour.component.html',
+  styleUrls: ['./tour.component.scss'],
   standalone: true,
   imports: [
     NgFor,
@@ -30,13 +32,17 @@ import axios from 'axios';
     RouterModule,
     NgbDatepickerModule,
     DataTablesModule,
+    FormsModule,
+    NgIf,
   ],
 })
 export class TourComponent implements OnInit, OnDestroy, AfterViewInit {
+  @ViewChild(DataTableDirective, { static: false })
+  dtElement: DataTableDirective;
   public tourList: Tour[];
   host = 'https://provinces.open-api.vn/api/';
   dtOptions: DataTables.Settings = {};
-  dtTrigger: Subject<any> = new Subject<any>();
+  dtTrigger: Subject<any> = new Subject();
   currentPage = 1;
   closeResult = '';
   constructor(
@@ -46,7 +52,6 @@ export class TourComponent implements OnInit, OnDestroy, AfterViewInit {
     private router: Router
   ) {}
   ngOnInit(): void {
-    this.callAPIProvince('https://provinces.open-api.vn/api/?depth=1');
     this.getTourList();
     this.dtOptions = {
       ajax: {
@@ -56,10 +61,6 @@ export class TourComponent implements OnInit, OnDestroy, AfterViewInit {
         dataType: 'json',
       },
       columns: [
-        {
-          title: 'Mã Tour',
-          data: 'id',
-        },
         {
           title: 'Tên Tour',
           data: 'name',
@@ -105,6 +106,7 @@ export class TourComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   open(content) {
+    this.callAPIProvince('https://provinces.open-api.vn/api/?depth=1');
     this.modalService
       .open(content, { ariaLabelledBy: 'modal-basic-title', size: 'xl' })
       .result.then(
@@ -140,7 +142,12 @@ export class TourComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   renderData = (array, select) => {
-    let row = ' <option disable value="">chọn</option>';
+    let row;
+    if (select == 'district') {
+      row = ' <option disable value="">Chọn Quận/Huyện</option>';
+    } else {
+      row = ' <option disable value="">Chọn Phường/Xã</option>';
+    }
     array.forEach((element) => {
       row += `<option value="${element.code}">${element.name}</option>`;
     });
@@ -163,12 +170,29 @@ export class TourComponent implements OnInit, OnDestroy, AfterViewInit {
     });
   };
   provinceChange() {
-    this.callApiDistrict(this.host + 'p/' + $('#province').val() + '?depth=2');
-    this.printResult();
+    if ($('#province').val()) {
+      this.callApiDistrict(
+        this.host + 'p/' + $('#province').val() + '?depth=2'
+      );
+      this.printResult();
+    } else {
+      document.querySelector(
+        '#district'
+      ).innerHTML = `<option value="">Chọn Quận/Huyện</option>`;
+      document.querySelector(
+        '#ward'
+      ).innerHTML = `<option value="">Chọn Phường/Xã</option>`;
+    }
   }
   districtChange() {
-    this.callApiWard(this.host + 'd/' + $('#district').val() + '?depth=2');
-    this.printResult();
+    if ($('#district').val()) {
+      this.callApiWard(this.host + 'd/' + $('#district').val() + '?depth=2');
+      this.printResult();
+    } else {
+      document.querySelector(
+        '#ward'
+      ).innerHTML = `<option value="">Chọn Phường/Xã</option>`;
+    }
   }
   wardChange() {
     this.printResult();
@@ -188,4 +212,32 @@ export class TourComponent implements OnInit, OnDestroy, AfterViewInit {
       $('#result').text(result);
     }
   };
+
+  submit(data) {
+    console.log(data.value.name);
+    var province = $('#province option:selected').text();
+    var district = $('#district option:selected').text();
+    var ward = $('#ward option:selected').text();
+    var road = data.value.road;
+    var address = road + ', ' + ward + ', ' + district + ', ' + province;
+    var tour: Tour = {
+      id: null,
+      name: data.value.name,
+      description: data.value.description,
+      destinationAddress: address,
+      image: null,
+      availableSpaces: data.value.availableSpaces,
+      active: false,
+      createTime: new Date(),
+    };
+    this.curdService.post('tour', tour).subscribe(
+      (response: Tour) => {
+        console.log(response);
+        $('.table').DataTable().ajax.reload();
+      },
+      (error: HttpErrorResponse) => {
+        alert(error.message);
+      }
+    );
+  }
 }

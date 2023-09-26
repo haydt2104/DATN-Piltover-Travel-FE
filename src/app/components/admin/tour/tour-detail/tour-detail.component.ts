@@ -2,7 +2,7 @@ import { NgFor } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
-import { TourPlan } from 'src/app/models/tour-plan.entity';
+import { TourPlan } from 'src/app/models/tour-plan.model';
 import { TourPlanService } from 'src/app/services/tour-plan.service';
 
 @Component({

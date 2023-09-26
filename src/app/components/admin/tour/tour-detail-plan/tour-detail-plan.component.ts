@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
 import { TourPlanDetailService } from 'src/app/services/tour-plan-detail.service';
-import { TourPlanDetail } from 'src/app/models/tour-plan-detail.entity';
+import { TourPlanDetail } from 'src/app/models/tour-plan-detail.model';
 
 @Component({
   selector: 'app-tour-detail-plan',
