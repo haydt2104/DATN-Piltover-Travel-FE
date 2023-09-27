@@ -3,13 +3,15 @@
     <div class="card">
       <div class="card-body">
         <h4 class="card-title">Danh sách Tour</h4>
-        <button class="btn btn-success mb-3" (click)="open(content)">Thêm Tour</button>
-        <ng-template #content let-modal>
+        <button class="btn btn-success mb-3" (click)="open('add', null)">Thêm Tour</button>
+
+        <!-- Add Modal -->
+        <ng-template #addModal let-modal>
           <div class="modal-header">
             <h4 class="modal-title" id="modal-basic-title">Thêm Tour</h4>
             <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
           </div>
-          <form #tourForm="ngForm" class="container" (ngSubmit)="submit(tourForm)">
+          <form #addForm="ngForm" class="container" (ngSubmit)="submitAdd(addForm)">
             <div class="modal-body">
               <label class="form-label">Tên Tour:</label>
               <div class="row">
@@ -58,51 +60,146 @@
             </div>
             <!-- <img [src]="imgSrc" alt="">IMG -->
             <div class="modal-footer">
+              <div>
+                <small>Lưu ý sau khi thêm Tour chỉ có thể chỉnh sửa [Số lượng], [Hình] và [Mô tả]</small>
+              </div>
               <button type="submit" class="btn btn-primary" (click)="modal.close('Save click')"
-                [disabled]="!tourForm.valid">Submit</button>
+                [disabled]="!addForm.valid">Submit</button>
+            </div>
+          </form>
+        </ng-template>
+
+        <!-- Edit Modal -->
+        <ng-template #editModal let-modal>
+          <div class="modal-header">
+            <h4 class="modal-title" id="modal-basic-title">Chỉnh Sửa Tour</h4>
+            <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+          </div>
+          <form #editForm="ngForm" class="container" (ngSubmit)="submitEdit(editForm)">
+            <div class="modal-body">
+              <label class="form-label">Tên Tour:</label>
+              <div class="row">
+                <input #name="ngModel" class="form-control" type="text"
+                  placeholder="VD: Chuyến đi gia đình đến Phú Quốc" name="name" ngModel="{{editTour.name}}" required>
+                <small *ngIf="name.touched && name.invalid">Tên không được trống</small>
+              </div>
+              <label class="form-label">Điểm đến:</label>
+              <div class="row">
+                <select #province="ngModel" class="form-control col-md-4" name="province" (change)="provinceChange()"
+                  id="province" ngModel required>
+                  <option value="">Chọn Tỉnh/Thành Phố</option>
+                </select>
+                <select #district="ngModel" class="form-control col-md-4" name="district" (change)="districtChange()"
+                  id="district" ngModel required>
+                  <option value="">Chọn Quận/Huyện</option>
+                </select>
+                <select #ward="ngModel" class="form-control col-md-4" name="ward" (change)="wardChange()" id="ward"
+                  ngModel required>
+                  <option value="">Chọn Phường/Xã</option>
+                </select>
+              </div>
+              <label class="form-label">Đường:</label>
+              <div class="row">
+                <input #road="ngModel" class="form-control" name="road" type="text" placeholder="VD: Số 123, Đường ABC"
+                  ngModel required>
+              </div>
+              <div>
+                <div *ngIf="province.touched && district.touched && ward.touched && road.touched">
+                  <small *ngIf="province.invalid || district.invalid || ward.invalid || road.invalid">Vui lòng điền đầy
+                    đủ điểm đến và đường</small>
+                </div>
+              </div>
+              <label class="form-label">Số Lượng Khách:</label>
+              <div class="row">
+                <input #availability="ngModel" class="form-control" name="availableSpaces" type="number" min="10"
+                  max="200" placeholder="Giới hạn từ 10 đến 200" ngModel required>
+                <small *ngIf="availability.touched && availability.value < 10">Số lượng phải từ 10 trở lên</small>
+                <small *ngIf="availability.touched && availability.value > 200">Số lượng vượt quá 200</small>
+              </div>
+              <label class="form-label">Mô Tả:</label>
+              <div class="row">
+                <textarea #description="ngModel" name="description" id="" rows="6" ngModel required></textarea>
+                <small *ngIf="description.touched && description.invalid">Vui lòng điền mô tả</small>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <div>
+                <small>Lưu ý sau khi thêm Tour chỉ có thể chỉnh sửa [Số lượng], [Hình] và [Mô tả]</small>
+              </div>
+              <button type="submit" class="btn btn-primary" (click)="modal.close('Save click')"
+                [disabled]="!editForm.valid">Submit</button>
+            </div>
+          </form>
+        </ng-template>
+
+        <!-- Delete Modal -->
+        <ng-template #deleteModal let-modal>
+          <div class="modal-header">
+            <h4 class="modal-title" id="modal-basic-title">Thêm Tour</h4>
+            <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+          </div>
+          <form #addForm="ngForm" class="container" (ngSubmit)="submitAdd(addForm)">
+            <div class="modal-body">
+              <label class="form-label">Tên Tour:</label>
+              <div class="row">
+                <input #name="ngModel" class="form-control" type="text"
+                  placeholder="VD: Chuyến đi gia đình đến Phú Quốc" name="name" ngModel required>
+                <small *ngIf="name.touched && name.invalid">Tên không được trống</small>
+              </div>
+              <label class="form-label">Điểm đến:</label>
+              <div class="row">
+                <select #province="ngModel" class="form-control col-md-4" name="province" (change)="provinceChange()"
+                  id="province" ngModel required>
+                  <option value="">Chọn Tỉnh/Thành Phố</option>
+                </select>
+                <select #district="ngModel" class="form-control col-md-4" name="district" (change)="districtChange()"
+                  id="district" ngModel required>
+                  <option value="">Chọn Quận/Huyện</option>
+                </select>
+                <select #ward="ngModel" class="form-control col-md-4" name="ward" (change)="wardChange()" id="ward"
+                  ngModel required>
+                  <option value="">Chọn Phường/Xã</option>
+                </select>
+              </div>
+              <label class="form-label">Đường:</label>
+              <div class="row">
+                <input #road="ngModel" class="form-control" name="road" type="text" placeholder="VD: Số 123, Đường ABC"
+                  ngModel required>
+              </div>
+              <div>
+                <div *ngIf="province.touched && district.touched && ward.touched && road.touched">
+                  <small *ngIf="province.invalid || district.invalid || ward.invalid || road.invalid">Vui lòng điền đầy
+                    đủ điểm đến và đường</small>
+                </div>
+              </div>
+              <label class="form-label">Số Lượng Khách:</label>
+              <div class="row">
+                <input #availability="ngModel" class="form-control" name="availableSpaces" type="number" min="10"
+                  max="200" placeholder="Giới hạn từ 10 đến 200" ngModel required>
+                <small *ngIf="availability.touched && availability.value < 10">Số lượng phải từ 10 trở lên</small>
+                <small *ngIf="availability.touched && availability.value > 200">Số lượng vượt quá 200</small>
+              </div>
+              <label class="form-label">Mô Tả:</label>
+              <div class="row">
+                <textarea #description="ngModel" name="description" id="" rows="6" ngModel required></textarea>
+                <small *ngIf="description.touched && description.invalid">Vui lòng điền mô tả</small>
+              </div>
+            </div>
+            <!-- <img [src]="imgSrc" alt="">IMG -->
+            <div class="modal-footer">
+              <div>
+                <small>Lưu ý sau khi thêm Tour chỉ có thể chỉnh sửa [Số lượng], [Hình] và [Mô tả]</small>
+              </div>
+              <button type="submit" class="btn btn-primary" (click)="modal.close('Save click')"
+                [disabled]="!addForm.valid">Submit</button>
             </div>
           </form>
         </ng-template>
 
         <div class="table-responsive">
           <table datatable [dtOptions]="dtOptions" class="table row-border hover"></table>
-          <!-- <table class="table align-middle text-nowrap">
-            <thead>
-              <tr>
-                <th class="text-dark font-medium fs-4">Tên Tour</th>
-                <th class="text-dark font-medium fs-4">Điểm đến</th>
-                <th class="text-dark font-medium fs-4">Trạng thái</th>
-                <th class="text-dark font-medium fs-4">Số lượng</th>
-                <th class="text-dark font-medium fs-4"></th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor='let tour of tourList'>
-                <td>
-                  <div class="d-flex align-items-center">
-                    <div class="ms-3">
-                      <h5 class="mb-0 font-medium">{{tour.name}}</h5>
-                    </div>
-                  </div>
-                </td>
-                <td class="fs-4">{{tour.destinationAddress}}</td>
-                <td>
-                  <h5 class="mb-0 fw-normal">{{tour.active}}</h5>
-                </td>
-                <td>
-                  <h5 class="mb-0 fw-normal">{{tour.availableSpaces}}</h5>
-                </td>
-                <td>
-                  <button [routerLink]="['/admin/tour/details/'+tour.id]" routerLinkActive="router-link-active"
-                    class="btn btn-primary">Chi tiết</button>
-                </td>
-              </tr>
-            </tbody>
-          </table> -->
         </div>
       </div>
     </div>
   </div>
 </div>
-<!-- <ngb-pagination class="d-flex justify-content-center" [collectionSize]="120" [(page)]="currentPage" [maxSize]="7"
-  [rotate]="true" [boundaryLinks]="true"></ngb-pagination> -->

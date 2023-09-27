@@ -19,5 +19,11 @@ export class CurdService {
     return this.http.post<any>(url, data);
   }
 
-  
+  public put(object: string, data: any): Observable<any> {
+    const url = `${this.url}/${object}`;
+    return this.http.put<any>(url, data);
+  }
+  public delete(object: string, id: number): Observable<void> {
+    return this.http.delete<void>(`${this.url}/${object}/${id}`);
+  }
 }

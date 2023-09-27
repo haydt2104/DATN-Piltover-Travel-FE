@@ -18,9 +18,10 @@ import {
 } from '@ng-bootstrap/ng-bootstrap';
 import { DataTableDirective, DataTablesModule } from 'angular-datatables';
 import axios from 'axios';
-import { Subject } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { Tour } from 'src/app/models/tour.model';
 import { CurdService } from './../../../services/curd.service';
+import { TourService } from 'src/app/services/tour.service';
 @Component({
   selector: 'app-tour',
   templateUrl: './tour.component.html',
@@ -37,9 +38,13 @@ import { CurdService } from './../../../services/curd.service';
   ],
 })
 export class TourComponent implements OnInit, OnDestroy, AfterViewInit {
-  @ViewChild(DataTableDirective, { static: false })
+  @ViewChild('editModal') editModal: any;
+  @ViewChild('deleteModal') deleteModal: any;
+  @ViewChild('addModal') addModal: any;
+
   dtElement: DataTableDirective;
   public tourList: Tour[];
+  public editTour: Tour;
   host = 'https://provinces.open-api.vn/api/';
   dtOptions: DataTables.Settings = {};
   dtTrigger: Subject<any> = new Subject();
@@ -47,6 +52,7 @@ export class TourComponent implements OnInit, OnDestroy, AfterViewInit {
   closeResult = '';
   constructor(
     private curdService: CurdService,
+    private tourService: TourService,
     private modalService: NgbModal,
     private renderer: Renderer2,
     private router: Router
@@ -81,6 +87,16 @@ export class TourComponent implements OnInit, OnDestroy, AfterViewInit {
           title: '',
           render: function (data: any, type: any, full: any) {
             return (
+              '<button class="btn btn-primary" update="' +
+              full.id +
+              '">Chỉnh sửa</button>'
+            );
+          },
+        },
+        {
+          title: '',
+          render: function (data: any, type: any, full: any) {
+            return (
               '<button class="btn btn-primary" route="' +
               full.id +
               '">Kế Hoạch</button>'
@@ -101,29 +117,90 @@ export class TourComponent implements OnInit, OnDestroy, AfterViewInit {
         this.router.navigate([
           '/admin/tour/details/' + event.target.getAttribute('route'),
         ]);
+      } else if (event.target.hasAttribute('update')) {
+        this.open('edit', event.target.getAttribute('update'));
+      } else if (event.target.hasAttribute('delete')) {
+        this.open('delete', null);
       }
     });
   }
 
-  open(content) {
+  province: string;
+  district: string;
+  ward: string;
+  road: string;
+
+  open(content, id: number) {
     this.callAPIProvince('https://provinces.open-api.vn/api/?depth=1');
-    this.modalService
-      .open(content, { ariaLabelledBy: 'modal-basic-title', size: 'xl' })
-      .result.then(
-        (result) => {
-          this.closeResult = `Closed with: ${result}`;
-        },
-        (reason) => {
-          this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-        }
-      );
+    if (content == 'add') {
+      this.modalService
+        .open(this.addModal, {
+          ariaLabelledBy: 'modal-basic-title',
+          size: 'xl',
+        })
+        .result.then(
+          (result) => {
+            this.closeResult = `Closed with: ${result}`;
+          },
+          (reason) => {
+            this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+          }
+        );
+    } else if (content == 'edit') {
+      this.editTour = this.tourList.find((tour) => tour.id == id);
+      const destinationAddress = this.editTour.destinationAddress;
+      console.log('Destination Address:', destinationAddress);
+      this.province = destinationAddress
+        .split(',')
+        [destinationAddress.split(',').length - 1].trim();
+      console.log('Province:', this.province);
+      this.district = destinationAddress
+        .split(',')
+        [destinationAddress.split(',').length - 2].trim();
+      console.log('District:', this.district);
+      this.ward = destinationAddress
+        .split(',')
+        [destinationAddress.split(',').length - 3].trim();
+      console.log('Ward:', this.ward);
+      this.road = destinationAddress
+        .substring(0, destinationAddress.indexOf(this.ward) - 2)
+        .trim();
+      console.log('Road:', this.road);
+
+      this.modalService
+        .open(this.editModal, {
+          ariaLabelledBy: 'modal-basic-title',
+          size: 'xl',
+        })
+        .result.then(
+          (result) => {
+            this.closeResult = `Closed with: ${result}`;
+          },
+          (reason) => {
+            this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+          }
+        );
+    } else {
+      this.modalService
+        .open(this.deleteModal, {
+          ariaLabelledBy: 'modal-basic-title',
+          size: 'xl',
+        })
+        .result.then(
+          (result) => {
+            this.closeResult = `Closed with: ${result}`;
+          },
+          (reason) => {
+            this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+          }
+        );
+    }
   }
 
   public getTourList(): void {
     this.curdService.getList('tour').subscribe(
       (response: Tour[]) => {
         this.tourList = response;
-        console.log(this.tourList);
       },
       (error: HttpErrorResponse) => {
         console.log(error.message);
@@ -213,8 +290,7 @@ export class TourComponent implements OnInit, OnDestroy, AfterViewInit {
     }
   };
 
-  submit(data) {
-    console.log(data.value.name);
+  submitAdd(data) {
     var province = $('#province option:selected').text();
     var district = $('#district option:selected').text();
     var ward = $('#ward option:selected').text();
@@ -239,5 +315,14 @@ export class TourComponent implements OnInit, OnDestroy, AfterViewInit {
         alert(error.message);
       }
     );
+  }
+
+  submitEdit(data) {
+    var province = $('#province option:selected').text();
+    var district = $('#district option:selected').text();
+    var ward = $('#ward option:selected').text();
+    var road = data.value.road;
+    var address = road + ', ' + ward + ', ' + district + ', ' + province;
+    console.log(address);
   }
 }
