@@ -7,7 +7,20 @@ import { Tour } from '../models/tour.model';
   providedIn: 'root',
 })
 export class TourService {
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
+
+  public getProvinceList() {
+    return this.http.get('https://provinces.open-api.vn/api/p/');
+  }
+
+  public getDistrictList() {
+    return this.http.get('https://provinces.open-api.vn/api/d/');
+  }
+
+  public getWardList() {
+    return this.http.get('https://provinces.open-api.vn/api/w/');
+  }
+
   public getTourList(): Observable<Tour[]> {
     return this.http.get<Tour[]>(`http://localhost:8080/api/tour/all`);
   }

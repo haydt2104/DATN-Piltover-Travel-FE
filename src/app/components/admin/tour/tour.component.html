@@ -101,7 +101,7 @@
               <label class="form-label">Đường:</label>
               <div class="row">
                 <input #road="ngModel" class="form-control" name="road" type="text" placeholder="VD: Số 123, Đường ABC"
-                  ngModel required>
+                  ngModel="{{roadValue}}" required>
               </div>
               <div>
                 <div *ngIf="province.touched && district.touched && ward.touched && road.touched">
@@ -112,13 +112,14 @@
               <label class="form-label">Số Lượng Khách:</label>
               <div class="row">
                 <input #availability="ngModel" class="form-control" name="availableSpaces" type="number" min="10"
-                  max="200" placeholder="Giới hạn từ 10 đến 200" ngModel required>
+                  max="200" placeholder="Giới hạn từ 10 đến 200" ngModel="{{editTour.availableSpaces}}" required>
                 <small *ngIf="availability.touched && availability.value < 10">Số lượng phải từ 10 trở lên</small>
                 <small *ngIf="availability.touched && availability.value > 200">Số lượng vượt quá 200</small>
               </div>
               <label class="form-label">Mô Tả:</label>
               <div class="row">
-                <textarea #description="ngModel" name="description" id="" rows="6" ngModel required></textarea>
+                <textarea #description="ngModel" name="description" id="" rows="6" ngModel="{{editTour.description}}"
+                  required></textarea>
                 <small *ngIf="description.touched && description.invalid">Vui lòng điền mô tả</small>
               </div>
             </div>

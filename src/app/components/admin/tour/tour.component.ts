@@ -18,10 +18,10 @@ import {
 } from '@ng-bootstrap/ng-bootstrap';
 import { DataTableDirective, DataTablesModule } from 'angular-datatables';
 import axios from 'axios';
-import { Observable, Subject } from 'rxjs';
+import { Subject } from 'rxjs';
 import { Tour } from 'src/app/models/tour.model';
-import { CurdService } from './../../../services/curd.service';
 import { TourService } from 'src/app/services/tour.service';
+import { CurdService } from './../../../services/curd.service';
 @Component({
   selector: 'app-tour',
   templateUrl: './tour.component.html',
@@ -45,6 +45,9 @@ export class TourComponent implements OnInit, OnDestroy, AfterViewInit {
   dtElement: DataTableDirective;
   public tourList: Tour[];
   public editTour: Tour;
+  public provinceList: any;
+  public districtList: any;
+  public wardList: any;
   host = 'https://provinces.open-api.vn/api/';
   dtOptions: DataTables.Settings = {};
   dtTrigger: Subject<any> = new Subject();
@@ -55,10 +58,13 @@ export class TourComponent implements OnInit, OnDestroy, AfterViewInit {
     private tourService: TourService,
     private modalService: NgbModal,
     private renderer: Renderer2,
-    private router: Router
-  ) {}
+    private router: Router,
+  ) { }
   ngOnInit(): void {
     this.getTourList();
+    this.getProvinceData()
+    this.getDistrictData()
+    this.getWardData()
     this.dtOptions = {
       ajax: {
         url: 'http://localhost:8080/api/tour/all',
@@ -125,10 +131,10 @@ export class TourComponent implements OnInit, OnDestroy, AfterViewInit {
     });
   }
 
-  province: string;
-  district: string;
-  ward: string;
-  road: string;
+  provinceValue: number;
+  districtValue: number;
+  wardValue: number;
+  roadValue: string;
 
   open(content, id: number) {
     this.callAPIProvince('https://provinces.open-api.vn/api/?depth=1');
@@ -148,25 +154,21 @@ export class TourComponent implements OnInit, OnDestroy, AfterViewInit {
         );
     } else if (content == 'edit') {
       this.editTour = this.tourList.find((tour) => tour.id == id);
-      const destinationAddress = this.editTour.destinationAddress;
-      console.log('Destination Address:', destinationAddress);
-      this.province = destinationAddress
+      const provinceAddress = this.editTour.destinationAddress
         .split(',')
-        [destinationAddress.split(',').length - 1].trim();
-      console.log('Province:', this.province);
-      this.district = destinationAddress
+      [this.editTour.destinationAddress.split(',').length - 1].trim();
+      const districtAddress = this.editTour.destinationAddress
         .split(',')
-        [destinationAddress.split(',').length - 2].trim();
-      console.log('District:', this.district);
-      this.ward = destinationAddress
+      [this.editTour.destinationAddress.split(',').length - 2].trim();
+      const wardAddress = this.editTour.destinationAddress
         .split(',')
-        [destinationAddress.split(',').length - 3].trim();
-      console.log('Ward:', this.ward);
-      this.road = destinationAddress
-        .substring(0, destinationAddress.indexOf(this.ward) - 2)
+      [this.editTour.destinationAddress.split(',').length - 3].trim();
+      this.provinceValue = this.provinceList.find((province) => province.name == provinceAddress).code
+      this.districtValue = this.districtList.find((district) => district.name == districtAddress).code
+      this.wardValue = this.wardList.find((ward) => ward.name == wardAddress).code
+      this.roadValue = this.editTour.destinationAddress
+        .substring(0, this.editTour.destinationAddress.indexOf(wardAddress) - 2)
         .trim();
-      console.log('Road:', this.road);
-
       this.modalService
         .open(this.editModal, {
           ariaLabelledBy: 'modal-basic-title',
@@ -201,6 +203,37 @@ export class TourComponent implements OnInit, OnDestroy, AfterViewInit {
     this.curdService.getList('tour').subscribe(
       (response: Tour[]) => {
         this.tourList = response;
+      },
+      (error: HttpErrorResponse) => {
+        console.log(error.message);
+      }
+    );
+  }
+
+  public getProvinceData(): void {
+    this.tourService.getProvinceList().subscribe(
+      (response) => {
+        this.provinceList = response;
+      },
+      (error: HttpErrorResponse) => {
+        console.log(error.message);
+      }
+    );
+  }
+  public getDistrictData(): void {
+    this.tourService.getDistrictList().subscribe(
+      (response) => {
+        this.districtList = response;
+      },
+      (error: HttpErrorResponse) => {
+        console.log(error.message);
+      }
+    );
+  }
+  public getWardData(): void {
+    this.tourService.getWardList().subscribe(
+      (response) => {
+        this.wardList = response;
       },
       (error: HttpErrorResponse) => {
         console.log(error.message);
