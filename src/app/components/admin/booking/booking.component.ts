@@ -14,10 +14,10 @@ export class BookingComponent implements OnInit {
     // this.getAllBooking();
   }
 
-  private getAllBooking() {
-    this.bService.getAllBooking.subscribe((data) => {
-      this.bookings = data;
-      console.log(this.bookings);
-    });
-  }
+  // private getAllBooking() {
+  //   this.Service.getAllBooking.subscribe((data) => {
+  //     this.bookings = data;
+  //     console.log(this.bookings);
+  //   });
+  // }
 }
