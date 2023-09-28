@@ -137,8 +137,8 @@ export class TourComponent implements OnInit, OnDestroy, AfterViewInit {
   roadValue: string;
 
   open(content, id: number) {
-    this.callAPIProvince('https://provinces.open-api.vn/api/?depth=1');
     if (content == 'add') {
+      this.callAPIProvince('https://provinces.open-api.vn/api/?depth=1', null);
       this.modalService
         .open(this.addModal, {
           ariaLabelledBy: 'modal-basic-title',
@@ -169,6 +169,9 @@ export class TourComponent implements OnInit, OnDestroy, AfterViewInit {
       this.roadValue = this.editTour.destinationAddress
         .substring(0, this.editTour.destinationAddress.indexOf(wardAddress) - 2)
         .trim();
+      this.callAPIProvince('https://provinces.open-api.vn/api/?depth=1', this.provinceValue);
+      this.callApiDistrict('https://provinces.open-api.vn/api/p/' + this.provinceValue + '?depth=2', this.districtValue);
+      this.callApiWard('https://provinces.open-api.vn/api/d/' + this.districtValue + '?depth=2', this.wardValue);
       this.modalService
         .open(this.editModal, {
           ariaLabelledBy: 'modal-basic-title',
@@ -251,7 +254,7 @@ export class TourComponent implements OnInit, OnDestroy, AfterViewInit {
     }
   }
 
-  renderData = (array, select) => {
+  renderData = (array, select, code) => {
     let row;
     if (select == 'district') {
       row = ' <option disable value="">Chọn Quận/Huyện</option>';
@@ -259,30 +262,34 @@ export class TourComponent implements OnInit, OnDestroy, AfterViewInit {
       row = ' <option disable value="">Chọn Phường/Xã</option>';
     }
     array.forEach((element) => {
-      row += `<option value="${element.code}">${element.name}</option>`;
+      if (element.code == code) {
+        row += `<option value="${element.code}" selected>${element.name}</option>`;
+      } else {
+        row += `<option value="${element.code}">${element.name}</option>`;
+      }
     });
     document.querySelector('#' + select).innerHTML = row;
   };
 
-  callAPIProvince = (api) => {
+  callAPIProvince = (api, code) => {
     return axios.get(api).then((response) => {
-      this.renderData(response.data, 'province');
+      this.renderData(response.data, 'province', code);
     });
   };
-  callApiDistrict = (api) => {
+  callApiDistrict = (api, code) => {
     return axios.get(api).then((response) => {
-      this.renderData(response.data.districts, 'district');
+      this.renderData(response.data.districts, 'district', code);
     });
   };
-  callApiWard = (api) => {
+  callApiWard = (api, code) => {
     return axios.get(api).then((response) => {
-      this.renderData(response.data.wards, 'ward');
+      this.renderData(response.data.wards, 'ward', code);
     });
   };
   provinceChange() {
     if ($('#province').val()) {
       this.callApiDistrict(
-        this.host + 'p/' + $('#province').val() + '?depth=2'
+        this.host + 'p/' + $('#province').val() + '?depth=2', null
       );
       this.printResult();
     } else {
@@ -296,7 +303,7 @@ export class TourComponent implements OnInit, OnDestroy, AfterViewInit {
   }
   districtChange() {
     if ($('#district').val()) {
-      this.callApiWard(this.host + 'd/' + $('#district').val() + '?depth=2');
+      this.callApiWard(this.host + 'd/' + $('#district').val() + '?depth=2', null);
       this.printResult();
     } else {
       document.querySelector(
