@@ -12,6 +12,9 @@ import {
   ApexGrid,
   ApexPlotOptions
 } from 'ng-apexcharts';
+import { MonthRevenue } from 'src/app/models/revenue';
+import { Revenue } from 'src/app/models/revenue';
+import { MonthrevenueService } from 'src/app/services/revenue/monthrevenue.service';
 
 export type salesChartOptions = {
   series: ApexAxisChartSeries | any;
@@ -34,20 +37,21 @@ export type salesChartOptions = {
   templateUrl: './sales-ratio.component.html'
 })
 export class SalesRatioComponent implements OnInit {
+  public monthrevenue!: MonthRevenue[];
 
   @ViewChild("chart") chart: ChartComponent = Object.create(null);
   public salesChartOptions: Partial<salesChartOptions>;
-  constructor() {
+  constructor(private monthrevenueService: MonthrevenueService) {
     this.salesChartOptions = {
       series: [
         {
           name: "Tour",
-          data: [0, 31, 40, 28, 51, 42, 109, 100, 105, 111, 150, 300],
+          data: [0, 31, 40, 28, 51, 42, 109, 100, 105, 111, 150, 230],
         },
         {
           name: "Khách Sạn",
           data: [0, 11, 32, 45, 32, 34, 52, 41, 55, 81, 100, 150],
-        }, 
+        },
         {
           name: "Máy Bay",
           data: [0, 71, 75, 94, 102, 134, 152, 141, 125, 181, 220, 140],
@@ -77,18 +81,18 @@ export class SalesRatioComponent implements OnInit {
       },
       xaxis: {
         categories: [
-          "Jan",
-          "Feb",
-          "March",
-          "April",
-          "May",
-          "June",
-          "July",
-          "Aug",
-          "Sep",
-          "Oct",
-          "Nov",
-          "Dec"
+          "Tháng 1",
+          "Tháng 2",
+          "Tháng 3",
+          "Tháng 4",
+          "Tháng 5",
+          "Tháng 6",
+          "Tháng 7",
+          "Tháng 8",
+          "Tháng 9",
+          "Tháng 10",
+          "Tháng 11",
+          "Tháng 12"
         ],
       },
       tooltip: {
@@ -98,6 +102,12 @@ export class SalesRatioComponent implements OnInit {
   }
 
   ngOnInit(): void {
+      this.getMonthRevenue();
   }
-
+  private getMonthRevenue(){
+    this.monthrevenueService.getMonthRevenue().subscribe((data) =>{
+      this.monthrevenue = data;
+      console.log('Month Doanh thu: ', this.monthrevenue);
+    });
+  }
 }

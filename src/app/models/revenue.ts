@@ -4,3 +4,9 @@ export interface Revenue {
   total_hotel_revenue: number;
   total_transport_revenue: number;
 }
+export interface MonthRevenue {
+  month: String;
+  total_tour_revenue: number;
+  total_hotel_revenue: number;
+  total_transport_revenue: number;
+}
