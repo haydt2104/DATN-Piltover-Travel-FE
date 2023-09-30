@@ -104,10 +104,40 @@ export class SalesRatioComponent implements OnInit {
   ngOnInit(): void {
       this.getMonthRevenue();
   }
-  private getMonthRevenue(){
-    this.monthrevenueService.getMonthRevenue().subscribe((data) =>{
+  private getMonthRevenue() {
+    this.monthrevenueService.getMonthRevenue().subscribe((data) => {
       this.monthrevenue = data;
       console.log('Month Doanh thu: ', this.monthrevenue);
+
+      const tourData: number[] = Array(12).fill(0);
+      const hotelData: number[] = Array(12).fill(0);
+      const transportData: number[] = Array(12).fill(0);
+      this.monthrevenue.forEach((item) => {
+        const monthFromDatabase = item.month; // Lấy giá trị month từ cơ sở dữ liệu
+        const parts = monthFromDatabase.split("-");
+
+        const month = parseInt(parts[1]); // month sẽ là 1
+        console.log("Tháng:", month);
+
+        tourData[month -1] = item.total_tour_revenue;
+        hotelData[month -1] = item.total_hotel_revenue;
+        transportData[month -1] = item.total_transport_revenue;
+      });
+      // Cập nhật lại biểu đồ
+      this.salesChartOptions.series = [
+        {
+          name: "Tour",
+          data: tourData,
+        },
+        {
+          name: "Khách Sạn",
+          data: hotelData,
+        },
+        {
+          name: "Phương tiện",
+          data: transportData,
+        },
+      ];
     });
   }
 }
