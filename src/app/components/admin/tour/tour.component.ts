@@ -8,7 +8,8 @@ import {
   Renderer2,
   ViewChild,
 } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { AngularFireStorage } from '@angular/fire/compat/storage';
+import { FormsModule, NgForm } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import {
   ModalDismissReasons,
@@ -20,8 +21,12 @@ import { DataTableDirective, DataTablesModule } from 'angular-datatables';
 import axios from 'axios';
 import { Subject } from 'rxjs';
 import { Tour } from 'src/app/models/tour.model';
+import { TourDateService } from 'src/app/services/tour-date.service';
 import { TourService } from 'src/app/services/tour.service';
+import { TourDate } from './../../../models/tour-date.model';
 import { CurdService } from './../../../services/curd.service';
+import { TourImageService } from './../../../services/tour-image.service';
+import { TourImage } from 'src/app/models/tour-img.model';
 @Component({
   selector: 'app-tour',
   templateUrl: './tour.component.html',
@@ -37,13 +42,18 @@ import { CurdService } from './../../../services/curd.service';
     NgIf,
   ],
 })
-export class TourComponent implements OnInit, OnDestroy, AfterViewInit {
+export class TourComponent implements OnInit, AfterViewInit {
+  @ViewChild('addModal') addModal: any;
   @ViewChild('editModal') editModal: any;
   @ViewChild('deleteModal') deleteModal: any;
-  @ViewChild('addModal') addModal: any;
+  @ViewChild('imageModal') imageModal: any;
+  @ViewChild('confirmModal') confirmModal: any;
+
 
   dtElement: DataTableDirective;
   public tourList: Tour[];
+  public tourDateList: TourDate[];
+  public tourImageList: TourImage[];
   public editTour: Tour;
   public provinceList: any;
   public districtList: any;
@@ -51,15 +61,21 @@ export class TourComponent implements OnInit, OnDestroy, AfterViewInit {
   host = 'https://provinces.open-api.vn/api/';
   dtOptions: DataTables.Settings = {};
   dtTrigger: Subject<any> = new Subject();
-  currentPage = 1;
   closeResult = '';
   constructor(
     private curdService: CurdService,
     private tourService: TourService,
+    private tourDateService: TourDateService,
+    private tourImageService: TourImageService,
     private modalService: NgbModal,
     private renderer: Renderer2,
     private router: Router,
+    private fireStorage: AngularFireStorage
   ) { }
+
+  file = null
+  mainImgUrl = null
+
   ngOnInit(): void {
     this.getTourList();
     this.getProvinceData()
@@ -93,9 +109,19 @@ export class TourComponent implements OnInit, OnDestroy, AfterViewInit {
           title: '',
           render: function (data: any, type: any, full: any) {
             return (
+              '<button class="btn btn-primary" pic="' +
+              full.id +
+              '">Ảnh</button>'
+            );
+          },
+        },
+        {
+          title: '',
+          render: function (data: any, type: any, full: any) {
+            return (
               '<button class="btn btn-primary" update="' +
               full.id +
-              '">Chỉnh sửa</button>'
+              '">Sửa</button>'
             );
           },
         },
@@ -113,10 +139,6 @@ export class TourComponent implements OnInit, OnDestroy, AfterViewInit {
     };
   }
 
-  ngOnDestroy(): void {
-    this.dtTrigger.unsubscribe();
-  }
-
   ngAfterViewInit(): void {
     this.renderer.listen('document', 'click', (event) => {
       if (event.target.hasAttribute('route')) {
@@ -126,15 +148,120 @@ export class TourComponent implements OnInit, OnDestroy, AfterViewInit {
       } else if (event.target.hasAttribute('update')) {
         this.open('edit', event.target.getAttribute('update'));
       } else if (event.target.hasAttribute('delete')) {
-        this.open('delete', null);
+        this.open('delete', event.target.getAttribute('delete'));
+      } else if (event.target.hasAttribute('pic')) {
+        this.open('image', event.target.getAttribute('pic'));
       }
     });
+  }
+
+  onFileChange(event: any) {
+    this.file = event.target.files[0]
+    if (this.file.type.match(/image\/*/) && this.file.size <= 6000000) {
+      var reader = new FileReader();
+      reader.readAsDataURL(event.target.files[0])
+      reader.onload = (e: any) => {
+        this.mainImgUrl = e.target.result
+      }
+    } else {
+      alert("Tour chỉ nhận ảnh từ 5MB trở xuống")
+    }
+  }
+
+  addImage() {
+    document.getElementById("addImageInput").click();
+  }
+
+  async saveNewImage(event: any) {
+    const file = event.target.files[0]
+    if (file.type.match(/image\/*/) && file.size <= 6000000) {
+      const path = `tour-img/${new Date + file.name}`
+      const upload = await this.fireStorage.upload(path, file)
+      const url = await upload.ref.getDownloadURL()
+      var tourImage: TourImage = {
+        id: null,
+        path: url,
+        tour: this.editTour
+      }
+      this.curdService.post('tour_image', tourImage).subscribe(
+        (response: TourImage) => {
+          this.getTourImageList(this.editTour.id);
+        },
+        (error: HttpErrorResponse) => {
+          alert(error.message);
+        }
+      );
+      this.editTour = null
+    } else {
+      alert("Tour chỉ nhận file ảnh từ 5MB trở xuống")
+    }
+  }
+
+  updateImage(id: number) {
+    document.getElementById("image_" + id).click();
+  }
+
+  async changeImage(event: any, id: number) {
+    const file = event.target.files[0]
+    if (file.type.match(/image\/*/) && file.size <= 6000000) {
+      const path = `tour-img/${new Date + file.name}`
+      const upload = await this.fireStorage.upload(path, file)
+      const url = await upload.ref.getDownloadURL()
+      const editImageTour = this.tourImageList.find((tour) => tour.id == id);
+      editImageTour.path = url
+      this.curdService.put('tour_image', editImageTour).subscribe(
+        (response: TourImage) => {
+          this.getTourImageList(this.editTour.id);
+        },
+        (error: HttpErrorResponse) => {
+          alert(error.message);
+        }
+      );
+      this.editTour = null
+    } else {
+      alert("Tour chỉ nhận file ảnh từ 5MB trở xuống")
+    }
+  }
+
+  confirmDelete(object: string, id: number) {
+    this.modalService
+      .open(this.confirmModal, {
+        ariaLabelledBy: 'modal-basic-title',
+        size: 'xl',
+      })
+      .result.then(
+        (result) => {
+          this.closeResult = `Closed with: ${result}`;
+        },
+        (reason) => {
+          this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+        }
+      );
+    if (object === 'tour') {
+
+    } else if (object == 'image') {
+      document.querySelector('#confirmDelete').addEventListener('click', (e: Event) => this.deleteImage(id));
+    }
+  }
+
+  deleteImage(id: number) {
+    this.curdService.delete('tour_image', id).subscribe(
+      (response) => {
+        const editImageTour = this.tourImageList.findIndex((tour) => tour.id == id);
+        this.tourImageList.splice(editImageTour, 1)
+      },
+      (error: HttpErrorResponse) => {
+        alert(error.message);
+      }
+    )
   }
 
   provinceValue: number;
   districtValue: number;
   wardValue: number;
   roadValue: string;
+
+  tourId: number
 
   open(content, id: number) {
     if (content == 'add') {
@@ -172,6 +299,7 @@ export class TourComponent implements OnInit, OnDestroy, AfterViewInit {
       this.callAPIProvince('https://provinces.open-api.vn/api/?depth=1', this.provinceValue);
       this.callApiDistrict('https://provinces.open-api.vn/api/p/' + this.provinceValue + '?depth=2', this.districtValue);
       this.callApiWard('https://provinces.open-api.vn/api/d/' + this.districtValue + '?depth=2', this.wardValue);
+      this.mainImgUrl = this.editTour.image
       this.modalService
         .open(this.editModal, {
           ariaLabelledBy: 'modal-basic-title',
@@ -185,7 +313,7 @@ export class TourComponent implements OnInit, OnDestroy, AfterViewInit {
             this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
           }
         );
-    } else {
+    } else if (content == 'delete') {
       this.modalService
         .open(this.deleteModal, {
           ariaLabelledBy: 'modal-basic-title',
@@ -199,6 +327,23 @@ export class TourComponent implements OnInit, OnDestroy, AfterViewInit {
             this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
           }
         );
+    } else if (content == 'image') {
+      this.editTour = this.tourList.find((tour) => tour.id == id);
+      this.getTourImageList(id);
+      this.modalService
+        .open(this.imageModal, {
+          ariaLabelledBy: 'modal-basic-title',
+          size: 'xl',
+        })
+        .result.then(
+          (result) => {
+            this.closeResult = `Closed with: ${result}`;
+          },
+          (reason) => {
+            this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+          }
+        );
+      document.querySelector('#addImageBtn').addEventListener('click', (e: Event) => this.addImage());
     }
   }
 
@@ -244,7 +389,28 @@ export class TourComponent implements OnInit, OnDestroy, AfterViewInit {
     );
   }
 
+  public getTourDateList(id: number) {
+    this.tourDateService.getTourDateByTourId(id).subscribe(
+      (response: TourDate[]) => {
+        this.tourDateList = response;
+      },
+      (error: HttpErrorResponse) => {
+        console.log(error.message);
+      })
+  }
+
+  public getTourImageList(id: number) {
+    this.tourImageService.getTourImageByTourId(id).subscribe(
+      (response: TourImage[]) => {
+        this.tourImageList = response;
+      },
+      (error: HttpErrorResponse) => {
+        console.log(error.message);
+      })
+  }
+
   private getDismissReason(reason: any): string {
+    this.mainImgUrl = null
     if (reason === ModalDismissReasons.ESC) {
       return 'by pressing ESC';
     } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
@@ -330,7 +496,7 @@ export class TourComponent implements OnInit, OnDestroy, AfterViewInit {
     }
   };
 
-  submitAdd(data) {
+  async submitAdd(data) {
     var province = $('#province option:selected').text();
     var district = $('#district option:selected').text();
     var ward = $('#ward option:selected').text();
@@ -345,24 +511,83 @@ export class TourComponent implements OnInit, OnDestroy, AfterViewInit {
       availableSpaces: data.value.availableSpaces,
       active: false,
       createTime: new Date(),
+      price: {
+        id: null,
+        adultPrice: data.value.adult,
+        childrenPrice: data.value.children
+      }
     };
+    const path = `tour-img/${new Date + this.file.name}`
+    const upload = await this.fireStorage.upload(path, this.file)
+    const url = await upload.ref.getDownloadURL()
+    tour.image = url
     this.curdService.post('tour', tour).subscribe(
       (response: Tour) => {
-        console.log(response);
+        this.getTourList();
         $('.table').DataTable().ajax.reload();
       },
       (error: HttpErrorResponse) => {
         alert(error.message);
       }
     );
+    this.mainImgUrl = null;
   }
 
-  submitEdit(data) {
+  async submitEdit(data) {
     var province = $('#province option:selected').text();
     var district = $('#district option:selected').text();
     var ward = $('#ward option:selected').text();
     var road = data.value.road;
     var address = road + ', ' + ward + ', ' + district + ', ' + province;
-    console.log(address);
+    var tour: Tour = {
+      id: this.editTour.id,
+      name: data.value.name,
+      description: data.value.description,
+      destinationAddress: address,
+      image: null,
+      availableSpaces: data.value.availableSpaces,
+      active: this.editTour.active,
+      createTime: this.editTour.createTime,
+      price: {
+        id: this.editTour.price.id,
+        adultPrice: data.value.adult,
+        childrenPrice: data.value.children
+      }
+    };
+    if (this.mainImgUrl != this.editTour.image) {
+      const path = `tour-img/${new Date + this.file.name}`
+      const upload = await this.fireStorage.upload(path, this.file)
+      const url = await upload.ref.getDownloadURL()
+      tour.image = url
+    } else {
+      tour.image = this.editTour.image
+    }
+    this.curdService.put('tour', tour).subscribe(
+      (response: Tour) => {
+        this.getTourList();
+        $('.table').DataTable().ajax.reload();
+      },
+      (error: HttpErrorResponse) => {
+        alert(error.message);
+      }
+    );
+    this.editTour = null
+    this.mainImgUrl = null
+  }
+
+  checkValid(type: string, data: NgForm) {
+    if (type == 'add') {
+      if (data.valid && this.mainImgUrl && $('#province').val() && $('#district').val() && $('#ward').val()) {
+        return false;
+      } else {
+        return true
+      }
+    } else {
+      if (data.valid && this.mainImgUrl && $('#province').val() && $('#district').val() && $('#ward').val()) {
+        return false
+      } else {
+        return true;
+      }
+    }
   }
 }

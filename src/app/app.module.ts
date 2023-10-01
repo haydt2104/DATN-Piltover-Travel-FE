@@ -25,6 +25,9 @@ import { FooterComponent } from './components/user/layouts/footer/footer.compone
 import { HeaderComponent } from './components/user/layouts/header/header.component';
 import { LayoutComponent } from './components/user/layouts/layout/layout.component';
 import { TestPipePipe } from './pipes/test-pipe.pipe';
+import { AngularFireModule } from '@angular/fire/compat'
+import { AngularFireStorageModule } from '@angular/fire/compat/storage'
+import { environment } from 'src/environments/environment';
 
 @NgModule({
   declarations: [
@@ -48,6 +51,8 @@ import { TestPipePipe } from './pipes/test-pipe.pipe';
     FullComponent,
     SidebarComponent,
     NavigationComponent,
+    AngularFireModule.initializeApp(environment.firebaseConfig),
+    AngularFireStorageModule
   ],
   providers: [
     {
@@ -57,4 +62,4 @@ import { TestPipePipe } from './pipes/test-pipe.pipe';
   ],
   bootstrap: [AppComponent],
 })
-export class AppModule {}
+export class AppModule { }

@@ -16,7 +16,7 @@
               <label class="form-label">Tên Tour:</label>
               <div class="row">
                 <input #name="ngModel" class="form-control" type="text"
-                  placeholder="VD: Chuyến đi gia đình đến Phú Quốc" name="name" ngModel required>
+                  placeholder="VD: Chuyến đi gia đình đến Phú Quốc" name="name" ngModel [maxlength]="50" required>
                 <small *ngIf="name.touched && name.invalid">Tên không được trống</small>
               </div>
               <label class="form-label">Điểm đến:</label>
@@ -52,19 +52,48 @@
                 <small *ngIf="availability.touched && availability.value < 10">Số lượng phải từ 10 trở lên</small>
                 <small *ngIf="availability.touched && availability.value > 200">Số lượng vượt quá 200</small>
               </div>
+              <div class="row">
+                <div class="col-6">
+                  <label class="form-label">Người lớn:</label>
+                  <div class="input-group">
+                    <input #adultPrice="ngModel" name="adult" type="number" class="form-control" ngModel required>
+                    <span class="input-group-text" id="basic-addon2">VNĐ</span>
+                  </div>
+                  <small *ngIf="adultPrice.touched && adultPrice.value < 0">Giá vé người lớn không được là số âm</small>
+                  <small
+                    *ngIf="adultPrice.touched && adultPrice.value < childerenPrice.value && adultPrice.value >= 0">Giá
+                    vé người lớn không
+                    được nhỏ hơn trẻ em</small>
+                </div>
+                <div class="col-6">
+                  <label class="form-label">Trẻ em:</label>
+                  <div class="input-group">
+                    <input #childerenPrice="ngModel" name="children" type="number" class="form-control" ngModel
+                      required>
+                    <span class="input-group-text" id="basic-addon2">VNĐ</span>
+                  </div>
+                  <small *ngIf="childerenPrice.touched && childerenPrice.value < 0">Giá vé trẻ em không được là số
+                    âm</small>
+                  <small
+                    *ngIf="childerenPrice.touched && childerenPrice.value > adultPrice.value && childerenPrice.value >= 0">Giá
+                    vé trẻ không được
+                    lớn hơn giá người lớn</small>
+                </div>
+              </div>
+              <label class="form-label">Ảnh Bìa</label>
+              <div class="row">
+                <input class="form-control" type="file" accept="image/*" (change)="onFileChange($event)">
+                <img [src]="mainImgUrl" alt="">
+              </div>
               <label class="form-label">Mô Tả:</label>
               <div class="row">
                 <textarea #description="ngModel" name="description" id="" rows="6" ngModel required></textarea>
                 <small *ngIf="description.touched && description.invalid">Vui lòng điền mô tả</small>
               </div>
             </div>
-            <!-- <img [src]="imgSrc" alt="">IMG -->
             <div class="modal-footer">
-              <div>
-                <small>Lưu ý sau khi thêm Tour chỉ có thể chỉnh sửa [Số lượng], [Hình] và [Mô tả]</small>
-              </div>
               <button type="submit" class="btn btn-primary" (click)="modal.close('Save click')"
-                [disabled]="!addForm.valid">Submit</button>
+                [disabled]="checkValid('add',addForm)">Thêm</button>
             </div>
           </form>
         </ng-template>
@@ -80,21 +109,21 @@
               <label class="form-label">Tên Tour:</label>
               <div class="row">
                 <input #name="ngModel" class="form-control" type="text"
-                  placeholder="VD: Chuyến đi gia đình đến Phú Quốc" name="name" ngModel="{{editTour.name}}" required>
+                  placeholder="VD: Chuyến đi gia đình đến Phú Quốc" name="name" ngModel="{{editTour.name}}"
+                  [maxlength]="50" required>
                 <small *ngIf="name.touched && name.invalid">Tên không được trống</small>
               </div>
               <label class="form-label">Điểm đến:</label>
               <div class="row">
-                <select #province="ngModel" class="form-control col-md-4" name="province" (change)="provinceChange()"
-                  id="province" ngModel required>
+                <select class="form-control col-md-4" name="province" (change)="provinceChange()" id="province"
+                  required>
                   <option value="">Chọn Tỉnh/Thành Phố</option>
                 </select>
-                <select #district="ngModel" class="form-control col-md-4" name="district" (change)="districtChange()"
-                  id="district" ngModel required>
+                <select class="form-control col-md-4" name="district" (change)="districtChange()" id="district"
+                  required>
                   <option value="">Chọn Quận/Huyện</option>
                 </select>
-                <select #ward="ngModel" class="form-control col-md-4" name="ward" (change)="wardChange()" id="ward"
-                  ngModel required>
+                <select class="form-control col-md-4" name="ward" (change)="wardChange()" id="ward" required>
                   <option value="">Chọn Phường/Xã</option>
                 </select>
               </div>
@@ -104,8 +133,8 @@
                   ngModel="{{roadValue}}" required>
               </div>
               <div>
-                <div *ngIf="province.touched && district.touched && ward.touched && road.touched">
-                  <small *ngIf="province.invalid || district.invalid || ward.invalid || road.invalid">Vui lòng điền đầy
+                <div *ngIf="road.touched">
+                  <small *ngIf="road.invalid">Vui lòng điền đầy
                     đủ điểm đến và đường</small>
                 </div>
               </div>
@@ -116,6 +145,40 @@
                 <small *ngIf="availability.touched && availability.value < 10">Số lượng phải từ 10 trở lên</small>
                 <small *ngIf="availability.touched && availability.value > 200">Số lượng vượt quá 200</small>
               </div>
+              <div class="row">
+                <div class="col-6">
+                  <label class="form-label">Người lớn:</label>
+                  <div class="input-group">
+                    <input #adultPrice="ngModel" name="adult" type="number" class="form-control"
+                      ngModel="{{editTour.price.adultPrice}}" required>
+                    <span class="input-group-text" id="basic-addon2">VNĐ</span>
+                  </div>
+                  <small *ngIf="adultPrice.touched && adultPrice.value < 0">Giá vé người lớn không được là số âm</small>
+                  <small
+                    *ngIf="adultPrice.touched && adultPrice.value < childerenPrice.value && adultPrice.value >= 0">Giá
+                    vé người lớn không
+                    được nhỏ hơn trẻ em</small>
+                </div>
+                <div class="col-6">
+                  <label class="form-label">Trẻ em:</label>
+                  <div class="input-group">
+                    <input #childerenPrice="ngModel" name="children" type="number" class="form-control"
+                      ngModel="{{editTour.price.childrenPrice}}" required>
+                    <span class="input-group-text" id="basic-addon2">VNĐ</span>
+                  </div>
+                  <small *ngIf="childerenPrice.touched && childerenPrice.value < 0">Giá vé trẻ em không được là số
+                    âm</small>
+                  <small
+                    *ngIf="childerenPrice.touched && childerenPrice.value > adultPrice.value && childerenPrice.value >= 0">Giá
+                    vé trẻ không được
+                    lớn hơn giá người lớn</small>
+                </div>
+              </div>
+              <label class="form-label">Ảnh Bìa</label>
+              <div class="row">
+                <input class="form-control" type="file" accept="image/*" (change)="onFileChange($event)">
+                <img [src]="mainImgUrl" alt="">
+              </div>
               <label class="form-label">Mô Tả:</label>
               <div class="row">
                 <textarea #description="ngModel" name="description" id="" rows="6" ngModel="{{editTour.description}}"
@@ -124,11 +187,8 @@
               </div>
             </div>
             <div class="modal-footer">
-              <div>
-                <small>Lưu ý sau khi thêm Tour chỉ có thể chỉnh sửa [Số lượng], [Hình] và [Mô tả]</small>
-              </div>
               <button type="submit" class="btn btn-primary" (click)="modal.close('Save click')"
-                [disabled]="!editForm.valid">Submit</button>
+                [disabled]="checkValid('edit',editForm)">Thay đổi</button>
             </div>
           </form>
         </ng-template>
@@ -188,13 +248,53 @@
             </div>
             <!-- <img [src]="imgSrc" alt="">IMG -->
             <div class="modal-footer">
-              <div>
-                <small>Lưu ý sau khi thêm Tour chỉ có thể chỉnh sửa [Số lượng], [Hình] và [Mô tả]</small>
-              </div>
               <button type="submit" class="btn btn-primary" (click)="modal.close('Save click')"
                 [disabled]="!addForm.valid">Submit</button>
             </div>
           </form>
+        </ng-template>
+
+        <!-- Image Modal -->
+        <ng-template #imageModal let-modal>
+          <div class="modal-header">
+            <h4 class="modal-title" id="modal-basic-title">Ảnh Tour</h4>
+            <button id="addImageBtn" class="btn btn-success ml-3">Thêm Ảnh</button>
+            <input id="addImageInput" (change)="saveNewImage($event)" type="file" accept="image/*"
+                    hidden>
+            <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+          </div>
+          <table class="table table-hover align-middle text-nowrap table-bordered">
+            <tbody>
+              <tr *ngFor="let img of tourImageList">
+                <td align="center">
+                  <img width="200" [src]="img.path" alt="">
+                </td>
+                <td align="center">
+                  <button class="btn btn-warning" (click)="updateImage(img.id)">Chỉnh
+                    sửa</button>
+                  <input id="image_{{img.id}}" (change)="changeImage($event, img.id)" type="file" accept="image/*"
+                    hidden>
+                </td>
+                <td align="center">
+                  <button (click)="confirmDelete('image',img.id)" class="btn btn-danger">Xóa</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </ng-template>
+
+        <!-- Confirm Modal -->
+        <ng-template #confirmModal let-modal>
+          <div class="modal-header">
+            Vui lòng xác nhận
+          </div>
+          <div class="modal-body">
+            Bạn có chắc muốn xóa? Một khi đã xóa sẽ không thể khôi phục lại
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-success" (click)="modal.close()">Hủy bỏ</button>
+            <button id="confirmDelete" class="btn btn-danger" (click)="modal.close()">Xác nhận</button>
+          </div>
         </ng-template>
 
         <div class="table-responsive">
