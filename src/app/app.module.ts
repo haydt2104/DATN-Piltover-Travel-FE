@@ -30,8 +30,7 @@ import { BookingComponent } from './components/admin/booking/booking.component';
 
 import { environment } from './../environments/environment';
 
-import { CheckStatusAccountPipe } from './pipes/check-status-account.pipe';
-import { BookingdetailComponent } from './components/admin/bookingdetail/bookingdetail.component';
+import { CheckStatusAccountPipe } from './pipes/check-status-account.pipe'
 
 @NgModule({
   declarations: [
@@ -45,7 +44,6 @@ import { BookingdetailComponent } from './components/admin/bookingdetail/booking
     AccountComponent,
     CheckStatusAccountPipe,
     BookingComponent,
-    BookingdetailComponent,
   ],
   imports: [
     CommonModule,

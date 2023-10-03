@@ -1,0 +1,104 @@
+<h3 class="text-center">BOOKING DETAIL</h3>
+<form >
+  <div class="card">
+    <div class="card-body">
+      <div class="row">
+        <div class="mb-3 col-sm-12 col-md-6">
+          <label class="form-label">Booking Id: </label>
+          <input class="form-control" type="text" disabled [(ngModel)]="detailItem.id" name="id">
+        </div>
+        <div class="mb-3 col-sm-12 col-md-6">
+          <label class="form-label">Tour: </label>
+          <input class="form-control" id="" type="text" disabled name="tourname" >
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="mb-3 col-sm-12 col-md-6">
+          <label class="form-label">Trạng thái: </label>
+          <select class="form-control">
+            <option selected class="text-center"> --- Chọn --- </option>
+            <option>Chưa liên hệ</option>
+            <option>Đã liên hệ</option>
+            <option>Đã hủy</option>
+          </select>
+        </div>
+        <div class="mb-3 col-sm-12 col-md-6">
+          <label for="" class="form-label">Ngày lập:</label>
+          <input class="form-control" id="" type="date" disabled>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="mb-3 col-sm-12 col-md-3">
+          <label for="" class="form-label" >Chỗ ở: </label>
+          <input class="form-control" id="" type="text" >
+        </div>
+        <div class="mb-3 col-sm-12 col-md-3">
+          <label for="" class="form-label">Phương tiện: </label>
+          <input class="form-control" id="" type="text">
+        </div>
+        <div class="mb-3 col-sm-12 col-md-3">
+          <label for="" class="form-label">Số lượng người lớn: </label>
+          <input class="form-control" id="" type="text" >
+        </div>
+        <div class="mb-3 col-sm-12 col-md-3">
+          <label for="" class="form-label">Số lượng trẻ em: </label>
+          <input class="form-control" id="" type="text" >
+        </div>
+      </div>
+      <div class="row">
+        <div class="mb-3 col-sm-12 col-md-4">
+          <label for="" class="form-label">Tổng tiền cơ bản: </label>
+          <input class="form-control" id="" type="text" disabled >
+        </div>
+        <div class="mb-3 col-sm-12 col-md-4">
+          <label for="" class="form-label">Tiền giảm giá: </label>
+          <input class="form-control" id="" type="text" disabled >
+        </div>
+        <div class="mb-3 col-sm-12 col-md-4">
+          <label for="" class="form-label">Tổng tiền thu: </label>
+          <input class="form-control" id="" type="text" >
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-body">
+      <div class="row">
+        <div class="mb-3 col-sm-12 col-md-6">
+          <label for="" class="form-label">Tên khách hàng: </label>
+          <input class="form-control" id="" type="text">
+        </div>
+        <div class="mb-3 col-sm-12 col-md-6">
+          <label for="email" class="form-label">Email:</label>
+          <input class="form-control" id="email" type="email">
+        </div>
+
+      </div>
+      <div class="row">
+        <div class="mb-3 col-sm-12 col-md-4">
+          <label for="phone" class="form-label">Số điện thoại: </label>
+          <input class="form-control" id="phone" type="text" >
+        </div>
+        <div class="mb-3 col-sm-12 col-md-4">
+          <label for="" class="form-label">Địa chỉ: </label>
+          <input class="form-control" id="" type="text" >
+        </div>
+        <div class="mb-3 col-sm-12 col-md-4">
+          <label for="" class="form-label">Ngày đi: </label>
+          <input class="form-control" id="" type="date" disabled >
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row col-md-12">
+    <div class="text-right">
+      <button type="submit" class="btn btn-outline-success col-md-2 mr-3">Lưu</button>
+      <button class="btn btn-outline-info col-md-2" [routerLink]="['/admin/manage/booking']" routerLinkActive="router-link-active" >Trở lại</button>
+    </div>
+
+  </div>
+
+</form>

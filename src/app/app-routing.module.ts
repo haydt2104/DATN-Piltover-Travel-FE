@@ -52,13 +52,13 @@ export const Approutes: Routes = [
             (m) => m.BookingModule
           ),
       },
-      {
-        path: 'manage/bookingdetail',
-        loadChildren: () =>
-          import('./components/admin/bookingdetail/bookingdetail.module').then(
-            (m) => m.BookingdetailModule
-          ),
-      },
+      // {
+      //   path: 'manage/booking/detail:did',
+      //   loadChildren: () =>
+      //     import('./components/admin/booking/edit-booking/edit-booking.module').then(
+      //       (m) => m.EditBookingModule
+      //     ),
+      // },
       {
         path: 'component',
         loadChildren: () =>

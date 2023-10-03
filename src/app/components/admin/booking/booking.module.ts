@@ -1,28 +1,22 @@
-import { NgModule } from "@angular/core";
-import { CommonModule } from "@angular/common";
-import { FormsModule, ReactiveFormsModule } from "@angular/forms";
-import { Routes, RouterModule } from "@angular/router";
+import { EditBookingModule } from './edit-booking/edit-booking.module';
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Bookingroutes } from './booking-routing.module';
+import { EditBookingComponent } from './edit-booking/edit-booking.component';//detail
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { Routes, RouterModule } from '@angular/router';
 
-import { BookingComponent } from "./booking.component";
-const routes: Routes = [
-  {
-    path: "",
-    data: {
-      title: "Booking",
-      urls: [{ title: "Booking", url: "/booking" }, { title: "Booking" }],
-    },
-    component: BookingComponent,
-  },
-];
+import { BookingComponent } from './booking.component';
+
 
 @NgModule({
   imports: [
     FormsModule,
     ReactiveFormsModule,
     CommonModule,
-    RouterModule.forChild(routes),
+    RouterModule.forChild(Bookingroutes),
+    EditBookingModule
   ],
-  declarations: [
-  ],
+  declarations: [],
 })
-export class BookingModule { }
+export class BookingModule {}

@@ -3,6 +3,7 @@
   <div class="table-responsive">
     <table class="table table-hover align-middle text-nowrap">
       <thead class="text-center">
+        <th class="col-md-1">STT</th>
         <th class="col-md-1">ID</th>
         <th class="col-md-2">Ngày đặt</th>
         <th class="col-md-2 text-left">Họ và tên</th>
@@ -12,14 +13,17 @@
         <th class="col-md-1"></th>
       </thead>
       <tbody>
-        <tr>
-          <td class="text-center">1</td>
-          <td class="text-center">01/01/0101-11h11m11s</td>
-          <td>Vạng Thành Đạt</td>
-          <td class="text-left">0123456789</td>
-          <td>đateptrai@gmail.com</td>
-          <td class="text-center">Chưa liên hệ</td>
-          <td class="text-center"><i class="bi bi-card-list"></i></td>
+        <tr *ngFor="let booking of bookings,index as i">
+          <td>{{i+1}}</td>
+          <td class="text-center">{{booking.id}}</td>
+          <td class="text-center">{{booking.tourDate.initiateDate}}</td>
+          <td>{{booking.account.fullname}}</td>
+          <td class="text-left">{{booking.account.phone}}</td>
+          <td>{{booking.account.email}}</td>
+          <td class="text-center">{{booking.status}}</td>
+          <td class="text-center">
+            <button class="btn btn-info" [routerLink]="['/admin/manage/booking/detail/'+booking.id]"><i class="bi bi-card-list"></i></button>
+          </td>
         </tr>
 
       </tbody>
