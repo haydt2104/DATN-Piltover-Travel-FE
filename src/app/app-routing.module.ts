@@ -32,11 +32,16 @@ export const Approutes: Routes = [
           ),
       },
       {
+        path: 'tour',
+        loadChildren: () =>
+          import('./components/admin/tour/tour.module').then(
+            (m) => m.TourModule
+          ),
+      },
+      {
         path: 'about',
         loadChildren: () =>
-          import('./components/admin/about/about.module').then(
-            (m) => m.AboutModule
-          ),
+          import('./components/admin/about/about.module').then((m) => m.AboutModule),
       },
       {
         path: 'manage/account',

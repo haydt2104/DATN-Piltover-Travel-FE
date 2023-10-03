@@ -1,3 +1,5 @@
+import { Price } from './price.model';
+
 export interface Tour {
   id: number;
   name: string;
@@ -7,4 +9,5 @@ export interface Tour {
   availableSpaces: number;
   createTime: Date;
   active: boolean;
+  price: Price
 }

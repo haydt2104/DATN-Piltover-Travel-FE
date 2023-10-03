@@ -17,21 +17,21 @@ import { FullComponent } from './components/admin/layouts/full/full.component';
 import { NavigationComponent } from './components/admin/shared/header/navigation.component';
 import { SidebarComponent } from './components/admin/shared/sidebar/sidebar.component';
 
-import { SpinnerComponent } from './components/admin/shared/spinner.component';
 import { Approutes } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { LayoutComponent } from './components/user/layouts/layout/layout.component';
-import { HeaderComponent } from './components/user/layouts/header/header.component';
-import { FooterComponent } from './components/user/layouts/footer/footer.component';
+import { SpinnerComponent } from './components/admin/shared/spinner.component';
 import { AuthorizationsComponent } from './components/user/authorizations/authorizations.component';
+import { FooterComponent } from './components/user/layouts/footer/footer.component';
+import { HeaderComponent } from './components/user/layouts/header/header.component';
+import { LayoutComponent } from './components/user/layouts/layout/layout.component';
 import { TestPipePipe } from './pipes/test-pipe.pipe';
 import { AccountComponent } from './components/admin/account/account.component';
 import { BookingComponent } from './components/admin/booking/booking.component';
-
-import { environment } from './../environments/environment';
-
 import { CheckStatusAccountPipe } from './pipes/check-status-account.pipe';
 import { BookingdetailComponent } from './components/admin/bookingdetail/bookingdetail.component';
+import { AngularFireModule } from '@angular/fire/compat'
+import { AngularFireStorageModule } from '@angular/fire/compat/storage'
+import { environment } from 'src/environments/environment';
 
 @NgModule({
   declarations: [
@@ -59,6 +59,8 @@ import { BookingdetailComponent } from './components/admin/bookingdetail/booking
     FullComponent,
     SidebarComponent,
     NavigationComponent,
+    AngularFireModule.initializeApp(environment.firebaseConfig),
+    AngularFireStorageModule
   ],
   providers: [
     {
@@ -72,4 +74,4 @@ import { BookingdetailComponent } from './components/admin/bookingdetail/booking
   ],
   bootstrap: [AppComponent],
 })
-export class AppModule {}
+export class AppModule { }
