@@ -10,3 +10,12 @@ export interface MonthRevenue {
   total_hotel_revenue: number;
   total_transport_revenue: number;
 }
+
+export interface TourRevenue {
+  total_name: string;
+  adult_price: number;
+  children_price: number;
+  adult_bookings: number;
+  children_bookings: number;
+  total_revenue: number;
+}

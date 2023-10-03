@@ -134,7 +134,7 @@ export class SalesRatioComponent implements OnInit {
           data: hotelData,
         },
         {
-          name: "Phương tiện",
+          name: "Vận chuyển",
           data: transportData,
         },
       ];
