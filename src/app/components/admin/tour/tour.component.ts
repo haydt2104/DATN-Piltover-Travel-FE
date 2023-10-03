@@ -1,8 +1,9 @@
-import { NgFor, NgIf } from '@angular/common';
+import { DatePipe, NgFor, NgIf } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
 import {
   AfterViewInit,
   Component,
+  ElementRef,
   OnDestroy,
   OnInit,
   Renderer2,
@@ -41,14 +42,27 @@ import { TourImage } from 'src/app/models/tour-img.model';
     FormsModule,
     NgIf,
   ],
+  providers: [DatePipe]
 })
-export class TourComponent implements OnInit, AfterViewInit {
-  @ViewChild('addModal') addModal: any;
-  @ViewChild('editModal') editModal: any;
-  @ViewChild('deleteModal') deleteModal: any;
-  @ViewChild('imageModal') imageModal: any;
-  @ViewChild('confirmModal') confirmModal: any;
+export class TourComponent implements OnInit, AfterViewInit, OnDestroy {
+  @ViewChild('addModal') addModal: ElementRef;
+  @ViewChild('editModal') editModal: ElementRef;
+  @ViewChild('deleteModal') deleteModal: ElementRef;
+  @ViewChild('imageModal') imageModal: ElementRef;
+  @ViewChild('confirmModal') confirmModal: ElementRef;
+  @ViewChild('dateModal') dateModal: ElementRef;
 
+  constructor(
+    private curdService: CurdService,
+    private tourService: TourService,
+    private tourDateService: TourDateService,
+    private tourImageService: TourImageService,
+    private modalService: NgbModal,
+    private renderer: Renderer2,
+    private router: Router,
+    private fireStorage: AngularFireStorage,
+    private datePipe: DatePipe
+  ) { }
 
   dtElement: DataTableDirective;
   public tourList: Tour[];
@@ -58,20 +72,12 @@ export class TourComponent implements OnInit, AfterViewInit {
   public provinceList: any;
   public districtList: any;
   public wardList: any;
+  public currentDate: any = this.datePipe.transform(new Date(), 'yyyy-MM-dd');
+
   host = 'https://provinces.open-api.vn/api/';
-  dtOptions: DataTables.Settings = {};
+  dtOptions: DataTables.Settings[] = [];
   dtTrigger: Subject<any> = new Subject();
   closeResult = '';
-  constructor(
-    private curdService: CurdService,
-    private tourService: TourService,
-    private tourDateService: TourDateService,
-    private tourImageService: TourImageService,
-    private modalService: NgbModal,
-    private renderer: Renderer2,
-    private router: Router,
-    private fireStorage: AngularFireStorage
-  ) { }
 
   file = null
   mainImgUrl = null
@@ -81,7 +87,7 @@ export class TourComponent implements OnInit, AfterViewInit {
     this.getProvinceData()
     this.getDistrictData()
     this.getWardData()
-    this.dtOptions = {
+    this.dtOptions[0] = {
       ajax: {
         url: 'http://localhost:8080/api/tour/all',
         type: 'GET',
@@ -109,6 +115,16 @@ export class TourComponent implements OnInit, AfterViewInit {
           title: '',
           render: function (data: any, type: any, full: any) {
             return (
+              '<button class="btn btn-primary" date="' +
+              full.id +
+              '">Ngày</button>'
+            );
+          },
+        },
+        {
+          title: '',
+          render: function (data: any, type: any, full: any) {
+            return (
               '<button class="btn btn-primary" pic="' +
               full.id +
               '">Ảnh</button>'
@@ -124,35 +140,36 @@ export class TourComponent implements OnInit, AfterViewInit {
               '">Sửa</button>'
             );
           },
-        },
-        {
-          title: '',
-          render: function (data: any, type: any, full: any) {
-            return (
-              '<button class="btn btn-primary" route="' +
-              full.id +
-              '">Kế Hoạch</button>'
-            );
-          },
-        },
+        }
       ],
     };
   }
 
+
   ngAfterViewInit(): void {
+    this.dtTrigger.next(0);
     this.renderer.listen('document', 'click', (event) => {
       if (event.target.hasAttribute('route')) {
+        document.getElementById('closeDateModal').click();
         this.router.navigate([
           '/admin/tour/details/' + event.target.getAttribute('route'),
-        ]);
+        ]).then(() => {
+          window.location.reload();
+        });
       } else if (event.target.hasAttribute('update')) {
         this.open('edit', event.target.getAttribute('update'));
       } else if (event.target.hasAttribute('delete')) {
         this.open('delete', event.target.getAttribute('delete'));
       } else if (event.target.hasAttribute('pic')) {
         this.open('image', event.target.getAttribute('pic'));
+      } else if (event.target.hasAttribute('date')) {
+        this.open('date', event.target.getAttribute('date'));
       }
     });
+  }
+
+  ngOnDestroy(): void {
+    this.dtTrigger.unsubscribe();
   }
 
   onFileChange(event: any) {
@@ -344,6 +361,56 @@ export class TourComponent implements OnInit, AfterViewInit {
           }
         );
       document.querySelector('#addImageBtn').addEventListener('click', (e: Event) => this.addImage());
+    } else if (content == 'date') {
+      this.editTour = this.tourList.find((tour) => tour.id == id);
+      // const formatedDate = this.currentDate.getFullYear() + "/" + [this.currentDate.getMonth() + 1] + "/" + this.currentDate.getDate();
+      this.dtOptions[1] = {
+        ajax: {
+          url: `http://localhost:8080/api/tour_date?tourId=${this.editTour.id}`,
+          type: 'GET',
+          dataSrc: '',
+          dataType: 'json',
+        },
+        columns: [
+          {
+            title: 'Thời điểm khởi hành',
+            data: 'initiateDate',
+          },
+          {
+            title: '',
+            render: function (data: any, type: any, full: any) {
+              return (
+                '<button class="btn btn-primary" updateDate="' +
+                full.id +
+                '">Sửa</button><input type="date" min="' + this.currentDate + '"></input>'
+              );
+            },
+          },
+          {
+            title: '',
+            render: function (data: any, type: any, full: any) {
+              return (
+                '<button class="btn btn-primary" route="' +
+                full.id +
+                '">Kế Hoạch</button>'
+              );
+            },
+          },
+        ],
+      };
+      this.modalService
+        .open(this.dateModal, {
+          ariaLabelledBy: 'modal-basic-title',
+          size: 'xl',
+        })
+        .result.then(
+          (result) => {
+            this.closeResult = `Closed with: ${result}`;
+          },
+          (reason) => {
+            this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+          }
+        );
     }
   }
 

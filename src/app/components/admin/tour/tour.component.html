@@ -259,8 +259,7 @@
           <div class="modal-header">
             <h4 class="modal-title" id="modal-basic-title">Ảnh Tour</h4>
             <button id="addImageBtn" class="btn btn-success ml-3">Thêm Ảnh</button>
-            <input id="addImageInput" (change)="saveNewImage($event)" type="file" accept="image/*"
-                    hidden>
+            <input id="addImageInput" (change)="saveNewImage($event)" type="file" accept="image/*" hidden>
             <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
           </div>
           <table class="table table-hover align-middle text-nowrap table-bordered">
@@ -283,6 +282,19 @@
           </table>
         </ng-template>
 
+        <!-- Tour Date Modal -->
+        <ng-template #dateModal let-modal>
+          <div class="modal-header">
+            <h4 class="modal-title" id="modal-basic-title">Ngày hoạt động</h4>
+            <button id="" class="btn btn-success ml-3">Thêm ngày</button>
+            <button id="closeDateModal" type="button" class="btn-close" aria-label="Close"
+              (click)="modal.dismiss('Cross click')"></button>
+          </div>
+          <div class="modal-body">
+            <table datatable [dtOptions]="dtOptions[1]" class="table row-border hover"></table>
+          </div>
+        </ng-template>
+
         <!-- Confirm Modal -->
         <ng-template #confirmModal let-modal>
           <div class="modal-header">
@@ -298,7 +310,7 @@
         </ng-template>
 
         <div class="table-responsive">
-          <table datatable [dtOptions]="dtOptions" class="table row-border hover"></table>
+          <table datatable [dtOptions]="dtOptions[0]" class="table row-border hover" [dtTrigger]="dtTrigger"></table>
         </div>
       </div>
     </div>
