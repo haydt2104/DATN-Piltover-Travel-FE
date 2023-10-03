@@ -1,6 +1,7 @@
 import { Injectable, Inject } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Observable, throwError } from 'rxjs';
+import { catchError, map } from 'rxjs/operators';
 import { Account } from 'src/app/models/account.model';
 
 @Injectable({
@@ -15,6 +16,32 @@ export class AccountService {
   }
 
   public getAllAccounts(): Observable<Account[]> {
-    return this.http.get<Account[]>(this.baseUrl + 'api/account/getAllAccount');
+    return this.http
+      .get<Account[]>(this.baseUrl + 'api/account/getAllAccount')
+      .pipe(
+        map((response) => {
+          // Xử lý dữ liệu ở đây nếu cần
+          return response;
+        }),
+        catchError((error) => {
+          // Xử lý lỗi ở đây
+          console.error('Error:', error);
+          return throwError(() => error);
+        })
+      );
+  }
+
+  public createAccount(accountData: Account): Observable<any> {
+    return this.http
+      .post(`${this.baseUrl}api/account/createAccount`, accountData)
+      .pipe(
+        map((response) => {
+          // Xử lý dữ liệu ở đây nếu cần
+          return response;
+        }),
+        catchError((error) => {
+          return throwError(() => error);
+        })
+      );
   }
 }

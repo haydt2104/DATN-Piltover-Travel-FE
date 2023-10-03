@@ -4,7 +4,7 @@ import { Booking } from 'src/app/models/booking.model';
 @Component({
   selector: 'app-booking',
   templateUrl: './booking.component.html',
-  styleUrls: ['./booking.component.scss']
+  styleUrls: ['./booking.component.scss'],
 })
 export class BookingComponent implements OnInit {
   public bookings!: Booking[];
@@ -12,5 +12,12 @@ export class BookingComponent implements OnInit {
 
   ngOnInit() {
     // this.getAllBooking();
+  }
+
+  private getAllBooking() {
+    this.bService.getAllBooking().subscribe((data) => {
+      this.bookings = data;
+      console.log(this.bookings);
+    });
   }
 }

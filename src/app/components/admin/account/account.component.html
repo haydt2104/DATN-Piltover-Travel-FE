@@ -1,15 +1,84 @@
 <div class="card">
   <div class="card-body">
-    <form>
+    <form [formGroup]="formAccountData" (ngSubmit)="onSubmit()">
       <div class="row">
-        <div class="mb-3 col-sm-12 col-md-6">
+        <div class="mb-3 col-sm-12 col-md-4">
           <label for="email" class="form-label">Email: </label>
-          <input class="form-control" id="email" type="email">
+          <input class="form-control" id="email" formControlName="email" name="email" type="email">
+          <small *ngIf="!formAccountData.controls.email.valid && this.submitted" class="text-danger">Vui lòng nhập
+            email</small>
         </div>
-        <div class="mb-3 col-sm-12 col-md-6">
+        <div class="mb-3 col-sm-12 col-md-4">
+          <label for="password" class="form-label">Mật khẩu: </label>
+          <input class="form-control" id="password" formControlName="password" name="password" type="password">
+          <small *ngIf="!formAccountData.controls.password.valid && this.submitted" class="text-danger">Vui lòng nhập
+            mật khẩu</small>
+        </div>
+        <div class="mb-3 col-sm-12 col-md-4">
           <label for="phone" class="form-label">Số điện thoại: </label>
-          <input class="form-control" id="phone" type="text">
+          <input class="form-control" id="phone" formControlName="phone" name="phone" type="text">
+          <small *ngIf="!formAccountData.controls.phone.valid && this.submitted" class="text-danger">Vui lòng nhập
+            số điện thoại</small>
         </div>
+        <div class="mb-3 col-sm-12 col-md-4">
+          <label for="fullname" class="form-label">Họ tên đầy đủ: </label>
+          <input class="form-control" id="fullname" formControlName="fullname" name="fullname" type="text">
+          <small *ngIf="!formAccountData.controls.fullname.valid && this.submitted" class="text-danger">Vui lòng nhập
+            họ tên</small>
+        </div>
+        <div class="mb-3 col-sm-12 col-md-4">
+          <label for="birthday" class="form-label">Ngày sinh: </label>
+          <input class="form-control" name="birthday" [value]="'2001-01-01'" formControlName="birthday" id="birthday"
+            type="date">
+          <small *ngIf="!formAccountData.controls.birthday.valid && this.submitted" class="text-danger">Vui lòng nhập
+            ngày sinh</small>
+        </div>
+        <div class="mb-3 col-sm-12 col-md-4">
+          <label for="gender" class="form-label">Giới tính: </label><br>
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" formControlName="gender" name="gender" id="inlineRadio1"
+              [value]="true">
+            <label class="form-check-label" for="inlineRadio1">Nam</label>
+          </div>
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" formControlName="gender" name="gender" id="inlineRadio2"
+              [value]="false">
+            <label class="form-check-label" for="inlineRadio2">Nữ</label>
+          </div>
+          <br>
+          <small *ngIf="!formAccountData.controls.gender.valid && this.submitted" class="text-danger">Vui lòng chọn giới
+            tính</small>
+        </div>
+        <div class="mb-3 col-sm-12 col-md-8">
+          <label for="address" class="form-label">Địa chỉ: </label>
+          <input class="form-control" id="address" formControlName="address" name="address" type="text">
+          <small *ngIf="!formAccountData.controls.address.valid && this.submitted" class="text-danger">Vui lòng nhập
+            địa chỉ</small>
+        </div>
+        <div class="mb-3 col-sm-12 col-md-4">
+          <label for="active" class="form-label">Trạng thái: </label><br>
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" formControlName="active" name="active" id="activeRadio1"
+              [value]="true" checked>
+            <label class="form-check-label" for="activeRadio1">Hoạt động</label>
+          </div>
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" formControlName="active" name="active" id="activeRadio2"
+              [value]="false">
+            <label class="form-check-label" for="activeRadio2">Không hoạt động</label>
+          </div>
+          <br>
+          <small *ngIf="!formAccountData.controls.active.valid && this.submitted" class="text-danger">Vui lòng chọn
+            trạng
+            thái</small>
+        </div>
+
+      </div>
+      <div class="row p-3">
+        <button type="submit" class="btn btn-primary me-2 mb-2 col-sm-5 col-md-2 col-lg-1"
+          (click)="createAccount()">Thêm</button>
+        <button class="btn btn-success me-2 mb-2 col-sm-5 col-md-2 col-lg-1">Cập nhật</button>
+        <button class="btn btn-info me-2 mb-2 col-sm-5 col-md-2 col-lg-1" (click)="refreshForm()">Làm mới</button>
       </div>
     </form>
   </div>
@@ -25,6 +94,7 @@
       <th>Số điện thoại</th>
       <th>Ngày sinh</th>
       <th>Trạng thái</th>
+      <th></th>
     </thead>
     <tbody>
       <tr *ngFor="let item of accounts">
@@ -35,6 +105,7 @@
         <td>{{item.birthday |
           date:'dd/MM/yyyy'}}</td>
         <td>{{item.active | checkStatusAccount}}</td>
+        <td class="text-warning" (click)="showAccountDetail(item)">Chi tiết</td>
       </tr>
     </tbody>
 
