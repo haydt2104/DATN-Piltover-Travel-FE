@@ -283,7 +283,7 @@
         </ng-template>
 
         <!-- Tour Date Modal -->
-        <ng-template #dateModal let-modal>
+        <!-- <ng-template #dateModal let-modal>
           <div class="modal-header">
             <h4 class="modal-title" id="modal-basic-title">Ngày hoạt động</h4>
             <button id="" class="btn btn-success ml-3">Thêm ngày</button>
@@ -293,6 +293,48 @@
           <div class="modal-body">
             <table datatable [dtOptions]="dtOptions[1]" class="table row-border hover"></table>
           </div>
+        </ng-template> -->
+
+        <ng-template #dateModal let-modal>
+          <div class="modal-header">
+            <h4 class="modal-title" id="modal-basic-title">Ngày hoạt động</h4>
+            <button id="" class="btn btn-success ml-3">Thêm ngày</button>
+            <button id="closeDateModal" type="button" class="btn-close" aria-label="Close"
+              (click)="modal.dismiss('Cross click')"></button>
+          </div>
+          <p-table #dt2 [value]="tourDateList" dataKey="id" [rows]="10" [showCurrentPageReport]="true"
+            [rowsPerPageOptions]="[10, 25, 50]" [paginator]="true"
+            currentPageReportTemplate="Hiển thị từ bảng {first} đến {last} trong tổng {totalRecords} bảng"
+            [globalFilterFields]="['initiateDate']" [rowsPerPageOptions]="[10, 25, 50]">
+            <ng-template pTemplate="caption">
+              <div class="flex">
+                <form [formGroup]="formFilter">
+                  <span class="p-input-icon-left ml-auto">
+                    <input pInputText type="text" (change)="dt2.filterGlobal(getValueSearch(), 'contains')"
+                      formControlName="search" class="form-control box-shadow-none" placeholder="Tìm kiếm"
+                      aria-label="Example text with button addon" aria-describedby="button-search">
+                  </span>
+                </form>
+              </div>
+            </ng-template>
+            <ng-template pTemplate="header" class="theader">
+              <tr>
+                <th pSortableColumn="initiateDate" style="width:25%">Thời điểm khởi hành<p-sortIcon
+                    field="initiateDate"></p-sortIcon></th>
+                <th></th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" class="tbody" let-tourDateList>
+              <tr>
+                <td>{{ tourDateList.initiateDate }}</td>
+                <td>
+                  <button class="btn btn-primary">Sửa</button>
+                </td>
+                <td>
+                  <button class="btn btn-primary" [routerLink]="['/admin/tour/date/'+tourDateList.id]" (click)="modal.close()">Kế Hoạch</button>
+              </tr>
+            </ng-template>
+          </p-table>
         </ng-template>
 
         <!-- Confirm Modal -->
@@ -309,8 +351,55 @@
           </div>
         </ng-template>
 
-        <div class="table-responsive">
+        <!-- <div class="table-responsive">
           <table datatable [dtOptions]="dtOptions[0]" class="table row-border hover" [dtTrigger]="dtTrigger"></table>
+        </div> -->
+
+        <div class="table-responsive">
+          <p-table #dt1 [value]="tourList" dataKey="id" [rows]="10" [showCurrentPageReport]="true"
+            [rowsPerPageOptions]="[10, 25, 50]" [paginator]="true"
+            currentPageReportTemplate="Hiển thị từ bảng {first} đến {last} trong tổng {totalRecords} bảng"
+            [globalFilterFields]="['name', 'destinationAddress']" [rowsPerPageOptions]="[10, 25, 50]">
+            <ng-template pTemplate="caption">
+              <div class="flex">
+                <form [formGroup]="formFilter">
+                  <span class="p-input-icon-left ml-auto">
+                    <input pInputText type="text" (change)="dt1.filterGlobal(getValueSearch(), 'contains')"
+                      formControlName="search" class="form-control box-shadow-none" placeholder="Tìm kiếm"
+                      aria-label="Example text with button addon" aria-describedby="button-search">
+                  </span>
+                </form>
+              </div>
+            </ng-template>
+            <ng-template pTemplate="header" class="theader">
+              <tr>
+                <th pSortableColumn="name" style="width:15%">Tên Tour<p-sortIcon field="name"></p-sortIcon></th>
+                <th pSortableColumn="destinationAddress" style="width:40%">Điểm đến<p-sortIcon
+                    field="destinationAddress"></p-sortIcon></th>
+                <th pSortableColumn="active" style="width:12%">Trạng thái<p-sortIcon field="active"></p-sortIcon></th>
+                <th pSortableColumn="availableSpaces" style="width:12%">Số lượng<p-sortIcon
+                    field="availableSpaces"></p-sortIcon></th>
+                <th></th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" class="tbody" let-tourList>
+              <tr>
+                <td>{{ tourList.name }}</td>
+                <td>{{ tourList.destinationAddress }}</td>
+                <td>{{ tourList.active }}</td>
+                <td>{{ tourList.availableSpaces}}</td>
+                <td>
+                  <button class="btn btn-primary" (click)="open('date', tourList.id)">Ngày</button>
+                </td>
+                <td>
+                  <button class="btn btn-primary" (click)="open('image', tourList.id)">Ảnh</button>
+                </td>
+                <td>
+                  <button class="btn btn-primary" (click)="open('edit', tourList.id)">Sửa</button>
+                </td>
+              </tr>
+            </ng-template>
+          </p-table>
         </div>
       </div>
     </div>

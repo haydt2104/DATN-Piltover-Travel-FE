@@ -6,12 +6,12 @@ import { TourPlanDetailService } from 'src/app/services/tour-plan-detail.service
 import { TourPlanDetail } from 'src/app/models/tour-plan-detail.model';
 
 @Component({
-  selector: 'app-tour-detail-plan',
-  templateUrl: './tour-detail-plan.component.html',
+  selector: 'app-tour-plan-detail',
+  templateUrl: './tour-plan-detail.component.html',
   standalone: true,
   imports: [NgFor, RouterLink],
 })
-export class TourDetailPlanComponent implements OnInit {
+export class TourPlanDetailComponent implements OnInit {
   planDetailList: TourPlanDetail[];
   constructor(
     private route: ActivatedRoute,
@@ -19,7 +19,7 @@ export class TourDetailPlanComponent implements OnInit {
   ) {}
   ngOnInit(): void {
     this.route.params.subscribe((params) => {
-      let id = params['id2'];
+      let id = params['id'];
       this.getTourPlanByTourId(id);
     });
   }

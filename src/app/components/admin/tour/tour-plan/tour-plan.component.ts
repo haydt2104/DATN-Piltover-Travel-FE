@@ -6,12 +6,12 @@ import { TourPlan } from 'src/app/models/tour-plan.model';
 import { TourPlanService } from 'src/app/services/tour-plan.service';
 
 @Component({
-  selector: 'app-tour-detail',
-  templateUrl: './tour-detail.component.html',
+  selector: 'app-tour-plan',
+  templateUrl: './tour-plan.component.html',
   standalone: true,
   imports: [NgFor, RouterLink],
 })
-export class TourDetailComponent implements OnInit {
+export class TourPlanComponent implements OnInit {
   planList: TourPlan[];
   constructor(
     private route: ActivatedRoute,

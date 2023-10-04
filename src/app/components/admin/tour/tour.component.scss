@@ -9,7 +9,36 @@ textarea.ng-invalid.ng-touched {
   border: red 1px solid;
 }
 
-small{
+small {
   color: red;
 }
 
+:host ::ng-deep tbody {
+  border-radius: var(--8, 8px);
+  border: 1px solid var(--gray-200, #eaecf0);
+  background: var(--white-100, #fff);
+}
+
+:host ::ng-deep p-table th {
+  font-size: 14px;
+  border-radius: var(--8, 8px);
+  border-top: 1px solid var(--gray-200, #eaecf0);
+  background: var(--white-100, #fff);
+}
+
+:host ::ng-deep tbody tr td {
+  border-bottom: 1px solid var(--gray-200, #eaecf0);
+  background: var(--gray-50, #f9fafb);
+  font-size: 14px;
+}
+
+:host ::ng-deep thead {
+  border-radius: var(--8, 8px);
+  border: 1px solid var(--gray-200, #eaecf0);
+  background: var(--white-100, #fff);
+}
+
+:host ::ng-deep p-dropdown ul {
+  margin: 0;
+  padding: 0;
+}

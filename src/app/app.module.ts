@@ -17,6 +17,10 @@ import { FullComponent } from './components/admin/layouts/full/full.component';
 import { NavigationComponent } from './components/admin/shared/header/navigation.component';
 import { SidebarComponent } from './components/admin/shared/sidebar/sidebar.component';
 
+import { AngularFireModule } from '@angular/fire/compat';
+import { AngularFireStorageModule } from '@angular/fire/compat/storage';
+import { TableModule } from 'primeng/table';
+import { environment } from 'src/environments/environment';
 import { Approutes } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { SpinnerComponent } from './components/admin/shared/spinner.component';
@@ -25,9 +29,7 @@ import { FooterComponent } from './components/user/layouts/footer/footer.compone
 import { HeaderComponent } from './components/user/layouts/header/header.component';
 import { LayoutComponent } from './components/user/layouts/layout/layout.component';
 import { TestPipePipe } from './pipes/test-pipe.pipe';
-import { AngularFireModule } from '@angular/fire/compat'
-import { AngularFireStorageModule } from '@angular/fire/compat/storage'
-import { environment } from 'src/environments/environment';
+
 
 @NgModule({
   declarations: [
@@ -52,7 +54,8 @@ import { environment } from 'src/environments/environment';
     SidebarComponent,
     NavigationComponent,
     AngularFireModule.initializeApp(environment.firebaseConfig),
-    AngularFireStorageModule
+    AngularFireStorageModule,
+    TableModule
   ],
   providers: [
     {

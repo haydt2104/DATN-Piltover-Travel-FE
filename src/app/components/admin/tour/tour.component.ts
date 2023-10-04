@@ -10,7 +10,7 @@ import {
   ViewChild,
 } from '@angular/core';
 import { AngularFireStorage } from '@angular/fire/compat/storage';
-import { FormsModule, NgForm } from '@angular/forms';
+import { FormBuilder, FormControl, FormsModule, NgForm, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import {
   ModalDismissReasons,
@@ -28,6 +28,8 @@ import { TourService } from 'src/app/services/tour.service';
 import { TourDate } from './../../../models/tour-date.model';
 import { CurdService } from './../../../services/curd.service';
 import { TourImageService } from './../../../services/tour-image.service';
+import { TableModule } from 'primeng/table';
+
 @Component({
   selector: 'app-tour',
   templateUrl: './tour.component.html',
@@ -41,6 +43,8 @@ import { TourImageService } from './../../../services/tour-image.service';
     DataTablesModule,
     FormsModule,
     NgIf,
+    TableModule,
+    ReactiveFormsModule
   ],
 })
 export class TourComponent implements OnInit, AfterViewInit, OnDestroy {
@@ -60,6 +64,7 @@ export class TourComponent implements OnInit, AfterViewInit, OnDestroy {
     private renderer: Renderer2,
     private router: Router,
     private fireStorage: AngularFireStorage,
+    private formBuilder: FormBuilder
   ) { }
 
   dtElement: DataTableDirective;
@@ -79,90 +84,99 @@ export class TourComponent implements OnInit, AfterViewInit, OnDestroy {
   file = null
   mainImgUrl = null
 
+  public getValueSearch() {
+    return this.formFilter.get('search')?.value;
+  }
+
+  public formFilter = this.formBuilder.group({
+    setRows: new FormControl(5),
+    search: new FormControl('')
+  })
+
   ngOnInit(): void {
     this.getTourList();
     this.getProvinceData()
     this.getDistrictData()
     this.getWardData()
-    this.dtOptions[0] = {
-      ajax: {
-        url: 'http://localhost:8080/api/tour/all',
-        type: 'GET',
-        dataSrc: '',
-        dataType: 'json',
-      },
-      columns: [
-        {
-          title: 'Tên Tour',
-          data: 'name',
-        },
-        {
-          title: 'Điểm đến',
-          data: 'destinationAddress',
-        },
-        {
-          title: 'Trạng thái',
-          data: 'active',
-        },
-        {
-          title: 'Số lượng',
-          data: 'availableSpaces',
-        },
-        {
-          title: '',
-          render: function (data: any, type: any, full: any) {
-            return (
-              '<button class="btn btn-primary" date="' +
-              full.id +
-              '">Ngày</button>'
-            );
-          },
-        },
-        {
-          title: '',
-          render: function (data: any, type: any, full: any) {
-            return (
-              '<button class="btn btn-primary" pic="' +
-              full.id +
-              '">Ảnh</button>'
-            );
-          },
-        },
-        {
-          title: '',
-          render: function (data: any, type: any, full: any) {
-            return (
-              '<button class="btn btn-primary" update="' +
-              full.id +
-              '">Sửa</button>'
-            );
-          },
-        }
-      ],
-    };
+    // this.dtOptions[0] = {
+    //   ajax: {
+    //     url: 'http://localhost:8080/api/tour/all',
+    //     type: 'GET',
+    //     dataSrc: '',
+    //     dataType: 'json',
+    //   },
+    //   columns: [
+    //     {
+    //       title: 'Tên Tour',
+    //       data: 'name',
+    //     },
+    //     {
+    //       title: 'Điểm đến',
+    //       data: 'destinationAddress',
+    //     },
+    //     {
+    //       title: 'Trạng thái',
+    //       data: 'active',
+    //     },
+    //     {
+    //       title: 'Số lượng',
+    //       data: 'availableSpaces',
+    //     },
+    //     {
+    //       title: '',
+    //       render: function (data: any, type: any, full: any) {
+    //         return (
+    //           '<button class="btn btn-primary" date="' +
+    //           full.id +
+    //           '">Ngày</button>'
+    //         );
+    //       },
+    //     },
+    //     {
+    //       title: '',
+    //       render: function (data: any, type: any, full: any) {
+    //         return (
+    //           '<button class="btn btn-primary" pic="' +
+    //           full.id +
+    //           '">Ảnh</button>'
+    //         );
+    //       },
+    //     },
+    //     {
+    //       title: '',
+    //       render: function (data: any, type: any, full: any) {
+    //         return (
+    //           '<button class="btn btn-primary" update="' +
+    //           full.id +
+    //           '">Sửa</button>'
+    //         );
+    //       },
+    //     }
+    //   ],
+    // };
   }
 
 
   ngAfterViewInit(): void {
     this.dtTrigger.next(0);
-    this.renderer.listen('document', 'click', (event) => {
-      if (event.target.hasAttribute('route')) {
-        document.getElementById('closeDateModal').click();
-        this.router.navigate([
-          '/admin/tour/details/' + event.target.getAttribute('route'),
-        ]).then(() => {
-          window.location.reload();
-        });
-      } else if (event.target.hasAttribute('update')) {
-        this.open('edit', event.target.getAttribute('update'));
-      } else if (event.target.hasAttribute('delete')) {
-        this.open('delete', event.target.getAttribute('delete'));
-      } else if (event.target.hasAttribute('pic')) {
-        this.open('image', event.target.getAttribute('pic'));
-      } else if (event.target.hasAttribute('date')) {
-        this.open('date', event.target.getAttribute('date'));
-      }
-    });
+    // this.renderer.listen('document', 'click', (event) => {
+    //   if (event.target.hasAttribute('route')) {
+    //     document.getElementById('closeDateModal').click();
+    //     this.router.navigate([
+    //       '/admin/tour/details/' + event.target.getAttribute('route'),
+    //     ]).then(() => {
+    //       window.location.reload();
+    //     });
+    //   } else if (event.target.hasAttribute('update')) {
+    //     this.open('edit', event.target.getAttribute('update'));
+    //   } else if (event.target.hasAttribute('delete')) {
+    //     this.open('delete', event.target.getAttribute('delete'));
+    //   } else if (event.target.hasAttribute('pic')) {
+    //     this.open('image', event.target.getAttribute('pic'));
+    //   } else if (event.target.hasAttribute('date')) {
+    //     this.open('date', event.target.getAttribute('date'));
+    //   }
+    // });
   }
 
   ngOnDestroy(): void {
@@ -360,41 +374,41 @@ export class TourComponent implements OnInit, AfterViewInit, OnDestroy {
       document.querySelector('#addImageBtn').addEventListener('click', (e: Event) => this.addImage());
     } else if (content == 'date') {
       this.editTour = this.tourList.find((tour) => tour.id == id);
-      // const formatedDate = this.currentDate.getFullYear() + "/" + [this.currentDate.getMonth() + 1] + "/" + this.currentDate.getDate();
-      this.dtOptions[1] = {
-        ajax: {
-          url: `http://localhost:8080/api/tour_date?tourId=${this.editTour.id}`,
-          type: 'GET',
-          dataSrc: '',
-          dataType: 'json',
-        },
-        columns: [
-          {
-            title: 'Thời điểm khởi hành',
-            data: 'initiateDate',
-          },
-          {
-            title: '',
-            render: function (data: any, type: any, full: any) {
-              return (
-                '<button class="btn btn-primary" updateDate="' +
-                full.id +
-                '">Sửa</button><input type="date" min="" hidden></input>'
-              );
-            },
-          },
-          {
-            title: '',
-            render: function (data: any, type: any, full: any) {
-              return (
-                '<button class="btn btn-primary" route="' +
-                full.id +
-                '">Kế Hoạch</button>'
-              );
-            },
-          },
-        ],
-      };
+      this.getTourDateList(this.editTour.id)
+      // this.dtOptions[1] = {
+      //   ajax: {
+      //     url: `http://localhost:8080/api/tour_date?tourId=${this.editTour.id}`,
+      //     type: 'GET',
+      //     dataSrc: '',
+      //     dataType: 'json',
+      //   },
+      //   columns: [
+      //     {
+      //       title: 'Thời điểm khởi hành',
+      //       data: 'initiateDate',
+      //     },
+      //     {
+      //       title: '',
+      //       render: function (data: any, type: any, full: any) {
+      //         return (
+      //           '<button class="btn btn-primary" updateDate="' +
+      //           full.id +
+      //           '">Sửa</button><input type="date" min="" hidden></input>'
+      //         );
+      //       },
+      //     },
+      //     {
+      //       title: '',
+      //       render: function (data: any, type: any, full: any) {
+      //         return (
+      //           '<button class="btn btn-primary" route="' +
+      //           full.id +
+      //           '">Kế Hoạch</button>'
+      //         );
+      //       },
+      //     },
+      //   ],
+      // };
       this.modalService
         .open(this.dateModal, {
           ariaLabelledBy: 'modal-basic-title',
