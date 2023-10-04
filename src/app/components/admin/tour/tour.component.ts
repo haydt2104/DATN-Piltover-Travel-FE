@@ -1,4 +1,4 @@
-import { DatePipe, NgFor, NgIf } from '@angular/common';
+import { NgFor, NgIf } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
 import {
   AfterViewInit,
@@ -21,13 +21,13 @@ import {
 import { DataTableDirective, DataTablesModule } from 'angular-datatables';
 import axios from 'axios';
 import { Subject } from 'rxjs';
+import { TourImage } from 'src/app/models/tour-img.model';
 import { Tour } from 'src/app/models/tour.model';
 import { TourDateService } from 'src/app/services/tour-date.service';
 import { TourService } from 'src/app/services/tour.service';
 import { TourDate } from './../../../models/tour-date.model';
 import { CurdService } from './../../../services/curd.service';
 import { TourImageService } from './../../../services/tour-image.service';
-import { TourImage } from 'src/app/models/tour-img.model';
 @Component({
   selector: 'app-tour',
   templateUrl: './tour.component.html',
@@ -42,7 +42,6 @@ import { TourImage } from 'src/app/models/tour-img.model';
     FormsModule,
     NgIf,
   ],
-  providers: [DatePipe]
 })
 export class TourComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('addModal') addModal: ElementRef;
@@ -61,7 +60,6 @@ export class TourComponent implements OnInit, AfterViewInit, OnDestroy {
     private renderer: Renderer2,
     private router: Router,
     private fireStorage: AngularFireStorage,
-    private datePipe: DatePipe
   ) { }
 
   dtElement: DataTableDirective;
@@ -72,7 +70,6 @@ export class TourComponent implements OnInit, AfterViewInit, OnDestroy {
   public provinceList: any;
   public districtList: any;
   public wardList: any;
-  public currentDate: any = this.datePipe.transform(new Date(), 'yyyy-MM-dd');
 
   host = 'https://provinces.open-api.vn/api/';
   dtOptions: DataTables.Settings[] = [];
@@ -382,7 +379,7 @@ export class TourComponent implements OnInit, AfterViewInit, OnDestroy {
               return (
                 '<button class="btn btn-primary" updateDate="' +
                 full.id +
-                '">Sửa</button><input type="date" min="' + this.currentDate + '"></input>'
+                '">Sửa</button><input type="date" min="" hidden></input>'
               );
             },
           },
