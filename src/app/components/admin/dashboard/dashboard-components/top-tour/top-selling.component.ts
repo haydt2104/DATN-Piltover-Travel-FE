@@ -1,13 +1,16 @@
+import { NgFor } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import {Product,TopSelling} from './top-selling-data';
 import { TourrevenueService } from 'src/app/services/revenue/tourrevenue.service';
 import { Revenue, TourRevenue } from 'src/app/models/revenue';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-top-selling',
   templateUrl: './top-selling.component.html',
   styleUrls: ['./top-selling.component.scss'],
-
+  standalone: true,
+  imports: [NgFor, RouterLink],
 })
 export class TopSellingComponent implements OnInit {
   public TourRevenue!: TourRevenue[];

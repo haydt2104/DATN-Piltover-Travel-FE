@@ -34,7 +34,8 @@ export type salesChartOptions = {
 
 @Component({
   selector: 'app-sales-ratio',
-  templateUrl: './sales-ratio.component.html'
+  templateUrl: './sales-ratio.component.html',
+  
 })
 export class SalesRatioComponent implements OnInit {
   public monthrevenue!: MonthRevenue[];

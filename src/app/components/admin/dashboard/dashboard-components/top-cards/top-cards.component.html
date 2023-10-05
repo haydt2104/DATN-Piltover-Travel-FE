@@ -5,17 +5,17 @@
               <div class="d-flex align-items-center">
                   <div class="btn btn-lg rounded-circle round round-lg fs-6 d-flex align-items-center justify-content-center bg-light-{{topcard.bgcolor}} text-{{topcard.bgcolor}}">
                     <div *ngIf="i === 0">
-                      <a href="/admin/dashboard" class="bi bi-wallet success text-{{topcard.bgcolor}}"></a>
+                      <a [routerLink]="['/admin/dashboard']" class="bi bi-wallet success text-{{topcard.bgcolor}}"></a>
                   </div>
                   <div *ngIf="i === 1">
-                    <a href="/admin/dashboard/tour" class="bi bi-coin text-{{topcard.bgcolor}}"></a>
+                    <a [routerLink]="['/admin/dashboard/tour']" class="bi bi-coin text-{{topcard.bgcolor}}"></a>
                     <i class=""></i>
                   </div>
                   <div *ngIf="i === 2">
-                    <a href="/admin/dashboard" class="bi bi-basket3 text-{{topcard.bgcolor}}"></a>
+                    <a [routerLink]="['/admin/dashboard/hotel']" class="bi bi-basket3 text-{{topcard.bgcolor}}"></a>
                   </div>
                   <div *ngIf="i === 3">
-                    <a href="/admin/dashboard" class="bi bi-bag text-{{topcard.bgcolor}}"></a>
+                    <a [routerLink]="['/admin/dashboard/transport']" class="bi bi-bag text-{{topcard.bgcolor}}"></a>
                     <i class=""></i>
                   </div>
                   </div>
