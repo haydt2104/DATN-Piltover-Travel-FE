@@ -35,10 +35,13 @@ export type salesChartOptions = {
 @Component({
   selector: 'app-sales-ratio',
   templateUrl: './sales-ratio.component.html',
-  
+
 })
 export class SalesRatioComponent implements OnInit {
   public monthrevenue!: MonthRevenue[];
+  public startDate: string = '2023-01-01'; // Ngày bắt đầu
+  public endDate: string = '2023-12-31';   // Ngày kết thúc
+
 
   @ViewChild("chart") chart: ChartComponent = Object.create(null);
   public salesChartOptions: Partial<salesChartOptions>;
@@ -105,8 +108,12 @@ export class SalesRatioComponent implements OnInit {
   ngOnInit(): void {
       this.getMonthRevenue();
   }
+  filterData() {
+    // Gọi hàm để lấy dữ liệu dựa trên ngày bắt đầu và kết thúc đã chọn
+    this.getMonthRevenue();
+  }
   private getMonthRevenue() {
-    this.monthrevenueService.getMonthRevenue().subscribe((data) => {
+    this.monthrevenueService.getMonthRevenue(this.startDate, this.endDate).subscribe((data) => {
       this.monthrevenue = data;
       console.log('Month Doanh thu: ', this.monthrevenue);
 

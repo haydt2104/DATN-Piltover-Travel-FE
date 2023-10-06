@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { MonthRevenue, Revenue } from 'src/app/models/revenue';
 
@@ -14,6 +14,11 @@ export class MonthrevenueService {
   ) {
     console.log('Base URL:', this.baseUrl);
   }
-  public getMonthRevenue(): Observable<MonthRevenue[]>{
-    return this.http.get<MonthRevenue[]>(this.baseUrl + "api/revenue/getMonthRevenue");
-}}
+  public getMonthRevenue(startDate: string, endDate: string): Observable<MonthRevenue[]> {
+    let params = new HttpParams();
+    params = params.append('startDate', startDate);
+    params = params.append('endDate', endDate);
+
+    return this.http.get<MonthRevenue[]>(this.baseUrl + 'api/revenue/getMonthRevenue', { params });
+  }
+}
