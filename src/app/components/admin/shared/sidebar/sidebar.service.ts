@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { RouteInfo } from './sidebar.metadata';
-import { ROUTES } from './menu-items';
+import { ROUTES } from './ROUTES';
 
 
 @Injectable({

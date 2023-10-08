@@ -11,11 +11,11 @@ export class BookingComponent implements OnInit {
   constructor(private bService: BookingService) {}
 
   ngOnInit() {
-    // this.getAllBooking();
+    this.getAllBooking();
   }
 
   private getAllBooking() {
-    this.bService.getAllBooking.subscribe((data) => {
+    this.bService.getAllBooking().subscribe((data) => {
       this.bookings = data;
       console.log(this.bookings);
     });

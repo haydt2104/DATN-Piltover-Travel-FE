@@ -37,7 +37,7 @@ import { BookingdetailComponent } from './components/admin/bookingdetail/booking
   declarations: [
     AppComponent,
     SpinnerComponent,
-    LayoutComponent,
+    // LayoutComponent,
     HeaderComponent,
     FooterComponent,
     AuthorizationsComponent,
