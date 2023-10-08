@@ -11,6 +11,7 @@ import { TopCardsComponent } from "./dashboard-components/top-cards/top-cards.co
 import { BlogCardsComponent } from "./dashboard-components/blog-cards/blog-cards.component";
 import { TopTransportComponent } from './dashboard-components/top-transport/top-transport.component';
 import { TopHotelComponent } from './dashboard-components/top-hotel/top-hotel.component';
+import { DateFormComponent } from './dashboard-components/date-form/date-form.component';
 
 
 const routes: Routes = [
@@ -52,6 +53,7 @@ const routes: Routes = [
     FeedsComponent,
     TopCardsComponent,
     BlogCardsComponent,
+    DateFormComponent,
   ],
 })
 export class DashboardModule {}

@@ -21,22 +21,42 @@
                   </div>
                   <div class="ms-3">
                       <div *ngFor="let revenue of revenue">
-                        <div *ngIf="i === 0">
-                          <h3 class="mb-0 font-weight-bold">{{ revenue.total_revenue | currency:'VND':'symbol':'1.3-3' }}</h3>
-                          <small class="text-muted fs-3">Doanh Thu Tổng </small>
-                      </div>
-                      <div *ngIf="i === 1">
-                        <h3 class="mb-0 font-weight-bold">{{ revenue.total_tour_revenue | currency:'VND':'symbol':'1.3-3' }}</h3>
-                        <small class="text-muted fs-3">Doanh Thu tour </small>
-                      </div>
-                      <div *ngIf="i === 2">
-                        <h3 class="mb-0 font-weight-bold">{{ revenue.total_hotel_revenue | currency:'VND':'symbol':'1.3-3' }}</h3>
-                        <small class="text-muted fs-3">Doanh Thu hotel </small>
-                      </div>
-                      <div *ngIf="i === 3">
-                        <h3 class="mb-0 font-weight-bold">{{ revenue.total_transport_revenue | currency:'VND':'symbol':'1.3-3' }}</h3>
-                        <small class="text-muted fs-3">Doanh Thu vận chuyển </small>
-                    </div>
+                        <div *ngIf="revenue !== null; else noRevenue">
+                           <div *ngIf="i === 0">
+                             <h3 class="mb-0 font-weight-bold">{{ revenue.total_revenue | currency:'VND':'symbol':'1.3-3' }}</h3>
+                             <small class="text-muted fs-3">Doanh Thu Tổng</small>
+                           </div>
+                           <div *ngIf="i === 1">
+                             <h3 class="mb-0 font-weight-bold">{{ revenue.total_tour_revenue | currency:'VND':'symbol':'1.3-3' }}</h3>
+                             <small class="text-muted fs-3">Doanh Thu tour</small>
+                           </div>
+                           <div *ngIf="i === 2">
+                             <h3 class="mb-0 font-weight-bold">{{ revenue.total_hotel_revenue | currency:'VND':'symbol':'1.3-3' }}</h3>
+                             <small class="text-muted fs-3">Doanh Thu tour</small>
+                           </div>
+                           <div *ngIf="i === 3">
+                             <h3 class="mb-0 font-weight-bold">{{ revenue.total_transport_revenue | currency:'VND':'symbol':'1.3-3' }}</h3>
+                             <small class="text-muted fs-3">Doanh Thu tour</small>
+                           </div>
+                        </div>
+                        <ng-template #noRevenue>
+                            <div *ngIf="i === 0">
+                              <h3 class="mb-0 font-weight-bold">{{ 0.0 | currency:'VND':'symbol':'1.3-3' }}</h3>
+                              <small class="text-muted fs-3">Doanh Thu Tổng</small>
+                            </div>
+                            <div *ngIf="i === 1">
+                              <h3 class="mb-0 font-weight-bold">{{ 0.0 | currency:'VND':'symbol':'1.3-3' }}</h3>
+                              <small class="text-muted fs-3">Doanh Thu tour</small>
+                            </div>
+                            <div *ngIf="i === 2">
+                              <h3 class="mb-0 font-weight-bold">{{ 0.0 | currency:'VND':'symbol':'1.3-3' }}</h3>
+                              <small class="text-muted fs-3">Doanh Thu hotel</small>
+                            </div>
+                            <div *ngIf="i === 3">
+                              <h3 class="mb-0 font-weight-bold">{{ 0.0 | currency:'VND':'symbol':'1.3-3' }}</h3>
+                              <small class="text-muted fs-3">Doanh Thu vận chuyển</small>
+                            </div>
+                        </ng-template>
                     </div>
                   </div>
               </div>

@@ -1,4 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { ActivatedRoute, Params, Router } from '@angular/router';
 import {
   ApexAxisChartSeries,
   ApexChart,
@@ -15,6 +16,7 @@ import {
 import { MonthRevenue } from 'src/app/models/revenue';
 import { Revenue } from 'src/app/models/revenue';
 import { MonthrevenueService } from 'src/app/services/revenue/monthrevenue.service';
+import { DateRangeService } from '../date-form/DateRangeService.component';
 
 export type salesChartOptions = {
   series: ApexAxisChartSeries | any;
@@ -45,7 +47,8 @@ export class SalesRatioComponent implements OnInit {
 
   @ViewChild("chart") chart: ChartComponent = Object.create(null);
   public salesChartOptions: Partial<salesChartOptions>;
-  constructor(private monthrevenueService: MonthrevenueService) {
+  constructor(private router: Router, private route: ActivatedRoute, private monthrevenueService: MonthrevenueService, private dateRangeService: DateRangeService) {
+
     this.salesChartOptions = {
       series: [
         {
@@ -106,12 +109,24 @@ export class SalesRatioComponent implements OnInit {
   }
 
   ngOnInit(): void {
-      this.getMonthRevenue();
-  }
-  filterData() {
-    // Gọi hàm để lấy dữ liệu dựa trên ngày bắt đầu và kết thúc đã chọn
     this.getMonthRevenue();
+    this.route.queryParams.subscribe((params: Params) => {
+      this['startDate'] = params['startDate'] || '';
+      this['endDate'] = params['endDate'] || '';
+      // Thực hiện việc lọc dữ liệu dựa trên startDate và endDate ở đây
+      this.getMonthRevenue();
+    });
   }
+  // filterData(dateRange: { startDate: string; endDate: string }) {
+  //   // Gán lại giá trị startDate và endDate từ sự kiện lọc
+  //   this.startDate = dateRange.startDate;
+  //   this.endDate = dateRange.endDate;
+
+  //   // Gọi hàm để lấy dữ liệu dựa trên khoảng thời gian đã chọn
+  //   this.getMonthRevenue();
+  // }
+
+
   private getMonthRevenue() {
     this.monthrevenueService.getMonthRevenue(this.startDate, this.endDate).subscribe((data) => {
       this.monthrevenue = data;
