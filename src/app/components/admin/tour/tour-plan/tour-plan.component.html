@@ -34,7 +34,8 @@
             </td>
             <td>
               <div class="button-group">
-                <button [routerLink]="['/admin/tour/details/'+plan.tourDate.id+'/plan/'+plan.id]" class="btn btn-success">Chi tiết</button>
+                <button [routerLink]="['/admin/tour/details/'+plan.tourDate.id+'/plan/'+plan.id]"
+                  class="btn btn-success">Chi tiết</button>
                 <button class="btn btn-danger">Hủy</button>
               </div>
             </td>
@@ -43,4 +44,45 @@
       </table>
     </div>
   </div>
+</div>
+
+<div class="table-responsive">
+  <p-table #dt1 [value]="planList" dataKey="id" [rows]="10" [showCurrentPageReport]="true"
+    [rowsPerPageOptions]="[10, 25, 50]" [paginator]="true"
+    currentPageReportTemplate="Hiển thị từ bảng {first} đến {last} trong tổng {totalRecords} bảng"
+    [globalFilterFields]="['name', 'destinationAddress']" [rowsPerPageOptions]="[10, 25, 50]">
+    <ng-template pTemplate="caption">
+      <div class="flex">
+        <form [formGroup]="formFilter">
+          <span class="p-input-icon-left ml-auto">
+            <input pInputText type="text" (change)="dt1.filterGlobal(getValueSearch(), 'contains')"
+              formControlName="search" class="form-control box-shadow-none" placeholder="Tìm kiếm"
+              aria-label="Example text with button addon" aria-describedby="button-search">
+          </span>
+        </form>
+      </div>
+    </ng-template>
+    <ng-template pTemplate="header" class="theader">
+      <tr>
+        <th pSortableColumn="name" style="width:16%">Vị trí khởi hành<p-sortIcon field="name"></p-sortIcon></th>
+        <th pSortableColumn="destinationAddress" style="width:20%">Địa chỉ khởi hành<p-sortIcon
+            field="destinationAddress"></p-sortIcon></th>
+        <th pSortableColumn="active" style="width:16%">Ngày khởi hành<p-sortIcon field="active"></p-sortIcon></th>
+        <th pSortableColumn="availableSpaces" style="width:21%">Phương tiện di chuyển<p-sortIcon
+            field="availableSpaces"></p-sortIcon></th>
+        <th pSortableColumn="availableSpaces" style="width:12%">Trạng thái<p-sortIcon
+            field="availableSpaces"></p-sortIcon></th>
+        <th></th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" class="tbody" let-planList>
+      <tr>
+        <td>{{ planList.startName }}</td>
+        <td>{{ planList.startAddress }}</td>
+        <td>{{ planList.startTime }}</td>
+        <td>{{planList.transport.name}}</td>
+        <td>{{ planList.status.name}}</td>
+      </tr>
+    </ng-template>
+  </p-table>
 </div>

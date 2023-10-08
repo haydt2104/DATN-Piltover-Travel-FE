@@ -10,7 +10,7 @@ export class TourPlanService {
   constructor(private http: HttpClient) {}
   public getTourPlansByPlanID(tourId: number): Observable<TourPlan[]> {
     return this.http.get<TourPlan[]>(
-      `http://localhost:8080/api/tour_plan?tourId=` + tourId
+      `http://localhost:8080/api/tour_plan?tourDateId=` + tourId
     );
   }
 }
