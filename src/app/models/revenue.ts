@@ -19,3 +19,17 @@ export interface TourRevenue {
   children_bookings: number;
   total_revenue: number;
 }
+
+export interface HotelRevenue {
+  hotel_name: string;
+  hotel_price: number;
+  total_hotel_revenue: number;
+  total_hotel_booking: number;
+}
+
+export interface TransportRevenue {
+  transport_name: string;
+  transport_price: number;
+  total_transport_revenue: number;
+  total_transport_booking: number;
+}

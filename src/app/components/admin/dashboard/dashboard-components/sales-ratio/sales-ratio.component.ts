@@ -16,7 +16,6 @@ import {
 import { MonthRevenue } from 'src/app/models/revenue';
 import { Revenue } from 'src/app/models/revenue';
 import { MonthrevenueService } from 'src/app/services/revenue/monthrevenue.service';
-import { DateRangeService } from '../date-form/DateRangeService.component';
 
 export type salesChartOptions = {
   series: ApexAxisChartSeries | any;
@@ -47,7 +46,7 @@ export class SalesRatioComponent implements OnInit {
 
   @ViewChild("chart") chart: ChartComponent = Object.create(null);
   public salesChartOptions: Partial<salesChartOptions>;
-  constructor(private router: Router, private route: ActivatedRoute, private monthrevenueService: MonthrevenueService, private dateRangeService: DateRangeService) {
+  constructor(private router: Router, private route: ActivatedRoute, private monthrevenueService: MonthrevenueService) {
 
     this.salesChartOptions = {
       series: [

@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import {Product,TopSelling} from './top-selling-data';
 import { TourrevenueService } from 'src/app/services/revenue/tourrevenue.service';
 import { Revenue, TourRevenue } from 'src/app/models/revenue';
-import { RouterLink } from '@angular/router';
+import { ActivatedRoute, Params, Router, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-top-selling',
@@ -17,17 +17,23 @@ export class TopSellingComponent implements OnInit {
   currentSortColumn: keyof TourRevenue = 'total_name'; // Đặt giá trị ban đầu ở đây
   isDescendingOrder: boolean = false;
   topSelling:Product[];
+  public startDate: string = '2023-01-01'; // Ngày bắt đầu
+  public endDate: string = '2023-12-31';   // Ngày kết thúc
 
-  constructor(private tourService: TourrevenueService) {
+  constructor(private tourService: TourrevenueService, private router: Router, private route: ActivatedRoute) {
 
     this.topSelling=TopSelling;
   }
 
   ngOnInit(): void {
-      this.getAllTourRevenue();
+      this.route.queryParams.subscribe((params: Params) => {
+        this.startDate = params['startDate'] || '2023-01-01';
+        this.endDate = params['endDate'] || '2023-12-31';
+        this.getAllTourRevenue();
+      });
   }
   private getAllTourRevenue(){
-    this.tourService.getTourRevenue().subscribe((data) =>{
+    this.tourService.getTourRevenue(this.startDate, this.endDate).subscribe((data) =>{
       this.TourRevenue = data;
       console.log('Doanh thu Tour: ', this.TourRevenue);
     });

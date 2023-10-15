@@ -21,8 +21,8 @@ export class TopCardsComponent implements OnInit {
   ngOnInit(): void {
     this.getAllRevenue();
     this.route.queryParams.subscribe((params: Params) => {
-      this['startDate'] = params['startDate'] || '';
-      this['endDate'] = params['endDate'] || '';
+      this.startDate = params['startDate'] || '2023-01-01';
+      this.endDate = params['endDate'] || '2023-12-31';
       // Thực hiện việc lọc dữ liệu dựa trên startDate và endDate ở đây
 
       this.getAllRevenue();
