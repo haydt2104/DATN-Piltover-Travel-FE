@@ -1,7 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Like } from 'src/app/models/like.model';
 import { Post } from 'src/app/models/post.model';
 
 @Injectable({
@@ -20,7 +19,15 @@ export class PostService {
     return this.http.get<Post[]>(this.baseUrl + 'api/post/getAllPosts')
   }
 
-  // public getLikePosts(): Observable<long>{
-  //   return this.http.get<
-  // }
+  public getPostById(id: number): Observable<Post>{
+    return this.http.get<Post>(this.baseUrl + 'api/post/getPostById/' + id)
+  }
+
+  public getLikePosts(id: number): Observable<number> {
+    return this.http.get<number>(this.baseUrl + 'api/post/getLikePosts/' + id)
+  }
+
+  public updatePostById(data: any, id: any): Observable<any>{
+    return this.http.put<number>(this.baseUrl + 'api/post/updatePost/' + id, data);
+  }
 }

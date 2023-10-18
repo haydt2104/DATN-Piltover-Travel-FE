@@ -11,4 +11,5 @@ export interface Post {
   comment: Comment;
   createTime: Date;
   status: Boolean;
+
 }

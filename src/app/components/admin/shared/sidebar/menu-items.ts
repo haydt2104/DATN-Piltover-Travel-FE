@@ -34,7 +34,7 @@ export const ROUTES: RouteInfo[] = [
     submenu: [],
   },
   {
-    path: '/admin/component/post',
+    path: '/admin/manage/post',
     title: 'Bài viết',
     icon: 'bi bi-card-text',
     class: '',

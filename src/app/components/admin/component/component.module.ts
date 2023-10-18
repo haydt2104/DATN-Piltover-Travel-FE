@@ -12,7 +12,7 @@ import { NgbdnavBasicComponent } from './nav/nav.component';
 import { NgbdButtonsComponent } from './buttons/buttons.component';
 import { CardsComponent } from './card/card.component';
 import { TableComponent } from "./table/table.component";
-import { PostComponent } from '../post/post.component';
+import { PostListComponent } from '../post/post-list/post-list.component';
 
 @NgModule({
   imports: [
@@ -30,7 +30,7 @@ import { PostComponent } from '../post/post.component';
     TableComponent
   ],
   declarations: [
-    PostComponent
+    PostListComponent
   ],
 })
 export class ComponentsModule { }

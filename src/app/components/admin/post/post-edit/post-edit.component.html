@@ -1,0 +1,25 @@
+<div class="card">
+  <div class="card-body">
+    <form [formGroup]="formGroup" (ngSubmit)="savePost()">
+      <div class="row">
+        <!-- <div class="mb-3 col-sm-12 col-md-6">
+          <label for="email" class="form-label">Email: </label>
+          <input class="form-control" formControlName="email" id="email" type="email">
+        </div> -->
+        <div class="mb-3 col-sm-12 col-md-12">
+          <label for="title" class="form-label">Tiêu đề: </label>
+          <input class="form-control" formControlName="title" id="title" type="text">
+        </div>
+        <div class="mb-3 col-sm-12 col-md-12">
+          <label for="description" class="form-label">Mô tả: </label>
+          <textarea class="form-control" formControlName="description" id="description"></textarea>
+        </div>
+        <div class="mb-3 col-sm-12 col-md-12">
+          <label for="content" class="form-label">Nội dung: </label>
+          <textarea class="form-control" formControlName="content" id="title" type="text"></textarea>
+        </div>
+      </div>
+      <button type="submit">Lưu</button>
+    </form>
+  </div>
+</div>

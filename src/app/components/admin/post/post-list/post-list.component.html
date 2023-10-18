@@ -1,19 +1,3 @@
-<!-- <div class="card">
-  <div class="card-body">
-    <form>
-      <div class="row">
-        <div class="mb-3 col-sm-12 col-md-6">
-          <label for="email" class="form-label">Email: </label>
-          <input class="form-control" id="email" type="email">
-        </div>
-        <div class="mb-3 col-sm-12 col-md-6">
-          <label for="phone" class="form-label">Số điện thoại: </label>
-          <input class="form-control" id="phone" type="text">
-        </div>
-      </div>
-    </form>
-  </div>
-</div> -->
 
 <div class="card p-3">
   <h3 class="text-center">DANH SÁCH BÀI VIẾT</h3>
@@ -26,10 +10,11 @@
       <th>Nội dung</th>
       <th>Ngày đăng</th>
       <th>Trạng thái</th>
-      <!-- <th></th> -->
+      <th>Số thích</th>
+      <th></th>
     </thead>
     <tbody>
-      <tr *ngFor="let item of posts">
+      <tr *ngFor='let item of posts; let i = index'>
         <td>{{item.id}}</td>
         <td>{{item.account.email}}</td>
         <td>{{item.title}}</td>
@@ -37,9 +22,9 @@
         <td>{{item.content}}</td>
         <td>{{item.createTime}}</td>
         <td>{{item.status == true ? 'Đang mở' : 'Đã đóng'}}</td>
-        <!-- <td>{{item.like.length}}</td> -->
+        <td>{{likeCount[i]}}</td>
+        <td><button (click)="getPostById(item.id)" [routerLink]="['/admin/manage/post/edit', item.id]">Click me</button></td>
       </tr>
     </tbody>
-
   </table>
-</div>
+  </div>
