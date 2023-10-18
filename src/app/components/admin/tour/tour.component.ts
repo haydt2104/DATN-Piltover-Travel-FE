@@ -1,5 +1,5 @@
 import { CommonModule, NgFor, NgIf } from '@angular/common';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpErrorResponse } from '@angular/common/http';
 import {
   AfterViewInit,
   Component,
@@ -12,7 +12,6 @@ import { AngularFireStorage } from '@angular/fire/compat/storage';
 import { FormBuilder, FormControl, FormsModule, NgForm, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import {
-  ModalDismissReasons,
   NgbModal,
   NgbPaginationModule
 } from '@ng-bootstrap/ng-bootstrap';
@@ -31,6 +30,7 @@ import { TourService } from 'src/app/services/tour.service';
 import { TourDate } from './../../../models/tour-date.model';
 import { CurdService } from './../../../services/curd.service';
 import { TourImageService } from './../../../services/tour-image.service';
+import { CalendarModule } from 'primeng/calendar';
 
 @Component({
   selector: 'app-tour',
@@ -47,7 +47,8 @@ import { TourImageService } from './../../../services/tour-image.service';
     ReactiveFormsModule,
     ButtonModule,
     CommonModule,
-    InputTextModule
+    InputTextModule,
+    CalendarModule
   ],
 })
 export class TourComponent implements OnInit, AfterViewInit, OnDestroy {
@@ -132,7 +133,8 @@ export class TourComponent implements OnInit, AfterViewInit, OnDestroy {
   async saveNewImage(event: any) {
     const file = event.target.files[0]
     if (file.type.match(/image\/*/) && file.size <= 6000000) {
-      const path = `tour-img/${new Date + file.name}`
+      const randomNumberString = Array.from({ length: 15 }, () => Math.floor(Math.random() * 10)).join('');
+      const path = `tour-img/${randomNumberString}`
       const upload = await this.fireStorage.upload(path, file)
       const url = await upload.ref.getDownloadURL()
       var tourImage: TourImage = {
@@ -161,10 +163,12 @@ export class TourComponent implements OnInit, AfterViewInit, OnDestroy {
   async changeImage(event: any, id: number) {
     const file = event.target.files[0]
     if (file.type.match(/image\/*/) && file.size <= 6000000) {
-      const path = `tour-img/${new Date + file.name}`
+      const randomNumberString = Array.from({ length: 15 }, () => Math.floor(Math.random() * 10)).join('');
+      const path = `tour-img/${randomNumberString}`
       const upload = await this.fireStorage.upload(path, file)
       const url = await upload.ref.getDownloadURL()
       const editImageTour = this.tourImageList.find((tour) => tour.id == id);
+      this.fireStorage.storage.refFromURL(editImageTour.path).delete()
       editImageTour.path = url
       this.curdService.put('tour_image', editImageTour).subscribe(
         (response: TourImage) => {
@@ -186,14 +190,6 @@ export class TourComponent implements OnInit, AfterViewInit, OnDestroy {
         ariaLabelledBy: 'modal-basic-title',
         size: 'xl',
       })
-      .result.then(
-        (result) => {
-          this.closeResult = `Closed with: ${result}`;
-        },
-        (reason) => {
-          this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-        }
-      );
     if (object === 'tour') {
       document.querySelector('#confirmDelete').addEventListener('click', (e: Event) => this.deleteTour(id));
     } else if (object == 'image') {
@@ -207,6 +203,7 @@ export class TourComponent implements OnInit, AfterViewInit, OnDestroy {
     this.curdService.delete('tour', id).subscribe(
       (response) => {
         const editTour = this.tourList.findIndex((tour) => tour.id == id);
+        this.fireStorage.storage.refFromURL(this.tourList[editTour].image).delete()
         this.tourList.splice(editTour, 1)
       },
       (error: HttpErrorResponse) => {
@@ -219,6 +216,7 @@ export class TourComponent implements OnInit, AfterViewInit, OnDestroy {
     this.curdService.delete('tour_image', id).subscribe(
       (response) => {
         const editImageTour = this.tourImageList.findIndex((tourImage) => tourImage.id == id);
+        this.fireStorage.storage.refFromURL(this.tourImageList[editImageTour].path).delete()
         this.tourImageList.splice(editImageTour, 1)
       },
       (error: HttpErrorResponse) => {
@@ -252,14 +250,6 @@ export class TourComponent implements OnInit, AfterViewInit, OnDestroy {
           ariaLabelledBy: 'modal-basic-title',
           size: 'lg',
         })
-        .result.then(
-          (result) => {
-            this.closeResult = `Closed with: ${result}`;
-          },
-          (reason) => {
-            this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-          }
-        );
       document.getElementById('message').innerHTML = message
     } else if (content == 'add') {
       this.callAPIProvince('https://provinces.open-api.vn/api/?depth=1', null);
@@ -268,14 +258,6 @@ export class TourComponent implements OnInit, AfterViewInit, OnDestroy {
           ariaLabelledBy: 'modal-basic-title',
           size: 'xl',
         })
-        .result.then(
-          (result) => {
-            this.closeResult = `Closed with: ${result}`;
-          },
-          (reason) => {
-            this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-          }
-        );
     } else if (content == 'edit') {
       this.editTour = this.tourList.find((tour) => tour.id == id);
       const provinceAddress = this.editTour.destinationAddress
@@ -302,14 +284,6 @@ export class TourComponent implements OnInit, AfterViewInit, OnDestroy {
           ariaLabelledBy: 'modal-basic-title',
           size: 'xl',
         })
-        .result.then(
-          (result) => {
-            this.closeResult = `Closed with: ${result}`;
-          },
-          (reason) => {
-            this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-          }
-        );
     } else if (content == 'image') {
       this.editTour = this.tourList.find((tour) => tour.id == id);
       this.getTourImageList(id);
@@ -318,14 +292,6 @@ export class TourComponent implements OnInit, AfterViewInit, OnDestroy {
           ariaLabelledBy: 'modal-basic-title',
           size: 'xl',
         })
-        .result.then(
-          (result) => {
-            this.closeResult = `Closed with: ${result}`;
-          },
-          (reason) => {
-            this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-          }
-        );
       document.querySelector('#addImageBtn').addEventListener('click', (e: Event) => this.addImage());
     } else if (content == 'date') {
       this.editTour = this.tourList.find((tour) => tour.id == id);
@@ -335,14 +301,6 @@ export class TourComponent implements OnInit, AfterViewInit, OnDestroy {
           ariaLabelledBy: 'modal-basic-title',
           size: 'xl',
         })
-        .result.then(
-          (result) => {
-            this.closeResult = `Closed with: ${result}`;
-          },
-          (reason) => {
-            this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-          }
-        );
     }
   }
 
@@ -406,17 +364,6 @@ export class TourComponent implements OnInit, AfterViewInit, OnDestroy {
       (error: HttpErrorResponse) => {
         console.log(error.message);
       })
-  }
-
-  private getDismissReason(reason: any): string {
-    this.mainImgUrl = null
-    if (reason === ModalDismissReasons.ESC) {
-      return 'by pressing ESC';
-    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
-      return 'by clicking on a backdrop';
-    } else {
-      return `with: ${reason}`;
-    }
   }
 
   renderData = (array, select, code) => {
@@ -516,7 +463,8 @@ export class TourComponent implements OnInit, AfterViewInit, OnDestroy {
         childrenPrice: data.value.children
       }
     };
-    const path = `tour-img/${new Date + this.file.name}`
+    const randomNumberString = Array.from({ length: 15 }, () => Math.floor(Math.random() * 10)).join('');
+    const path = `tour-img/${randomNumberString}`
     const upload = await this.fireStorage.upload(path, this.file)
     const url = await upload.ref.getDownloadURL()
     tour.image = url
@@ -553,7 +501,9 @@ export class TourComponent implements OnInit, AfterViewInit, OnDestroy {
       }
     };
     if (this.mainImgUrl != this.editTour.image) {
-      const path = `tour-img/${new Date + this.file.name}`
+      this.fireStorage.storage.refFromURL(this.editTour.image).delete()
+      const randomNumberString = Array.from({ length: 15 }, () => Math.floor(Math.random() * 10)).join('');
+      const path = `tour-img/${randomNumberString}`
       const upload = await this.fireStorage.upload(path, this.file)
       const url = await upload.ref.getDownloadURL()
       tour.image = url
@@ -668,7 +618,7 @@ export class TourComponent implements OnInit, AfterViewInit, OnDestroy {
       )
     } else if (object == 'date') {
       var planList: TourPlan[]
-      this.tourPlanService.getTourPlansByPlanID(id).subscribe(
+      this.tourPlanService.getTourPlansByDateID(id).subscribe(
         (response) => {
           planList = response;
           if (planList.length == 0) {

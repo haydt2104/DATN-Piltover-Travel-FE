@@ -7,7 +7,7 @@
     <ng-template #announcementModal let-modal>
       <div class="modal-header">
         <h4 class="modal-title">Thông Báo</h4>
-        <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+        <button type="button" class="btn-close" aria-label="Close" (click)="modal.close()"></button>
       </div>
       <div class="modal-body" id="message">
       </div>
@@ -17,7 +17,7 @@
     <ng-template #addModal let-modal>
       <div class="modal-header">
         <h4 class="modal-title" id="modal-basic-title">Thêm Tour</h4>
-        <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+        <button type="button" class="btn-close" aria-label="Close" (click)="modal.close()"></button>
       </div>
       <form #addForm="ngForm" class="container" (ngSubmit)="submitAdd(addForm)">
         <div class="modal-body">
@@ -108,7 +108,7 @@
     <ng-template #editModal let-modal>
       <div class="modal-header">
         <h4 class="modal-title" id="modal-basic-title">Chỉnh Sửa Tour</h4>
-        <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+        <button type="button" class="btn-close" aria-label="Close" (click)="modal.close()"></button>
       </div>
       <form #editForm="ngForm" class="container" (ngSubmit)="submitEdit(editForm)">
         <div class="modal-body">
@@ -201,25 +201,27 @@
         <h4 class="modal-title" id="modal-basic-title">Ảnh Tour</h4>
         <button id="addImageBtn" class="btn btn-success ml-3">Thêm Ảnh</button>
         <input id="addImageInput" (change)="saveNewImage($event)" type="file" accept="image/*" hidden>
-        <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+        <button type="button" class="btn-close" aria-label="Close" (click)="modal.close()"></button>
       </div>
-      <table class="table table-hover align-middle text-nowrap table-bordered">
-        <tbody>
-          <tr *ngFor="let img of tourImageList">
-            <td align="center">
-              <img width="200" [src]="img.path" alt="">
-            </td>
-            <td align="center">
-              <button class="btn btn-warning" (click)="updateImage(img.id)">Chỉnh
-                sửa</button>
-              <input id="image_{{img.id}}" (change)="changeImage($event, img.id)" type="file" accept="image/*" hidden>
-            </td>
-            <td align="center">
-              <button (click)="confirmDelete('image',img.id)" class="btn btn-danger">Xóa</button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+      <div class="modal-body">
+        <table class="table table-hover align-middle text-nowrap table-bordered">
+          <tbody>
+            <tr *ngFor="let img of tourImageList">
+              <td align="center">
+                <img width="200" [src]="img.path" alt="">
+              </td>
+              <td align="center">
+                <button class="btn btn-warning" (click)="updateImage(img.id)">Chỉnh
+                  sửa</button>
+                <input id="image_{{img.id}}" (change)="changeImage($event, img.id)" type="file" accept="image/*" hidden>
+              </td>
+              <td align="center">
+                <button (click)="confirmDelete('image',img.id)" class="btn btn-danger">Xóa</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </ng-template>
 
     <!-- Tour Date Modal -->
@@ -230,77 +232,77 @@
         <input id="addDate" pInputText type="date" *ngIf="addDateStatus">
         <button pButton icon="pi pi-check" (click)="saveDate()" *ngIf="addDateStatus"></button>
         <button pButton icon="pi pi-times" (click)="cancelAddDate()" *ngIf="addDateStatus"></button>
-        <button id="closeDateModal" type="button" class="btn-close" aria-label="Close"
-          (click)="modal.dismiss('Cross click')"></button>
+        <button id="closeDateModal" type="button" class="btn-close" aria-label="Close" (click)="modal.close()"></button>
       </div>
-      <p-table #dt2 [value]="tourDateList" dataKey="id" [rows]="10" [showCurrentPageReport]="true"
-        [rowsPerPageOptions]="[10, 25, 50]" [paginator]="true" editMode="row"
-        currentPageReportTemplate="Hiển thị từ bảng {first} đến {last} trong tổng {totalRecords} bảng"
-        [globalFilterFields]="['initiateDate']" [rowsPerPageOptions]="[10, 25, 50]">
-        <ng-template pTemplate="caption">
-          <div class="flex">
-            <form [formGroup]="formFilter">
-              <span class="p-input-icon-left ml-auto">
-                <input pInputText type="text" (change)="dt2.filterGlobal(getValueSearch(), 'contains')"
-                  formControlName="search" class="form-control box-shadow-none" placeholder="Tìm kiếm"
-                  aria-label="Example text with button addon" aria-describedby="button-search">
-              </span>
-            </form>
-          </div>
-        </ng-template>
-        <ng-template pTemplate="header" class="theader">
-          <tr>
-            <th pSortableColumn="id" style="width:25%">Id<p-sortIcon field="id"></p-sortIcon></th>
-            <th pSortableColumn="initiateDate" style="width:40%">Thời điểm khởi hành<p-sortIcon
-                field="initiateDate"></p-sortIcon></th>
-            <th></th>
-          </tr>
-        </ng-template>
-        <ng-template pTemplate="body" class="tbody" let-tourDateList let-editing="editing" let-ri="rowIndex">
-          <tr [pEditableRow]="tourDateList">
-            <td>
-              {{ tourDateList.id }}
-            </td>
-            <td>
-              <p-cellEditor>
-                <ng-template pTemplate="input">
-                  <input pInputText type="date" [(ngModel)]="tourDateList.initiateDate"
-                    min="{{currentDate | date:'yyyy-MM-dd'}}">
-                </ng-template>
-                <ng-template pTemplate="output">
-                  {{ tourDateList.initiateDate | date: 'dd-MM-yyyy' }}
-                </ng-template>
-              </p-cellEditor>
-            </td>
-            <td>
-              <div class="flex align-items-center justify-content-center gap-2">
-                <button *ngIf="!editing" pButton pRipple type="button" pInitEditableRow icon="pi pi-pencil"
-                  (click)="onRowEditInit(tourDateList)" class="p-button-rounded p-button-text"></button>
-                <button *ngIf="editing" pButton pRipple type="button" pSaveEditableRow icon="pi pi-check"
-                  (click)="onRowEditSave(tourDateList)"
-                  class="p-button-rounded p-button-text p-button-success mr-2"></button>
-                <button *ngIf="editing" pButton pRipple type="button" pCancelEditableRow icon="pi pi-times"
-                  (click)="onRowEditCancel(tourDateList, ri)"
-                  class="p-button-rounded p-button-text p-button-danger"></button>
-              </div>
-            </td>
-            <td>
-              <button class="btn btn-primary" [routerLink]="['/admin/tour/date/'+tourDateList.id]"
-                (click)="modal.close()">Kế Hoạch</button>
-            </td>
-            <td>
-              <button class="btn btn-danger" (click)="checkDeleteable('date',tourDateList.id)">Xóa</button>
-            </td>
-          </tr>
-        </ng-template>
-      </p-table>
+      <div class="modal-body">
+        <p-table #dt2 [value]="tourDateList" dataKey="id" [rows]="10" [showCurrentPageReport]="true" [paginator]="true"
+          editMode="row" currentPageReportTemplate="Hiển thị từ bảng {first} đến {last} trong tổng {totalRecords} bảng"
+          [globalFilterFields]="['initiateDate']">
+          <ng-template pTemplate="caption">
+            <div class="flex">
+              <form [formGroup]="formFilter">
+                <span class="p-input-icon-left ml-auto">
+                  <input pInputText type="text" (change)="dt2.filterGlobal(getValueSearch(), 'contains')"
+                    formControlName="search" class="form-control box-shadow-none" placeholder="Tìm kiếm"
+                    aria-label="Example text with button addon" aria-describedby="button-search">
+                </span>
+              </form>
+            </div>
+          </ng-template>
+          <ng-template pTemplate="header" class="theader">
+            <tr>
+              <th pSortableColumn="id" style="width:25%">Id<p-sortIcon field="id"></p-sortIcon></th>
+              <th pSortableColumn="initiateDate" style="width:40%">Thời điểm khởi hành<p-sortIcon
+                  field="initiateDate"></p-sortIcon></th>
+              <th></th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" class="tbody" let-tourDateList let-editing="editing" let-ri="rowIndex">
+            <tr [pEditableRow]="tourDateList">
+              <td>
+                {{ tourDateList.id }}
+              </td>
+              <td>
+                <p-cellEditor>
+                  <ng-template pTemplate="input">
+                    <input pInputText type="date" [(ngModel)]="tourDateList.initiateDate"
+                      min="{{currentDate | date:'yyyy-MM-dd'}}">
+                  </ng-template>
+                  <ng-template pTemplate="output">
+                    {{ tourDateList.initiateDate | date: 'dd-MM-yyyy' }}
+                  </ng-template>
+                </p-cellEditor>
+              </td>
+              <td>
+                <div class="flex align-items-center justify-content-center gap-2">
+                  <button *ngIf="!editing" pButton pRipple type="button" pInitEditableRow icon="pi pi-pencil"
+                    (click)="onRowEditInit(tourDateList)" class="p-button-rounded p-button-text"></button>
+                  <button *ngIf="editing" pButton pRipple type="button" pSaveEditableRow icon="pi pi-check"
+                    (click)="onRowEditSave(tourDateList)"
+                    class="p-button-rounded p-button-text p-button-success mr-2"></button>
+                  <button *ngIf="editing" pButton pRipple type="button" pCancelEditableRow icon="pi pi-times"
+                    (click)="onRowEditCancel(tourDateList, ri)"
+                    class="p-button-rounded p-button-text p-button-danger"></button>
+                </div>
+              </td>
+              <td>
+                <button class="btn btn-primary" [routerLink]="['/admin/tour/date/'+tourDateList.id]"
+                  (click)="modal.close()">Kế Hoạch</button>
+              </td>
+              <td>
+                <button class="btn btn-danger" (click)="checkDeleteable('date',tourDateList.id)">Xóa</button>
+              </td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </div>
     </ng-template>
 
     <!-- Confirm Delete Modal -->
     <ng-template #confirmModal let-modal>
       <div class="modal-header">
         <b>Vui lòng xác nhận</b>
-        <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+        <button type="button" class="btn-close" aria-label="Close" (click)="modal.close()"></button>
       </div>
       <div class="modal-body">
         Bạn có chắc muốn xóa? Một khi đã xóa sẽ không thể khôi phục lại
@@ -313,10 +315,9 @@
 
     <!-- Main Table -->
     <div class="table-responsive">
-      <p-table #dt1 [value]="tourList" dataKey="id" [rows]="10" [showCurrentPageReport]="true"
-        [rowsPerPageOptions]="[10, 25, 50]" [paginator]="true"
+      <p-table #dt1 [value]="tourList" dataKey="id" [rows]="10" [showCurrentPageReport]="true" [paginator]="true"
         currentPageReportTemplate="Hiển thị từ bảng {first} đến {last} trong tổng {totalRecords} bảng"
-        [globalFilterFields]="['name', 'destinationAddress']" [rowsPerPageOptions]="[10, 25, 50]">
+        [globalFilterFields]="['name', 'destinationAddress']">
         <ng-template pTemplate="caption">
           <div class="flex">
             <form [formGroup]="formFilter">
@@ -331,7 +332,7 @@
         <ng-template pTemplate="header" class="theader">
           <tr>
             <th pSortableColumn="name" style="width:15%">Tên Tour<p-sortIcon field="name"></p-sortIcon></th>
-            <th pSortableColumn="destinationAddress" style="width:40%">Điểm đến<p-sortIcon
+            <th pSortableColumn="destinationAddress" style="width:35%">Điểm đến<p-sortIcon
                 field="destinationAddress"></p-sortIcon></th>
             <th pSortableColumn="active" style="width:12%">Trạng thái<p-sortIcon field="active"></p-sortIcon></th>
             <th pSortableColumn="availableSpaces" style="width:12%">Số lượng<p-sortIcon
@@ -345,16 +346,10 @@
             <td>{{ tourList.destinationAddress }}</td>
             <td>{{ tourList.active }}</td>
             <td>{{ tourList.availableSpaces}}</td>
-            <td>
+            <td class="button-group">
               <button class="btn btn-primary" (click)="open('date',null, tourList.id)">Ngày</button>
-            </td>
-            <td>
               <button class="btn btn-primary" (click)="open('image',null, tourList.id)">Ảnh</button>
-            </td>
-            <td>
               <button class="btn btn-primary" (click)="open('edit',null, tourList.id)">Sửa</button>
-            </td>
-            <td>
               <button class="btn btn-primary" (click)="checkDeleteable('tour',tourList.id)">Xóa</button>
             </td>
           </tr>

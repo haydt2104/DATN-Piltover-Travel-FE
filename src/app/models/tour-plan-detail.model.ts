@@ -1,9 +1,10 @@
+import { Time } from '@angular/common';
 import { TourPlan } from './tour-plan.model';
 
 export interface TourPlanDetail {
-  tourPlanDetailID: number;
-  startTime: Date;
-  endTime: Date;
+  id: number;
+  startTime: Time;
+  endTime: Time;
   description: string;
   tourPlan: TourPlan;
 }
