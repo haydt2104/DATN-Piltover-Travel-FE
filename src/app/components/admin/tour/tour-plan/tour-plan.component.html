@@ -90,8 +90,6 @@
             </th>
             <th pSortableColumn="transport.name" style="width:14%">Phương tiện<p-sortIcon
                 field="transport.name"></p-sortIcon></th>
-            <th pSortableColumn="status.name" style="width:13%">Trạng thái<p-sortIcon field="status.name"></p-sortIcon>
-            </th>
             <th></th>
           </tr>
         </ng-template>
@@ -140,9 +138,6 @@
                   {{ planList.transport.name }}
                 </ng-template>
               </p-cellEditor>
-            </td>
-            <td>
-              {{ planList.status.name}}
             </td>
             <td class="button-group">
               <button *ngIf="!editing" [routerLink]="['/admin/tour/plan/'+planList.id]" class="btn btn-primary">Chi

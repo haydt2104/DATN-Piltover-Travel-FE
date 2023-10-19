@@ -130,12 +130,13 @@ export class TourPlanComponent implements OnInit {
       startAddress: data.value.startAddress,
       startTime: data.value.startTime,
       transport: transport,
-      status: null,
       tourDate: this.currentTourDate,
     }
     this.curdService.post('tour_plan', plan).subscribe(
       (response: TourPlan) => {
         this.getTourPlansByDateID(this.currentTourDate.id);
+        this.messageService.clear();
+        this.messageService.add({ key: 'success', severity: 'success', summary: 'Thông Báo', detail: 'Thêm thành công' });
       },
       (error: HttpErrorResponse) => {
         alert(error.message);

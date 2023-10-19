@@ -1,17 +1,11 @@
+<p-toast key="success"></p-toast>
+<p-toast key="error"></p-toast>
+<p-toast key="warn"></p-toast>
+<p-toast key="info"></p-toast>
 <div class="card">
   <div class="card-body">
     <h4 class="card-title">Danh sách Tour</h4>
-    <button class="btn btn-success mb-3" (click)="open('add',null, null)">Thêm Tour</button>
-
-    <!-- Announcement Modal -->
-    <ng-template #announcementModal let-modal>
-      <div class="modal-header">
-        <h4 class="modal-title">Thông Báo</h4>
-        <button type="button" class="btn-close" aria-label="Close" (click)="modal.close()"></button>
-      </div>
-      <div class="modal-body" id="message">
-      </div>
-    </ng-template>
+    <button class="btn btn-success mb-3" (click)="open('add', null)">Thêm Tour</button>
 
     <!-- Add Modal -->
     <ng-template #addModal let-modal>
@@ -37,8 +31,7 @@
               id="district" ngModel required>
               <option value="">Chọn Quận/Huyện</option>
             </select>
-            <select #ward="ngModel" class="form-control col-md-4" name="ward" (change)="wardChange()" id="ward" ngModel
-              required>
+            <select #ward="ngModel" class="form-control col-md-4" name="ward" id="ward" ngModel required>
               <option value="">Chọn Phường/Xã</option>
             </select>
           </div>
@@ -65,7 +58,7 @@
               <label class="form-label">Người lớn:</label>
               <div class="input-group">
                 <input #adultPrice="ngModel" name="adult" type="number" class="form-control" ngModel required>
-                <span class="input-group-text" id="basic-addon2">VNĐ</span>
+                <span class="input-group-text" id="basic-addon2">.000 VNĐ</span>
               </div>
               <small *ngIf="adultPrice.touched && adultPrice.value < 0">Giá vé người lớn không được là số âm</small>
               <small *ngIf="adultPrice.touched && adultPrice.value < childerenPrice.value && adultPrice.value >= 0">Giá
@@ -76,7 +69,7 @@
               <label class="form-label">Trẻ em:</label>
               <div class="input-group">
                 <input #childerenPrice="ngModel" name="children" type="number" class="form-control" ngModel required>
-                <span class="input-group-text" id="basic-addon2">VNĐ</span>
+                <span class="input-group-text" id="basic-addon2">.000 VNĐ</span>
               </div>
               <small *ngIf="childerenPrice.touched && childerenPrice.value < 0">Giá vé trẻ em không được là số
                 âm</small>
@@ -126,7 +119,7 @@
             <select class="form-control col-md-4" name="district" (change)="districtChange()" id="district" required>
               <option value="">Chọn Quận/Huyện</option>
             </select>
-            <select class="form-control col-md-4" name="ward" (change)="wardChange()" id="ward" required>
+            <select class="form-control col-md-4" name="ward" id="ward" required>
               <option value="">Chọn Phường/Xã</option>
             </select>
           </div>
@@ -154,7 +147,7 @@
               <div class="input-group">
                 <input #adultPrice="ngModel" name="adult" type="number" class="form-control"
                   ngModel="{{editTour.price.adultPrice}}" required>
-                <span class="input-group-text" id="basic-addon2">VNĐ</span>
+                <span class="input-group-text" id="basic-addon2">.000 VNĐ</span>
               </div>
               <small *ngIf="adultPrice.touched && adultPrice.value < 0">Giá vé người lớn không được là số âm</small>
               <small *ngIf="adultPrice.touched && adultPrice.value < childerenPrice.value && adultPrice.value >= 0">Giá
@@ -166,7 +159,7 @@
               <div class="input-group">
                 <input #childerenPrice="ngModel" name="children" type="number" class="form-control"
                   ngModel="{{editTour.price.childrenPrice}}" required>
-                <span class="input-group-text" id="basic-addon2">VNĐ</span>
+                <span class="input-group-text" id="basic-addon2">.000 VNĐ</span>
               </div>
               <small *ngIf="childerenPrice.touched && childerenPrice.value < 0">Giá vé trẻ em không được là số
                 âm</small>
@@ -230,8 +223,10 @@
         <h4 class="modal-title mr-3" id="modal-basic-title">Ngày hoạt động</h4>
         <button class="btn btn-success" (click)="addDate()" *ngIf="!addDateStatus">Thêm ngày</button>
         <input id="addDate" pInputText type="date" *ngIf="addDateStatus">
-        <button pButton icon="pi pi-check" (click)="saveDate()" *ngIf="addDateStatus"></button>
-        <button pButton icon="pi pi-times" (click)="cancelAddDate()" *ngIf="addDateStatus"></button>
+        <button pButton class="p-button-success" icon="pi pi-check" (click)="saveDate()"
+          *ngIf="addDateStatus">Thêm</button>
+        <button pButton class="p-button-danger" icon="pi pi-times" (click)="cancelAddDate()"
+          *ngIf="addDateStatus">Hủy</button>
         <button id="closeDateModal" type="button" class="btn-close" aria-label="Close" (click)="modal.close()"></button>
       </div>
       <div class="modal-body">
@@ -252,8 +247,11 @@
           <ng-template pTemplate="header" class="theader">
             <tr>
               <th pSortableColumn="id" style="width:25%">Id<p-sortIcon field="id"></p-sortIcon></th>
-              <th pSortableColumn="initiateDate" style="width:40%">Thời điểm khởi hành<p-sortIcon
+              <th pSortableColumn="initiateDate" style="width:25%">Thời điểm khởi hành<p-sortIcon
                   field="initiateDate"></p-sortIcon></th>
+              <th pSortableColumn="status.name" style="width:20%">Trạng thái<p-sortIcon
+                  field="status.name"></p-sortIcon>
+              </th>
               <th></th>
             </tr>
           </ng-template>
@@ -274,9 +272,26 @@
                 </p-cellEditor>
               </td>
               <td>
-                <div class="flex align-items-center justify-content-center gap-2">
+                <p-cellEditor>
+                  <ng-template pTemplate="input">
+                    <select class="form-control" [(ngModel)]="tourDateList.status.id" required>
+                      <option *ngFor="let item of statusList" value="{{item.id}}">{{item.name}}</option>
+                    </select>
+                  </ng-template>
+                  <ng-template pTemplate="output">
+                    {{ tourDateList.status.name}}
+                  </ng-template>
+                </p-cellEditor>
+              </td>
+              <td>
+                <div class="button-group">
+                  <button pButton *ngIf="!editing" class="btn btn-info"
+                    [routerLink]="['/admin/tour/date/'+tourDateList.id]" (click)="modal.close()" icon="pi pi-book">Kế
+                    Hoạch</button>
                   <button *ngIf="!editing" pButton pRipple type="button" pInitEditableRow icon="pi pi-pencil"
-                    (click)="onRowEditInit(tourDateList)" class="p-button-rounded p-button-text"></button>
+                    (click)="onRowEditInit(tourDateList)" class="btn btn-warning">Sửa</button>
+                  <button pButton *ngIf="!editing" class="btn btn-danger"
+                    (click)="checkDeleteable('date',tourDateList.id)" icon="pi pi-times-circle">Xóa</button>
                   <button *ngIf="editing" pButton pRipple type="button" pSaveEditableRow icon="pi pi-check"
                     (click)="onRowEditSave(tourDateList)"
                     class="p-button-rounded p-button-text p-button-success mr-2"></button>
@@ -284,13 +299,6 @@
                     (click)="onRowEditCancel(tourDateList, ri)"
                     class="p-button-rounded p-button-text p-button-danger"></button>
                 </div>
-              </td>
-              <td>
-                <button class="btn btn-primary" [routerLink]="['/admin/tour/date/'+tourDateList.id]"
-                  (click)="modal.close()">Kế Hoạch</button>
-              </td>
-              <td>
-                <button class="btn btn-danger" (click)="checkDeleteable('date',tourDateList.id)">Xóa</button>
               </td>
             </tr>
           </ng-template>
@@ -344,13 +352,21 @@
           <tr>
             <td>{{ tourList.name }}</td>
             <td>{{ tourList.destinationAddress }}</td>
-            <td>{{ tourList.active }}</td>
+            <td>{{ tourList.active ? "Công khai" : "Ẩn"}}</td>
             <td>{{ tourList.availableSpaces}}</td>
             <td class="button-group">
-              <button class="btn btn-primary" (click)="open('date',null, tourList.id)">Ngày</button>
-              <button class="btn btn-primary" (click)="open('image',null, tourList.id)">Ảnh</button>
-              <button class="btn btn-primary" (click)="open('edit',null, tourList.id)">Sửa</button>
-              <button class="btn btn-primary" (click)="checkDeleteable('tour',tourList.id)">Xóa</button>
+              <button pButton class="btn btn-info" (click)="open('date', tourList.id)"
+                icon="pi pi-calendar">Ngày</button>
+              <button pButton class="btn btn-primary" (click)="open('image', tourList.id)"
+                icon="pi pi-calendar">Ảnh</button>
+              <button pButton class="btn btn-warning" (click)="open('edit', tourList.id)"
+                icon="pi pi-file-edit">Sửa</button>
+              <button pButton class="btn btn-success" (click)="updateActive(tourList)" icon="pi pi-eye"
+                *ngIf="tourList.active == false">Hiện</button>
+              <button pButton class="btn btn-danger" (click)="updateActive(tourList)" icon="pi pi-eye-slash"
+                *ngIf="tourList.active != false">ẨN</button>
+              <button pButton class="btn btn-danger" (click)="checkDeleteable('tour',tourList.id)"
+                icon="pi pi-times-circle">Xóa</button>
             </td>
           </tr>
         </ng-template>

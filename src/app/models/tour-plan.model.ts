@@ -1,4 +1,3 @@
-import { Status } from "./status.model";
 import { TourDate } from "./tour-date.model";
 import { Transportation } from "./transportation.model";
 
@@ -8,6 +7,5 @@ export interface TourPlan {
   startAddress: string;
   startTime: Date;
   transport: Transportation;
-  status: Status;
   tourDate: TourDate;
 }

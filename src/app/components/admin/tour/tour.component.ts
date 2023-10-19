@@ -17,9 +17,12 @@ import {
 } from '@ng-bootstrap/ng-bootstrap';
 import { DataTableDirective } from 'angular-datatables';
 import axios from 'axios';
+import { MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
+import { CalendarModule } from 'primeng/calendar';
 import { InputTextModule } from 'primeng/inputtext';
 import { TableModule } from 'primeng/table';
+import { ToastModule } from 'primeng/toast';
 import { Subject } from 'rxjs';
 import { TourImage } from 'src/app/models/tour-img.model';
 import { TourPlan } from 'src/app/models/tour-plan.model';
@@ -30,7 +33,8 @@ import { TourService } from 'src/app/services/tour.service';
 import { TourDate } from './../../../models/tour-date.model';
 import { CurdService } from './../../../services/curd.service';
 import { TourImageService } from './../../../services/tour-image.service';
-import { CalendarModule } from 'primeng/calendar';
+import { Transportation } from 'src/app/models/transportation.model';
+import { Status } from 'src/app/models/status.model';
 
 @Component({
   selector: 'app-tour',
@@ -48,8 +52,10 @@ import { CalendarModule } from 'primeng/calendar';
     ButtonModule,
     CommonModule,
     InputTextModule,
-    CalendarModule
+    CalendarModule,
+    ToastModule
   ],
+  providers: [MessageService]
 })
 export class TourComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('addModal') addModal: ElementRef;
@@ -57,7 +63,6 @@ export class TourComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('imageModal') imageModal: ElementRef;
   @ViewChild('confirmModal') confirmModal: ElementRef;
   @ViewChild('dateModal') dateModal: ElementRef;
-  @ViewChild('announcementModal') announcementModal: ElementRef;
 
   constructor(
     private curdService: CurdService,
@@ -68,12 +73,15 @@ export class TourComponent implements OnInit, AfterViewInit, OnDestroy {
     private modalService: NgbModal,
     private fireStorage: AngularFireStorage,
     private formBuilder: FormBuilder,
+    private messageService: MessageService,
   ) { }
 
   dtElement: DataTableDirective;
   public tourList: Tour[];
   public tourDateList: TourDate[];
   public tourImageList: TourImage[];
+  public transportList: Transportation[];
+  public statusList: Status[];
   public editTour: Tour;
   public provinceList: any;
   public districtList: any;
@@ -88,6 +96,12 @@ export class TourComponent implements OnInit, AfterViewInit, OnDestroy {
   mainImgUrl = null
   currentDate = new Date();
 
+  provinceValue: number;
+  districtValue: number;
+  wardValue: number;
+  roadValue: string;
+  tourId: number
+
   public getValueSearch() {
     return this.formFilter.get('search')?.value;
   }
@@ -99,9 +113,11 @@ export class TourComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngOnInit(): void {
     this.getTourList();
-    this.getProvinceData()
-    this.getDistrictData()
-    this.getWardData()
+    this.getAllTransport();
+    this.getAllStatus();
+    this.getProvinceData();
+    this.getDistrictData();
+    this.getWardData();
   }
 
 
@@ -113,145 +129,8 @@ export class TourComponent implements OnInit, AfterViewInit, OnDestroy {
     this.dtTrigger.unsubscribe();
   }
 
-  onFileChange(event: any) {
-    this.file = event.target.files[0]
-    if (this.file.type.match(/image\/*/) && this.file.size <= 6000000) {
-      var reader = new FileReader();
-      reader.readAsDataURL(event.target.files[0])
-      reader.onload = (e: any) => {
-        this.mainImgUrl = e.target.result
-      }
-    } else {
-      alert("Tour chỉ nhận ảnh từ 5MB trở xuống")
-    }
-  }
-
-  addImage() {
-    document.getElementById("addImageInput").click();
-  }
-
-  async saveNewImage(event: any) {
-    const file = event.target.files[0]
-    if (file.type.match(/image\/*/) && file.size <= 6000000) {
-      const randomNumberString = Array.from({ length: 15 }, () => Math.floor(Math.random() * 10)).join('');
-      const path = `tour-img/${randomNumberString}`
-      const upload = await this.fireStorage.upload(path, file)
-      const url = await upload.ref.getDownloadURL()
-      var tourImage: TourImage = {
-        id: null,
-        path: url,
-        tour: this.editTour
-      }
-      this.curdService.post('tour_image', tourImage).subscribe(
-        (response: TourImage) => {
-          this.getTourImageList(this.editTour.id);
-          this.editTour = null
-        },
-        (error: HttpErrorResponse) => {
-          alert(error.message);
-        }
-      );
-    } else {
-      alert("Tour chỉ nhận file ảnh từ 5MB trở xuống")
-    }
-  }
-
-  updateImage(id: number) {
-    document.getElementById("image_" + id).click();
-  }
-
-  async changeImage(event: any, id: number) {
-    const file = event.target.files[0]
-    if (file.type.match(/image\/*/) && file.size <= 6000000) {
-      const randomNumberString = Array.from({ length: 15 }, () => Math.floor(Math.random() * 10)).join('');
-      const path = `tour-img/${randomNumberString}`
-      const upload = await this.fireStorage.upload(path, file)
-      const url = await upload.ref.getDownloadURL()
-      const editImageTour = this.tourImageList.find((tour) => tour.id == id);
-      this.fireStorage.storage.refFromURL(editImageTour.path).delete()
-      editImageTour.path = url
-      this.curdService.put('tour_image', editImageTour).subscribe(
-        (response: TourImage) => {
-          this.getTourImageList(this.editTour.id);
-          this.editTour = null
-        },
-        (error: HttpErrorResponse) => {
-          alert(error.message);
-        }
-      );
-    } else {
-      alert("Tour chỉ nhận file ảnh từ 5MB trở xuống")
-    }
-  }
-
-  confirmDelete(object: string, id: number) {
-    this.modalService
-      .open(this.confirmModal, {
-        ariaLabelledBy: 'modal-basic-title',
-        size: 'xl',
-      })
-    if (object === 'tour') {
-      document.querySelector('#confirmDelete').addEventListener('click', (e: Event) => this.deleteTour(id));
-    } else if (object == 'image') {
-      document.querySelector('#confirmDelete').addEventListener('click', (e: Event) => this.deleteImage(id));
-    } else if (object == 'tour_date') {
-      document.querySelector('#confirmDelete').addEventListener('click', (e: Event) => this.deleteDate(id));
-    }
-  }
-
-  deleteTour(id: number) {
-    this.curdService.delete('tour', id).subscribe(
-      (response) => {
-        const editTour = this.tourList.findIndex((tour) => tour.id == id);
-        this.fireStorage.storage.refFromURL(this.tourList[editTour].image).delete()
-        this.tourList.splice(editTour, 1)
-      },
-      (error: HttpErrorResponse) => {
-        alert(error.message);
-      }
-    )
-  }
-
-  deleteImage(id: number) {
-    this.curdService.delete('tour_image', id).subscribe(
-      (response) => {
-        const editImageTour = this.tourImageList.findIndex((tourImage) => tourImage.id == id);
-        this.fireStorage.storage.refFromURL(this.tourImageList[editImageTour].path).delete()
-        this.tourImageList.splice(editImageTour, 1)
-      },
-      (error: HttpErrorResponse) => {
-        alert(error.message);
-      }
-    )
-  }
-
-  deleteDate(id: number) {
-    this.curdService.delete('tour_date', id).subscribe(
-      (response) => {
-        const editDateTour = this.tourDateList.findIndex((tourDate) => tourDate.id == id);
-        this.tourDateList.splice(editDateTour, 1)
-      },
-      (error: HttpErrorResponse) => {
-        alert(error.message);
-      }
-    )
-  }
-
-  provinceValue: number;
-  districtValue: number;
-  wardValue: number;
-  roadValue: string;
-  tourId: number
-
-  open(content, message: string, id: number) {
-    if (content == 'announcement') {
-      this.modalService
-        .open(this.announcementModal, {
-          ariaLabelledBy: 'modal-basic-title',
-          size: 'lg',
-        })
-      document.getElementById('message').innerHTML = message
-    } else if (content == 'add') {
+  open(content: string, id: number) {
+    if (content == 'add') {
       this.callAPIProvince('https://provinces.open-api.vn/api/?depth=1', null);
       this.modalService
         .open(this.addModal, {
@@ -302,6 +181,142 @@ export class TourComponent implements OnInit, AfterViewInit, OnDestroy {
           size: 'xl',
         })
     }
+  }
+
+  onFileChange(event: any) {
+    this.file = event.target.files[0]
+    if (this.file.type.match(/image\/*/) && this.file.size <= 6000000) {
+      var reader = new FileReader();
+      reader.readAsDataURL(event.target.files[0])
+      reader.onload = (e: any) => {
+        this.mainImgUrl = e.target.result
+      }
+    } else {
+      console.log("Tour chỉ nhận ảnh từ 5MB trở xuống")
+    }
+  }
+
+  addImage() {
+    document.getElementById("addImageInput").click();
+  }
+
+  async saveNewImage(event: any) {
+    const file = event.target.files[0]
+    if (file.type.match(/image\/*/) && file.size <= 6000000) {
+      const randomNumberString = Array.from({ length: 15 }, () => Math.floor(Math.random() * 10)).join('');
+      const path = `tour-img/${randomNumberString}`
+      const upload = await this.fireStorage.upload(path, file)
+      const url = await upload.ref.getDownloadURL()
+      var tourImage: TourImage = {
+        id: null,
+        path: url,
+        tour: this.editTour
+      }
+      this.curdService.post('tour_image', tourImage).subscribe(
+        (response: TourImage) => {
+          this.getTourImageList(this.editTour.id);
+          this.messageService.clear();
+          this.messageService.add({ key: 'success', severity: 'success', summary: 'Thông Báo', detail: 'Thêm ảnh thành công' })
+          this.editTour = null
+        },
+        (error: HttpErrorResponse) => {
+          console.log(error.message);
+        }
+      );
+    } else {
+      this.messageService.clear();
+      this.messageService.add({ key: 'warn', severity: 'warn', summary: 'Thông Báo', detail: 'Tour chỉ nhận duy nhất file kiểu ảnh và từ 5MB trở xuống' });
+    }
+  }
+
+  updateImage(id: number) {
+    document.getElementById("image_" + id).click();
+  }
+
+  async changeImage(event: any, id: number) {
+    const file = event.target.files[0]
+    if (file.type.match(/image\/*/) && file.size <= 6000000) {
+      const randomNumberString = Array.from({ length: 15 }, () => Math.floor(Math.random() * 10)).join('');
+      const path = `tour-img/${randomNumberString}`
+      const upload = await this.fireStorage.upload(path, file)
+      const url = await upload.ref.getDownloadURL()
+      const editImageTour = this.tourImageList.find((tour) => tour.id == id);
+      this.fireStorage.storage.refFromURL(editImageTour.path).delete()
+      editImageTour.path = url
+      this.curdService.put('tour_image', editImageTour).subscribe(
+        (response: TourImage) => {
+          this.getTourImageList(this.editTour.id);
+          this.messageService.clear();
+          this.messageService.add({ key: 'info', severity: 'info', summary: 'Thông Báo', detail: 'Cập nhập ảnh thành công' })
+          this.editTour = null
+        },
+        (error: HttpErrorResponse) => {
+          console.log(error.message);
+        }
+      );
+    } else {
+      this.messageService.clear();
+      this.messageService.add({ key: 'warn', severity: 'warn', summary: 'Thông Báo', detail: 'Tour chỉ nhận duy nhất file kiểu ảnh và từ 5MB trở xuống' });
+    }
+  }
+
+  confirmDelete(object: string, id: number) {
+    this.modalService
+      .open(this.confirmModal, {
+        ariaLabelledBy: 'modal-basic-title',
+        size: 'xl',
+      })
+    if (object === 'tour') {
+      document.querySelector('#confirmDelete').addEventListener('click', (e: Event) => this.deleteTour(id));
+    } else if (object == 'image') {
+      document.querySelector('#confirmDelete').addEventListener('click', (e: Event) => this.deleteImage(id));
+    } else if (object == 'tour_date') {
+      document.querySelector('#confirmDelete').addEventListener('click', (e: Event) => this.deleteDate(id));
+    }
+  }
+
+  deleteTour(id: number) {
+    this.curdService.delete('tour', id).subscribe(
+      (response) => {
+        const editTour = this.tourList.findIndex((tour) => tour.id == id);
+        this.fireStorage.storage.refFromURL(this.tourList[editTour].image).delete()
+        this.tourList.splice(editTour, 1)
+        this.messageService.clear();
+        this.messageService.add({ key: 'info', severity: 'info', summary: 'Thông Báo', detail: 'Xóa thành công' });
+      },
+      (error: HttpErrorResponse) => {
+        console.log(error.message);
+      }
+    )
+  }
+
+  deleteImage(id: number) {
+    this.curdService.delete('tour_image', id).subscribe(
+      (response) => {
+        const editImageTour = this.tourImageList.findIndex((tourImage) => tourImage.id == id);
+        this.fireStorage.storage.refFromURL(this.tourImageList[editImageTour].path).delete()
+        this.tourImageList.splice(editImageTour, 1)
+        this.messageService.clear();
+        this.messageService.add({ key: 'info', severity: 'info', summary: 'Thông Báo', detail: 'Xóa thành công' });
+      },
+      (error: HttpErrorResponse) => {
+        console.log(error.message);
+      }
+    )
+  }
+
+  deleteDate(id: number) {
+    this.curdService.delete('tour_date', id).subscribe(
+      (response) => {
+        const editDateTour = this.tourDateList.findIndex((tourDate) => tourDate.id == id);
+        this.tourDateList.splice(editDateTour, 1)
+        this.messageService.clear();
+        this.messageService.add({ key: 'info', severity: 'info', summary: 'Thông Báo', detail: 'Xóa thành công' });
+      },
+      (error: HttpErrorResponse) => {
+        console.log(error.message);
+      }
+    )
   }
 
   public getTourList(): void {
@@ -366,6 +381,28 @@ export class TourComponent implements OnInit, AfterViewInit, OnDestroy {
       })
   }
 
+  public getAllTransport() {
+    this.curdService.getList('transport').subscribe(
+      (response) => {
+        this.transportList = response;
+      },
+      (error: HttpErrorResponse) => {
+        alert(error.message);
+      }
+    )
+  }
+
+  public getAllStatus() {
+    this.curdService.getList('status').subscribe(
+      (response) => {
+        this.statusList = response;
+      },
+      (error: HttpErrorResponse) => {
+        alert(error.message);
+      }
+    )
+  }
+
   renderData = (array, select, code) => {
     let row;
     if (select == 'district') {
@@ -403,7 +440,6 @@ export class TourComponent implements OnInit, AfterViewInit, OnDestroy {
       this.callApiDistrict(
         this.host + 'p/' + $('#province').val() + '?depth=2', null
       );
-      this.printResult();
     } else {
       document.querySelector(
         '#district'
@@ -416,31 +452,13 @@ export class TourComponent implements OnInit, AfterViewInit, OnDestroy {
   districtChange() {
     if ($('#district').val()) {
       this.callApiWard(this.host + 'd/' + $('#district').val() + '?depth=2', null);
-      this.printResult();
     } else {
       document.querySelector(
         '#ward'
       ).innerHTML = `<option value="">Chọn Phường/Xã</option>`;
     }
   }
-  wardChange() {
-    this.printResult();
-  }
-  printResult = () => {
-    if (
-      $('#district').val() != '' &&
-      $('#province').val() != '' &&
-      $('#ward').val() != ''
-    ) {
-      let result =
-        $('#province option:selected').text() +
-        ' | ' +
-        $('#district option:selected').text() +
-        ' | ' +
-        $('#ward option:selected').text();
-      $('#result').text(result);
-    }
-  };
+
 
   async submitAdd(data) {
     var province = $('#province option:selected').text();
@@ -471,9 +489,11 @@ export class TourComponent implements OnInit, AfterViewInit, OnDestroy {
     this.curdService.post('tour', tour).subscribe(
       (response: Tour) => {
         this.getTourList();
+        this.messageService.clear();
+        this.messageService.add({ key: 'success', severity: 'success', summary: 'Thông Báo', detail: 'Thêm thành công' })
       },
       (error: HttpErrorResponse) => {
-        alert(error.message);
+        console.log(error.message);
       }
     );
     this.mainImgUrl = null;
@@ -513,9 +533,11 @@ export class TourComponent implements OnInit, AfterViewInit, OnDestroy {
     this.curdService.put('tour', tour).subscribe(
       (response: Tour) => {
         this.getTourList();
+        this.messageService.clear();
+        this.messageService.add({ key: 'info', severity: 'info', summary: 'Thông Báo', detail: 'Cập nhập thành công' })
       },
       (error: HttpErrorResponse) => {
-        alert(error.message);
+        console.log(error.message);
       }
     );
     this.editTour = null
@@ -550,15 +572,18 @@ export class TourComponent implements OnInit, AfterViewInit, OnDestroy {
     const tourDate: TourDate = {
       id: null,
       initiateDate: date,
-      tour: this.editTour
+      tour: this.editTour,
+      status: null
     }
     this.curdService.post('tour_date', tourDate).subscribe(
       (response: TourDate) => {
         this.getTourDateList(this.editTour.id)
         this.addDateStatus = false
+        this.messageService.clear();
+        this.messageService.add({ key: 'success', severity: 'success', summary: 'Thông Báo', detail: 'Thêm thành công' })
       },
       (error: HttpErrorResponse) => {
-        alert(error.message);
+        console.log(error.message);
       }
     );
   }
@@ -575,9 +600,11 @@ export class TourComponent implements OnInit, AfterViewInit, OnDestroy {
     this.curdService.put('tour_date', tourDate).subscribe(
       (response: TourDate) => {
         delete this.clonedProducts[tourDate.id]
+        this.messageService.clear();
+        this.messageService.add({ key: 'info', severity: 'info', summary: 'Thông Báo', detail: 'Cập nhập thành công' })
       },
       (error: HttpErrorResponse) => {
-        alert(error.message);
+        console.log(error.message);
       }
     );
   }
@@ -601,7 +628,8 @@ export class TourComponent implements OnInit, AfterViewInit, OnDestroy {
                 if (imageList.length == 0) {
                   this.confirmDelete('tour', id)
                 } else {
-                  this.open('announcement', 'Bảng này đang được sử dụng tại những bảng khác không thể xóa được', null)
+                  this.messageService.clear();
+                  this.messageService.add({ key: 'error', severity: 'error', summary: 'Thông Báo', detail: 'Bảng này đang được sử dụng tại những bảng khác không thể xóa được' });
                 }
               },
               (error: HttpErrorResponse) => {
@@ -609,7 +637,8 @@ export class TourComponent implements OnInit, AfterViewInit, OnDestroy {
               }
             )
           } else {
-            this.open('announcement', 'Bảng này đang được sử dụng tại những bảng khác không thể xóa được', null)
+            this.messageService.clear();
+            this.messageService.add({ key: 'error', severity: 'error', summary: 'Thông Báo', detail: 'Bảng này đang được sử dụng tại những bảng khác không thể xóa được' })
           }
         },
         (error: HttpErrorResponse) => {
@@ -624,7 +653,8 @@ export class TourComponent implements OnInit, AfterViewInit, OnDestroy {
           if (planList.length == 0) {
             this.confirmDelete('tour_date', id)
           } else {
-            this.open('announcement', 'Bảng này đang được sử dụng tại những bảng khác không thể xóa được', null)
+            this.messageService.clear();
+            this.messageService.add({ key: 'error', severity: 'error', summary: 'Thông Báo', detail: 'Bảng này đang được sử dụng tại những bảng khác không thể xóa được' })
           }
         },
         (error: HttpErrorResponse) => {
@@ -632,5 +662,23 @@ export class TourComponent implements OnInit, AfterViewInit, OnDestroy {
         }
       );
     }
+  }
+
+  updateActive(tour: Tour) {
+    if (tour.active === true) {
+      tour.active = false;
+    } else {
+      tour.active = true;
+    }
+    this.curdService.put("tour", tour).subscribe(
+      (response: Tour) => {
+        this.getTourList();
+        this.messageService.clear();
+        this.messageService.add({ key: 'info', severity: 'info', summary: 'Thông Báo', detail: 'Cập nhập trạng thái thành công' })
+      },
+      (error: HttpErrorResponse) => {
+        console.log(error.message);
+      }
+    )
   }
 }

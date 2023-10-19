@@ -79,7 +79,6 @@ export class TourPlanDetailComponent implements OnInit {
   public getTourPlanDetailByTourPlanId(planId: number): void {
     this.tourPlanDetailService.getTourPlanDetailsByTourPlanId(planId).subscribe(
       (response: TourPlanDetail[]) => {
-        console.log(response);
         this.planDetailList = response;
       },
       (error: HttpErrorResponse) => {
@@ -105,7 +104,6 @@ export class TourPlanDetailComponent implements OnInit {
   }
 
   submitAdd(data) {
-    console.log(data.value)
     var planDetail: TourPlanDetail = {
       id: null,
       startTime: data.value.startTime,
@@ -132,8 +130,8 @@ export class TourPlanDetailComponent implements OnInit {
     this.clonedProducts[tourPlanDetail.id as number] = { ...tourPlanDetail };
   }
 
-  onRowEditSave(tourPlan: TourPlanDetail) {
-    this.curdService.put('tour_plan_detail', tourPlan).subscribe(
+  onRowEditSave(tourPlanDetail: TourPlanDetail) {
+    this.curdService.put('tour_plan_detail', tourPlanDetail).subscribe(
       (response: TourPlan) => {
         this.messageService.clear();
         this.messageService.add({ key: 'success', severity: 'success', summary: 'Thông Báo', detail: 'Cập nhập thành công' });
