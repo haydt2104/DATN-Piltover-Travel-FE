@@ -58,7 +58,7 @@
               <h6 class="mb-0 font-medium text-center">{{ ts.transport_name }}</h6>
             </td>
             <td>
-              <h6 class="mb-0 font-medium text-center">{{ ts.transport_price }}</h6>
+              <h6 class="mb-0 font-medium text-center">{{ formatCurrency(ts.transport_price) }}</h6>
             </td>
             <td>
               <h6 class="mb-0 font-medium text-center">
@@ -67,7 +67,7 @@
             </td>
             <td>
               <h6 class="mb-0 font-medium text-center">
-                {{ ts.total_transport_revenue}}
+                {{ formatCurrency(ts.total_transport_revenue) }}
               </h6>
             </td>
           </tr>

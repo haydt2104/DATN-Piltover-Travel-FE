@@ -53,4 +53,14 @@ export class TopHotelComponent {
           this.currentSortColumn = column;
         }
       }
+      formatCurrency(value: number): string {
+        const formattedValue = new Intl.NumberFormat('vi-VN', {
+          style: 'currency',
+          currency: 'VND',
+          minimumFractionDigits: 3,
+          maximumFractionDigits: 3,
+        }).format(value);
+
+        return formattedValue.replace('₫', '') + 'VNĐ';
+      }
     }

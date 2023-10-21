@@ -58,7 +58,7 @@
               <h6 class="mb-0 font-medium text-center">{{ ts.hotel_name }}</h6>
             </td>
             <td>
-              <h6 class="mb-0 font-medium text-center">{{ ts.hotel_price }}</h6>
+              <h6 class="mb-0 font-medium text-center">{{ formatCurrency(ts.hotel_price) }}</h6>
             </td>
             <td>
               <h6 class="mb-0 font-medium text-center">
@@ -67,7 +67,7 @@
             </td>
             <td>
               <h6 class="mb-0 font-medium text-center">
-                {{ ts.total_hotel_revenue}}
+                {{ formatCurrency(ts.total_hotel_revenue) }}
               </h6>
             </td>
           </tr>

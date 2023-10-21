@@ -14,7 +14,6 @@ import {
   ApexPlotOptions
 } from 'ng-apexcharts';
 import { MonthRevenue } from 'src/app/models/revenue';
-import { Revenue } from 'src/app/models/revenue';
 import { RevenueService } from 'src/app/services/revenue/revenue.service';
 
 export type salesChartOptions = {
@@ -47,7 +46,9 @@ export class SalesRatioComponent implements OnInit {
   @ViewChild("chart") chart: ChartComponent = Object.create(null);
   public salesChartOptions: Partial<salesChartOptions>;
   constructor(private router: Router, private route: ActivatedRoute, private monthrevenueService: RevenueService) {
-
+    function formatCurrency(value: number): string {
+      return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(value);
+    }
     this.salesChartOptions = {
       series: [
         {
@@ -102,11 +103,21 @@ export class SalesRatioComponent implements OnInit {
         ],
       },
       tooltip: {
-        theme: 'dark'
+        theme: 'dark',
+        y: {
+          formatter: function (value: number) {
+            const formattedValue = new Intl.NumberFormat('vi-VN', {
+              style: 'currency',
+              currency: 'VND',
+              minimumFractionDigits: 3,
+              maximumFractionDigits: 3,
+            }).format(value);
+            return formattedValue.replace('₫', '') +'VNĐ';
+          }
+        }
       }
-    };
-  }
-
+   }
+}
   ngOnInit(): void {
     this.getMonthRevenue();
     this.route.queryParams.subscribe((params: Params) => {
@@ -116,15 +127,6 @@ export class SalesRatioComponent implements OnInit {
       this.getMonthRevenue();
     });
   }
-  // filterData(dateRange: { startDate: string; endDate: string }) {
-  //   // Gán lại giá trị startDate và endDate từ sự kiện lọc
-  //   this.startDate = dateRange.startDate;
-  //   this.endDate = dateRange.endDate;
-
-  //   // Gọi hàm để lấy dữ liệu dựa trên khoảng thời gian đã chọn
-  //   this.getMonthRevenue();
-  // }
-
 
   private getMonthRevenue() {
     this.monthrevenueService.getMonthRevenue(this.startDate, this.endDate).subscribe((data) => {

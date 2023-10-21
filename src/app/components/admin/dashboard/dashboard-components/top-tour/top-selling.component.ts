@@ -4,13 +4,15 @@ import {Product,TopSelling} from './top-selling-data';
 import { RevenueService } from 'src/app/services/revenue/revenue.service';
 import { Revenue, TourRevenue } from 'src/app/models/revenue';
 import { ActivatedRoute, Params, Router, RouterLink } from '@angular/router';
+import { CommonModule } from '@angular/common';
+
 
 @Component({
   selector: 'app-top-selling',
   templateUrl: './top-selling.component.html',
   styleUrls: ['./top-selling.component.scss'],
   standalone: true,
-  imports: [NgFor, RouterLink],
+  imports: [NgFor, RouterLink, CommonModule],
 })
 export class TopSellingComponent implements OnInit {
   public TourRevenue!: TourRevenue[];
@@ -55,6 +57,16 @@ export class TopSellingComponent implements OnInit {
       });
       this.currentSortColumn = column;
     }
+  }
+  formatCurrency(value: number): string {
+    const formattedValue = new Intl.NumberFormat('vi-VN', {
+      style: 'currency',
+      currency: 'VND',
+      minimumFractionDigits: 3,
+      maximumFractionDigits: 3,
+    }).format(value);
+
+    return formattedValue.replace('₫', '') + 'VNĐ';
   }
 }
 

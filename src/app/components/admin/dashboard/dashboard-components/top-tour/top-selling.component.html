@@ -77,11 +77,11 @@
               <h6 class="mb-0 font-medium text-center">{{ ts.total_name }}</h6>
             </td>
             <td>
-              <h6 class="mb-0 font-medium text-center">{{ ts.adult_price }}</h6>
+              <h6 class="mb-0 font-medium text-center">{{ formatCurrency(ts.adult_price) }}</h6>
             </td>
             <td>
               <h6 class="mb-0 font-medium text-center">
-                {{ ts.children_price }}
+                {{ formatCurrency(ts.children_price) }}
               </h6>
             </td>
             <td>
@@ -96,7 +96,7 @@
             </td>
             <td>
               <h6 class="mb-0 font-medium text-center">
-                {{ ts.total_revenue }}
+                {{ formatCurrency(ts.total_revenue) }}
               </h6>
             </td>
           </tr>
