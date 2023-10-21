@@ -1,7 +1,7 @@
 import { NgFor } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import {Product,TopSelling} from './top-selling-data';
-import { TourrevenueService } from 'src/app/services/revenue/tourrevenue.service';
+import { RevenueService } from 'src/app/services/revenue/revenue.service';
 import { Revenue, TourRevenue } from 'src/app/models/revenue';
 import { ActivatedRoute, Params, Router, RouterLink } from '@angular/router';
 
@@ -20,7 +20,7 @@ export class TopSellingComponent implements OnInit {
   public startDate: string = '2023-01-01'; // Ngày bắt đầu
   public endDate: string = '2023-12-31';   // Ngày kết thúc
 
-  constructor(private tourService: TourrevenueService, private router: Router, private route: ActivatedRoute) {
+  constructor(private tourService: RevenueService, private router: Router, private route: ActivatedRoute) {
 
     this.topSelling=TopSelling;
   }

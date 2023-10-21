@@ -15,7 +15,7 @@ import {
 } from 'ng-apexcharts';
 import { MonthRevenue } from 'src/app/models/revenue';
 import { Revenue } from 'src/app/models/revenue';
-import { MonthrevenueService } from 'src/app/services/revenue/monthrevenue.service';
+import { RevenueService } from 'src/app/services/revenue/revenue.service';
 
 export type salesChartOptions = {
   series: ApexAxisChartSeries | any;
@@ -46,7 +46,7 @@ export class SalesRatioComponent implements OnInit {
 
   @ViewChild("chart") chart: ChartComponent = Object.create(null);
   public salesChartOptions: Partial<salesChartOptions>;
-  constructor(private router: Router, private route: ActivatedRoute, private monthrevenueService: MonthrevenueService) {
+  constructor(private router: Router, private route: ActivatedRoute, private monthrevenueService: RevenueService) {
 
     this.salesChartOptions = {
       series: [

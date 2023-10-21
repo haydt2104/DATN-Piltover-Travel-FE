@@ -1,6 +1,6 @@
 import { NgFor } from '@angular/common';
 import { Component } from '@angular/core';
-import { TourrevenueService } from 'src/app/services/revenue/tourrevenue.service';
+import { RevenueService } from 'src/app/services/revenue/revenue.service';
 import { Revenue, HotelRevenue } from 'src/app/models/revenue';
 import { ActivatedRoute, Params, Router, RouterLink } from '@angular/router';
 
@@ -18,7 +18,7 @@ export class TopHotelComponent {
     public startDate: string = '2023-01-01'; // Ngày bắt đầu
     public endDate: string = '2023-12-31';   // Ngày kết thúc
 
-    constructor(private hotelService: TourrevenueService, private router: Router, private route: ActivatedRoute) {
+    constructor(private hotelService: RevenueService, private router: Router, private route: ActivatedRoute) {
     }
 
     ngOnInit(): void {
