@@ -3,8 +3,10 @@
 
 <div class="card">
   <div class="card-body">
-    <h4 class="card-title">Danh sách Kế Hoạch</h4>
-    <button class="btn btn-success mb-3" (click)="open('add', null)">Thêm Kế Hoạch</button>
+    <h4 class="card-title">Danh sách Kế Hoạch [<i *ngIf="currentTourDate">{{currentTourDate.initiateDate | date:
+        "dd/MM/yyyy"}}</i>]</h4>
+    <button *ngIf="currentTourDate && currentTourDate.status.id == 1" pButton icon="pi pi-plus"
+      class="btn btn-success mb-3" (click)="open('add', null)">Thêm Kế Hoạch</button>
 
     <!-- Add Modal -->
     <ng-template #addModal let-modal>
@@ -29,7 +31,8 @@
           <div class="row">
             <div class="col-6">
               <label class="form-label">Thời gian khởi hành:</label>
-              <input #startTime="ngModel" name="startTime" class="form-control" type="datetime-local" ngModel required>
+              <input #startTime="ngModel" min="{{minDate | date:'yyyy-MM-dd hh:mm:ss'}}" name="startTime"
+                class="form-control" type="datetime-local" ngModel required>
               <small *ngIf="startTime.touched && startTime.invalid">Thời điểm không được bỏ trống</small>
             </div>
             <div class="col-6">
@@ -118,11 +121,14 @@
             <td>
               <p-cellEditor>
                 <ng-template pTemplate="input">
-                  <p-calendar [(ngModel)]="planList.startTime" [touchUI]="true" [readonlyInput]="true" [showTime]="true"
-                    [showIcon]="true"></p-calendar>
+                  <p-calendar [(ngModel)]="planList.startTime" [minDate]="minDate" [touchUI]="true"
+                    [readonlyInput]="true" [showTime]="true" [showIcon]="true"></p-calendar>
                 </ng-template>
                 <ng-template pTemplate="output">
                   {{ planList.startTime | date:"HH:mm | dd-MM-yyyy" : "UTC"}}
+                  <br>
+                  <small *ngIf="checkValidDate(currentTourDate,planList)">Ngày hoạt động không khớp với lịch trình vui
+                    lòng cập nhập lại</small>
                 </ng-template>
               </p-cellEditor>
             </td>
@@ -130,7 +136,6 @@
               <p-cellEditor>
                 <ng-template pTemplate="input">
                   <select name="transport" class="form-control" [(ngModel)]="planList.transport.id" required>
-                    <option value="">Chọn phương tiện</option>
                     <option *ngFor="let item of transportList" value="{{item.id}}">{{item.name}}</option>
                   </select>
                 </ng-template>
@@ -140,11 +145,13 @@
               </p-cellEditor>
             </td>
             <td class="button-group">
-              <button *ngIf="!editing" [routerLink]="['/admin/tour/plan/'+planList.id]" class="btn btn-primary">Chi
+              <button pButton *ngIf="!editing" [routerLink]="['/admin/tour/plan/'+planList.id]" class="btn btn-info"
+                icon="pi pi-book">Chi
                 tiết</button>
-              <button *ngIf="!editing" (click)="onRowEditInit(planList)" pInitEditableRow
-                class="btn btn-success">Sửa</button>
-              <button *ngIf="!editing" (click)="checkDeleteable(planList.id)" class="btn btn-danger">Xóa</button>
+              <button pButton *ngIf="!editing && currentTourDate.status.id == 1" (click)="onRowEditInit(planList)"
+                icon="pi pi-pencil" pInitEditableRow class="btn btn-warning">Sửa</button>
+              <button pButton *ngIf="!editing && currentTourDate.status.id == 1" (click)="checkDeleteable(planList.id)"
+                class="btn btn-danger" icon="pi pi-times-circle">Xóa</button>
               <button *ngIf="editing" pButton pRipple type="button" pSaveEditableRow icon="pi pi-check"
                 (click)="onRowEditSave(planList, ri)"
                 class="p-button-rounded p-button-text p-button-success mr-2"></button>

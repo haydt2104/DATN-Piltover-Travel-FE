@@ -1,4 +1,3 @@
-import { TourPlanDetailService } from './../../../../services/tour-plan-detail.service';
 import { CommonModule, NgFor, NgIf } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
@@ -10,12 +9,13 @@ import { ButtonModule } from 'primeng/button';
 import { CalendarModule } from 'primeng/calendar';
 import { InputTextModule } from 'primeng/inputtext';
 import { TableModule } from 'primeng/table';
+import { ToastModule } from 'primeng/toast';
 import { TourDate } from 'src/app/models/tour-date.model';
-import { TourPlan } from 'src/app/models/tour-plan.model';
 import { Transportation } from 'src/app/models/transportation.model';
 import { CurdService } from 'src/app/services/curd.service';
 import { TourPlanService } from 'src/app/services/tour-plan.service';
-import { ToastModule } from 'primeng/toast';
+import { TourPlan } from './../../../../models/tour-plan.model';
+import { TourPlanDetailService } from './../../../../services/tour-plan-detail.service';
 
 
 @Component({
@@ -45,6 +45,8 @@ export class TourPlanComponent implements OnInit {
   currentTourDate: TourDate;
   planList: TourPlan[];
   transportList: Transportation[];
+  minDate: Date
+
   constructor(
     private route: ActivatedRoute,
     private tourPlanService: TourPlanService,
@@ -93,6 +95,8 @@ export class TourPlanComponent implements OnInit {
     this.curdService.getSpecificObject('tour_date', tourDateId).subscribe(
       (response: TourDate) => {
         this.currentTourDate = response;
+        this.minDate = new Date(this.currentTourDate.initiateDate);
+        this.minDate.setHours(this.minDate.getHours() - 7);
       },
       (error: HttpErrorResponse) => {
         console.log(error.message);
@@ -157,21 +161,20 @@ export class TourPlanComponent implements OnInit {
   }
 
   onRowEditSave(tourPlan: TourPlan, index: number) {
-    if (tourPlan.transport.id) {
-      tourPlan.startTime.setHours(tourPlan.startTime.getHours() + 7);
-      tourPlan.transport = this.transportList.find(transport => transport.id == tourPlan.transport.id);
-      this.planList[index] = tourPlan;
-      this.curdService.put('tour_plan', tourPlan).subscribe(
-        (response) => {
-          this.messageService.clear();
-          this.messageService.add({ key: 'success', severity: 'success', summary: 'Thông Báo', detail: 'Cập nhập thành công' });
-        },
-        (error: HttpErrorResponse) => {
-          this.messageService.clear();
-          this.messageService.add({ key: 'error', severity: 'error', summary: 'Lỗi', detail: 'Cập nhập thất bại vui lòng điền đầy đủ dữ liệu' });
-        }
-      )
-    }
+    tourPlan.startTime.setHours(tourPlan.startTime.getHours() + 7);
+    tourPlan.transport = this.transportList.find(transport => transport.id == tourPlan.transport.id);
+    this.planList[index] = tourPlan;
+    this.curdService.put('tour_plan', tourPlan).subscribe(
+      (response) => {
+        delete this.clonedProducts[tourPlan.id]
+        this.messageService.clear();
+        this.messageService.add({ key: 'success', severity: 'success', summary: 'Thông Báo', detail: 'Cập nhập thành công' });
+      },
+      (error: HttpErrorResponse) => {
+        this.messageService.clear();
+        this.messageService.add({ key: 'error', severity: 'error', summary: 'Lỗi', detail: 'Cập nhập thất bại vui lòng điền đầy đủ dữ liệu' });
+      }
+    )
   }
 
   onRowEditCancel(tourPlan: TourPlan, index: number) {
@@ -194,6 +197,15 @@ export class TourPlanComponent implements OnInit {
         console.log(error.message)
       }
     )
+  }
+
+  checkValidDate(tourDate: TourDate, tourPlan: TourPlan) {
+    var dateDif = Math.round(Number(new Date(tourPlan.startTime).getTime()) - Number(new Date(tourDate.initiateDate).getTime())) / (24 * 60 * 60 * 1000)
+    if (dateDif < 0) {
+      return true
+    } else {
+      return false;
+    }
   }
 
   deleteTourPlan(id: number) {

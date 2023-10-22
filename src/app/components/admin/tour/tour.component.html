@@ -5,7 +5,7 @@
 <div class="card">
   <div class="card-body">
     <h4 class="card-title">Danh sách Tour</h4>
-    <button class="btn btn-success mb-3" (click)="open('add', null)">Thêm Tour</button>
+    <button pButton icon="pi pi-plus" class="btn btn-success mb-3" (click)="open('add', null)">Thêm Tour</button>
 
     <!-- Add Modal -->
     <ng-template #addModal let-modal>
@@ -192,12 +192,12 @@
     <ng-template #imageModal let-modal>
       <div class="modal-header">
         <h4 class="modal-title" id="modal-basic-title">Ảnh Tour</h4>
-        <button id="addImageBtn" class="btn btn-success ml-3">Thêm Ảnh</button>
+        <button pButton icon="pi pi-plus" id="addImageBtn" class="btn btn-success ml-3">Thêm Ảnh</button>
         <input id="addImageInput" (change)="saveNewImage($event)" type="file" accept="image/*" hidden>
         <button type="button" class="btn-close" aria-label="Close" (click)="modal.close()"></button>
       </div>
       <div class="modal-body">
-        <table class="table table-hover align-middle text-nowrap table-bordered">
+        <table *ngIf="tourImageList.length > 0" class="table table-hover align-middle text-nowrap table-bordered">
           <tbody>
             <tr *ngFor="let img of tourImageList">
               <td align="center">
@@ -214,6 +214,7 @@
             </tr>
           </tbody>
         </table>
+        <h5 *ngIf="tourImageList.length == 0" class="text-center">Hiện Chưa Có Ảnh Nào Được Thêm Vào</h5>
       </div>
     </ng-template>
 
@@ -221,8 +222,9 @@
     <ng-template #dateModal let-modal>
       <div class="modal-header">
         <h4 class="modal-title mr-3" id="modal-basic-title">Ngày hoạt động</h4>
-        <button class="btn btn-success" (click)="addDate()" *ngIf="!addDateStatus">Thêm ngày</button>
-        <input id="addDate" pInputText type="date" *ngIf="addDateStatus">
+        <button pButton icon="pi pi-plus" class="btn btn-success" (click)="addDate()" *ngIf="!addDateStatus">Thêm
+          ngày</button>
+        <input id="addDate" pInputText type="date" *ngIf="addDateStatus" min="{{minDate | date:'yyyy-MM-dd'}}">
         <button pButton class="p-button-success" icon="pi pi-check" (click)="saveDate()"
           *ngIf="addDateStatus">Thêm</button>
         <button pButton class="p-button-danger" icon="pi pi-times" (click)="cancelAddDate()"
@@ -230,16 +232,16 @@
         <button id="closeDateModal" type="button" class="btn-close" aria-label="Close" (click)="modal.close()"></button>
       </div>
       <div class="modal-body">
-        <p-table #dt2 [value]="tourDateList" dataKey="id" [rows]="10" [showCurrentPageReport]="true" [paginator]="true"
-          editMode="row" currentPageReportTemplate="Hiển thị từ bảng {first} đến {last} trong tổng {totalRecords} bảng"
+        <p-table *ngIf="tourDateList.length > 0" #dt2 [value]="tourDateList" sortField="initiateDate" [sortOrder]=-1 dataKey="id" [rows]="10"
+          [showCurrentPageReport]="true" [paginator]="true" editMode="row"
+          currentPageReportTemplate="Hiển thị từ bảng {first} đến {last} trong tổng {totalRecords} bảng"
           [globalFilterFields]="['initiateDate']">
           <ng-template pTemplate="caption">
             <div class="flex">
               <form [formGroup]="formFilter">
                 <span class="p-input-icon-left ml-auto">
                   <input pInputText type="text" (change)="dt2.filterGlobal(getValueSearch(), 'contains')"
-                    formControlName="search" class="form-control box-shadow-none" placeholder="Tìm kiếm"
-                    aria-label="Example text with button addon" aria-describedby="button-search">
+                    formControlName="search" class="form-control box-shadow-none" placeholder="Tìm kiếm">
                 </span>
               </form>
             </div>
@@ -264,7 +266,7 @@
                 <p-cellEditor>
                   <ng-template pTemplate="input">
                     <input pInputText type="date" [(ngModel)]="tourDateList.initiateDate"
-                      min="{{currentDate | date:'yyyy-MM-dd'}}">
+                      min="{{minDate | date:'yyyy-MM-dd'}}">
                   </ng-template>
                   <ng-template pTemplate="output">
                     {{ tourDateList.initiateDate | date: 'dd-MM-yyyy' }}
@@ -285,15 +287,15 @@
               </td>
               <td>
                 <div class="button-group">
-                  <button pButton *ngIf="!editing" class="btn btn-info"
+                  <button pButton pRipple *ngIf="!editing" class="btn btn-info"
                     [routerLink]="['/admin/tour/date/'+tourDateList.id]" (click)="modal.close()" icon="pi pi-book">Kế
                     Hoạch</button>
-                  <button *ngIf="!editing" pButton pRipple type="button" pInitEditableRow icon="pi pi-pencil"
-                    (click)="onRowEditInit(tourDateList)" class="btn btn-warning">Sửa</button>
-                  <button pButton *ngIf="!editing" class="btn btn-danger"
+                  <button *ngIf="!editing && tourDateList.status.id != 3" pButton pRipple type="button" pInitEditableRow
+                    icon="pi pi-pencil" (click)="onRowEditInit(tourDateList)" class="btn btn-warning">Sửa</button>
+                  <button pButton pRipple *ngIf="!editing" class="btn btn-danger"
                     (click)="checkDeleteable('date',tourDateList.id)" icon="pi pi-times-circle">Xóa</button>
                   <button *ngIf="editing" pButton pRipple type="button" pSaveEditableRow icon="pi pi-check"
-                    (click)="onRowEditSave(tourDateList)"
+                    (click)="onRowEditSave(tourDateList, ri)"
                     class="p-button-rounded p-button-text p-button-success mr-2"></button>
                   <button *ngIf="editing" pButton pRipple type="button" pCancelEditableRow icon="pi pi-times"
                     (click)="onRowEditCancel(tourDateList, ri)"
@@ -303,6 +305,7 @@
             </tr>
           </ng-template>
         </p-table>
+        <h5 *ngIf="tourDateList.length == 0" class="text-center">Hiện Chưa Có Ngày Nào Được Thêm Vào</h5>
       </div>
     </ng-template>
 
@@ -323,7 +326,8 @@
 
     <!-- Main Table -->
     <div class="table-responsive">
-      <p-table #dt1 [value]="tourList" dataKey="id" [rows]="10" [showCurrentPageReport]="true" [paginator]="true"
+      <p-table #dt1 [value]="tourList" sortField="active" [sortOrder]=-1 dataKey="id" [rows]="10"
+        [showCurrentPageReport]="true" [paginator]="true"
         currentPageReportTemplate="Hiển thị từ bảng {first} đến {last} trong tổng {totalRecords} bảng"
         [globalFilterFields]="['name', 'destinationAddress']">
         <ng-template pTemplate="caption">
@@ -331,8 +335,7 @@
             <form [formGroup]="formFilter">
               <span class="p-input-icon-left ml-auto">
                 <input pInputText type="text" (change)="dt1.filterGlobal(getValueSearch(), 'contains')"
-                  formControlName="search" class="form-control box-shadow-none" placeholder="Tìm kiếm"
-                  aria-label="Example text with button addon" aria-describedby="button-search">
+                  formControlName="search" class="form-control box-shadow-none" placeholder="Tìm kiếm">
               </span>
             </form>
           </div>

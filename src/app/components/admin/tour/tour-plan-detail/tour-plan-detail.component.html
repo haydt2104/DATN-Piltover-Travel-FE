@@ -2,12 +2,13 @@
 <p-toast key="error"></p-toast>
 <div class="card">
   <div class="card-body">
-    <h4 class="card-title">Danh sách Kế Hoạch</h4>
-    <button class="btn btn-success mb-3" (click)="open('add',null)">Thêm Kế Hoạch</button>
+    <h4 class="card-title">Danh sách Chi Tiết Kế Hoạch</h4>
+    <button pButton *ngIf="currentTourPlan && currentTourPlan.tourDate.status.id == 1" icon="pi pi-plus"
+      class="btn btn-success mb-3" (click)="open('add',null)">Thêm Chi Tiết Kế Hoạch</button>
 
     <ng-template #addModal let-modal>
       <div class="modal-header">
-        <h4 class="modal-title" id="modal-basic-title">Thêm Kế Hoạch</h4>
+        <h4 class="modal-title" id="modal-basic-title">Thêm Chi Tiết Kế Hoạch</h4>
         <button type="button" class="btn-close" aria-label="Close" (click)="modal.close()"></button>
       </div>
       <form #addForm="ngForm" class="container" (ngSubmit)="submitAdd(addForm)">
@@ -114,9 +115,10 @@
               </p-cellEditor>
             </td>
             <td class="button-group">
-              <button *ngIf="!editing" (click)="onRowEditInit(planDetailList)" pInitEditableRow
-                class="btn btn-warning">Sửa</button>
-              <button *ngIf="!editing" (click)="open('confirm',planDetailList.id)" class="btn btn-danger">Xóa</button>
+              <button pButton icon="pi pi-pencil" *ngIf="!editing && currentTourPlan.tourDate.status.id == 1"
+                (click)="onRowEditInit(planDetailList)" pInitEditableRow class="btn btn-warning">Sửa</button>
+              <button pButton icon="pi pi-times-circle" *ngIf="!editing && currentTourPlan.tourDate.status.id == 1"
+                (click)="open('confirm',planDetailList.id)" class="btn btn-danger">Xóa</button>
               <button *ngIf="editing" pButton pRipple type="button" pSaveEditableRow icon="pi pi-check"
                 (click)="onRowEditSave(planDetailList)"
                 class="p-button-rounded p-button-text p-button-success mr-2"></button>

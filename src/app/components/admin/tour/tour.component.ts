@@ -24,17 +24,17 @@ import { InputTextModule } from 'primeng/inputtext';
 import { TableModule } from 'primeng/table';
 import { ToastModule } from 'primeng/toast';
 import { Subject } from 'rxjs';
+import { Status } from 'src/app/models/status.model';
 import { TourImage } from 'src/app/models/tour-img.model';
 import { TourPlan } from 'src/app/models/tour-plan.model';
 import { Tour } from 'src/app/models/tour.model';
+import { Transportation } from 'src/app/models/transportation.model';
 import { TourDateService } from 'src/app/services/tour-date.service';
 import { TourPlanService } from 'src/app/services/tour-plan.service';
 import { TourService } from 'src/app/services/tour.service';
 import { TourDate } from './../../../models/tour-date.model';
 import { CurdService } from './../../../services/curd.service';
 import { TourImageService } from './../../../services/tour-image.service';
-import { Transportation } from 'src/app/models/transportation.model';
-import { Status } from 'src/app/models/status.model';
 
 @Component({
   selector: 'app-tour',
@@ -57,11 +57,12 @@ import { Status } from 'src/app/models/status.model';
   ],
   providers: [MessageService]
 })
-export class TourComponent implements OnInit, AfterViewInit, OnDestroy {
+export class TourComponent implements OnInit {
   @ViewChild('addModal') addModal: ElementRef;
   @ViewChild('editModal') editModal: ElementRef;
   @ViewChild('imageModal') imageModal: ElementRef;
   @ViewChild('confirmModal') confirmModal: ElementRef;
+  @ViewChild('confirmStatusModal') confirmStatusModal: ElementRef;
   @ViewChild('dateModal') dateModal: ElementRef;
 
   constructor(
@@ -88,13 +89,11 @@ export class TourComponent implements OnInit, AfterViewInit, OnDestroy {
   public wardList: any;
 
   host = 'https://provinces.open-api.vn/api/';
-  dtOptions: DataTables.Settings[] = [];
-  dtTrigger: Subject<any> = new Subject();
   closeResult = '';
 
   file = null
   mainImgUrl = null
-  currentDate = new Date();
+  minDate = new Date().setDate(new Date().getDate() + 8);
 
   provinceValue: number;
   districtValue: number;
@@ -102,14 +101,7 @@ export class TourComponent implements OnInit, AfterViewInit, OnDestroy {
   roadValue: string;
   tourId: number
 
-  public getValueSearch() {
-    return this.formFilter.get('search')?.value;
-  }
 
-  public formFilter = this.formBuilder.group({
-    setRows: new FormControl(5),
-    search: new FormControl('')
-  })
 
   ngOnInit(): void {
     this.getTourList();
@@ -120,18 +112,10 @@ export class TourComponent implements OnInit, AfterViewInit, OnDestroy {
     this.getWardData();
   }
 
-
-  ngAfterViewInit(): void {
-    this.dtTrigger.next(0);
-  }
-
-  ngOnDestroy(): void {
-    this.dtTrigger.unsubscribe();
-  }
-
   open(content: string, id: number) {
     if (content == 'add') {
       this.callAPIProvince('https://provinces.open-api.vn/api/?depth=1', null);
+      this.mainImgUrl = null
       this.modalService
         .open(this.addModal, {
           ariaLabelledBy: 'modal-basic-title',
@@ -182,6 +166,15 @@ export class TourComponent implements OnInit, AfterViewInit, OnDestroy {
         })
     }
   }
+
+  public getValueSearch() {
+    return this.formFilter.get('search')?.value;
+  }
+
+  public formFilter = this.formBuilder.group({
+    setRows: new FormControl(5),
+    search: new FormControl('')
+  })
 
   onFileChange(event: any) {
     this.file = event.target.files[0]
@@ -340,6 +333,7 @@ export class TourComponent implements OnInit, AfterViewInit, OnDestroy {
       }
     );
   }
+
   public getDistrictData(): void {
     this.tourService.getDistrictList().subscribe(
       (response) => {
@@ -350,6 +344,7 @@ export class TourComponent implements OnInit, AfterViewInit, OnDestroy {
       }
     );
   }
+
   public getWardData(): void {
     this.tourService.getWardList().subscribe(
       (response) => {
@@ -365,6 +360,19 @@ export class TourComponent implements OnInit, AfterViewInit, OnDestroy {
     this.tourDateService.getTourDateByTourId(id).subscribe(
       (response: TourDate[]) => {
         this.tourDateList = response;
+        for (var i = 0; i < this.tourDateList.length; i++) {
+          var dateDif = Math.round(Number(new Date(this.tourDateList[i].initiateDate).getTime()) - Number(new Date().getTime())) / (24 * 60 * 60 * 1000)
+          if (dateDif < 7 && this.tourDateList[i].status.id != 2) {
+            this.tourDateList[i].status = this.statusList.find(status => status.id == 3);
+            this.curdService.put('tour_date', this.tourDateList[i]).subscribe(
+              (response: TourDate) => {
+              },
+              (error: HttpErrorResponse) => {
+                console.log(error.message);
+              }
+            );
+          }
+        }
       },
       (error: HttpErrorResponse) => {
         console.log(error.message);
@@ -596,7 +604,9 @@ export class TourComponent implements OnInit, AfterViewInit, OnDestroy {
     this.clonedProducts[tourDate.id as number] = { ...tourDate };
   }
 
-  onRowEditSave(tourDate: TourDate) {
+  onRowEditSave(tourDate: TourDate, index: number) {
+    tourDate.status = this.statusList.find(status => status.id == tourDate.status.id);
+    this.tourDateList[index] = tourDate;
     this.curdService.put('tour_date', tourDate).subscribe(
       (response: TourDate) => {
         delete this.clonedProducts[tourDate.id]
@@ -612,6 +622,15 @@ export class TourComponent implements OnInit, AfterViewInit, OnDestroy {
   onRowEditCancel(tourDate: TourDate, index: number) {
     this.tourDateList[index] = this.clonedProducts[tourDate.id]
     delete this.clonedProducts[tourDate.id];
+  }
+
+  checkDateEditAble(tourDate: TourDate) {
+    var dateDif = Math.round(Math.abs(Number(new Date(tourDate.initiateDate).getTime()) - Number(new Date().getTime())) / (24 * 60 * 60 * 1000))
+    if (dateDif > 7) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   checkDeleteable(object: string, id: number) {
