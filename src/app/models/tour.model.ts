@@ -1,4 +1,5 @@
 import { Price } from './price.model';
+import { Status } from './status.model';
 
 export interface Tour {
   id: number;

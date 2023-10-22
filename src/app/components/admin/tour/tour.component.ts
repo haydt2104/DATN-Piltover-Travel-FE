@@ -1,4 +1,4 @@
-import { DatePipe, NgFor, NgIf } from '@angular/common';
+import { CommonModule, NgFor, NgIf } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
 import {
   AfterViewInit,
@@ -6,28 +6,36 @@ import {
   ElementRef,
   OnDestroy,
   OnInit,
-  Renderer2,
-  ViewChild,
+  ViewChild
 } from '@angular/core';
 import { AngularFireStorage } from '@angular/fire/compat/storage';
-import { FormsModule, NgForm } from '@angular/forms';
-import { Router, RouterModule } from '@angular/router';
+import { FormBuilder, FormControl, FormsModule, NgForm, ReactiveFormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
 import {
-  ModalDismissReasons,
-  NgbDatepickerModule,
   NgbModal,
-  NgbPaginationModule,
+  NgbPaginationModule
 } from '@ng-bootstrap/ng-bootstrap';
-import { DataTableDirective, DataTablesModule } from 'angular-datatables';
+import { DataTableDirective } from 'angular-datatables';
 import axios from 'axios';
+import { MessageService } from 'primeng/api';
+import { ButtonModule } from 'primeng/button';
+import { CalendarModule } from 'primeng/calendar';
+import { InputTextModule } from 'primeng/inputtext';
+import { TableModule } from 'primeng/table';
+import { ToastModule } from 'primeng/toast';
 import { Subject } from 'rxjs';
+import { Status } from 'src/app/models/status.model';
+import { TourImage } from 'src/app/models/tour-img.model';
+import { TourPlan } from 'src/app/models/tour-plan.model';
 import { Tour } from 'src/app/models/tour.model';
+import { Transportation } from 'src/app/models/transportation.model';
 import { TourDateService } from 'src/app/services/tour-date.service';
+import { TourPlanService } from 'src/app/services/tour-plan.service';
 import { TourService } from 'src/app/services/tour.service';
 import { TourDate } from './../../../models/tour-date.model';
 import { CurdService } from './../../../services/curd.service';
 import { TourImageService } from './../../../services/tour-image.service';
-import { TourImage } from 'src/app/models/tour-img.model';
+
 @Component({
   selector: 'app-tour',
   templateUrl: './tour.component.html',
@@ -37,265 +45,82 @@ import { TourImage } from 'src/app/models/tour-img.model';
     NgFor,
     NgbPaginationModule,
     RouterModule,
-    NgbDatepickerModule,
-    DataTablesModule,
     FormsModule,
     NgIf,
+    TableModule,
+    ReactiveFormsModule,
+    ButtonModule,
+    CommonModule,
+    InputTextModule,
+    CalendarModule,
+    ToastModule
   ],
-  providers: [DatePipe]
+  providers: [MessageService]
 })
-export class TourComponent implements OnInit, AfterViewInit, OnDestroy {
+export class TourComponent implements OnInit {
   @ViewChild('addModal') addModal: ElementRef;
   @ViewChild('editModal') editModal: ElementRef;
-  @ViewChild('deleteModal') deleteModal: ElementRef;
   @ViewChild('imageModal') imageModal: ElementRef;
   @ViewChild('confirmModal') confirmModal: ElementRef;
+  @ViewChild('confirmStatusModal') confirmStatusModal: ElementRef;
   @ViewChild('dateModal') dateModal: ElementRef;
 
   constructor(
     private curdService: CurdService,
     private tourService: TourService,
     private tourDateService: TourDateService,
+    private tourPlanService: TourPlanService,
     private tourImageService: TourImageService,
     private modalService: NgbModal,
-    private renderer: Renderer2,
-    private router: Router,
     private fireStorage: AngularFireStorage,
-    private datePipe: DatePipe
+    private formBuilder: FormBuilder,
+    private messageService: MessageService,
   ) { }
 
   dtElement: DataTableDirective;
   public tourList: Tour[];
   public tourDateList: TourDate[];
   public tourImageList: TourImage[];
+  public transportList: Transportation[];
+  public statusList: Status[];
   public editTour: Tour;
   public provinceList: any;
   public districtList: any;
   public wardList: any;
-  public currentDate: any = this.datePipe.transform(new Date(), 'yyyy-MM-dd');
 
   host = 'https://provinces.open-api.vn/api/';
-  dtOptions: DataTables.Settings[] = [];
-  dtTrigger: Subject<any> = new Subject();
   closeResult = '';
 
   file = null
   mainImgUrl = null
-
-  ngOnInit(): void {
-    this.getTourList();
-    this.getProvinceData()
-    this.getDistrictData()
-    this.getWardData()
-    this.dtOptions[0] = {
-      ajax: {
-        url: 'http://localhost:8080/api/tour/all',
-        type: 'GET',
-        dataSrc: '',
-        dataType: 'json',
-      },
-      columns: [
-        {
-          title: 'Tên Tour',
-          data: 'name',
-        },
-        {
-          title: 'Điểm đến',
-          data: 'destinationAddress',
-        },
-        {
-          title: 'Trạng thái',
-          data: 'active',
-        },
-        {
-          title: 'Số lượng',
-          data: 'availableSpaces',
-        },
-        {
-          title: '',
-          render: function (data: any, type: any, full: any) {
-            return (
-              '<button class="btn btn-primary" date="' +
-              full.id +
-              '">Ngày</button>'
-            );
-          },
-        },
-        {
-          title: '',
-          render: function (data: any, type: any, full: any) {
-            return (
-              '<button class="btn btn-primary" pic="' +
-              full.id +
-              '">Ảnh</button>'
-            );
-          },
-        },
-        {
-          title: '',
-          render: function (data: any, type: any, full: any) {
-            return (
-              '<button class="btn btn-primary" update="' +
-              full.id +
-              '">Sửa</button>'
-            );
-          },
-        }
-      ],
-    };
-  }
-
-
-  ngAfterViewInit(): void {
-    this.dtTrigger.next(0);
-    this.renderer.listen('document', 'click', (event) => {
-      if (event.target.hasAttribute('route')) {
-        document.getElementById('closeDateModal').click();
-        this.router.navigate([
-          '/admin/tour/details/' + event.target.getAttribute('route'),
-        ]).then(() => {
-          window.location.reload();
-        });
-      } else if (event.target.hasAttribute('update')) {
-        this.open('edit', event.target.getAttribute('update'));
-      } else if (event.target.hasAttribute('delete')) {
-        this.open('delete', event.target.getAttribute('delete'));
-      } else if (event.target.hasAttribute('pic')) {
-        this.open('image', event.target.getAttribute('pic'));
-      } else if (event.target.hasAttribute('date')) {
-        this.open('date', event.target.getAttribute('date'));
-      }
-    });
-  }
-
-  ngOnDestroy(): void {
-    this.dtTrigger.unsubscribe();
-  }
-
-  onFileChange(event: any) {
-    this.file = event.target.files[0]
-    if (this.file.type.match(/image\/*/) && this.file.size <= 6000000) {
-      var reader = new FileReader();
-      reader.readAsDataURL(event.target.files[0])
-      reader.onload = (e: any) => {
-        this.mainImgUrl = e.target.result
-      }
-    } else {
-      alert("Tour chỉ nhận ảnh từ 5MB trở xuống")
-    }
-  }
-
-  addImage() {
-    document.getElementById("addImageInput").click();
-  }
-
-  async saveNewImage(event: any) {
-    const file = event.target.files[0]
-    if (file.type.match(/image\/*/) && file.size <= 6000000) {
-      const path = `tour-img/${new Date + file.name}`
-      const upload = await this.fireStorage.upload(path, file)
-      const url = await upload.ref.getDownloadURL()
-      var tourImage: TourImage = {
-        id: null,
-        path: url,
-        tour: this.editTour
-      }
-      this.curdService.post('tour_image', tourImage).subscribe(
-        (response: TourImage) => {
-          this.getTourImageList(this.editTour.id);
-        },
-        (error: HttpErrorResponse) => {
-          alert(error.message);
-        }
-      );
-      this.editTour = null
-    } else {
-      alert("Tour chỉ nhận file ảnh từ 5MB trở xuống")
-    }
-  }
-
-  updateImage(id: number) {
-    document.getElementById("image_" + id).click();
-  }
-
-  async changeImage(event: any, id: number) {
-    const file = event.target.files[0]
-    if (file.type.match(/image\/*/) && file.size <= 6000000) {
-      const path = `tour-img/${new Date + file.name}`
-      const upload = await this.fireStorage.upload(path, file)
-      const url = await upload.ref.getDownloadURL()
-      const editImageTour = this.tourImageList.find((tour) => tour.id == id);
-      editImageTour.path = url
-      this.curdService.put('tour_image', editImageTour).subscribe(
-        (response: TourImage) => {
-          this.getTourImageList(this.editTour.id);
-        },
-        (error: HttpErrorResponse) => {
-          alert(error.message);
-        }
-      );
-      this.editTour = null
-    } else {
-      alert("Tour chỉ nhận file ảnh từ 5MB trở xuống")
-    }
-  }
-
-  confirmDelete(object: string, id: number) {
-    this.modalService
-      .open(this.confirmModal, {
-        ariaLabelledBy: 'modal-basic-title',
-        size: 'xl',
-      })
-      .result.then(
-        (result) => {
-          this.closeResult = `Closed with: ${result}`;
-        },
-        (reason) => {
-          this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-        }
-      );
-    if (object === 'tour') {
-
-    } else if (object == 'image') {
-      document.querySelector('#confirmDelete').addEventListener('click', (e: Event) => this.deleteImage(id));
-    }
-  }
-
-  deleteImage(id: number) {
-    this.curdService.delete('tour_image', id).subscribe(
-      (response) => {
-        const editImageTour = this.tourImageList.findIndex((tour) => tour.id == id);
-        this.tourImageList.splice(editImageTour, 1)
-      },
-      (error: HttpErrorResponse) => {
-        alert(error.message);
-      }
-    )
-  }
+  minDate = new Date().setDate(new Date().getDate() + 8);
 
   provinceValue: number;
   districtValue: number;
   wardValue: number;
   roadValue: string;
-
   tourId: number
 
-  open(content, id: number) {
+
+
+  ngOnInit(): void {
+    this.getTourList();
+    this.getAllTransport();
+    this.getAllStatus();
+    this.getProvinceData();
+    this.getDistrictData();
+    this.getWardData();
+  }
+
+  open(content: string, id: number) {
     if (content == 'add') {
       this.callAPIProvince('https://provinces.open-api.vn/api/?depth=1', null);
+      this.mainImgUrl = null
       this.modalService
         .open(this.addModal, {
           ariaLabelledBy: 'modal-basic-title',
           size: 'xl',
         })
-        .result.then(
-          (result) => {
-            this.closeResult = `Closed with: ${result}`;
-          },
-          (reason) => {
-            this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-          }
-        );
     } else if (content == 'edit') {
       this.editTour = this.tourList.find((tour) => tour.id == id);
       const provinceAddress = this.editTour.destinationAddress
@@ -322,28 +147,6 @@ export class TourComponent implements OnInit, AfterViewInit, OnDestroy {
           ariaLabelledBy: 'modal-basic-title',
           size: 'xl',
         })
-        .result.then(
-          (result) => {
-            this.closeResult = `Closed with: ${result}`;
-          },
-          (reason) => {
-            this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-          }
-        );
-    } else if (content == 'delete') {
-      this.modalService
-        .open(this.deleteModal, {
-          ariaLabelledBy: 'modal-basic-title',
-          size: 'xl',
-        })
-        .result.then(
-          (result) => {
-            this.closeResult = `Closed with: ${result}`;
-          },
-          (reason) => {
-            this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-          }
-        );
     } else if (content == 'image') {
       this.editTour = this.tourList.find((tour) => tour.id == id);
       this.getTourImageList(id);
@@ -352,66 +155,161 @@ export class TourComponent implements OnInit, AfterViewInit, OnDestroy {
           ariaLabelledBy: 'modal-basic-title',
           size: 'xl',
         })
-        .result.then(
-          (result) => {
-            this.closeResult = `Closed with: ${result}`;
-          },
-          (reason) => {
-            this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-          }
-        );
       document.querySelector('#addImageBtn').addEventListener('click', (e: Event) => this.addImage());
     } else if (content == 'date') {
       this.editTour = this.tourList.find((tour) => tour.id == id);
-      // const formatedDate = this.currentDate.getFullYear() + "/" + [this.currentDate.getMonth() + 1] + "/" + this.currentDate.getDate();
-      this.dtOptions[1] = {
-        ajax: {
-          url: `http://localhost:8080/api/tour_date?tourId=${this.editTour.id}`,
-          type: 'GET',
-          dataSrc: '',
-          dataType: 'json',
-        },
-        columns: [
-          {
-            title: 'Thời điểm khởi hành',
-            data: 'initiateDate',
-          },
-          {
-            title: '',
-            render: function (data: any, type: any, full: any) {
-              return (
-                '<button class="btn btn-primary" updateDate="' +
-                full.id +
-                '">Sửa</button><input type="date" min="' + this.currentDate + '"></input>'
-              );
-            },
-          },
-          {
-            title: '',
-            render: function (data: any, type: any, full: any) {
-              return (
-                '<button class="btn btn-primary" route="' +
-                full.id +
-                '">Kế Hoạch</button>'
-              );
-            },
-          },
-        ],
-      };
+      this.getTourDateList(this.editTour.id)
       this.modalService
         .open(this.dateModal, {
           ariaLabelledBy: 'modal-basic-title',
           size: 'xl',
         })
-        .result.then(
-          (result) => {
-            this.closeResult = `Closed with: ${result}`;
-          },
-          (reason) => {
-            this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-          }
-        );
     }
+  }
+
+  public getValueSearch() {
+    return this.formFilter.get('search')?.value;
+  }
+
+  public formFilter = this.formBuilder.group({
+    setRows: new FormControl(5),
+    search: new FormControl('')
+  })
+
+  onFileChange(event: any) {
+    this.file = event.target.files[0]
+    if (this.file.type.match(/image\/*/) && this.file.size <= 6000000) {
+      var reader = new FileReader();
+      reader.readAsDataURL(event.target.files[0])
+      reader.onload = (e: any) => {
+        this.mainImgUrl = e.target.result
+      }
+    } else {
+      console.log("Tour chỉ nhận ảnh từ 5MB trở xuống")
+    }
+  }
+
+  addImage() {
+    document.getElementById("addImageInput").click();
+  }
+
+  async saveNewImage(event: any) {
+    const file = event.target.files[0]
+    if (file.type.match(/image\/*/) && file.size <= 6000000) {
+      const randomNumberString = Array.from({ length: 15 }, () => Math.floor(Math.random() * 10)).join('');
+      const path = `tour-img/${randomNumberString}`
+      const upload = await this.fireStorage.upload(path, file)
+      const url = await upload.ref.getDownloadURL()
+      var tourImage: TourImage = {
+        id: null,
+        path: url,
+        tour: this.editTour
+      }
+      this.curdService.post('tour_image', tourImage).subscribe(
+        (response: TourImage) => {
+          this.getTourImageList(this.editTour.id);
+          this.messageService.clear();
+          this.messageService.add({ key: 'success', severity: 'success', summary: 'Thông Báo', detail: 'Thêm ảnh thành công' })
+          this.editTour = null
+        },
+        (error: HttpErrorResponse) => {
+          console.log(error.message);
+        }
+      );
+    } else {
+      this.messageService.clear();
+      this.messageService.add({ key: 'warn', severity: 'warn', summary: 'Thông Báo', detail: 'Tour chỉ nhận duy nhất file kiểu ảnh và từ 5MB trở xuống' });
+    }
+  }
+
+  updateImage(id: number) {
+    document.getElementById("image_" + id).click();
+  }
+
+  async changeImage(event: any, id: number) {
+    const file = event.target.files[0]
+    if (file.type.match(/image\/*/) && file.size <= 6000000) {
+      const randomNumberString = Array.from({ length: 15 }, () => Math.floor(Math.random() * 10)).join('');
+      const path = `tour-img/${randomNumberString}`
+      const upload = await this.fireStorage.upload(path, file)
+      const url = await upload.ref.getDownloadURL()
+      const editImageTour = this.tourImageList.find((tour) => tour.id == id);
+      this.fireStorage.storage.refFromURL(editImageTour.path).delete()
+      editImageTour.path = url
+      this.curdService.put('tour_image', editImageTour).subscribe(
+        (response: TourImage) => {
+          this.getTourImageList(this.editTour.id);
+          this.messageService.clear();
+          this.messageService.add({ key: 'info', severity: 'info', summary: 'Thông Báo', detail: 'Cập nhập ảnh thành công' })
+          this.editTour = null
+        },
+        (error: HttpErrorResponse) => {
+          console.log(error.message);
+        }
+      );
+    } else {
+      this.messageService.clear();
+      this.messageService.add({ key: 'warn', severity: 'warn', summary: 'Thông Báo', detail: 'Tour chỉ nhận duy nhất file kiểu ảnh và từ 5MB trở xuống' });
+    }
+  }
+
+  confirmDelete(object: string, id: number) {
+    this.modalService
+      .open(this.confirmModal, {
+        ariaLabelledBy: 'modal-basic-title',
+        size: 'xl',
+      })
+    if (object === 'tour') {
+      document.querySelector('#confirmDelete').addEventListener('click', (e: Event) => this.deleteTour(id));
+    } else if (object == 'image') {
+      document.querySelector('#confirmDelete').addEventListener('click', (e: Event) => this.deleteImage(id));
+    } else if (object == 'tour_date') {
+      document.querySelector('#confirmDelete').addEventListener('click', (e: Event) => this.deleteDate(id));
+    }
+  }
+
+  deleteTour(id: number) {
+    this.curdService.delete('tour', id).subscribe(
+      (response) => {
+        const editTour = this.tourList.findIndex((tour) => tour.id == id);
+        this.fireStorage.storage.refFromURL(this.tourList[editTour].image).delete()
+        this.tourList.splice(editTour, 1)
+        this.messageService.clear();
+        this.messageService.add({ key: 'info', severity: 'info', summary: 'Thông Báo', detail: 'Xóa thành công' });
+      },
+      (error: HttpErrorResponse) => {
+        console.log(error.message);
+      }
+    )
+  }
+
+  deleteImage(id: number) {
+    this.curdService.delete('tour_image', id).subscribe(
+      (response) => {
+        const editImageTour = this.tourImageList.findIndex((tourImage) => tourImage.id == id);
+        this.fireStorage.storage.refFromURL(this.tourImageList[editImageTour].path).delete()
+        this.tourImageList.splice(editImageTour, 1)
+        this.messageService.clear();
+        this.messageService.add({ key: 'info', severity: 'info', summary: 'Thông Báo', detail: 'Xóa thành công' });
+      },
+      (error: HttpErrorResponse) => {
+        console.log(error.message);
+      }
+    )
+  }
+
+  deleteDate(id: number) {
+    this.curdService.delete('tour_date', id).subscribe(
+      (response) => {
+        const editDateTour = this.tourDateList.findIndex((tourDate) => tourDate.id == id);
+        this.tourDateList.splice(editDateTour, 1)
+        this.messageService.clear();
+        this.messageService.add({ key: 'info', severity: 'info', summary: 'Thông Báo', detail: 'Xóa thành công' });
+      },
+      (error: HttpErrorResponse) => {
+        console.log(error.message);
+      }
+    )
   }
 
   public getTourList(): void {
@@ -435,6 +333,7 @@ export class TourComponent implements OnInit, AfterViewInit, OnDestroy {
       }
     );
   }
+
   public getDistrictData(): void {
     this.tourService.getDistrictList().subscribe(
       (response) => {
@@ -445,6 +344,7 @@ export class TourComponent implements OnInit, AfterViewInit, OnDestroy {
       }
     );
   }
+
   public getWardData(): void {
     this.tourService.getWardList().subscribe(
       (response) => {
@@ -460,6 +360,19 @@ export class TourComponent implements OnInit, AfterViewInit, OnDestroy {
     this.tourDateService.getTourDateByTourId(id).subscribe(
       (response: TourDate[]) => {
         this.tourDateList = response;
+        for (var i = 0; i < this.tourDateList.length; i++) {
+          var dateDif = Math.round(Number(new Date(this.tourDateList[i].initiateDate).getTime()) - Number(new Date().getTime())) / (24 * 60 * 60 * 1000)
+          if (dateDif < 7 && this.tourDateList[i].status.id != 2) {
+            this.tourDateList[i].status = this.statusList.find(status => status.id == 3);
+            this.curdService.put('tour_date', this.tourDateList[i]).subscribe(
+              (response: TourDate) => {
+              },
+              (error: HttpErrorResponse) => {
+                console.log(error.message);
+              }
+            );
+          }
+        }
       },
       (error: HttpErrorResponse) => {
         console.log(error.message);
@@ -476,15 +389,26 @@ export class TourComponent implements OnInit, AfterViewInit, OnDestroy {
       })
   }
 
-  private getDismissReason(reason: any): string {
-    this.mainImgUrl = null
-    if (reason === ModalDismissReasons.ESC) {
-      return 'by pressing ESC';
-    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
-      return 'by clicking on a backdrop';
-    } else {
-      return `with: ${reason}`;
-    }
+  public getAllTransport() {
+    this.curdService.getList('transport').subscribe(
+      (response) => {
+        this.transportList = response;
+      },
+      (error: HttpErrorResponse) => {
+        alert(error.message);
+      }
+    )
+  }
+
+  public getAllStatus() {
+    this.curdService.getList('status').subscribe(
+      (response) => {
+        this.statusList = response;
+      },
+      (error: HttpErrorResponse) => {
+        alert(error.message);
+      }
+    )
   }
 
   renderData = (array, select, code) => {
@@ -524,7 +448,6 @@ export class TourComponent implements OnInit, AfterViewInit, OnDestroy {
       this.callApiDistrict(
         this.host + 'p/' + $('#province').val() + '?depth=2', null
       );
-      this.printResult();
     } else {
       document.querySelector(
         '#district'
@@ -537,31 +460,13 @@ export class TourComponent implements OnInit, AfterViewInit, OnDestroy {
   districtChange() {
     if ($('#district').val()) {
       this.callApiWard(this.host + 'd/' + $('#district').val() + '?depth=2', null);
-      this.printResult();
     } else {
       document.querySelector(
         '#ward'
       ).innerHTML = `<option value="">Chọn Phường/Xã</option>`;
     }
   }
-  wardChange() {
-    this.printResult();
-  }
-  printResult = () => {
-    if (
-      $('#district').val() != '' &&
-      $('#province').val() != '' &&
-      $('#ward').val() != ''
-    ) {
-      let result =
-        $('#province option:selected').text() +
-        ' | ' +
-        $('#district option:selected').text() +
-        ' | ' +
-        $('#ward option:selected').text();
-      $('#result').text(result);
-    }
-  };
+
 
   async submitAdd(data) {
     var province = $('#province option:selected').text();
@@ -584,17 +489,19 @@ export class TourComponent implements OnInit, AfterViewInit, OnDestroy {
         childrenPrice: data.value.children
       }
     };
-    const path = `tour-img/${new Date + this.file.name}`
+    const randomNumberString = Array.from({ length: 15 }, () => Math.floor(Math.random() * 10)).join('');
+    const path = `tour-img/${randomNumberString}`
     const upload = await this.fireStorage.upload(path, this.file)
     const url = await upload.ref.getDownloadURL()
     tour.image = url
     this.curdService.post('tour', tour).subscribe(
       (response: Tour) => {
         this.getTourList();
-        $('.table').DataTable().ajax.reload();
+        this.messageService.clear();
+        this.messageService.add({ key: 'success', severity: 'success', summary: 'Thông Báo', detail: 'Thêm thành công' })
       },
       (error: HttpErrorResponse) => {
-        alert(error.message);
+        console.log(error.message);
       }
     );
     this.mainImgUrl = null;
@@ -622,7 +529,9 @@ export class TourComponent implements OnInit, AfterViewInit, OnDestroy {
       }
     };
     if (this.mainImgUrl != this.editTour.image) {
-      const path = `tour-img/${new Date + this.file.name}`
+      this.fireStorage.storage.refFromURL(this.editTour.image).delete()
+      const randomNumberString = Array.from({ length: 15 }, () => Math.floor(Math.random() * 10)).join('');
+      const path = `tour-img/${randomNumberString}`
       const upload = await this.fireStorage.upload(path, this.file)
       const url = await upload.ref.getDownloadURL()
       tour.image = url
@@ -632,10 +541,11 @@ export class TourComponent implements OnInit, AfterViewInit, OnDestroy {
     this.curdService.put('tour', tour).subscribe(
       (response: Tour) => {
         this.getTourList();
-        $('.table').DataTable().ajax.reload();
+        this.messageService.clear();
+        this.messageService.add({ key: 'info', severity: 'info', summary: 'Thông Báo', detail: 'Cập nhập thành công' })
       },
       (error: HttpErrorResponse) => {
-        alert(error.message);
+        console.log(error.message);
       }
     );
     this.editTour = null
@@ -656,5 +566,138 @@ export class TourComponent implements OnInit, AfterViewInit, OnDestroy {
         return true;
       }
     }
+  }
+
+  clonedProducts: { [s: number]: TourDate; } = {};
+  addDateStatus = false
+
+  addDate() {
+    this.addDateStatus = true
+  }
+
+  saveDate() {
+    var date: Date = new Date((<HTMLInputElement>document.getElementById('addDate')).value)
+    const tourDate: TourDate = {
+      id: null,
+      initiateDate: date,
+      tour: this.editTour,
+      status: null
+    }
+    this.curdService.post('tour_date', tourDate).subscribe(
+      (response: TourDate) => {
+        this.getTourDateList(this.editTour.id)
+        this.addDateStatus = false
+        this.messageService.clear();
+        this.messageService.add({ key: 'success', severity: 'success', summary: 'Thông Báo', detail: 'Thêm thành công' })
+      },
+      (error: HttpErrorResponse) => {
+        console.log(error.message);
+      }
+    );
+  }
+
+  cancelAddDate() {
+    this.addDateStatus = false
+  }
+
+  onRowEditInit(tourDate: TourDate) {
+    this.clonedProducts[tourDate.id as number] = { ...tourDate };
+  }
+
+  onRowEditSave(tourDate: TourDate, index: number) {
+    tourDate.status = this.statusList.find(status => status.id == tourDate.status.id);
+    this.tourDateList[index] = tourDate;
+    this.curdService.put('tour_date', tourDate).subscribe(
+      (response: TourDate) => {
+        delete this.clonedProducts[tourDate.id]
+        this.messageService.clear();
+        this.messageService.add({ key: 'info', severity: 'info', summary: 'Thông Báo', detail: 'Cập nhập thành công' })
+      },
+      (error: HttpErrorResponse) => {
+        console.log(error.message);
+      }
+    );
+  }
+
+  onRowEditCancel(tourDate: TourDate, index: number) {
+    this.tourDateList[index] = this.clonedProducts[tourDate.id]
+    delete this.clonedProducts[tourDate.id];
+  }
+
+  checkDateEditAble(tourDate: TourDate) {
+    var dateDif = Math.round(Math.abs(Number(new Date(tourDate.initiateDate).getTime()) - Number(new Date().getTime())) / (24 * 60 * 60 * 1000))
+    if (dateDif > 7) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  checkDeleteable(object: string, id: number) {
+    if (object == 'tour') {
+      var tourDateList: TourDate[]
+      var imageList: TourImage[]
+      this.tourDateService.getTourDateByTourId(id).subscribe(
+        (response) => {
+          tourDateList = response;
+          if (tourDateList.length == 0) {
+            this.tourImageService.getTourImageByTourId(id).subscribe(
+              (response) => {
+                imageList = response;
+                if (imageList.length == 0) {
+                  this.confirmDelete('tour', id)
+                } else {
+                  this.messageService.clear();
+                  this.messageService.add({ key: 'error', severity: 'error', summary: 'Thông Báo', detail: 'Bảng này đang được sử dụng tại những bảng khác không thể xóa được' });
+                }
+              },
+              (error: HttpErrorResponse) => {
+                console.log(error.message);
+              }
+            )
+          } else {
+            this.messageService.clear();
+            this.messageService.add({ key: 'error', severity: 'error', summary: 'Thông Báo', detail: 'Bảng này đang được sử dụng tại những bảng khác không thể xóa được' })
+          }
+        },
+        (error: HttpErrorResponse) => {
+          console.log(error.message);
+        }
+      )
+    } else if (object == 'date') {
+      var planList: TourPlan[]
+      this.tourPlanService.getTourPlansByDateID(id).subscribe(
+        (response) => {
+          planList = response;
+          if (planList.length == 0) {
+            this.confirmDelete('tour_date', id)
+          } else {
+            this.messageService.clear();
+            this.messageService.add({ key: 'error', severity: 'error', summary: 'Thông Báo', detail: 'Bảng này đang được sử dụng tại những bảng khác không thể xóa được' })
+          }
+        },
+        (error: HttpErrorResponse) => {
+          console.log(error.message);
+        }
+      );
+    }
+  }
+
+  updateActive(tour: Tour) {
+    if (tour.active === true) {
+      tour.active = false;
+    } else {
+      tour.active = true;
+    }
+    this.curdService.put("tour", tour).subscribe(
+      (response: Tour) => {
+        this.getTourList();
+        this.messageService.clear();
+        this.messageService.add({ key: 'info', severity: 'info', summary: 'Thông Báo', detail: 'Cập nhập trạng thái thành công' })
+      },
+      (error: HttpErrorResponse) => {
+        console.log(error.message);
+      }
+    )
   }
 }

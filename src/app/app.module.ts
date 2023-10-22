@@ -17,22 +17,22 @@ import { FullComponent } from './components/admin/layouts/full/full.component';
 import { NavigationComponent } from './components/admin/shared/header/navigation.component';
 import { SidebarComponent } from './components/admin/shared/sidebar/sidebar.component';
 
+import { AngularFireModule } from '@angular/fire/compat';
+import { AngularFireStorageModule } from '@angular/fire/compat/storage';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { environment } from 'src/environments/environment';
 import { Approutes } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { AccountComponent } from './components/admin/account/account.component';
+import { BookingComponent } from './components/admin/booking/booking.component';
+import { BookingdetailComponent } from './components/admin/bookingdetail/bookingdetail.component';
 import { SpinnerComponent } from './components/admin/shared/spinner.component';
 import { AuthorizationsComponent } from './components/user/authorizations/authorizations.component';
 import { FooterComponent } from './components/user/layouts/footer/footer.component';
 import { HeaderComponent } from './components/user/layouts/header/header.component';
-import { LayoutComponent } from './components/user/layouts/layout/layout.component';
-import { TestPipePipe } from './pipes/test-pipe.pipe';
-import { AccountComponent } from './components/admin/account/account.component';
-import { BookingComponent } from './components/admin/booking/booking.component';
 import { CheckStatusAccountPipe } from './pipes/check-status-account.pipe';
-import { BookingdetailComponent } from './components/admin/bookingdetail/bookingdetail.component';
-import { AngularFireModule } from '@angular/fire/compat'
-import { AngularFireStorageModule } from '@angular/fire/compat/storage'
-import { environment } from 'src/environments/environment';
-import { MatPaginatorModule } from '@angular/material/paginator';
+import { TestPipePipe } from './pipes/test-pipe.pipe';
+
 
 @NgModule({
   declarations: [

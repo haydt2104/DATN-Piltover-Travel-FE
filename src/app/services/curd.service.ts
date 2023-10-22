@@ -8,9 +8,15 @@ import { Tour } from '../models/tour.model';
 })
 export class CurdService {
   url = 'http://localhost:8080/api';
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
+
   public getList(object: string): Observable<any> {
     const url = `${this.url}/${object}/all`;
+    return this.http.get<any>(url);
+  }
+
+  public getSpecificObject(object: string, id: number): Observable<any> {
+    const url = `${this.url}/${object}/${id}`
     return this.http.get<any>(url);
   }
 

@@ -1,0 +1,166 @@
+<p-toast key="success"></p-toast>
+<p-toast key="error"></p-toast>
+
+<div class="card">
+  <div class="card-body">
+    <h4 class="card-title">Danh sách Kế Hoạch [<i *ngIf="currentTourDate">{{currentTourDate.initiateDate | date:
+        "dd/MM/yyyy"}}</i>]</h4>
+    <button *ngIf="currentTourDate && currentTourDate.status.id == 1" pButton icon="pi pi-plus"
+      class="btn btn-success mb-3" (click)="open('add', null)">Thêm Kế Hoạch</button>
+
+    <!-- Add Modal -->
+    <ng-template #addModal let-modal>
+      <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">Thêm Kế Hoạch</h4>
+        <button type="button" class="btn-close" aria-label="Close" (click)="modal.close()"></button>
+      </div>
+      <form #addForm="ngForm" class="container" (ngSubmit)="submitAdd(addForm)">
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-6">
+              <label class="form-label">Vị trí khởi hành:</label>
+              <input #startLocation="ngModel" name="startLocation" class="form-control" type="text" ngModel required>
+              <small *ngIf="startLocation.touched && startLocation.invalid">Vị trí không được bỏ trống</small>
+            </div>
+            <div class="col-6">
+              <label class="form-label">Địa chỉ khởi hành:</label>
+              <input #startAddress="ngModel" name="startAddress" class="form-control" type="text" ngModel required>
+              <small *ngIf="startAddress.touched && startAddress.invalid">Địa chỉ không được bỏ trống</small>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-6">
+              <label class="form-label">Thời gian khởi hành:</label>
+              <input #startTime="ngModel" min="{{minDate | date:'yyyy-MM-dd hh:mm:ss'}}" name="startTime"
+                class="form-control" type="datetime-local" ngModel required>
+              <small *ngIf="startTime.touched && startTime.invalid">Thời điểm không được bỏ trống</small>
+            </div>
+            <div class="col-6">
+              <label class="form-label">Phương tiện khởi hành:</label>
+              <select #transport="ngModel" name="transport" class="form-control" ngModel required>
+                <option value="" selected>Chọn phương tiện</option>
+                <option *ngFor="let item of transportList" value="{{item.id}}">{{item.name}}</option>
+              </select>
+              <small *ngIf="transport.touched && transport.invalid">Phương tiện không hợp lệ</small>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary" (click)="modal.close('Save click')"
+            [disabled]="!addForm.valid">Thêm</button>
+        </div>
+      </form>
+    </ng-template>
+
+    <ng-template #confirmModal let-modal>
+      <div class="modal-header">
+        <b>Vui lòng xác nhận</b>
+        <button type="button" class="btn-close" aria-label="Close" (click)="modal.close()"></button>
+      </div>
+      <div class="modal-body">
+        Bạn có chắc muốn xóa? Một khi đã xóa sẽ không thể khôi phục lại
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-success" (click)="modal.close()">Hủy bỏ</button>
+        <button id="confirmDelete" class="btn btn-danger" (click)="modal.close()">Xác nhận</button>
+      </div>
+    </ng-template>
+
+
+    <div class="table-responsive">
+      <p-table #dt1 [value]="planList" dataKey="id" [rows]="10" [paginator]="true" editMode="row"
+        currentPageReportTemplate="Hiển thị từ bảng {first} đến {last} trong tổng {totalRecords} bảng"
+        [globalFilterFields]="['startName', 'startAddress', 'transport.name']" [tableStyle]="{'min-width': '100rem'}">
+        <ng-template pTemplate="caption">
+          <div class="flex">
+            <form [formGroup]="formFilter">
+              <span class="p-input-icon-left ml-auto">
+                <input pInputText type="text" (change)="dt1.filterGlobal(getValueSearch(), 'contains')"
+                  formControlName="search" class="form-control box-shadow-none" placeholder="Tìm kiếm"
+                  aria-label="Example text with button addon" aria-describedby="button-search">
+              </span>
+            </form>
+          </div>
+        </ng-template>
+        <ng-template pTemplate="header" class="theader">
+          <tr>
+            <th pSortableColumn="startName" style="width:15%">Nơi khởi hành<p-sortIcon field="startName"></p-sortIcon>
+            </th>
+            <th pSortableColumn="startAddress" style="width:16%">Địa chỉ<p-sortIcon field="startAddress"></p-sortIcon>
+            </th>
+            <th pSortableColumn="startTime" style="width:20%">Thời gian khởi hành<p-sortIcon
+                field="startTime"></p-sortIcon>
+            </th>
+            <th pSortableColumn="transport.name" style="width:14%">Phương tiện<p-sortIcon
+                field="transport.name"></p-sortIcon></th>
+            <th></th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" class="tbody" let-planList let-editing="editing" let-ri="rowIndex">
+          <tr [pEditableRow]="planList">
+            <td>
+              <p-cellEditor>
+                <ng-template pTemplate="input">
+                  <input pInputText type="text" [(ngModel)]="planList.startName" required>
+                </ng-template>
+                <ng-template pTemplate="output">
+                  {{ planList.startName }}
+                </ng-template>
+              </p-cellEditor>
+            </td>
+            <td>
+              <p-cellEditor>
+                <ng-template pTemplate="input">
+                  <input pInputText type="text" [(ngModel)]="planList.startAddress" required>
+                </ng-template>
+                <ng-template pTemplate="output">
+                  {{ planList.startAddress }}
+                </ng-template>
+              </p-cellEditor>
+            </td>
+            <td>
+              <p-cellEditor>
+                <ng-template pTemplate="input">
+                  <p-calendar [(ngModel)]="planList.startTime" [minDate]="minDate" [touchUI]="true"
+                    [readonlyInput]="true" [showTime]="true" [showIcon]="true"></p-calendar>
+                </ng-template>
+                <ng-template pTemplate="output">
+                  {{ planList.startTime | date:"HH:mm | dd-MM-yyyy" : "UTC"}}
+                  <br>
+                  <small *ngIf="checkValidDate(currentTourDate,planList)">Ngày hoạt động không khớp với lịch trình vui
+                    lòng cập nhập lại</small>
+                </ng-template>
+              </p-cellEditor>
+            </td>
+            <td>
+              <p-cellEditor>
+                <ng-template pTemplate="input">
+                  <select name="transport" class="form-control" [(ngModel)]="planList.transport.id" required>
+                    <option *ngFor="let item of transportList" value="{{item.id}}">{{item.name}}</option>
+                  </select>
+                </ng-template>
+                <ng-template pTemplate="output">
+                  {{ planList.transport.name }}
+                </ng-template>
+              </p-cellEditor>
+            </td>
+            <td class="button-group">
+              <button pButton *ngIf="!editing" [routerLink]="['/admin/tour/plan/'+planList.id]" class="btn btn-info"
+                icon="pi pi-book">Chi
+                tiết</button>
+              <button pButton *ngIf="!editing && currentTourDate.status.id == 1" (click)="onRowEditInit(planList)"
+                icon="pi pi-pencil" pInitEditableRow class="btn btn-warning">Sửa</button>
+              <button pButton *ngIf="!editing && currentTourDate.status.id == 1" (click)="checkDeleteable(planList.id)"
+                class="btn btn-danger" icon="pi pi-times-circle">Xóa</button>
+              <button *ngIf="editing" pButton pRipple type="button" pSaveEditableRow icon="pi pi-check"
+                (click)="onRowEditSave(planList, ri)"
+                class="p-button-rounded p-button-text p-button-success mr-2"></button>
+              <button *ngIf="editing" pButton pRipple type="button" pCancelEditableRow icon="pi pi-times"
+                (click)="onRowEditCancel(planList, ri)" class="p-button-rounded p-button-text p-button-danger"></button>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+  </div>
+</div>
