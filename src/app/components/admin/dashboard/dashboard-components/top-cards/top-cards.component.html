@@ -1,17 +1,66 @@
 <div class="row">
-    <div class="col-md-6 col-lg-3" *ngFor='let topcard of topcards'>
-        <div class="card">
-            <div class="card-body">
-                <div class="d-flex align-items-center">
-                    <div class="btn btn-lg rounded-circle round round-lg fs-6 d-flex align-items-center justify-content-center bg-light-{{topcard.bgcolor}} text-{{topcard.bgcolor}}">
-                        <i class={{topcard.icon}}></i>
+  <div class="col-md-6 col-lg-3" *ngFor="let topcard of topcards; let i = index">
+      <div class="card">
+          <div class="card-body">
+              <div class="d-flex align-items-center">
+                  <div class="btn btn-lg rounded-circle round round-lg fs-6 d-flex align-items-center justify-content-center bg-light-{{topcard.bgcolor}} text-{{topcard.bgcolor}}">
+                    <div *ngIf="i === 0">
+                      <a [routerLink]="['/admin/dashboard']" [queryParams]="{ startDate: startDate, endDate: endDate }" class="bi bi-wallet success text-{{topcard.bgcolor}}"></a>
+                  </div>
+                  <div *ngIf="i === 1">
+                    <a [routerLink]="['/admin/dashboard/tour']" [queryParams]="{ startDate: startDate, endDate: endDate }" class="bi bi-coin text-{{topcard.bgcolor}}"></a>
+                    <i class=""></i>
+                  </div>
+                  <div *ngIf="i === 2">
+                    <a [routerLink]="['/admin/dashboard/hotel']" [queryParams]="{ startDate: startDate, endDate: endDate }" class="bi bi-basket3 text-{{topcard.bgcolor}}"></a>
+                  </div>
+                  <div *ngIf="i === 3">
+                    <a [routerLink]="['/admin/dashboard/transport']" [queryParams]="{ startDate: startDate, endDate: endDate }" class="bi bi-bag text-{{topcard.bgcolor}}"></a>
+                    <i class=""></i>
+                  </div>
+                  </div>
+                  <div class="ms-3">
+                      <div *ngFor="let revenue of revenue">
+                        <div *ngIf="revenue !== null; else noRevenue">
+                          <div *ngIf="i === 0" class="fixed-font-size">
+                            <h3 class="mb-0 font-weight-bold" style="font-size: 20px;">{{ formatCurrency(revenue.total_revenue) }}</h3>
+                            <small class="text-muted fs-3">Doanh Thu Tổng</small>
+                          </div>
+                          <div *ngIf="i === 1" class="fixed-font-size">
+                            <h3 class="mb-0 font-weight-bold" style="font-size: 20px;">{{ formatCurrency(revenue.total_tour_revenue) }}</h3>
+                            <small class="text-muted fs-3">Doanh Thu tour</small>
+                          </div>
+                           <div *ngIf="i === 2" class="fixed-font-size">
+                             <h3 class="mb-0 font-weight-bold" style="font-size: 20px;">{{ formatCurrency(revenue.total_hotel_revenue) }}</h3>
+                             <small class="text-muted fs-3">Doanh Thu khách sạn</small>
+                           </div>
+                           <div *ngIf="i === 3">
+                             <h3 class="mb-0 font-weight-bold" style="font-size: 20px;">{{ formatCurrency(revenue.total_transport_revenue) }}</h3>
+                             <small class="text-muted fs-3">Doanh Thu vận chuyển</small>
+                           </div>
+                        </div>
+                        <ng-template #noRevenue>
+                            <div *ngIf="i === 0">
+                              <h3 class="mb-0 font-weight-bold" style="font-size: 20px;">{{formatCurrency(0.0)}}</h3>
+                              <small class="text-muted fs-3">Doanh Thu Tổng</small>
+                            </div>
+                            <div *ngIf="i === 1">
+                              <h3 class="mb-0 font-weight-bold" style="font-size: 20px;">{{formatCurrency(0.0)}}</h3>
+                              <small class="text-muted fs-3">Doanh Thu tour</small>
+                            </div>
+                            <div *ngIf="i === 2">
+                              <h3 class="mb-0 font-weight-bold" style="font-size: 20px;">{{formatCurrency(0.0)}}</h3>
+                              <small class="text-muted fs-3">Doanh Thu hotel</small>
+                            </div>
+                            <div *ngIf="i === 3">
+                              <h3 class="mb-0 font-weight-bold" style="font-size: 20px;">{{formatCurrency(0.0)}}</h3>
+                              <small class="text-muted fs-3">Doanh Thu vận chuyển</small>
+                            </div>
+                        </ng-template>
                     </div>
-                    <div class="ms-3">
-                        <h3 class="mb-0 font-weight-bold">{{topcard.title}}</h3>
-                        <small class="text-muted fs-3">{{topcard.subtitle}}</small>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
 </div>

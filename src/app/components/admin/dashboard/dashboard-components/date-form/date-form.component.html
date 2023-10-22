@@ -1,0 +1,7 @@
+<div class="form-group" style="display: flex; align-items: center;">
+  <label for="start" style="margin-right: 5px;">Từ</label>
+  <input type="date" name="begin" [(ngModel)]="startDate" style="margin-right: 5px; margin-bottom: 10px;" placeholder="dd-mm-yyyy" min="2020-01-01" max="2030-12-31">
+  <label for="start" style="margin-right: 5px;">Đến</label>
+  <input type="date" name="end" [(ngModel)]="endDate" style="margin-right: 5px; margin-bottom: 10px;" placeholder="dd-mm-yyyy" min="2020-01-01" max="2030-12-31">
+  <a class="btn btn-outline-primary" (click)="onFilterClick()" style="margin-bottom: 10px;">Lọc</a>
+</div>
