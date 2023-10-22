@@ -15,4 +15,8 @@ export class BookingService {
     return this.httpRequest.get(this.API_Url+'booking/');
   }
 
+  editBooking(Booking:Booking){
+    return this.httpRequest.put(this.API_Url+'/edit',Booking);
+   }
+
 }

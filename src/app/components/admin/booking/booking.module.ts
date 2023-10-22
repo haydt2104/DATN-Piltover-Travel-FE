@@ -7,6 +7,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Routes, RouterModule } from '@angular/router';
 
 import { BookingComponent } from './booking.component';
+import { HttpClientModule } from '@angular/common/http';
 
 
 @NgModule({
@@ -15,7 +16,8 @@ import { BookingComponent } from './booking.component';
     ReactiveFormsModule,
     CommonModule,
     RouterModule.forChild(Bookingroutes),
-    EditBookingModule
+    EditBookingModule,
+    HttpClientModule
   ],
   declarations: [],
 })
