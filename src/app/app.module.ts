@@ -32,6 +32,7 @@ import { environment } from './../environments/environment';
 
 import { CheckStatusAccountPipe } from './pipes/check-status-account.pipe';
 import { BookingdetailComponent } from './components/admin/bookingdetail/bookingdetail.component';
+import { MatPaginatorModule } from '@angular/material/paginator';
 
 @NgModule({
   declarations: [
@@ -59,6 +60,7 @@ import { BookingdetailComponent } from './components/admin/bookingdetail/booking
     FullComponent,
     SidebarComponent,
     NavigationComponent,
+    MatPaginatorModule,
   ],
   providers: [
     {

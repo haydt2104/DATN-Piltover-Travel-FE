@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Post } from 'src/app/models/post.model';
 import { PostService } from 'src/app/services/post/post.service';
+
 
 @Component({
   selector: 'app-post-edit',
@@ -27,7 +28,8 @@ export class PostEditComponent implements OnInit{
       email: new FormControl(),
       title: new FormControl(),
       description: new FormControl(),
-      content: new FormControl()
+      content: new FormControl(),
+      updateTime: new FormControl()
     })
     const id = this.route.snapshot.paramMap.get('id');
     if(id !== null){
@@ -37,10 +39,14 @@ export class PostEditComponent implements OnInit{
 
   }
 
+  onSubmit(){
+
+  }
   public getPost(id: number){
     console.log("hehe: " + id)
     this.postService.getPostById(id).subscribe((data) => {
       this.formGroup.patchValue(data)
+      this.post = data
       console.log(this.formGroup.patchValue(data))
     })
   }
@@ -48,8 +54,8 @@ export class PostEditComponent implements OnInit{
   public savePost(){
 
     this.postService.updatePostById(this.formGroup.value, this.formGroup.value.id).subscribe(data =>{
+      alert("Cập nhật thành công")
       this.router.navigateByUrl('/admin/manage/post/list')
     })
-    alert("Cập nhật thành công")
   }
 }

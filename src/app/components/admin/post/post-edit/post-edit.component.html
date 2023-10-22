@@ -8,18 +8,20 @@
         </div> -->
         <div class="mb-3 col-sm-12 col-md-12">
           <label for="title" class="form-label">Tiêu đề: </label>
-          <input class="form-control" formControlName="title" id="title" type="text">
+           <p-editor  #editor  formControlName="title" id="title" [style]="{ height: '100px' }"></p-editor>
         </div>
+
         <div class="mb-3 col-sm-12 col-md-12">
           <label for="description" class="form-label">Mô tả: </label>
-          <textarea class="form-control" formControlName="description" id="description"></textarea>
+          <p-editor formControlName="description" id="description" [style]="{ height: '350px' }"></p-editor>
         </div>
         <div class="mb-3 col-sm-12 col-md-12">
           <label for="content" class="form-label">Nội dung: </label>
-          <textarea class="form-control" formControlName="content" id="title" type="text"></textarea>
+          <p-editor formControlName="content" id="content" [style]="{ height: '350px' }"></p-editor>
         </div>
       </div>
-      <button type="submit">Lưu</button>
+      <button class="btn btn-success" type="submit">Lưu</button>
+      <span class="mb-3">Cập nhập lần cuối lúc {{ post.updateTime | date:"dd-MM-yyyy HH:mm:ss"}} bởi {{ post.updateUser.email }}</span>
     </form>
   </div>
 </div>

@@ -30,4 +30,8 @@ export class PostService {
   public updatePostById(data: any, id: any): Observable<any>{
     return this.http.put<number>(this.baseUrl + 'api/post/updatePost/' + id, data);
   }
+
+  public createPost(postDTO : any): Observable<any>{
+    return this.http.post<Post>(this.baseUrl+ 'api/post/create', postDTO);
+  }
 }

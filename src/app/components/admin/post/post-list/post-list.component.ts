@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
 import { Post } from 'src/app/models/post.model';
 import { PostService } from 'src/app/services/post/post.service';
 

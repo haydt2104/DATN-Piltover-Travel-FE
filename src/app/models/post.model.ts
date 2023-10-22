@@ -3,7 +3,7 @@ import { Account } from "./account.model";
 
 export interface Post {
   id: number;
-  account: Account;
+  createUser: Account;
   title: String;
   description: String;
   content: String;
@@ -11,5 +11,6 @@ export interface Post {
   comment: Comment;
   createTime: Date;
   status: Boolean;
-
+  updateTime: Date;
+  updateUser: Account;
 }
