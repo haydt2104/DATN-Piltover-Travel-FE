@@ -37,8 +37,8 @@ export class PostCreateComponent implements OnInit {
       this.isSubmited = true
       this.postService.createPost(this.formGroup.value).subscribe(data => {
         console.log(this.formGroup.value)
-        // alert("Thêm mới thành công")
-        // this.router.navigateByUrl('/admin/manage/post/list')
+        alert("Thêm mới thành công")
+        this.router.navigateByUrl('/admin/manage/post/list')
       })
     }
   }

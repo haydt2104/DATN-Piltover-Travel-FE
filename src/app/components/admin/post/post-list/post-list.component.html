@@ -23,7 +23,9 @@
         <td>{{item.createTime | date:"dd/MM/yyyy HH:mm:ss"}}</td>
         <td>{{item.status == true ? 'Đang mở' : 'Đã đóng'}}</td>
         <td>{{likeCount[i]}}</td>
-        <td><button (click)="getPostById(item.id)" [routerLink]="['/admin/manage/post/edit', item.id]">Click me</button>
+        <td><button class="btn btn-info"
+          (click)="getPostById(item.id)"
+          [routerLink]="['/admin/manage/post/edit', item.id]"><i class="bi bi-pencil-square"></i></button>
         </td>
       </tr>
     </tbody>
