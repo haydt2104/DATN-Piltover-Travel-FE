@@ -1,5 +1,6 @@
 import { Price } from './price.model';
 import { Status } from './status.model';
+import { Transportation } from './transportation.model';
 
 export interface Tour {
   id: number;
@@ -11,4 +12,5 @@ export interface Tour {
   createTime: Date;
   active: boolean;
   price: Price
+  transport:Transportation
 }

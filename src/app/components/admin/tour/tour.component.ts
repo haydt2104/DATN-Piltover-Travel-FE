@@ -487,7 +487,8 @@ export class TourComponent implements OnInit {
         id: null,
         adultPrice: data.value.adult,
         childrenPrice: data.value.children
-      }
+      },
+      transport: null
     };
     const randomNumberString = Array.from({ length: 15 }, () => Math.floor(Math.random() * 10)).join('');
     const path = `tour-img/${randomNumberString}`
@@ -526,7 +527,8 @@ export class TourComponent implements OnInit {
         id: this.editTour.price.id,
         adultPrice: data.value.adult,
         childrenPrice: data.value.children
-      }
+      },
+      transport:null
     };
     if (this.mainImgUrl != this.editTour.image) {
       this.fireStorage.storage.refFromURL(this.editTour.image).delete()
