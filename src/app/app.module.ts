@@ -25,13 +25,14 @@ import { Approutes } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { AccountComponent } from './components/admin/account/account.component';
 import { BookingComponent } from './components/admin/booking/booking.component';
-import { BookingdetailComponent } from './components/admin/bookingdetail/bookingdetail.component';
+// import { BookingdetailComponent } from './components/admin/bookingdetail/bookingdetail.component';
 import { SpinnerComponent } from './components/admin/shared/spinner.component';
 import { AuthorizationsComponent } from './components/user/authorizations/authorizations.component';
 import { FooterComponent } from './components/user/layouts/footer/footer.component';
 import { HeaderComponent } from './components/user/layouts/header/header.component';
 import { CheckStatusAccountPipe } from './pipes/check-status-account.pipe';
 import { TestPipePipe } from './pipes/test-pipe.pipe';
+
 
 
 @NgModule({
@@ -46,7 +47,6 @@ import { TestPipePipe } from './pipes/test-pipe.pipe';
     AccountComponent,
     CheckStatusAccountPipe,
     BookingComponent,
-    BookingdetailComponent,
   ],
   imports: [
     CommonModule,

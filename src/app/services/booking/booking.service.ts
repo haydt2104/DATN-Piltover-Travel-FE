@@ -1,20 +1,22 @@
-import { Injectable,Inject } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { Injectable, Inject } from '@angular/core';
+import { HttpClient} from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Booking } from 'src/app/models/booking.model';
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class BookingService {
+  private API_Url:String = 'http://localhost:8080/api/';
   constructor(
-    private http: HttpClient,
-    @Inject('BASE_URL') private baseUrl: string
-  ) {
-    console.log('Base URL:', this.baseUrl);
+    private httpRequest: HttpClient,
+  ){}
 
+  getDataBookingFromAPI(){
+    return this.httpRequest.get(this.API_Url+'booking/');
   }
 
-  getAllBooking(): Observable<Booking[]> {
-    return this.http.get<Booking[]>(this.baseUrl + 'api/booking/getAllBookings');
-  }
+  editBooking(Booking:Booking){
+    return this.httpRequest.put(this.API_Url+'/edit',Booking);
+   }
+
 }

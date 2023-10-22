@@ -1,0 +1,128 @@
+<h3 class="text-center">BOOKING DETAIL</h3>
+
+<div >
+
+  <form >
+    <div class="card">
+      <div class="card-body">
+        <div class="row">
+          <div class="mb-3 col-sm-12 col-md-6">
+            <label class="form-label">Booking Id: </label>
+            <input class="form-control" type="text" id="id" name="id"
+              disabled="disabled" [(ngModel)]="detailItem.booking.id" />
+          </div>
+          <div class="mb-3 col-sm-12 col-md-6">
+            <label class="form-label">Tour name: </label>
+            <input class="form-control" type="text" id="tourname" name="tourname"
+              disabled="disabled" [(ngModel)]="detailItem.booking.tourDate.tour.name"/>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="mb-3 col-sm-12 col-md-6">
+            <label class="form-label">Trạng thái: </label>
+            <select class="form-control" [(ngModel)]="detailItem.booking.status" name="status">
+              <option value="0">Chưa liên hệ</option>
+              <option value="1">Đã liên hệ</option>
+              <option value="2">Đã hủy</option>
+            </select>
+          </div>
+          <div class="mb-3 col-sm-12 col-md-6">
+            <label for="" class="form-label">Ngày lập:</label>
+            <input class="form-control" type="date" id="bookingTime" name="bookingTime"
+              disabled="disabled" [(ngModel)]="detailItem.bookingTime" />
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="mb-3 col-sm-12 col-md-3">
+            <label for="" class="form-label">Chỗ ở: </label>
+            <input class="form-control" type="text" id="hotelName" name="hotelName"
+            disabled="disabled" [(ngModel)]="detailItem.booking.hotel.name"/>
+          </div>
+          <div class="mb-3 col-sm-12 col-md-3">
+            <label for="" class="form-label">Phương tiện: </label>
+            <input class="form-control" type="text" id="transportName" name="transportName"
+              disabled="disabled" [(ngModel)]="detailItem.booking.tourDate.tour.transport.name" />
+          </div>
+          <div class="mb-3 col-sm-12 col-md-3">
+            <label for="" class="form-label">Số lượng người lớn: </label>
+            <div class="input-group">
+              <input class="form-control" type="number" min="0" aria-describedby="ng1" id="adult" name="adult" [(ngModel)]="detailItem.adult"/>
+              <span class="input-group-text" id="ng1">Người</span>
+            </div>
+          </div>
+          <div class="mb-3 col-sm-12 col-md-3">
+            <label for="" class="form-label">Số lượng trẻ em: </label>
+            <div class="input-group">
+              <input class="form-control" type="number" min="0" aria-describedby="ng2" id="children" name="children" [(ngModel)]="detailItem.children"/>
+              <span class="input-group-text" id="ng2">Người</span>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="mb-3 col-sm-12 col-md-4">
+            <label for="" class="form-label">Tổng tiền cơ bản: </label>
+             <input class="form-control" type="text" id="totalPrice" name="totalPrice" disabled="disabled" [(ngModel)]="detailItem.booking.totalPrice">
+          </div>
+          <div class="mb-3 col-sm-12 col-md-4">
+            <label for="" class="form-label">Mã giảm giá: </label>
+            <select class="form-control" [(ngModel)]="detailItem.booking.discount.id" name="discountName">
+              <option value="" class="text-center">--- Chọn ---</option>
+              <option *ngFor="let d of discounts" [value]="d.id"> {{d.name}} </option>
+            </select>
+          </div>
+          <div class="mb-3 col-sm-12 col-md-4">
+            <label for="" class="form-label">Tổng tiền thu: </label>
+            <input class="form-control" type="text" id="totalPrice" name="totalPrice"  disabled="disabled" [(ngModel)]="detailItem.booking.totalPrice">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-body">
+        <div class="row">
+          <div class="mb-3 col-sm-12 col-md-6">
+            <label for="" class="form-label">Tên khách hàng: </label>
+            <input type="text" class="form-control" id="customName" name="customName" disabled="disabled" [(ngModel)]="detailItem.booking.createUser.fullname">
+          </div>
+          <div class="mb-3 col-sm-12 col-md-6">
+            <label for="email" class="form-label">Email:</label>
+            <input class="form-control" type="email" id="customEmail" name="customEmail"disabled="disabled" [(ngModel)]="detailItem.booking.createUser.email">
+          </div>
+
+        </div>
+        <div class="row">
+          <div class="mb-3 col-sm-12 col-md-4">
+            <label for="phone" class="form-label">Số điện thoại: </label>
+            <input class="form-control" type="text" id="customPhone" name="customPhone"  disabled="disabled" [(ngModel)]="detailItem.booking.createUser.phone">
+          </div>
+          <div class="mb-3 col-sm-12 col-md-4">
+            <label for="" class="form-label">Địa chỉ: </label>
+            <input class="form-control"  type="text" id="customAddress" name="customAddress"  disabled="disabled" [(ngModel)]="detailItem.booking.createUser.address">
+          </div>
+          <div class="mb-3 col-sm-12 col-md-4">
+            <label for="" class="form-label">Ngày đi: </label>
+            <input class="form-control"  type="date" id="initiateDateTour" name="initiateDateTour" disabled="disabled" [(ngModel)]="detailItem.booking.tourDate.initiateDate">
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row col-md-12">
+      <div class="text-right">
+        <button type="submit" class="btn btn-outline-success col-md-2 mr-3">Lưu</button>
+        <button class="btn btn-outline-info col-md-2" [routerLink]="['/admin/manage/booking']"
+          routerLinkActive="router-link-active">Trở lại</button>
+      </div>
+
+    </div>
+
+  </form>
+
+</div>
+
+<!-- <div *ngIf="!currentDetail.booking.id">
+<h3> Can't access this detail</h3>
+
+</div>-->

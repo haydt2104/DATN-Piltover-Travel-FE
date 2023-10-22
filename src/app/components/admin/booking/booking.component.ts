@@ -1,23 +1,28 @@
 import { Component, OnInit } from '@angular/core';
-import { BookingService } from 'src/app/services/booking/booking.service';
+import { RouterModule } from '@angular/router';
+import { NgbDatepickerModule, NgbPaginationModule } from '@ng-bootstrap/ng-bootstrap';
 import { Booking } from 'src/app/models/booking.model';
+import { BookingService } from 'src/app/services/booking/booking.service';
+
+
+
 @Component({
   selector: 'app-booking',
   templateUrl: './booking.component.html',
   styleUrls: ['./booking.component.scss'],
 })
 export class BookingComponent implements OnInit {
-  public bookings!: Booking[];
+  bookings: Booking[] = [];
   constructor(private bService: BookingService) {}
 
   ngOnInit() {
     this.getAllBooking();
   }
 
-  private getAllBooking() {
-    this.bService.getAllBooking().subscribe((data) => {
+  getAllBooking() {
+    this.bService.getDataBookingFromAPI().subscribe((data: Booking[]) => {
       this.bookings = data;
-      console.log(this.bookings);
+      console.log('Booking: ', this.bookings);
     });
   }
 }
