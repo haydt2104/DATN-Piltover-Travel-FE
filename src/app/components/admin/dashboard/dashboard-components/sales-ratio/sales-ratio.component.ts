@@ -46,9 +46,6 @@ export class SalesRatioComponent implements OnInit {
   @ViewChild("chart") chart: ChartComponent = Object.create(null);
   public salesChartOptions: Partial<salesChartOptions>;
   constructor(private router: Router, private route: ActivatedRoute, private monthrevenueService: RevenueService) {
-    function formatCurrency(value: number): string {
-      return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(value);
-    }
     this.salesChartOptions = {
       series: [
         {
@@ -102,6 +99,19 @@ export class SalesRatioComponent implements OnInit {
           "Tháng 12"
         ],
       },
+      yaxis: [
+        {
+          labels: {
+            formatter: function (value: number) {
+              const formattedValue = new Intl.NumberFormat('vi-VN', {
+                style: 'currency',
+                currency: 'VND',
+              }).format(value);
+              return formattedValue.replace('₫', '') + 'VNĐ';
+            },
+          },
+        },
+      ],
       tooltip: {
         theme: 'dark',
         y: {
@@ -109,8 +119,8 @@ export class SalesRatioComponent implements OnInit {
             const formattedValue = new Intl.NumberFormat('vi-VN', {
               style: 'currency',
               currency: 'VND',
-              minimumFractionDigits: 3,
-              maximumFractionDigits: 3,
+              minimumFractionDigits: 0,
+              maximumFractionDigits: 0,
             }).format(value);
             return formattedValue.replace('₫', '') +'VNĐ';
           }

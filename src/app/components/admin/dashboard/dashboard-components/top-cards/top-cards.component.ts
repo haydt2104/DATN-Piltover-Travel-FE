@@ -34,4 +34,21 @@ export class TopCardsComponent implements OnInit {
       console.log('Doanh thu: ', this.revenue);
     });
 }
+formatCurrency(value: number): string {
+  const formattedValue = new Intl.NumberFormat('vi-VN', {
+    style: 'currency',
+    currency: 'VND',
+  }).format(value);
+  return formattedValue.replace('₫', '') + 'VNĐ';
 }
+calculateFontSize(value: number): number {
+  // Tính toán kích thước phông chữ dựa trên độ dài của giá trị
+  const textLength = value.toString().length;
+  if (textLength <= 10) {
+    return 22; // Kích thước phông chữ tối ưu
+  } else {
+    return 16; // Kích thước phông chữ thấp hơn cho văn bản dài hơn
+  }
+}
+}
+
