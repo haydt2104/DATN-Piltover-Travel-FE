@@ -1,0 +1,27 @@
+<div class="card">
+  <div class="card-body">
+    <form [formGroup]="formGroup" (ngSubmit)="savePost()">
+      <div class="row">
+        <!-- <div class="mb-3 col-sm-12 col-md-6">
+          <label for="email" class="form-label">Email: </label>
+          <input class="form-control" formControlName="email" id="email" type="email">
+        </div> -->
+        <div class="mb-3 col-sm-12 col-md-12">
+          <label for="title" class="form-label">Tiêu đề: </label>
+           <p-editor  #editor  formControlName="title" id="title" [style]="{ height: '100px' }"></p-editor>
+        </div>
+
+        <div class="mb-3 col-sm-12 col-md-12">
+          <label for="description" class="form-label">Mô tả: </label>
+          <p-editor formControlName="description" id="description" [style]="{ height: '350px' }"></p-editor>
+        </div>
+        <div class="mb-3 col-sm-12 col-md-12">
+          <label for="content" class="form-label">Nội dung: </label>
+          <p-editor formControlName="content" id="content" [style]="{ height: '350px' }"></p-editor>
+        </div>
+      </div>
+      <button class="btn btn-success" type="submit">Lưu</button>
+      <span class="mb-3">Cập nhập lần cuối lúc {{ post.updateTime | date:"dd-MM-yyyy HH:mm:ss"}} bởi {{ post.updateUser.email }}</span>
+    </form>
+  </div>
+</div>

@@ -1,3 +1,4 @@
+import { PostModule } from './components/admin/post/post.module';
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
@@ -9,14 +10,14 @@ import { AboutComponent } from './components/user/views/about/about.component';
 import { ContactComponent } from './components/user/views/contact/contact.component';
 import { HistoryComponent } from './components/user/views/history/history.component';
 import { HistoryDetailComponent } from './components/user/views/history-detail/history-detail.component';
-import { BlogComponent } from './components/user/views/blog/blog.component';
-import { BlogSingleComponent } from './components/user/views/blog-single/blog-single.component';
 import { DestinationComponent } from './components/user/views/destination/destination.component';
 import { DestinationDetailComponent } from './components/user/views/destination-detail/destination-detail.component';
 import { ForgotpassComponent } from './components/user/authorizations/forgotpass/forgotpass.component';
 import { SignUpComponent } from './components/user/authorizations/sign-up/sign-up.component';
 import { LoginComponent } from './components/user/authorizations/login/login.component';
 import { AuthorizationsComponent } from './components/user/authorizations/authorizations.component';
+import { PostComponent } from './components/user/views/post/post.component';
+import { PostSingleComponent } from './components/user/views/post-single/post-single.component';
 
 export const Approutes: Routes = [
   {
@@ -71,6 +72,13 @@ export const Approutes: Routes = [
             (m) => m.ComponentsModule
           ),
       },
+      {
+        path: 'manage/post',
+        loadChildren: () =>
+          import('./components/admin/post/post.module').then(
+            (m) => m.PostModule
+          ),
+      },
     ],
   },
   {
@@ -83,8 +91,14 @@ export const Approutes: Routes = [
       { path: 'contact', component: ContactComponent },
       { path: 'history', component: HistoryComponent },
       { path: 'history-detail', component: HistoryDetailComponent },
-      { path: 'blog', component: BlogComponent },
-      { path: 'blog-single', component: BlogSingleComponent },
+      {
+        path: 'post',
+        loadChildren: () =>
+          import('./components/user/views/post/post.module').then(
+            (m) => m.PostModule
+          )
+      },
+      { path: 'post-single/:id', component: PostSingleComponent },
       { path: 'destination', component: DestinationComponent },
       { path: 'destination-detail', component: DestinationDetailComponent },
     ],

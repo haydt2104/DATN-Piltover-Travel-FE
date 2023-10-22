@@ -1,0 +1,48 @@
+<div class="card">
+  <div class="card-body">
+    <form [formGroup]="formGroup" (ngSubmit)="savePost()">
+      <div class="row">
+        <!-- <div class="mb-3 col-sm-12 col-md-6">
+          <label for="email" class="form-label">Email: </label>
+          <input class="form-control" formControlName="email" id="email" type="email">
+        </div> -->
+        <div class="mb-3 col-sm-12 col-md-12">
+          <label for="title" class="form-label">Tiêu đề: </label>
+           <p-editor  #editor  formControlName="title" id="title" [style]="{ height: '100px' }" required></p-editor>
+           <div class="text-danger" *ngFor="let validation of validation_message.title">
+            <div class="error-message"
+                 *ngIf="formGroup.get('title')!.value.length == 0">
+              {{validation.message}}</div>
+          </div>
+        </div>
+
+        <div class="mb-3 col-sm-12 col-md-12">
+          <label for="description" class="form-label">Mô tả: </label>
+          <p-editor formControlName="description" id="description" [style]="{ height: '300px' }"></p-editor>
+          <div class="text-danger" *ngFor="let validation of validation_message.description">
+            <div class="error-message"
+                 *ngIf="formGroup.get('description')!.value.length == 0">
+              {{validation.message}}</div>
+          </div>
+        </div>
+        <div class="mb-3 col-sm-12 col-md-12">
+          <label for="content" class="form-label">Nội dung: </label>
+          <p-editor formControlName="content" id="content" [style]="{ height: '300px' }"></p-editor>
+          <div class="text-danger" *ngFor="let validation of validation_message.content">
+            <div class="error-message"
+                 *ngIf="formGroup.get('content')!.value.length == 0">
+              {{validation.message}}</div>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="formGroup.invalid then submited else notSubmited"></div>
+      <ng-template #notSubmited>
+        <button type="submit" class="btn btn-primary">Lưu</button>
+      </ng-template>
+      <ng-template #submited>
+        <button type="submit" class="btn btn-primary" disabled>Lưu
+        </button>
+      </ng-template>
+    </form>
+  </div>
+</div>

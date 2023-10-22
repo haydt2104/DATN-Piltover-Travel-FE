@@ -32,12 +32,13 @@ import { BookingdetailComponent } from './components/admin/bookingdetail/booking
 import { AngularFireModule } from '@angular/fire/compat'
 import { AngularFireStorageModule } from '@angular/fire/compat/storage'
 import { environment } from 'src/environments/environment';
+import { MatPaginatorModule } from '@angular/material/paginator';
 
 @NgModule({
   declarations: [
     AppComponent,
     SpinnerComponent,
-    LayoutComponent,
+    // LayoutComponent,
     HeaderComponent,
     FooterComponent,
     AuthorizationsComponent,
@@ -60,7 +61,8 @@ import { environment } from 'src/environments/environment';
     SidebarComponent,
     NavigationComponent,
     AngularFireModule.initializeApp(environment.firebaseConfig),
-    AngularFireStorageModule
+    AngularFireStorageModule,
+    MatPaginatorModule,
   ],
   providers: [
     {

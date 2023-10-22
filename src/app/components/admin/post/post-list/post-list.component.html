@@ -1,0 +1,42 @@
+<div class="card p-3">
+  <h3 class="text-center">DANH SÁCH BÀI VIẾT</h3>
+  <button routerLink="/admin/manage/post/create">Thêm bài viết mới</button>
+  <table class="table table-bordered table-light table-striped">
+    <thead>
+      <th>ID</th>
+      <th>Email</th>
+      <th>Tiêu đề</th>
+      <th>Mô tả</th>
+      <th>Nội dung</th>
+      <th>Ngày đăng</th>
+      <th>Trạng thái</th>
+      <th>Số thích</th>
+      <th></th>
+    </thead>
+    <tbody>
+      <tr *ngFor='let item of posts; let i = index'>
+        <td>{{item.id}}</td>
+        <td>{{item.createUser.email}}</td>
+        <td>{{item.title}}</td>
+        <td>{{item.description}}</td>
+        <td>{{item.content}}</td>
+        <td>{{item.createTime | date:"dd/MM/yyyy HH:mm:ss"}}</td>
+        <td>{{item.status == true ? 'Đang mở' : 'Đã đóng'}}</td>
+        <td>{{likeCount[i]}}</td>
+        <td><button class="btn btn-info"
+          (click)="getPostById(item.id)"
+          [routerLink]="['/admin/manage/post/edit', item.id]"><i class="bi bi-pencil-square"></i></button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <nav aria-label="Page navigation example">
+    <ul class="pagination justify-content-end">
+      <li class="page-item"><a class="page-link" href="#"><span aria-hidden="true">&laquo;</span></a></li>
+      <li class="page-item"><a class="page-link" href="#"><span aria-hidden="true">&lt;</span></a></li>
+      <li class="page-item"><a class="page-link" href="#">1</a></li>
+      <li class="page-item"><a class="page-link" href="#"><span aria-hidden="true">&gt;</span></a></li>
+      <li class="page-item"><a class="page-link" href="#"><span aria-hidden="true">&raquo;</span></a></li>
+    </ul>
+  </nav>
+</div>
