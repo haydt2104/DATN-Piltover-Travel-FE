@@ -273,7 +273,7 @@ export class TourComponent implements OnInit {
       (response) => {
         const editTour = this.tourList.findIndex((tour) => tour.id == id);
         this.fireStorage.storage.refFromURL(this.tourList[editTour].image).delete()
-        this.tourList.splice(editTour, 1)
+        this.getTourList();
         this.messageService.clear();
         this.messageService.add({ key: 'info', severity: 'info', summary: 'Thông Báo', detail: 'Xóa thành công' });
       },
@@ -301,8 +301,7 @@ export class TourComponent implements OnInit {
   deleteDate(id: number) {
     this.curdService.delete('tour_date', id).subscribe(
       (response) => {
-        const editDateTour = this.tourDateList.findIndex((tourDate) => tourDate.id == id);
-        this.tourDateList.splice(editDateTour, 1)
+        this.getTourDateList(this.editTour.id)
         this.messageService.clear();
         this.messageService.add({ key: 'info', severity: 'info', summary: 'Thông Báo', detail: 'Xóa thành công' });
       },
@@ -474,6 +473,7 @@ export class TourComponent implements OnInit {
     var ward = $('#ward option:selected').text();
     var road = data.value.road;
     var address = road + ', ' + ward + ', ' + district + ', ' + province;
+    var transport: Transportation = this.transportList.find(transport => transport.id == data.value.transport)
     var tour: Tour = {
       id: null,
       name: data.value.name,
@@ -487,7 +487,8 @@ export class TourComponent implements OnInit {
         id: null,
         adultPrice: data.value.adult,
         childrenPrice: data.value.children
-      }
+      },
+      transport: transport
     };
     const randomNumberString = Array.from({ length: 15 }, () => Math.floor(Math.random() * 10)).join('');
     const path = `tour-img/${randomNumberString}`
@@ -508,6 +509,7 @@ export class TourComponent implements OnInit {
   }
 
   async submitEdit(data) {
+    var transport: Transportation = this.transportList.find(transport => transport.id == data.value.transport)
     var province = $('#province option:selected').text();
     var district = $('#district option:selected').text();
     var ward = $('#ward option:selected').text();
@@ -526,7 +528,8 @@ export class TourComponent implements OnInit {
         id: this.editTour.price.id,
         adultPrice: data.value.adult,
         childrenPrice: data.value.children
-      }
+      },
+      transport: transport
     };
     if (this.mainImgUrl != this.editTour.image) {
       this.fireStorage.storage.refFromURL(this.editTour.image).delete()

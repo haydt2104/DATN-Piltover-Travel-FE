@@ -1,5 +1,5 @@
 import { Price } from './price.model';
-import { Status } from './status.model';
+import { Transportation } from './transportation.model';
 
 export interface Tour {
   id: number;
@@ -10,5 +10,6 @@ export interface Tour {
   availableSpaces: number;
   createTime: Date;
   active: boolean;
-  price: Price
+  price: Price;
+  transport: Transportation
 }
