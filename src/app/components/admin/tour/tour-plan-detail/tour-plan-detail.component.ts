@@ -1,7 +1,7 @@
 import { CommonModule, NgFor } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormControl, FormsModule, NgForm, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { MessageService } from 'primeng/api';
@@ -159,5 +159,13 @@ export class TourPlanDetailComponent implements OnInit {
         alert(error.message);
       }
     )
+  }
+
+  checkValid(data: NgForm) {
+    if (data.valid && $('#startTime').val() < $('#endTime').val()) {
+      return false
+    } else {
+      return true
+    }
   }
 }

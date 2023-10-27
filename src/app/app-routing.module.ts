@@ -100,7 +100,7 @@ export const Approutes: Routes = [
       },
       { path: 'post-single/:id', component: PostSingleComponent },
       { path: 'destination', component: DestinationComponent },
-      { path: 'destination-detail', component: DestinationDetailComponent },
+      { path: 'destination-detail/:id', component: DestinationDetailComponent },
     ],
   },
   {
