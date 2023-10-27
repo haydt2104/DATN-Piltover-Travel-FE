@@ -57,24 +57,26 @@
             <div class="col-4">
               <label class="form-label">Người lớn:</label>
               <div class="input-group">
-                <input #adultPrice="ngModel" name="adult" type="number" class="form-control" ngModel required>
+                <input #adultPrice="ngModel" name="adult" id="adult" type="number" class="form-control" ngModel
+                  required>
                 <span class="input-group-text" id="basic-addon2">.000 VNĐ</span>
               </div>
               <small *ngIf="adultPrice.touched && adultPrice.value < 0">Giá vé người lớn không được là số âm</small>
-              <small *ngIf="adultPrice.touched && adultPrice.value < childerenPrice.value && adultPrice.value >= 0">Giá
+              <small *ngIf="adultPrice.touched && adultPrice.value < childrenPrice.value && adultPrice.value >= 0">Giá
                 vé người lớn không
                 được nhỏ hơn trẻ em</small>
             </div>
             <div class="col-4">
               <label class="form-label">Trẻ em:</label>
               <div class="input-group">
-                <input #childerenPrice="ngModel" name="children" type="number" class="form-control" ngModel required>
+                <input #childrenPrice="ngModel" name="children" id="children" type="number" class="form-control" ngModel
+                  required>
                 <span class="input-group-text" id="basic-addon2">.000 VNĐ</span>
               </div>
-              <small *ngIf="childerenPrice.touched && childerenPrice.value < 0">Giá vé trẻ em không được là số
+              <small *ngIf="childrenPrice.touched && childrenPrice.value < 0">Giá vé trẻ em không được là số
                 âm</small>
               <small
-                *ngIf="childerenPrice.touched && childerenPrice.value > adultPrice.value && childerenPrice.value >= 0">Giá
+                *ngIf="childrenPrice.touched && childrenPrice.value > adultPrice.value && childrenPrice.value >= 0">Giá
                 vé trẻ không được
                 lớn hơn giá người lớn</small>
             </div>
@@ -153,26 +155,26 @@
             <div class="col-4">
               <label class="form-label">Người lớn:</label>
               <div class="input-group">
-                <input #adultPrice="ngModel" name="adult" type="number" class="form-control"
+                <input #adultPrice="ngModel" name="adult" id="adult" type="number" class="form-control"
                   ngModel="{{editTour.price.adultPrice}}" required>
                 <span class="input-group-text" id="basic-addon2">.000 VNĐ</span>
               </div>
               <small *ngIf="adultPrice.touched && adultPrice.value < 0">Giá vé người lớn không được là số âm</small>
-              <small *ngIf="adultPrice.touched && adultPrice.value < childerenPrice.value && adultPrice.value >= 0">Giá
+              <small *ngIf="adultPrice.touched && adultPrice.value < childrenPrice.value && adultPrice.value >= 0">Giá
                 vé người lớn không
                 được nhỏ hơn trẻ em</small>
             </div>
             <div class="col-4">
               <label class="form-label">Trẻ em:</label>
               <div class="input-group">
-                <input #childerenPrice="ngModel" name="children" type="number" class="form-control"
+                <input #childrenPrice="ngModel" name="children" id="children" type="number" class="form-control"
                   ngModel="{{editTour.price.childrenPrice}}" required>
                 <span class="input-group-text" id="basic-addon2">.000 VNĐ</span>
               </div>
-              <small *ngIf="childerenPrice.touched && childerenPrice.value < 0">Giá vé trẻ em không được là số
+              <small *ngIf="childrenPrice.touched && childrenPrice.value < 0">Giá vé trẻ em không được là số
                 âm</small>
               <small
-                *ngIf="childerenPrice.touched && childerenPrice.value > adultPrice.value && childerenPrice.value >= 0">Giá
+                *ngIf="childrenPrice.touched && childrenPrice.value > adultPrice.value && childrenPrice.value >= 0">Giá
                 vé trẻ không được
                 lớn hơn giá người lớn</small>
             </div>
@@ -266,10 +268,9 @@
           </ng-template>
           <ng-template pTemplate="header" class="theader">
             <tr>
-              <th pSortableColumn="id" style="width:25%">Id<p-sortIcon field="id"></p-sortIcon></th>
-              <th pSortableColumn="initiateDate" style="width:25%">Thời điểm khởi hành<p-sortIcon
+              <th pSortableColumn="initiateDate" style="width:35%">Thời điểm khởi hành<p-sortIcon
                   field="initiateDate"></p-sortIcon></th>
-              <th pSortableColumn="status.name" style="width:20%">Trạng thái<p-sortIcon
+              <th pSortableColumn="status.name" style="width:35%">Trạng thái<p-sortIcon
                   field="status.name"></p-sortIcon>
               </th>
               <th></th>
@@ -277,9 +278,6 @@
           </ng-template>
           <ng-template pTemplate="body" class="tbody" let-tourDateList let-editing="editing" let-ri="rowIndex">
             <tr [pEditableRow]="tourDateList">
-              <td>
-                {{ tourDateList.id }}
-              </td>
               <td>
                 <p-cellEditor>
                   <ng-template pTemplate="input">
@@ -308,9 +306,14 @@
                   <button pButton pRipple *ngIf="!editing" class="btn btn-info"
                     [routerLink]="['/admin/tour/date/'+tourDateList.id]" (click)="modal.close()" icon="pi pi-book">Kế
                     Hoạch</button>
-                  <button *ngIf="!editing && tourDateList.status.id != 3" pButton pRipple type="button" pInitEditableRow
-                    icon="pi pi-pencil" (click)="onRowEditInit(tourDateList)" class="btn btn-warning">Sửa</button>
-                  <button pButton pRipple *ngIf="!editing" class="btn btn-danger"
+                  <button pButton pRipple
+                    *ngIf="!editing && tourDateList.status.id == 2 && bookingList && getBooking(tourDateList.id).length > 0"
+                    class="btn btn-info" (click)="open('booking',tourDateList.id)" icon="pi pi-book">Booking</button>
+                  <button
+                    *ngIf="!editing && tourDateList.status.id != 3 && bookingList && getBooking(tourDateList.id).length == 0"
+                    pButton pRipple type="button" pInitEditableRow icon="pi pi-pencil"
+                    (click)="onRowEditInit(tourDateList)" class="btn btn-warning">Sửa</button>
+                  <button pButton pRipple *ngIf="!editing && tourDateList.status.id == 1" class="btn btn-danger"
                     (click)="checkDeleteable('date',tourDateList.id)" icon="pi pi-times-circle">Xóa</button>
                   <button *ngIf="editing" pButton pRipple type="button" pSaveEditableRow icon="pi pi-check"
                     (click)="onRowEditSave(tourDateList, ri)"
@@ -325,6 +328,51 @@
         </p-table>
         <h5 *ngIf="tourDateList && tourDateList.length == 0" class="text-center">Hiện Chưa Có Ngày Nào Được Thêm Vào
         </h5>
+      </div>
+    </ng-template>
+
+    <!-- Booking Modal -->
+    <ng-template #bookingModal let-modal>
+      <div class="modal-header">
+        <h4 class="modal-title mr-3" id="modal-basic-title">Danh Sách Đơn Đã Book</h4>
+        <button id="closeDateModal" type="button" class="btn-close" aria-label="Close" (click)="modal.close()"></button>
+      </div>
+      <div class="modal-body">
+        <p-table #dt3 [value]="editBookingList" dataKey="id" [rows]="10" [showCurrentPageReport]="true"
+          [paginator]="true"
+          currentPageReportTemplate="Hiển thị từ bảng {first} đến {last} trong tổng {totalRecords} bảng"
+          [globalFilterFields]="['initiateDate']">
+          <ng-template pTemplate="caption">
+            <div class="flex">
+              <form [formGroup]="formFilter">
+                <span class="p-input-icon-left ml-auto">
+                  <input pInputText type="text" (change)="dt3.filterGlobal(getValueSearch(), 'contains')"
+                    formControlName="search" class="form-control box-shadow-none" placeholder="Tìm kiếm">
+                </span>
+              </form>
+            </div>
+          </ng-template>
+          <ng-template pTemplate="header" class="theader">
+            <tr>
+              <th pSortableColumn="createUser">Tên Khách Hàng<p-sortIcon field="createUser"></p-sortIcon></th>
+              <th pSortableColumn="totalPassengers">Số Khách<p-sortIcon field="totalPassengers"></p-sortIcon></th>
+              <th pSortableColumn="totalPrice">Số Tiền<p-sortIcon field="totalPrice"></p-sortIcon></th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" class="tbody" let-editBookingList>
+            <tr>
+              <td>
+                {{editBookingList.createUser.fullname}}
+              </td>
+              <td>
+                {{editBookingList.totalPassengers}}
+              </td>
+              <td>
+                {{editBookingList.totalPrice | number }} VNĐ
+              </td>
+            </tr>
+          </ng-template>
+        </p-table>
       </div>
     </ng-template>
 

@@ -13,7 +13,7 @@ import { ToastModule } from 'primeng/toast';
 import { TourPlanDetail } from 'src/app/models/tour-plan-detail.model';
 import { TourPlan } from 'src/app/models/tour-plan.model';
 import { CurdService } from 'src/app/services/curd.service';
-import { TourPlanDetailService } from 'src/app/services/tour-plan-detail.service';
+import { TourPlanDetailService } from 'src/app/services/tour/tour-plan-detail.service';
 
 @Component({
   selector: 'app-tour-plan-detail',

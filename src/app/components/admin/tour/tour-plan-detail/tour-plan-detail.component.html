@@ -25,13 +25,15 @@
               <label class="form-label">Thời gian bắt đầu:</label>
               <input #startTime="ngModel" name="startTime" class="form-control" type="time" ngModel required>
               <small *ngIf="startTime.touched && startTime.invalid">Thời gian bắt đầu không được bỏ trống</small>
-              <small *ngIf="startTime > endTime">Thời gian bắt đầu phải xảy ra trước thời gian kết thúc</small>
+              <!-- <small *ngIf="startTime.value > endTime.value">Thời gian bắt đầu phải xảy ra trước thời gian kết
+                              thúc</small> -->
             </div>
             <div class="col-6">
               <label class="form-label">Thời gian kết thúc:</label>
               <input #endTime="ngModel" name="endTime" class="form-control" type="time" ngModel required>
               <small *ngIf="endTime.touched && endTime.invalid">Thời gian kết thúc không được bỏ trống</small>
-              <small *ngIf="startTime  < endTime">Thời gian kết thúc phải xảy ra sau thời gian bắt đầu</small>
+              <!-- <small *ngIf="startTime.value  < endTime.value">Thời gian kết thúc phải xảy ra sau thời gian bắt
+                đầu</small> -->
             </div>
           </div>
         </div>

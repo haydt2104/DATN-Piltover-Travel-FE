@@ -1,10 +1,8 @@
 import { CommonModule, NgFor, NgIf } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
 import {
-  AfterViewInit,
   Component,
   ElementRef,
-  OnDestroy,
   OnInit,
   ViewChild
 } from '@angular/core';
@@ -23,18 +21,19 @@ import { CalendarModule } from 'primeng/calendar';
 import { InputTextModule } from 'primeng/inputtext';
 import { TableModule } from 'primeng/table';
 import { ToastModule } from 'primeng/toast';
-import { Subject } from 'rxjs';
+import { Booking } from 'src/app/models/booking.model';
 import { Status } from 'src/app/models/status.model';
 import { TourImage } from 'src/app/models/tour-img.model';
 import { TourPlan } from 'src/app/models/tour-plan.model';
 import { Tour } from 'src/app/models/tour.model';
 import { Transportation } from 'src/app/models/transportation.model';
-import { TourDateService } from 'src/app/services/tour-date.service';
-import { TourPlanService } from 'src/app/services/tour-plan.service';
-import { TourService } from 'src/app/services/tour.service';
+import { BookingService } from 'src/app/services/booking/booking.service';
+import { TourDateService } from 'src/app/services/tour/tour-date.service';
+import { TourPlanService } from 'src/app/services/tour/tour-plan.service';
+import { TourService } from 'src/app/services/tour/tour.service';
+import { TourImageService } from '../../../services/tour/tour-image.service';
 import { TourDate } from './../../../models/tour-date.model';
 import { CurdService } from './../../../services/curd.service';
-import { TourImageService } from './../../../services/tour-image.service';
 
 @Component({
   selector: 'app-tour',
@@ -61,6 +60,7 @@ export class TourComponent implements OnInit {
   @ViewChild('addModal') addModal: ElementRef;
   @ViewChild('editModal') editModal: ElementRef;
   @ViewChild('imageModal') imageModal: ElementRef;
+  @ViewChild('bookingModal') bookingModal: ElementRef;
   @ViewChild('confirmModal') confirmModal: ElementRef;
   @ViewChild('confirmStatusModal') confirmStatusModal: ElementRef;
   @ViewChild('dateModal') dateModal: ElementRef;
@@ -71,6 +71,7 @@ export class TourComponent implements OnInit {
     private tourDateService: TourDateService,
     private tourPlanService: TourPlanService,
     private tourImageService: TourImageService,
+    private bookingService: BookingService,
     private modalService: NgbModal,
     private fireStorage: AngularFireStorage,
     private formBuilder: FormBuilder,
@@ -83,7 +84,9 @@ export class TourComponent implements OnInit {
   public tourImageList: TourImage[];
   public transportList: Transportation[];
   public statusList: Status[];
+  public bookingList: Booking[];
   public editTour: Tour;
+  public editBookingList: Booking[];
   public provinceList: any;
   public districtList: any;
   public wardList: any;
@@ -159,8 +162,17 @@ export class TourComponent implements OnInit {
     } else if (content == 'date') {
       this.editTour = this.tourList.find((tour) => tour.id == id);
       this.getTourDateList(this.editTour.id)
+      this.getBookingList();
       this.modalService
         .open(this.dateModal, {
+          ariaLabelledBy: 'modal-basic-title',
+          size: 'xl',
+        })
+    } else if (content == 'booking') {
+      var editDate = this.tourDateList.find((tour) => tour.id == id);
+      this.editBookingList = this.getBooking(editDate.id)
+      this.modalService
+        .open(this.bookingModal, {
           ariaLabelledBy: 'modal-basic-title',
           size: 'xl',
         })
@@ -410,6 +422,17 @@ export class TourComponent implements OnInit {
     )
   }
 
+  public getBookingList() {
+    this.bookingService.getAllBooking().subscribe(
+      (response) => {
+        this.bookingList = response;
+      },
+      (error: HttpErrorResponse) => {
+        alert(error.message);
+      }
+    )
+  }
+
   renderData = (array, select, code) => {
     let row;
     if (select == 'district') {
@@ -447,6 +470,9 @@ export class TourComponent implements OnInit {
       this.callApiDistrict(
         this.host + 'p/' + $('#province').val() + '?depth=2', null
       );
+      document.querySelector(
+        '#ward'
+      ).innerHTML = `<option value="">Chọn Phường/Xã</option>`;
     } else {
       document.querySelector(
         '#district'
@@ -551,19 +577,22 @@ export class TourComponent implements OnInit {
         console.log(error.message);
       }
     );
-    this.editTour = null
-    this.mainImgUrl = null
   }
 
   checkValid(type: string, data: NgForm) {
+    const adultPrice = $('#adult').val()
+    const childrenPrice = $('#children').val()
+
     if (type == 'add') {
-      if (data.valid && this.mainImgUrl && $('#province').val() && $('#district').val() && $('#ward').val()) {
+      if (data.valid && this.mainImgUrl && $('#province').val()
+        && $('#district').val() && $('#ward').val() && adultPrice >= childrenPrice) {
         return false;
       } else {
         return true
       }
     } else {
-      if (data.valid && this.mainImgUrl && $('#province').val() && $('#district').val() && $('#ward').val()) {
+      if (data.valid && this.mainImgUrl && $('#province').val()
+        && $('#district').val() && $('#ward').val() && adultPrice >= childrenPrice) {
         return false
       } else {
         return true;
@@ -627,13 +656,9 @@ export class TourComponent implements OnInit {
     delete this.clonedProducts[tourDate.id];
   }
 
-  checkDateEditAble(tourDate: TourDate) {
-    var dateDif = Math.round(Math.abs(Number(new Date(tourDate.initiateDate).getTime()) - Number(new Date().getTime())) / (24 * 60 * 60 * 1000))
-    if (dateDif > 7) {
-      return true;
-    } else {
-      return false;
-    }
+  getBooking(tourDateId: number): Booking[] {
+    var list = this.bookingList.filter(booking => booking.tourDate.id === tourDateId)
+    return list;
   }
 
   checkDeleteable(object: string, id: number) {
@@ -669,11 +694,25 @@ export class TourComponent implements OnInit {
       )
     } else if (object == 'date') {
       var planList: TourPlan[]
+      var bookingList: Booking[]
       this.tourPlanService.getTourPlansByDateID(id).subscribe(
         (response) => {
           planList = response;
           if (planList.length == 0) {
-            this.confirmDelete('tour_date', id)
+            this.bookingService.getBookingsByTourDate(id).subscribe(
+              (response) => {
+                bookingList = response
+                if (bookingList.length == 0) {
+                  this.confirmDelete('tour_date', id)
+                } else {
+                  this.messageService.clear();
+                  this.messageService.add({ key: 'error', severity: 'error', summary: 'Thông Báo', detail: 'Bảng này đang được sử dụng tại những bảng khác không thể xóa được' })
+                }
+              },
+              (error: HttpErrorResponse) => {
+                console.log(error.message);
+              }
+            )
           } else {
             this.messageService.clear();
             this.messageService.add({ key: 'error', severity: 'error', summary: 'Thông Báo', detail: 'Bảng này đang được sử dụng tại những bảng khác không thể xóa được' })

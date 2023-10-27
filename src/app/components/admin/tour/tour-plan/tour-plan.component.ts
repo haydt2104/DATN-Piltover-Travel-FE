@@ -13,9 +13,9 @@ import { ToastModule } from 'primeng/toast';
 import { TourDate } from 'src/app/models/tour-date.model';
 import { Transportation } from 'src/app/models/transportation.model';
 import { CurdService } from 'src/app/services/curd.service';
-import { TourPlanService } from 'src/app/services/tour-plan.service';
+import { TourPlanService } from 'src/app/services/tour/tour-plan.service';
 import { TourPlan } from './../../../../models/tour-plan.model';
-import { TourPlanDetailService } from './../../../../services/tour-plan-detail.service';
+import { TourPlanDetailService } from '../../../../services/tour/tour-plan-detail.service';
 
 
 @Component({
