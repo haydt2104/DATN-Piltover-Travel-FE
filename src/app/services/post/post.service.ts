@@ -34,4 +34,8 @@ export class PostService {
   public createPost(postDTO : any): Observable<any>{
     return this.http.post<Post>(this.baseUrl+ 'api/post/create', postDTO);
   }
+
+  public deletePost(id:number): Observable<Post>{
+    return this.http.get<Post>(this.baseUrl + 'api/post/removePost/' + id)
+  }
 }

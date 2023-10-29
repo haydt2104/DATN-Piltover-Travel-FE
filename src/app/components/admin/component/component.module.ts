@@ -30,7 +30,7 @@ import { PostListComponent } from '../post/post-list/post-list.component';
     TableComponent
   ],
   declarations: [
-    PostListComponent
+    // PostListComponent
   ],
 })
 export class ComponentsModule { }

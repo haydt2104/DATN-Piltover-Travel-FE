@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { MessageService } from 'primeng/api';
 import { Post } from 'src/app/models/post.model';
 import { PostService } from 'src/app/services/post/post.service';
 
@@ -10,7 +11,7 @@ import { PostService } from 'src/app/services/post/post.service';
   templateUrl: './post-edit.component.html',
   styleUrls: ['./post-edit.component.scss']
 })
-export class PostEditComponent implements OnInit{
+export class PostEditComponent implements OnInit {
 
   formGroup: FormGroup
   post!: Post
@@ -18,13 +19,14 @@ export class PostEditComponent implements OnInit{
   constructor(
     private formBuilder: FormBuilder,
     private postService: PostService,
+    private messageService: MessageService,
     private route: ActivatedRoute,
     private router: Router,
-  ){}
+  ) { }
 
   ngOnInit(): void {
     this.formGroup = this.formBuilder.group({
-      id:[''],
+      id: [''],
       email: new FormControl(),
       title: new FormControl(),
       description: new FormControl(),
@@ -32,17 +34,17 @@ export class PostEditComponent implements OnInit{
       updateTime: new FormControl()
     })
     const id = this.route.snapshot.paramMap.get('id');
-    if(id !== null){
+    if (id !== null) {
       const idNumber = parseInt(id)
       this.getPost(idNumber);
     }
 
   }
 
-  onSubmit(){
+  onSubmit() {
 
   }
-  public getPost(id: number){
+  public getPost(id: number) {
     console.log("hehe: " + id)
     this.postService.getPostById(id).subscribe((data) => {
       this.formGroup.patchValue(data)
@@ -51,11 +53,17 @@ export class PostEditComponent implements OnInit{
     })
   }
 
-  public savePost(){
-
-    this.postService.updatePostById(this.formGroup.value, this.formGroup.value.id).subscribe(data =>{
-      alert("Cập nhật thành công")
-      this.router.navigateByUrl('/admin/manage/post/list')
+  public savePost() {
+    this.postService.updatePostById(this.formGroup.value, this.formGroup.value.id).subscribe(data => {
+      this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Cập nhật thành công. Sẽ chuyển hướng sau 3 giây!', life: 3000 });
+      // this.router.navigateByUrl('/admin/manage/post/list');
+      setTimeout(() => {
+        this.router.navigateByUrl('/admin/manage/post/list');
+      }, 3000);
     })
+  }
+
+  public back() {
+    window.history.back();
   }
 }

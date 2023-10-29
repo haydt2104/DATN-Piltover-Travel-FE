@@ -20,8 +20,13 @@
           <p-editor formControlName="content" id="content" [style]="{ height: '350px' }"></p-editor>
         </div>
       </div>
-      <button class="btn btn-success" type="submit">Lưu</button>
-      <span class="mb-3">Cập nhập lần cuối lúc {{ post.updateTime | date:"dd-MM-yyyy HH:mm:ss"}} bởi {{ post.updateUser.email }}</span>
+      <button class="btn btn-success float-start" type="submit">Lưu</button>
+      <div *ngIf="post.updateTime == null"></div>
+      <div *ngIf="post.updateTime != null">
+        <span class="mb-3">Cập nhập lần cuối lúc {{ post.updateTime | date:"dd-MM-yyyy HH:mm:ss"}} bởi {{ post.updateUser.email }}</span>
+      </div>
     </form>
+    <button class="btn btn-info float-end" (click)="back()">Quay lại</button>
   </div>
 </div>
+<p-toast></p-toast>

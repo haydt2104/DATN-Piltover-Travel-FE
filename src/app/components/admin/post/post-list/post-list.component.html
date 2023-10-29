@@ -1,42 +1,51 @@
 <div class="card p-3">
   <h3 class="text-center">DANH SÁCH BÀI VIẾT</h3>
-  <button routerLink="/admin/manage/post/create">Thêm bài viết mới</button>
-  <table class="table table-bordered table-light table-striped">
-    <thead>
-      <th>ID</th>
-      <th>Email</th>
-      <th>Tiêu đề</th>
-      <th>Mô tả</th>
-      <th>Nội dung</th>
-      <th>Ngày đăng</th>
-      <th>Trạng thái</th>
-      <th>Số thích</th>
-      <th></th>
-    </thead>
-    <tbody>
-      <tr *ngFor='let item of posts; let i = index'>
-        <td>{{item.id}}</td>
-        <td>{{item.createUser.email}}</td>
-        <td>{{item.title}}</td>
-        <td>{{item.description}}</td>
-        <td>{{item.content}}</td>
-        <td>{{item.createTime | date:"dd/MM/yyyy HH:mm:ss"}}</td>
-        <td>{{item.status == true ? 'Đang mở' : 'Đã đóng'}}</td>
-        <td>{{likeCount[i]}}</td>
-        <td><button class="btn btn-info"
-          (click)="getPostById(item.id)"
-          [routerLink]="['/admin/manage/post/edit', item.id]"><i class="bi bi-pencil-square"></i></button>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-  <nav aria-label="Page navigation example">
-    <ul class="pagination justify-content-end">
-      <li class="page-item"><a class="page-link" href="#"><span aria-hidden="true">&laquo;</span></a></li>
-      <li class="page-item"><a class="page-link" href="#"><span aria-hidden="true">&lt;</span></a></li>
-      <li class="page-item"><a class="page-link" href="#">1</a></li>
-      <li class="page-item"><a class="page-link" href="#"><span aria-hidden="true">&gt;</span></a></li>
-      <li class="page-item"><a class="page-link" href="#"><span aria-hidden="true">&raquo;</span></a></li>
-    </ul>
-  </nav>
+  <button pButton icon="pi pi-plus" class="col-2 btn btn-success mb-3" routerLink="/admin/manage/post/create">Thêm bài
+    viết mới</button>
+  <div class="table-responsive">
+    <p-table #dt1 [value]="posts" sortField="active" [sortOrder]=-1 dataKey="id" [rows]="5"
+      [showCurrentPageReport]="true" [paginator]="true"
+      currentPageReportTemplate="Hiển thị từ bảng {first} đến {last} trong tổng {totalRecords} bảng">
+      <ng-template pTemplate="caption">
+        <div class="flex">
+          <form [formGroup]="formFilter">
+            <span class="p-input-icon-left ml-auto">
+              <input pInputText type="text" (change)="dt1.filterGlobal(getValueSearch(), 'contains')"
+                formControlName="search" class="form-control box-shadow-none" placeholder="Tìm kiếm">
+            </span>
+          </form>
+        </div>
+      </ng-template>
+      <ng-template pTemplate="header" class="theader">
+        <tr>
+          <th pSortableColumn="id" >Id</th>
+          <th pSortableColumn="createUser.email">Email</th>
+          <th pSortableColumn="content">Tiêu đề</th>
+          <th pSortableColumn="createTime">Ngày đăng</th>
+          <th pSortableColumn="content">Số Thích</th>
+          <th></th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" class="tbody" let-item let-rowIndex="rowIndex">
+        <tr>
+          <td>{{ item.id }}</td>
+          <td>{{ item.createUser.email }}</td>
+          <td>{{ item.content }}</td>
+          <td>{{ item.createTime | date:"HH:mm:ss dd/MM/yyyy" }}</td>
+          <!-- <td>{{ likeCount[rowIndex] }}</td> -->
+          <td>{{ this.getLikePost(item.id) }}</td>
+          <td>
+            <button pButton class="btn btn-info m-1" (click)="getPostById(item.id)"
+              [routerLink]="['/admin/manage/post/edit', item.id]"><i class="pi pi-pencil"></i>
+            </button>
+            <button pButton class="btn btn-danger" (click)="removePostById(item.id)"><i class="pi pi-times"></i>
+            </button>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
 </div>
+<!-- Bảng lựa chọn thông báo khi nhấn nút xóa -->
+<p-toast></p-toast>
+<p-confirmDialog [style]="{width: '50vw'}"></p-confirmDialog>
