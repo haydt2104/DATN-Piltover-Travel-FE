@@ -1,42 +1,33 @@
-<main>
-    <!-- Nội dung trang chi tiết tour -->
-    <section class="ftco-section ftco-no-pb">
-      <div class="container">
-          <div class="row">
-              <div class="col-md-12">
-                  <div class="tour-detail-wrap">
-                      <div class="row">
-                          <div class="col-lg-6">
-                            <img src="../assets/images/destination-1.jpg" alt="Tour Image"> <!-- Hình ảnh tour -->
-  
-                          </div>
-                          <div class="col-lg-6">
-                              <div class="tour-detail-text">
-                                  <h2>Nha Trang - 2 ngày 3 đêm</h2>
-                                  <p class="location"><i class="fa fa-map-marker"></i> Điểm khởi hành: TP.Hồ Chí
-                                      Minh</p>
-                                  <p class="location"><i class="fa fa-bus"></i> Phương tiện: Xe ghế ngồi</p>
-                                  <p class="location"><i class="fa fa-calendar"></i> Ngày khởi hành: 07/09/2023</p>
-                                  <p class="price"><i class="fa fa-money"></i> Giá: 5,390,000đ/người</p>
-                                  <p class="tour-description">Mô tả về tour du lịch Nha Trang: Lorem ipsum dolor sit
-                                      amet, consectetur adipiscing elit. Sed non nulla vel massa ultricies hendrerit.
-                                      Suspendisse potenti. Nunc pellentesque quam nec lectus vehicula, ac ultricies
-                                      tellus egestas. Sed nec quam ultrices, laoreet justo nec, vehicula justo.</p>
-                                  <p class="tour-highlights">Điểm nổi bật:</p>
-                                  <ul class="tour-highlights-list">
-                                      <li>Tham quan biển Nha Trang tuyệt đẹp</li>
-                                      <li>Thưởng thức các món ăn đặc sản vùng biển</li>
-                                      <li>Tham quan các điểm tham quan nổi tiếng</li>
-                                  </ul>
-                                  <a href="#" class="btn btn-primary"><i class="fa fa-hand-o-right"></i> Đặt tour</a>
-                                  <a href="#" class="btn btn-primary"><i class="fa fa-comments"></i> Liên hệ tư vấn</a>
-                              </div>
-                          </div>
-                      </div>
-                  </div>
+<main *ngIf="currentTour">
+  <!-- Nội dung trang chi tiết tour -->
+  <section class="ftco-section ftco-no-pb">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="tour-detail-wrap">
+            <div class="row">
+              <div class="col-lg-6">
+                <img [src]="currentTour.image" alt="Tour Image"> <!-- Hình ảnh tour -->
               </div>
+              <div class="col-lg-6">
+                <div class="tour-detail-text">
+                  <h2>{{currentTour.name}}</h2>
+                  <p class="location"><i class="fa fa-map-marker"></i> Điểm đến: {{currentTour.destinationAddress}}</p>
+                  <p class="location"><i class="fa fa-bus"></i> Phương tiện: {{currentTour.transport.name}}</p>
+                  <p class="price"><i class="fa fa-money"></i> Giá vé:
+                    Người lớn {{currentTour.price.adultPrice | number}}đ/người | Trẻ em
+                    {{currentTour.price.childrenPrice | number}}đ/người</p>
+                  <p class="tour-description">Mô tả về tour du lịch: {{currentTour.description}}</p>
+                  <p class="tour-seats">Số lượng tối đa: {{currentTour.availableSpaces}}</p>
+                  <button class="btn btn-primary" (click)="open(dateListModal)">Đặt tour</button>
+                  <!-- <a href="#" class="btn btn-primary"><i class="fa fa-comments"></i> Liên hệ tư vấn</a> -->
+                </div>
+              </div>
+            </div>
           </div>
+        </div>
       </div>
+    </div>
   </section>
   <br>
   <!-- Chương trình tour -->
@@ -56,25 +47,27 @@
             <ul class="list-unstyled">
               <!-- Tour 1 -->
               <a href="">
-              <li class="media">
-                <img src="../assets/images/destination-1.jpg" class="mr-3 align-self-center" alt="Tour 1" style="width: 100px; height: 100px; padding:5px 5px;">
-                <div class="media-body text-center">
-                  <h5 class="mt-0 mb-1">Tour 1</h5>
-                  <p> 5,390,000đ/người</p>
-                </div>
-              </li>
-            </a>
+                <li class="media">
+                  <img src="../assets/images/destination-1.jpg" class="mr-3 align-self-center" alt="Tour 1"
+                    style="width: 100px; height: 100px; padding:5px 5px;">
+                  <div class="media-body text-center">
+                    <h5 class="mt-0 mb-1">Tour 1</h5>
+                    <p> 5,390,000đ/người</p>
+                  </div>
+                </li>
+              </a>
               <br>
               <!-- Tour 2 -->
               <a href="">
-              <li class="media">
-                <img src="../assets/images/destination-2.jpg" class="mr-3 align-self-center" alt="Tour 1" style="width: 100px; height: 100px; padding:5px 5px;">
-                <div class="media-body text-center">
-                  <h5 class="mt-0 mb-1">Tour 2</h5>
-                  <p>6,200,000đ/người</p>
-                </div>
-              </li>
-            </a>
+                <li class="media">
+                  <img src="../assets/images/destination-2.jpg" class="mr-3 align-self-center" alt="Tour 1"
+                    style="width: 100px; height: 100px; padding:5px 5px;">
+                  <div class="media-body text-center">
+                    <h5 class="mt-0 mb-1">Tour 2</h5>
+                    <p>6,200,000đ/người</p>
+                  </div>
+                </li>
+              </a>
               <!-- Thêm các tour khác tại đây -->
             </ul>
           </div>
@@ -87,8 +80,8 @@
     <div class="container">
       <div class="row justify-content-center pb-4">
         <div class="col-md-12 heading-section text-center ftco-animate">
-  
-          <h2 class="mb-4">Book Tour Ngay! Giá Rẻ Trong Ngày</h2>
+
+          <h2 class="mb-4">Những Tour Khác Có Thể Bạn Sẽ Quan Tâm</h2>
         </div>
       </div>
       <div class="row">
@@ -106,12 +99,12 @@
               <p class="location"><span class="fa fa-calendar"></span> Ngày khởi hành: 07/09/2023</p>
               <ul>
                 <li><span class="ml-auto"></span><a href="">>> Xem thêm</a></li>
-  
+
               </ul>
             </div>
           </div>
         </div>
-  
+
         <div class="col-md-3 ftco-animate">
           <div class="project-wrap">
             <a href="#" class="img" style="background-image: url(../assets/images/destination-2.jpg);">
@@ -126,7 +119,7 @@
               <p class="location"><span class="fa fa-calendar"></span> Ngày khởi hành: 07/09/2023</p>
               <ul>
                 <li><span class="ml-auto"></span><a href="">>> Xem thêm</a></li>
-  
+
               </ul>
             </div>
           </div>
@@ -145,12 +138,12 @@
               <p class="location"><span class="fa fa-calendar"></span> Ngày khởi hành: 07/09/2023</p>
               <ul>
                 <li><span class="ml-auto"></span><a href="">>> Xem thêm</a></li>
-  
+
               </ul>
             </div>
           </div>
         </div>
-  
+
         <div class="col-md-3 ftco-animate">
           <div class="project-wrap">
             <a href="#" class="img" style="background-image: url(../assets/images/destination-4.jpg);">
@@ -165,13 +158,92 @@
               <p class="location"><span class="fa fa-calendar"></span> Ngày khởi hành: 07/09/2023</p>
               <ul>
                 <li><span class="ml-auto"></span><a href="">>> Xem thêm</a></li>
-  
+
               </ul>
             </div>
           </div>
         </div>
-        
+
       </div>
     </div>
   </section>
-  </main>
+
+  <ng-template #dateListModal let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title mr-3" id="modal-basic-title">Ngày hoạt động</h4>
+      <button id="closeDateModal" type="button" class="btn-close" aria-label="Close" (click)="modal.close()"></button>
+    </div>
+    <div class="modal-body">
+      <p-table *ngIf="tourDateList && tourDateList.length > 0" #dt [value]="tourDateList" sortField="initiateDate"
+        dataKey="id" [rows]="10" [showCurrentPageReport]="true" [paginator]="true"
+        currentPageReportTemplate="Hiển thị từ bảng {first} đến {last} trong tổng {totalRecords} bảng"
+        [globalFilterFields]="['initiateDate']">
+        <ng-template pTemplate="caption">
+          <div class="flex">
+            <form [formGroup]="formFilter">
+              <span class="p-input-icon-left ml-auto">
+                <input pInputText type="text" (change)="dt.filterGlobal(getValueSearch(), 'contains')"
+                  formControlName="search" class="form-control box-shadow-none" placeholder="Tìm kiếm">
+              </span>
+            </form>
+          </div>
+        </ng-template>
+        <ng-template pTemplate="header" class="theader">
+          <tr>
+            <th style="width: 3rem"></th>
+            <th pSortableColumn="initiateDate" style="width:75%">Thời điểm khởi hành<p-sortIcon
+                field="initiateDate"></p-sortIcon></th>
+            <th></th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" class="tbody" let-tourDateList let-expanded="expanded">
+          <tr>
+            <td>
+              <button type="button" pButton pRipple [pRowToggler]="tourDateList"
+                class="p-button-text p-button-rounded p-button-plain"
+                [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
+            </td>
+            <td class="text-center">
+              {{ tourDateList.initiateDate | date: 'dd-MM-yyyy' }}
+            </td>
+            <td>
+              <button class="btn btn-info">Đặt</button>
+            </td>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="rowexpansion" let-tourDateList>
+          <tr>
+            <td colspan="7">
+              <div class="p-3">
+                <p-table [value]="getPlanByDate(tourDateList.id)" dataKey="id">
+                  <ng-template pTemplate="header">
+          <tr>
+            <th pSortableColumn="startTime">Thời gian khởi hành<p-sortIcon field="startTime"></p-sortIcon></th>
+
+            <th pSortableColumn="startName">Điểm đến<p-sortIcon field="startName"></p-sortIcon>
+            </th>
+            <th pSortableColumn="startAddress">Địa chỉ<p-sortIcon field="startAddress"></p-sortIcon>
+            </th>
+
+            <th pSortableColumn="transport.name">Phương tiện<p-sortIcon field="transport.name"></p-sortIcon></th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-planList>
+          <tr>
+            <td>{{ planList.startTime | date:"HH:mm | dd-MM-yyyy" : "UTC"}}</td>
+            <td>{{ planList.startName }}</td>
+            <td>{{ planList.startAddress }}</td>
+            <td>{{ planList.transport.name}}</td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+    </td>
+    </tr>
+  </ng-template>
+  </p-table>
+  <h5 *ngIf="tourDateList && tourDateList.length == 0" class="text-center">Hiện Chưa Có Ngày Nào Được Thêm Vào
+  </h5>
+  </div>
+  </ng-template>
+</main>

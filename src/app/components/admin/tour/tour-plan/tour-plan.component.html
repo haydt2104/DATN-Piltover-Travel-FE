@@ -18,12 +18,12 @@
         <div class="modal-body">
           <div class="row">
             <div class="col-6">
-              <label class="form-label">Vị trí khởi hành:</label>
+              <label class="form-label">Điểm đến:</label>
               <input #startLocation="ngModel" name="startLocation" class="form-control" type="text" ngModel required>
-              <small *ngIf="startLocation.touched && startLocation.invalid">Vị trí không được bỏ trống</small>
+              <small *ngIf="startLocation.touched && startLocation.invalid">Điểm đến không được bỏ trống</small>
             </div>
             <div class="col-6">
-              <label class="form-label">Địa chỉ khởi hành:</label>
+              <label class="form-label">Địa chỉ:</label>
               <input #startAddress="ngModel" name="startAddress" class="form-control" type="text" ngModel required>
               <small *ngIf="startAddress.touched && startAddress.invalid">Địa chỉ không được bỏ trống</small>
             </div>
@@ -84,7 +84,7 @@
         </ng-template>
         <ng-template pTemplate="header" class="theader">
           <tr>
-            <th pSortableColumn="startName" style="width:15%">Nơi khởi hành<p-sortIcon field="startName"></p-sortIcon>
+            <th pSortableColumn="startName" style="width:15%">Điểm đến<p-sortIcon field="startName"></p-sortIcon>
             </th>
             <th pSortableColumn="startAddress" style="width:16%">Địa chỉ<p-sortIcon field="startAddress"></p-sortIcon>
             </th>

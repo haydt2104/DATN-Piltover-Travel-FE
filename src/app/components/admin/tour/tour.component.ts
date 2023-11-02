@@ -197,7 +197,7 @@ export class TourComponent implements OnInit {
         this.mainImgUrl = e.target.result
       }
     } else {
-      console.log("Tour chỉ nhận ảnh từ 5MB trở xuống")
+      alert("Tour chỉ nhận ảnh từ 5MB trở xuống")
     }
   }
 
@@ -455,16 +455,19 @@ export class TourComponent implements OnInit {
       this.renderData(response.data, 'province', code);
     });
   };
+
   callApiDistrict = (api, code) => {
     return axios.get(api).then((response) => {
       this.renderData(response.data.districts, 'district', code);
     });
   };
+
   callApiWard = (api, code) => {
     return axios.get(api).then((response) => {
       this.renderData(response.data.wards, 'ward', code);
     });
   };
+
   provinceChange() {
     if ($('#province').val()) {
       this.callApiDistrict(
@@ -482,6 +485,7 @@ export class TourComponent implements OnInit {
       ).innerHTML = `<option value="">Chọn Phường/Xã</option>`;
     }
   }
+
   districtChange() {
     if ($('#district').val()) {
       this.callApiWard(this.host + 'd/' + $('#district').val() + '?depth=2', null);
@@ -491,7 +495,6 @@ export class TourComponent implements OnInit {
       ).innerHTML = `<option value="">Chọn Phường/Xã</option>`;
     }
   }
-
 
   async submitAdd(data) {
     var province = $('#province option:selected').text();
@@ -511,8 +514,8 @@ export class TourComponent implements OnInit {
       createTime: new Date(),
       price: {
         id: null,
-        adultPrice: data.value.adult,
-        childrenPrice: data.value.children
+        adultPrice: data.value.adult * 1000,
+        childrenPrice: data.value.children * 1000
       },
       transport: transport
     };
@@ -552,8 +555,8 @@ export class TourComponent implements OnInit {
       createTime: this.editTour.createTime,
       price: {
         id: this.editTour.price.id,
-        adultPrice: data.value.adult,
-        childrenPrice: data.value.children
+        adultPrice: data.value.adult*1000,
+        childrenPrice: data.value.children*1000
       },
       transport: transport
     };
