@@ -12,6 +12,8 @@ import { Tour } from 'src/app/models/tour.model';
 import { CurdService } from 'src/app/services/curd.service';
 import { TourDateService } from 'src/app/services/tour/tour-date.service';
 import { TourService } from 'src/app/services/tour/tour.service';
+import { BookingService } from 'src/app/services/booking/booking.service';
+import { Booking } from 'src/app/models/booking.model';
 
 @Component({
   selector: 'app-destination-detail',
@@ -29,15 +31,17 @@ import { TourService } from 'src/app/services/tour/tour.service';
 export class DestinationDetailComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
+    private curdService: CurdService,
     private tourService: TourService,
     private tourDateService: TourDateService,
+    private bookingService: BookingService,
     private modalService: NgbModal,
-    private formBuilder: FormBuilder,
-    private curdService: CurdService
+    private formBuilder: FormBuilder
   ) { }
 
   currentTour: Tour
   tourDateList: TourDate[]
+  bookingList: Booking[]
   planList: TourPlan[]
 
   ngOnInit(): void {
@@ -46,6 +50,7 @@ export class DestinationDetailComponent implements OnInit {
       this.getTour(id);
       this.getDateList(id);
       this.getTourPlans();
+      this.getBookingList();
     });
   }
 
@@ -58,13 +63,13 @@ export class DestinationDetailComponent implements OnInit {
     search: new FormControl('')
   })
 
-  open(content) {
+  public open(content) {
     this.modalService.open(content, {
       ariaLabelledBy: 'modal-basic-title', size: 'xl',
     })
   }
 
-  getTour(id: number) {
+  public getTour(id: number) {
     this.tourService.getTourById(id).subscribe(
       (response) => {
         this.currentTour = response
@@ -75,10 +80,21 @@ export class DestinationDetailComponent implements OnInit {
     )
   }
 
-  getDateList(id: number) {
+  public getDateList(id: number) {
     this.tourDateService.getTourDateByTourId(id).subscribe(
       (response) => {
         this.tourDateList = response.filter(t => t.status.id == 2 && Math.round(Number(new Date(t.initiateDate).getTime()) - Number(new Date().getTime())) / (24 * 60 * 60 * 1000) > 7)
+      },
+      (error) => {
+        console.log(error.message)
+      }
+    )
+  }
+
+  public getBookingList() {
+    this.bookingService.getAllBooking().subscribe(
+      (response) => {
+        this.bookingList = response
       },
       (error) => {
         console.log(error.message)
@@ -97,7 +113,12 @@ export class DestinationDetailComponent implements OnInit {
     );
   }
 
-  public getPlanByDate(id: number) {
-    return this.planList.filter(plan => plan.tourDate.id === id);
+  public getPlanByDate(tourDateId: number) {
+    return this.planList.filter(plan => plan.tourDate.id === tourDateId);
+  }
+
+  public getBookedCustomerNumber(tourDateId: number): number {
+    console.log(tourDateId);
+    return this.bookingList.filter(booking => booking.tourDate.id === tourDateId).reduce((sum, booking) => sum + booking.totalPassengers, 0)
   }
 }

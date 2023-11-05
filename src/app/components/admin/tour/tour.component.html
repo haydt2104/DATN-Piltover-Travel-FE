@@ -23,16 +23,19 @@
           </div>
           <label class="form-label">Điểm đến:</label>
           <div class="row">
-            <select #province="ngModel" class="form-control col-md-4" name="province" (change)="provinceChange()"
+            <select #province="ngModel" class="form-control col-md-3" name="province" (change)="provinceChange()"
               id="province" ngModel required>
               <option value="">Chọn Tỉnh/Thành Phố</option>
             </select>
-            <select #district="ngModel" class="form-control col-md-4" name="district" (change)="districtChange()"
+            <select #district="ngModel" class="form-control col-md-3" name="district" (change)="districtChange()"
               id="district" ngModel required>
               <option value="">Chọn Quận/Huyện</option>
             </select>
-            <select #ward="ngModel" class="form-control col-md-4" name="ward" id="ward" ngModel required>
+            <select #ward="ngModel" class="form-control col-md-3" name="ward" id="ward" ngModel required>
               <option value="">Chọn Phường/Xã</option>
+            </select>
+            <select #hotel="ngModel" class="form-control col-md-3" name="hotel" id="hotel" ngModel required>
+              <option value="">Chọn Khách Sạn</option>
             </select>
           </div>
           <label class="form-label">Đường:</label>
@@ -244,7 +247,8 @@
         <h4 class="modal-title mr-3" id="modal-basic-title">Ngày hoạt động</h4>
         <button pButton icon="pi pi-plus" class="btn btn-success" (click)="addDate()" *ngIf="!addDateStatus">Thêm
           ngày</button>
-        <input id="addDate" pInputText type="date" *ngIf="addDateStatus" min="{{minDate | date:'yyyy-MM-dd'}}">
+        <input id="addDate" pInputText type="date" [value]="minDate | date:'yyyy-MM-dd'" *ngIf="addDateStatus"
+          min="{{minDate | date:'yyyy-MM-dd'}}">
         <button pButton class="p-button-success" icon="pi pi-check" (click)="saveDate()"
           *ngIf="addDateStatus">Thêm</button>
         <button pButton class="p-button-danger" icon="pi pi-times" (click)="cancelAddDate()"

@@ -34,6 +34,8 @@ import { TourService } from 'src/app/services/tour/tour.service';
 import { TourImageService } from '../../../services/tour/tour-image.service';
 import { TourDate } from './../../../models/tour-date.model';
 import { CurdService } from './../../../services/curd.service';
+import { HotelService } from 'src/app/services/hotel/hotel.service';
+import { Hotel } from 'src/app/models/hotel.model';
 
 @Component({
   selector: 'app-tour',
@@ -72,6 +74,7 @@ export class TourComponent implements OnInit {
     private tourPlanService: TourPlanService,
     private tourImageService: TourImageService,
     private bookingService: BookingService,
+    private hotelService: HotelService,
     private modalService: NgbModal,
     private fireStorage: AngularFireStorage,
     private formBuilder: FormBuilder,
@@ -87,6 +90,7 @@ export class TourComponent implements OnInit {
   public bookingList: Booking[];
   public editTour: Tour;
   public editBookingList: Booking[];
+  public hotelList: Hotel[]
   public provinceList: any;
   public districtList: any;
   public wardList: any;
@@ -113,6 +117,7 @@ export class TourComponent implements OnInit {
     this.getProvinceData();
     this.getDistrictData();
     this.getWardData();
+    this.getHotelList();
   }
 
   open(content: string, id: number) {
@@ -371,19 +376,7 @@ export class TourComponent implements OnInit {
     this.tourDateService.getTourDateByTourId(id).subscribe(
       (response: TourDate[]) => {
         this.tourDateList = response;
-        for (var i = 0; i < this.tourDateList.length; i++) {
-          var dateDif = Math.round(Number(new Date(this.tourDateList[i].initiateDate).getTime()) - Number(new Date().getTime())) / (24 * 60 * 60 * 1000)
-          if (dateDif < 7 && this.tourDateList[i].status.id != 2) {
-            this.tourDateList[i].status = this.statusList.find(status => status.id == 3);
-            this.curdService.put('tour_date', this.tourDateList[i]).subscribe(
-              (response: TourDate) => {
-              },
-              (error: HttpErrorResponse) => {
-                console.log(error.message);
-              }
-            );
-          }
-        }
+        setInterval(() => this.autoUpdateTourDateStatus(), 1000)
       },
       (error: HttpErrorResponse) => {
         console.log(error.message);
@@ -433,11 +426,41 @@ export class TourComponent implements OnInit {
     )
   }
 
+  public getHotelList() {
+    this.hotelService.getAllHotel().subscribe(
+      (response) => {
+        this.hotelList = response;
+        console.log(this.hotelList);
+      },
+      (error: HttpErrorResponse) => {
+        alert(error.message);
+      }
+    )
+  }
+
+  public autoUpdateTourDateStatus() {
+    for (var i = 0; i < this.tourDateList.length; i++) {
+      var dateDif = Math.round(Number(new Date(this.tourDateList[i].initiateDate).getTime()) - Number(new Date().getTime())) / (24 * 60 * 60 * 1000)
+      if (dateDif < 7 && this.tourDateList[i].status.id != 2) {
+        this.tourDateList[i].status = this.statusList.find(status => status.id == 3);
+        this.curdService.put('tour_date', this.tourDateList[i]).subscribe(
+          (response: TourDate) => {
+          },
+          (error: HttpErrorResponse) => {
+            console.log(error.message);
+          }
+        );
+      }
+    }
+  }
+
   renderData = (array, select, code) => {
     let row;
-    if (select == 'district') {
+    if (select == 'province') {
+      row = ' <option disable value="">Chọn Tỉnh/Thành Phố</option>';
+    } else if (select == 'district') {
       row = ' <option disable value="">Chọn Quận/Huyện</option>';
-    } else {
+    } else if (select == 'ward') {
       row = ' <option disable value="">Chọn Phường/Xã</option>';
     }
     array.forEach((element) => {
@@ -493,6 +516,13 @@ export class TourComponent implements OnInit {
       document.querySelector(
         '#ward'
       ).innerHTML = `<option value="">Chọn Phường/Xã</option>`;
+    }
+  }
+
+  wardChange() {
+    let row = ' <option disable value="">Chọn Khách Sạn</option>';
+    if ($('#ward').val()) {
+
     }
   }
 
@@ -555,8 +585,8 @@ export class TourComponent implements OnInit {
       createTime: this.editTour.createTime,
       price: {
         id: this.editTour.price.id,
-        adultPrice: data.value.adult*1000,
-        childrenPrice: data.value.children*1000
+        adultPrice: data.value.adult * 1000,
+        childrenPrice: data.value.children * 1000
       },
       transport: transport
     };

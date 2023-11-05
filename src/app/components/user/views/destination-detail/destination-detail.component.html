@@ -174,8 +174,8 @@
       <button id="closeDateModal" type="button" class="btn-close" aria-label="Close" (click)="modal.close()"></button>
     </div>
     <div class="modal-body">
-      <p-table *ngIf="tourDateList && tourDateList.length > 0" #dt [value]="tourDateList" sortField="initiateDate"
-        dataKey="id" [rows]="10" [showCurrentPageReport]="true" [paginator]="true"
+      <p-table class="table table-striped" *ngIf="tourDateList && tourDateList.length > 0" #dt [value]="tourDateList"
+        sortField="initiateDate" dataKey="id" [rows]="10" [showCurrentPageReport]="true" [paginator]="true"
         currentPageReportTemplate="Hiển thị từ bảng {first} đến {last} trong tổng {totalRecords} bảng"
         [globalFilterFields]="['initiateDate']">
         <ng-template pTemplate="caption">
@@ -189,10 +189,14 @@
           </div>
         </ng-template>
         <ng-template pTemplate="header" class="theader">
-          <tr>
+          <tr class="text-center">
             <th style="width: 3rem"></th>
-            <th pSortableColumn="initiateDate" style="width:75%">Thời điểm khởi hành<p-sortIcon
+            <th pSortableColumn="initiateDate" style="width:30%">Thời điểm khởi hành<p-sortIcon
                 field="initiateDate"></p-sortIcon></th>
+            <th pSortableColumn="passengerNumber" style="width:30%">Số Khách Đã Đặt<p-sortIcon
+                field="passengerNumber"></p-sortIcon></th>
+            <th pSortableColumn="emptySpace" style="width:30%">Số Lượng Còn Trống<p-sortIcon
+                field="emptySpace"></p-sortIcon></th>
             <th></th>
           </tr>
         </ng-template>
@@ -206,6 +210,12 @@
             <td class="text-center">
               {{ tourDateList.initiateDate | date: 'dd-MM-yyyy' }}
             </td>
+            <td class="text-center">
+              {{ getBookedCustomerNumber(tourDateList.id)}}
+            </td>
+            <td class="text-center">
+              {{ currentTour.availableSpaces - getBookedCustomerNumber(tourDateList.id)}}
+            </td>
             <td>
               <button class="btn btn-info">Đặt</button>
             </td>
@@ -215,16 +225,15 @@
           <tr>
             <td colspan="7">
               <div class="p-3">
-                <p-table [value]="getPlanByDate(tourDateList.id)" dataKey="id">
+                <p-table  sortField="startTime" [value]="getPlanByDate(tourDateList.id)" dataKey="id">
                   <ng-template pTemplate="header">
           <tr>
-            <th pSortableColumn="startTime">Thời gian khởi hành<p-sortIcon field="startTime"></p-sortIcon></th>
+            <th pSortableColumn="startTime" style="width: 20%;">Thời gian khởi hành<p-sortIcon field="startTime"></p-sortIcon></th>
 
-            <th pSortableColumn="startName">Điểm đến<p-sortIcon field="startName"></p-sortIcon>
+            <th pSortableColumn="startName" style="width: 30%;">Điểm đến<p-sortIcon field="startName"></p-sortIcon>
             </th>
-            <th pSortableColumn="startAddress">Địa chỉ<p-sortIcon field="startAddress"></p-sortIcon>
+            <th pSortableColumn="startAddress" style="width: 30%;">Địa chỉ<p-sortIcon field="startAddress"></p-sortIcon>
             </th>
-
             <th pSortableColumn="transport.name">Phương tiện<p-sortIcon field="transport.name"></p-sortIcon></th>
           </tr>
         </ng-template>
