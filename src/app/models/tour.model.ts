@@ -1,3 +1,4 @@
+import { Hotel } from './hotel.model';
 import { Price } from './price.model';
 import { Transportation } from './transportation.model';
 
@@ -11,5 +12,6 @@ export interface Tour {
   createTime: Date;
   active: boolean;
   price: Price;
-  transport: Transportation
+  transport: Transportation;
+  hotel: Hotel;
 }

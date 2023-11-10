@@ -2,6 +2,9 @@
 <p-toast key="error"></p-toast>
 <p-toast key="warn"></p-toast>
 <p-toast key="info"></p-toast>
+<div class="progress-spinner" *ngIf="loading$ | async">
+  <p-progressSpinner></p-progressSpinner>
+</div>
 <div class="card">
   <div class="card-body">
     <h4 class="card-title">Danh sách Tour</h4>
@@ -31,7 +34,8 @@
               id="district" ngModel required>
               <option value="">Chọn Quận/Huyện</option>
             </select>
-            <select #ward="ngModel" class="form-control col-md-3" name="ward" id="ward" ngModel required>
+            <select #ward="ngModel" class="form-control col-md-3" name="ward" id="ward" (change)="wardChange()" ngModel
+              required>
               <option value="">Chọn Phường/Xã</option>
             </select>
             <select #hotel="ngModel" class="form-control col-md-3" name="hotel" id="hotel" ngModel required>
@@ -104,7 +108,7 @@
           </div>
         </div>
         <div class="modal-footer">
-          <button type="submit" class="btn btn-primary" (click)="modal.close('Save click')"
+          <button type="submit" class="btn btn-primary" (click)="modal.close()"
             [disabled]="checkValid('add',addForm)">Thêm</button>
         </div>
       </form>
@@ -126,14 +130,20 @@
           </div>
           <label class="form-label">Điểm đến:</label>
           <div class="row">
-            <select class="form-control col-md-4" name="province" (change)="provinceChange()" id="province" required>
+            <select #province class="form-control col-md-3" name="province" (change)="provinceChange()" id="province"
+              required>
               <option value="">Chọn Tỉnh/Thành Phố</option>
             </select>
-            <select class="form-control col-md-4" name="district" (change)="districtChange()" id="district" required>
+            <select #district class="form-control col-md-3" name="district" (change)="districtChange()" id="district"
+              required>
               <option value="">Chọn Quận/Huyện</option>
             </select>
-            <select class="form-control col-md-4" name="ward" id="ward" required>
+            <select #ward class="form-control col-md-3" name="ward" (change)="wardChange()" id="ward" required>
               <option value="">Chọn Phường/Xã</option>
+            </select>
+            <select #hotel class="form-control col-md-3" name="hotel" id="hotel" ngModel="{{editTour.hotel.id}}"
+              required>
+              <option value="">Chọn Khách Sạn</option>
             </select>
           </div>
           <label class="form-label">Đường:</label>
@@ -204,7 +214,7 @@
           </div>
         </div>
         <div class="modal-footer">
-          <button type="submit" class="btn btn-primary" (click)="modal.close('Save click')"
+          <button type="submit" class="btn btn-primary" (click)="modal.close()"
             [disabled]="checkValid('edit',editForm)">Thay đổi</button>
         </div>
       </form>

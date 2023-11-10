@@ -1,13 +1,11 @@
 import { Account } from './account.model';
 import { Discount } from './discount.model';
-import { Hotel } from './hotel.model';
 import { TourDate } from './tour-date.model';
 
 export interface Booking {
   id: number;
   createUser: Account;
   tourDate: TourDate;
-  hotel: Hotel;
   discount: Discount;
   totalPrice: number;
   totalPassengers: number;

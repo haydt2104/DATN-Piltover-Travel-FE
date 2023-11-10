@@ -36,6 +36,8 @@ import { TourDate } from './../../../models/tour-date.model';
 import { CurdService } from './../../../services/curd.service';
 import { HotelService } from 'src/app/services/hotel/hotel.service';
 import { Hotel } from 'src/app/models/hotel.model';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { LoadingService } from 'src/app/services/loading.service';
 
 @Component({
   selector: 'app-tour',
@@ -54,7 +56,8 @@ import { Hotel } from 'src/app/models/hotel.model';
     CommonModule,
     InputTextModule,
     CalendarModule,
-    ToastModule
+    ToastModule,
+    ProgressSpinnerModule
   ],
   providers: [MessageService]
 })
@@ -79,36 +82,29 @@ export class TourComponent implements OnInit {
     private fireStorage: AngularFireStorage,
     private formBuilder: FormBuilder,
     private messageService: MessageService,
+    private loadingService: LoadingService
   ) { }
 
-  dtElement: DataTableDirective;
-  public tourList: Tour[];
-  public tourDateList: TourDate[];
-  public tourImageList: TourImage[];
-  public transportList: Transportation[];
-  public statusList: Status[];
-  public bookingList: Booking[];
+  public tourList: Tour[] = [];
+  public tourDateList: TourDate[] = [];
+  public tourImageList: TourImage[] = [];
+  public transportList: Transportation[] = [];
+  public statusList: Status[] = [];
+  public bookingList: Booking[] = [];
   public editTour: Tour;
-  public editBookingList: Booking[];
-  public hotelList: Hotel[]
+  public editBookingList: Booking[] = [];
+  public hotelList: Hotel[] = []
   public provinceList: any;
   public districtList: any;
   public wardList: any;
+  public loading$ = this.loadingService.loading$
 
   host = 'https://provinces.open-api.vn/api/';
-  closeResult = '';
-
   file = null
   mainImgUrl = null
   minDate = new Date().setDate(new Date().getDate() + 8);
-
-  provinceValue: number;
-  districtValue: number;
-  wardValue: number;
   roadValue: string;
   tourId: number
-
-
 
   ngOnInit(): void {
     this.getTourList();
@@ -118,6 +114,7 @@ export class TourComponent implements OnInit {
     this.getDistrictData();
     this.getWardData();
     this.getHotelList();
+    this.loadingService.hide()
   }
 
   open(content: string, id: number) {
@@ -140,21 +137,22 @@ export class TourComponent implements OnInit {
       const wardAddress = this.editTour.destinationAddress
         .split(',')
       [this.editTour.destinationAddress.split(',').length - 3].trim();
-      this.provinceValue = this.provinceList.find((province) => province.name == provinceAddress).code
-      this.districtValue = this.districtList.find((district) => district.name == districtAddress).code
-      this.wardValue = this.wardList.find((ward) => ward.name == wardAddress).code
+      var provinceValue = this.provinceList.find((province) => province.name == provinceAddress).code
+      var districtValue = this.districtList.find((district) => district.name == districtAddress).code
+      var wardValue = this.wardList.find((ward) => ward.name == wardAddress).code
       this.roadValue = this.editTour.destinationAddress
         .substring(0, this.editTour.destinationAddress.indexOf(wardAddress) - 2)
         .trim();
-      this.callAPIProvince('https://provinces.open-api.vn/api/?depth=1', this.provinceValue);
-      this.callApiDistrict('https://provinces.open-api.vn/api/p/' + this.provinceValue + '?depth=2', this.districtValue);
-      this.callApiWard('https://provinces.open-api.vn/api/d/' + this.districtValue + '?depth=2', this.wardValue);
+      this.callAPIProvince('https://provinces.open-api.vn/api/?depth=1', provinceValue);
+      this.callApiDistrict('https://provinces.open-api.vn/api/p/' + provinceValue + '?depth=2', districtValue);
+      this.callApiWard('https://provinces.open-api.vn/api/d/' + districtValue + '?depth=2', wardValue);
       this.mainImgUrl = this.editTour.image
       this.modalService
         .open(this.editModal, {
           ariaLabelledBy: 'modal-basic-title',
           size: 'xl',
         })
+      this.callHotel(provinceAddress, districtAddress, wardAddress, this.editTour.hotel.id)
     } else if (content == 'image') {
       this.editTour = this.tourList.find((tour) => tour.id == id);
       this.getTourImageList(id);
@@ -211,6 +209,7 @@ export class TourComponent implements OnInit {
   }
 
   async saveNewImage(event: any) {
+    this.loadingService.show()
     const file = event.target.files[0]
     if (file.type.match(/image\/*/) && file.size <= 6000000) {
       const randomNumberString = Array.from({ length: 15 }, () => Math.floor(Math.random() * 10)).join('');
@@ -225,6 +224,7 @@ export class TourComponent implements OnInit {
       this.curdService.post('tour_image', tourImage).subscribe(
         (response: TourImage) => {
           this.getTourImageList(this.editTour.id);
+          this.loadingService.hide()
           this.messageService.clear();
           this.messageService.add({ key: 'success', severity: 'success', summary: 'Thông Báo', detail: 'Thêm ảnh thành công' })
           this.editTour = null
@@ -244,6 +244,7 @@ export class TourComponent implements OnInit {
   }
 
   async changeImage(event: any, id: number) {
+    this.loadingService.show()
     const file = event.target.files[0]
     if (file.type.match(/image\/*/) && file.size <= 6000000) {
       const randomNumberString = Array.from({ length: 15 }, () => Math.floor(Math.random() * 10)).join('');
@@ -256,6 +257,7 @@ export class TourComponent implements OnInit {
       this.curdService.put('tour_image', editImageTour).subscribe(
         (response: TourImage) => {
           this.getTourImageList(this.editTour.id);
+          this.loadingService.hide()
           this.messageService.clear();
           this.messageService.add({ key: 'info', severity: 'info', summary: 'Thông Báo', detail: 'Cập nhập ảnh thành công' })
           this.editTour = null
@@ -430,7 +432,6 @@ export class TourComponent implements OnInit {
     this.hotelService.getAllHotel().subscribe(
       (response) => {
         this.hotelList = response;
-        console.log(this.hotelList);
       },
       (error: HttpErrorResponse) => {
         alert(error.message);
@@ -444,8 +445,6 @@ export class TourComponent implements OnInit {
       if (dateDif < 7 && this.tourDateList[i].status.id != 2) {
         this.tourDateList[i].status = this.statusList.find(status => status.id == 3);
         this.curdService.put('tour_date', this.tourDateList[i]).subscribe(
-          (response: TourDate) => {
-          },
           (error: HttpErrorResponse) => {
             console.log(error.message);
           }
@@ -496,17 +495,17 @@ export class TourComponent implements OnInit {
       this.callApiDistrict(
         this.host + 'p/' + $('#province').val() + '?depth=2', null
       );
-      document.querySelector(
-        '#ward'
-      ).innerHTML = `<option value="">Chọn Phường/Xã</option>`;
     } else {
       document.querySelector(
         '#district'
       ).innerHTML = `<option value="">Chọn Quận/Huyện</option>`;
-      document.querySelector(
-        '#ward'
-      ).innerHTML = `<option value="">Chọn Phường/Xã</option>`;
     }
+    document.querySelector(
+      '#ward'
+    ).innerHTML = `<option value="">Chọn Phường/Xã</option>`;
+    document.querySelector(
+      '#hotel'
+    ).innerHTML = `<option value="">Chọn Khách Sạn</option>`;
   }
 
   districtChange() {
@@ -517,22 +516,43 @@ export class TourComponent implements OnInit {
         '#ward'
       ).innerHTML = `<option value="">Chọn Phường/Xã</option>`;
     }
+    document.querySelector(
+      '#hotel'
+    ).innerHTML = `<option value="">Chọn Khách Sạn</option>`;
   }
 
   wardChange() {
-    let row = ' <option disable value="">Chọn Khách Sạn</option>';
-    if ($('#ward').val()) {
+    var provinceName = $('#province option:selected').text()
+    var districtName = $('#district option:selected').text()
+    var wardName = $('#ward option:selected').text()
+    this.callHotel(provinceName, districtName, wardName, null)
+  }
 
-    }
+  callHotel(provinceName, districtName, wardName, code) {
+    let row = ' <option disable value="">Chọn Khách Sạn</option>';
+    this.hotelList.filter(hotel =>
+      hotel.address.split(',')[hotel.address.split(',').length - 1].trim() == provinceName
+      && hotel.address.split(',')[hotel.address.split(',').length - 2].trim() == districtName
+      && hotel.address.split(',')[hotel.address.split(',').length - 3].trim() == wardName
+    ).forEach((item) => {
+      if (item.id == code) {
+        row += `<option value="${item.id}" selected>${item.name}</option>`;
+      } else {
+        row += `<option value="${item.id}">${item.name}</option>`;
+      }
+    })
+    document.querySelector('#hotel').innerHTML = row;
   }
 
   async submitAdd(data) {
+    this.loadingService.show()
     var province = $('#province option:selected').text();
     var district = $('#district option:selected').text();
     var ward = $('#ward option:selected').text();
     var road = data.value.road;
     var address = road + ', ' + ward + ', ' + district + ', ' + province;
     var transport: Transportation = this.transportList.find(transport => transport.id == data.value.transport)
+    var hotel: Hotel = this.hotelList.find(hotel => hotel.id == data.value.hotel)
     var tour: Tour = {
       id: null,
       name: data.value.name,
@@ -547,7 +567,8 @@ export class TourComponent implements OnInit {
         adultPrice: data.value.adult * 1000,
         childrenPrice: data.value.children * 1000
       },
-      transport: transport
+      transport: transport,
+      hotel: hotel
     };
     const randomNumberString = Array.from({ length: 15 }, () => Math.floor(Math.random() * 10)).join('');
     const path = `tour-img/${randomNumberString}`
@@ -557,6 +578,7 @@ export class TourComponent implements OnInit {
     this.curdService.post('tour', tour).subscribe(
       (response: Tour) => {
         this.getTourList();
+        this.loadingService.hide()
         this.messageService.clear();
         this.messageService.add({ key: 'success', severity: 'success', summary: 'Thông Báo', detail: 'Thêm thành công' })
       },
@@ -568,7 +590,9 @@ export class TourComponent implements OnInit {
   }
 
   async submitEdit(data) {
+    this.loadingService.show()
     var transport: Transportation = this.transportList.find(transport => transport.id == data.value.transport)
+    var hotel: Hotel = this.hotelList.find(hotel => hotel.id == data.value.hotel)
     var province = $('#province option:selected').text();
     var district = $('#district option:selected').text();
     var ward = $('#ward option:selected').text();
@@ -588,7 +612,8 @@ export class TourComponent implements OnInit {
         adultPrice: data.value.adult * 1000,
         childrenPrice: data.value.children * 1000
       },
-      transport: transport
+      transport: transport,
+      hotel: hotel
     };
     if (this.mainImgUrl != this.editTour.image) {
       this.fireStorage.storage.refFromURL(this.editTour.image).delete()
@@ -603,6 +628,7 @@ export class TourComponent implements OnInit {
     this.curdService.put('tour', tour).subscribe(
       (response: Tour) => {
         this.getTourList();
+        this.loadingService.hide()
         this.messageService.clear();
         this.messageService.add({ key: 'info', severity: 'info', summary: 'Thông Báo', detail: 'Cập nhập thành công' })
       },
