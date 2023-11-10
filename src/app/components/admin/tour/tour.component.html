@@ -2,7 +2,7 @@
 <p-toast key="error"></p-toast>
 <p-toast key="warn"></p-toast>
 <p-toast key="info"></p-toast>
-<div class="progress-spinner" *ngIf="loading$ | async">
+<div class="progress-spinner" *ngIf="loadingOverLay$ | async">
   <p-progressSpinner></p-progressSpinner>
 </div>
 <div class="card">
@@ -229,6 +229,7 @@
         <button type="button" class="btn-close" aria-label="Close" (click)="modal.close()"></button>
       </div>
       <div class="modal-body">
+        <p-progressBar mode="indeterminate" [style]="{ height: '6px' }" *ngIf="loadingButton$ | async"></p-progressBar>
         <table class="table table-hover align-middle text-nowrap table-bordered">
           <tbody>
             <tr *ngFor="let img of tourImageList">

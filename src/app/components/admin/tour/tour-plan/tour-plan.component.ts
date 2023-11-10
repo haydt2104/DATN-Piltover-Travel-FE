@@ -42,9 +42,9 @@ export class TourPlanComponent implements OnInit {
   @ViewChild('addModal') addModal: ElementRef;
   @ViewChild('confirmModal') confirmModal: ElementRef;
 
-  currentTourDate: TourDate;
-  planList: TourPlan[];
-  transportList: Transportation[];
+  currentTourDate: TourDate = null;
+  planList: TourPlan[] = [];
+  transportList: Transportation[] = [];
   minDate: Date
 
   constructor(

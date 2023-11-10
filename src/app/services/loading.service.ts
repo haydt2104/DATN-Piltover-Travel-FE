@@ -4,14 +4,22 @@ import { Injectable } from '@angular/core';
     providedIn: 'root'
 })
 export class LoadingService {
-    private _loading = new BehaviorSubject<boolean>(false)
-    public readonly loading$ = this._loading.asObservable();
+    private _loadingOverLay = new BehaviorSubject<boolean>(false)
+    private _loadingButton = new BehaviorSubject<boolean>(false)
+    public readonly loadingOverLay$ = this._loadingOverLay.asObservable();
+    public readonly loadingButton$ = this._loadingButton.asObservable();
     constructor() { }
-    show() {
-        this._loading.next(true);
+    showOverLay() {
+        this._loadingOverLay.next(true);
     }
-    hide() {
-        console.log('abc')
-        this._loading.next(false);
+    showButton() {
+        this._loadingButton.next(true);
+
+    }
+    hideOverLay() {
+        this._loadingOverLay.next(false);
+    }
+    hideButton() {
+        this._loadingButton.next(false);
     }
 }

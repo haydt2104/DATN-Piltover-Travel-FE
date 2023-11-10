@@ -38,8 +38,8 @@ export class TourPlanDetailComponent implements OnInit {
   @ViewChild('addModal') addModal: ElementRef;
   @ViewChild('confirmModal') confirmModal: ElementRef;
 
-  currentTourPlan: TourPlan;
-  planDetailList: TourPlanDetail[];
+  currentTourPlan: TourPlan = null;
+  planDetailList: TourPlanDetail[] = [];
   constructor(
     private route: ActivatedRoute,
     private tourPlanDetailService: TourPlanDetailService,

@@ -3,8 +3,8 @@
 
 <div class="card">
   <div class="card-body">
-    <h4 class="card-title">Danh sách Kế Hoạch [<i *ngIf="currentTourDate">{{currentTourDate.initiateDate | date:
-        "dd/MM/yyyy"}}</i>]</h4>
+    <h4 class="card-title">Danh sách Kế Hoạch [ <i *ngIf="currentTourDate">{{currentTourDate.initiateDate | date:
+        "dd/MM/yyyy"}}</i> ]</h4>
     <button *ngIf="currentTourDate && currentTourDate.status.id == 1" pButton icon="pi pi-plus"
       class="btn btn-success mb-3" (click)="open('add', null)">Thêm Kế Hoạch</button>
 

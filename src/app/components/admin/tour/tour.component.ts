@@ -13,31 +13,32 @@ import {
   NgbModal,
   NgbPaginationModule
 } from '@ng-bootstrap/ng-bootstrap';
-import { DataTableDirective } from 'angular-datatables';
 import axios from 'axios';
+import * as $ from "jquery";
 import { MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { CalendarModule } from 'primeng/calendar';
 import { InputTextModule } from 'primeng/inputtext';
+import { ProgressBarModule } from 'primeng/progressbar';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { TableModule } from 'primeng/table';
 import { ToastModule } from 'primeng/toast';
 import { Booking } from 'src/app/models/booking.model';
+import { Hotel } from 'src/app/models/hotel.model';
 import { Status } from 'src/app/models/status.model';
 import { TourImage } from 'src/app/models/tour-img.model';
 import { TourPlan } from 'src/app/models/tour-plan.model';
 import { Tour } from 'src/app/models/tour.model';
 import { Transportation } from 'src/app/models/transportation.model';
 import { BookingService } from 'src/app/services/booking/booking.service';
+import { HotelService } from 'src/app/services/hotel/hotel.service';
+import { LoadingService } from 'src/app/services/loading.service';
 import { TourDateService } from 'src/app/services/tour/tour-date.service';
 import { TourPlanService } from 'src/app/services/tour/tour-plan.service';
 import { TourService } from 'src/app/services/tour/tour.service';
 import { TourImageService } from '../../../services/tour/tour-image.service';
 import { TourDate } from './../../../models/tour-date.model';
 import { CurdService } from './../../../services/curd.service';
-import { HotelService } from 'src/app/services/hotel/hotel.service';
-import { Hotel } from 'src/app/models/hotel.model';
-import { ProgressSpinnerModule } from 'primeng/progressspinner';
-import { LoadingService } from 'src/app/services/loading.service';
 
 @Component({
   selector: 'app-tour',
@@ -57,7 +58,8 @@ import { LoadingService } from 'src/app/services/loading.service';
     InputTextModule,
     CalendarModule,
     ToastModule,
-    ProgressSpinnerModule
+    ProgressSpinnerModule,
+    ProgressBarModule
   ],
   providers: [MessageService]
 })
@@ -97,7 +99,8 @@ export class TourComponent implements OnInit {
   public provinceList: any;
   public districtList: any;
   public wardList: any;
-  public loading$ = this.loadingService.loading$
+  public loadingButton$ = this.loadingService.loadingButton$
+  public loadingOverLay$ = this.loadingService.loadingOverLay$
 
   host = 'https://provinces.open-api.vn/api/';
   file = null
@@ -114,7 +117,7 @@ export class TourComponent implements OnInit {
     this.getDistrictData();
     this.getWardData();
     this.getHotelList();
-    this.loadingService.hide()
+    this.loadingService.hideOverLay()
   }
 
   open(content: string, id: number) {
@@ -209,7 +212,7 @@ export class TourComponent implements OnInit {
   }
 
   async saveNewImage(event: any) {
-    this.loadingService.show()
+    this.loadingService.showButton()
     const file = event.target.files[0]
     if (file.type.match(/image\/*/) && file.size <= 6000000) {
       const randomNumberString = Array.from({ length: 15 }, () => Math.floor(Math.random() * 10)).join('');
@@ -224,10 +227,9 @@ export class TourComponent implements OnInit {
       this.curdService.post('tour_image', tourImage).subscribe(
         (response: TourImage) => {
           this.getTourImageList(this.editTour.id);
-          this.loadingService.hide()
+          this.loadingService.hideButton()
           this.messageService.clear();
           this.messageService.add({ key: 'success', severity: 'success', summary: 'Thông Báo', detail: 'Thêm ảnh thành công' })
-          this.editTour = null
         },
         (error: HttpErrorResponse) => {
           console.log(error.message);
@@ -244,7 +246,7 @@ export class TourComponent implements OnInit {
   }
 
   async changeImage(event: any, id: number) {
-    this.loadingService.show()
+    this.loadingService.showButton()
     const file = event.target.files[0]
     if (file.type.match(/image\/*/) && file.size <= 6000000) {
       const randomNumberString = Array.from({ length: 15 }, () => Math.floor(Math.random() * 10)).join('');
@@ -257,7 +259,7 @@ export class TourComponent implements OnInit {
       this.curdService.put('tour_image', editImageTour).subscribe(
         (response: TourImage) => {
           this.getTourImageList(this.editTour.id);
-          this.loadingService.hide()
+          this.loadingService.hideButton()
           this.messageService.clear();
           this.messageService.add({ key: 'info', severity: 'info', summary: 'Thông Báo', detail: 'Cập nhập ảnh thành công' })
           this.editTour = null
@@ -444,11 +446,7 @@ export class TourComponent implements OnInit {
       var dateDif = Math.round(Number(new Date(this.tourDateList[i].initiateDate).getTime()) - Number(new Date().getTime())) / (24 * 60 * 60 * 1000)
       if (dateDif < 7 && this.tourDateList[i].status.id != 2) {
         this.tourDateList[i].status = this.statusList.find(status => status.id == 3);
-        this.curdService.put('tour_date', this.tourDateList[i]).subscribe(
-          (error: HttpErrorResponse) => {
-            console.log(error.message);
-          }
-        );
+        this.curdService.put('tour_date', this.tourDateList[i])
       }
     }
   }
@@ -545,7 +543,7 @@ export class TourComponent implements OnInit {
   }
 
   async submitAdd(data) {
-    this.loadingService.show()
+    this.loadingService.showOverLay()
     var province = $('#province option:selected').text();
     var district = $('#district option:selected').text();
     var ward = $('#ward option:selected').text();
@@ -578,7 +576,7 @@ export class TourComponent implements OnInit {
     this.curdService.post('tour', tour).subscribe(
       (response: Tour) => {
         this.getTourList();
-        this.loadingService.hide()
+        this.loadingService.hideOverLay()
         this.messageService.clear();
         this.messageService.add({ key: 'success', severity: 'success', summary: 'Thông Báo', detail: 'Thêm thành công' })
       },
@@ -590,7 +588,7 @@ export class TourComponent implements OnInit {
   }
 
   async submitEdit(data) {
-    this.loadingService.show()
+    this.loadingService.showOverLay()
     var transport: Transportation = this.transportList.find(transport => transport.id == data.value.transport)
     var hotel: Hotel = this.hotelList.find(hotel => hotel.id == data.value.hotel)
     var province = $('#province option:selected').text();
@@ -628,7 +626,7 @@ export class TourComponent implements OnInit {
     this.curdService.put('tour', tour).subscribe(
       (response: Tour) => {
         this.getTourList();
-        this.loadingService.hide()
+        this.loadingService.hideOverLay()
         this.messageService.clear();
         this.messageService.add({ key: 'info', severity: 'info', summary: 'Thông Báo', detail: 'Cập nhập thành công' })
       },
