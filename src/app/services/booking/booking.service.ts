@@ -12,7 +12,7 @@ export class BookingService {
   ) { }
 
   getAllBooking(): Observable<Booking[]> {
-    return this.http.get<Booking[]>(this.baseUrl + 'api/booking/getAllBookings');
+    return this.http.get<Booking[]>(this.baseUrl + 'api/booking/');
   }
 
   getBookingsByTourDate(id: number): Observable<Booking[]> {

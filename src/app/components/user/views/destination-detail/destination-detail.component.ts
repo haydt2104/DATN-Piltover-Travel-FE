@@ -1,8 +1,9 @@
+import { data } from 'jquery';
 import { HttpErrorResponse } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ButtonModule } from 'primeng/button';
 import { TableModule } from 'primeng/table';
@@ -14,6 +15,8 @@ import { TourDateService } from 'src/app/services/tour/tour-date.service';
 import { TourService } from 'src/app/services/tour/tour.service';
 import { BookingService } from 'src/app/services/booking/booking.service';
 import { Booking } from 'src/app/models/booking.model';
+import { InputTextModule } from 'primeng/inputtext';
+
 
 @Component({
   selector: 'app-destination-detail',
@@ -25,12 +28,14 @@ import { Booking } from 'src/app/models/booking.model';
     TableModule,
     FormsModule,
     ReactiveFormsModule,
-    ButtonModule
+    ButtonModule,
+    InputTextModule
   ]
 })
 export class DestinationDetailComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
+    private router: Router,
     private curdService: CurdService,
     private tourService: TourService,
     private tourDateService: TourDateService,
@@ -118,7 +123,14 @@ export class DestinationDetailComponent implements OnInit {
   }
 
   public getBookedCustomerNumber(tourDateId: number): number {
-    console.log(tourDateId);
     return this.bookingList.filter(booking => booking.tourDate.id === tourDateId).reduce((sum, booking) => sum + booking.totalPassengers, 0)
+  }
+
+  public toCheckOut() {
+    this.router.navigate(['/checkout'], {
+      queryParams: {
+        data: btoa(JSON.stringify('abc'))
+      }
+    })
   }
 }

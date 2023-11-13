@@ -5,21 +5,21 @@ import { Injectable } from '@angular/core';
 })
 export class LoadingService {
     private _loadingOverLay = new BehaviorSubject<boolean>(false)
-    private _loadingButton = new BehaviorSubject<boolean>(false)
+    private _loadingProgress = new BehaviorSubject<boolean>(false)
     public readonly loadingOverLay$ = this._loadingOverLay.asObservable();
-    public readonly loadingButton$ = this._loadingButton.asObservable();
+    public readonly loadingProgress$ = this._loadingProgress.asObservable();
     constructor() { }
     showOverLay() {
         this._loadingOverLay.next(true);
     }
     showButton() {
-        this._loadingButton.next(true);
+        this._loadingProgress.next(true);
 
     }
     hideOverLay() {
         this._loadingOverLay.next(false);
     }
     hideButton() {
-        this._loadingButton.next(false);
+        this._loadingProgress.next(false);
     }
 }

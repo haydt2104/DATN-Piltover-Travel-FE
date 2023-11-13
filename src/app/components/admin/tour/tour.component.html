@@ -8,7 +8,8 @@
 <div class="card">
   <div class="card-body">
     <h4 class="card-title">Danh sách Tour</h4>
-    <button pButton icon="pi pi-plus" class="btn btn-success mb-3" (click)="open('add', null)">Thêm Tour</button>
+    <button pButton icon="pi pi-plus" class="btn btn-success mb-3" (click)="open('add', null)"
+      [hidden]="loadingOverLay$ | async">Thêm Tour</button>
 
     <!-- Add Modal -->
     <ng-template #addModal let-modal>
@@ -99,7 +100,10 @@
           <label class="form-label">Ảnh Bìa</label>
           <div class="row">
             <input class="form-control" type="file" accept="image/*" (change)="onFileChange($event)">
-            <img [src]="mainImgUrl" alt="">
+            <div class="col-2"></div>
+            <div class="col-8"> <img [src]="mainImgUrl" alt="" width="100%">
+            </div>
+            <div class="col-2"></div>
           </div>
           <label class="form-label">Mô Tả:</label>
           <div class="row">
@@ -204,7 +208,10 @@
           <label class="form-label">Ảnh Bìa</label>
           <div class="row">
             <input class="form-control" type="file" accept="image/*" (change)="onFileChange($event)">
-            <img [src]="mainImgUrl" alt="">
+            <div class="col-2"></div>
+            <div class="col-8"> <img [src]="mainImgUrl" alt="" width="100%">
+            </div>
+            <div class="col-2"></div>
           </div>
           <label class="form-label">Mô Tả:</label>
           <div class="row">
@@ -224,12 +231,14 @@
     <ng-template #imageModal let-modal>
       <div class="modal-header">
         <h4 class="modal-title" id="modal-basic-title">Ảnh Tour</h4>
-        <button pButton icon="pi pi-plus" id="addImageBtn" class="btn btn-success ml-3">Thêm Ảnh</button>
+        <button pButton icon="pi pi-plus" id="addImageBtn" class="btn btn-success ml-3"
+          [hidden]="loadingProgress$ | async">Thêm Ảnh</button>
         <input id="addImageInput" (change)="saveNewImage($event)" type="file" accept="image/*" hidden>
         <button type="button" class="btn-close" aria-label="Close" (click)="modal.close()"></button>
       </div>
       <div class="modal-body">
-        <p-progressBar mode="indeterminate" [style]="{ height: '6px' }" *ngIf="loadingButton$ | async"></p-progressBar>
+        <p-progressBar mode="indeterminate" [style]="{ height: '6px' }"
+          *ngIf="loadingProgress$ | async"></p-progressBar>
         <table class="table table-hover align-middle text-nowrap table-bordered">
           <tbody>
             <tr *ngFor="let img of tourImageList">
@@ -255,16 +264,21 @@
     <!-- Tour Date Modal -->
     <ng-template #dateModal let-modal>
       <div class="modal-header">
-        <h4 class="modal-title mr-3" id="modal-basic-title">Ngày hoạt động</h4>
+        <h2 class="modal-title mr-3" id="modal-basic-title">Ngày hoạt động</h2>
         <button pButton icon="pi pi-plus" class="btn btn-success" (click)="addDate()" *ngIf="!addDateStatus">Thêm
           ngày</button>
+        <label for="addDate" *ngIf="addDateStatus">Từ</label>
         <input id="addDate" pInputText type="date" [value]="minDate | date:'yyyy-MM-dd'" *ngIf="addDateStatus"
           min="{{minDate | date:'yyyy-MM-dd'}}">
-        <button pButton class="p-button-success" icon="pi pi-check" (click)="saveDate()"
-          *ngIf="addDateStatus">Thêm</button>
-        <button pButton class="p-button-danger" icon="pi pi-times" (click)="cancelAddDate()"
-          *ngIf="addDateStatus">Hủy</button>
+        <label for="endDate" *ngIf="addDateStatus">Đến</label>
+        <input id="endDate" pInputText type="date" [value]="minDate | date:'yyyy-MM-dd'" *ngIf="addDateStatus"
+          min="{{minDate | date:'yyyy-MM-dd'}}">
+        <pButton pButton class="p-button-success" icon="pi pi-check" (click)="saveDate()" *ngIf="addDateStatus">Thêm
+        </pButton>
+        <pButton pButton class="p-button-danger" icon="pi pi-times" (click)="cancelAddDate()" *ngIf="addDateStatus">
+          Hủy</pButton>
         <button id="closeDateModal" type="button" class="btn-close" aria-label="Close" (click)="modal.close()"></button>
+
       </div>
       <div class="modal-body">
         <p-table *ngIf="tourDateList && tourDateList.length > 0" #dt2 [value]="tourDateList" sortField="initiateDate"
@@ -283,9 +297,11 @@
           </ng-template>
           <ng-template pTemplate="header" class="theader">
             <tr>
-              <th pSortableColumn="initiateDate" style="width:35%">Thời điểm khởi hành<p-sortIcon
+              <th pSortableColumn="initiateDate" style="width:25%">Thời điểm khởi hành<p-sortIcon
                   field="initiateDate"></p-sortIcon></th>
-              <th pSortableColumn="status.name" style="width:35%">Trạng thái<p-sortIcon
+              <th pSortableColumn="endDate" style="width:25%">Thời điểm kết thúc<p-sortIcon
+                  field="endDate"></p-sortIcon></th>
+              <th pSortableColumn="status.name" style="width:20%">Trạng thái<p-sortIcon
                   field="status.name"></p-sortIcon>
               </th>
               <th></th>
@@ -301,6 +317,17 @@
                   </ng-template>
                   <ng-template pTemplate="output">
                     {{ tourDateList.initiateDate | date: 'dd-MM-yyyy' }}
+                  </ng-template>
+                </p-cellEditor>
+              </td>
+              <td>
+                <p-cellEditor>
+                  <ng-template pTemplate="input">
+                    <input pInputText type="date" [(ngModel)]="tourDateList.endDate"
+                      min="{{tourDateList.initiateDate | date:'yyyy-MM-dd'}}">
+                  </ng-template>
+                  <ng-template pTemplate="output">
+                    {{ tourDateList.endDate | date: 'dd-MM-yyyy' }}
                   </ng-template>
                 </p-cellEditor>
               </td>
@@ -439,8 +466,8 @@
           <tr>
             <td>{{ tourList.name }}</td>
             <td>{{ tourList.destinationAddress }}</td>
-            <td>{{ tourList.active ? "Công khai" : "Ẩn"}}</td>
-            <td>{{ tourList.availableSpaces}}</td>
+            <td class="text-center">{{ tourList.active ? "Công khai" : "Ẩn"}}</td>
+            <td class="text-center">{{ tourList.availableSpaces}}</td>
             <td>{{ tourList.transport.name}}</td>
             <td class="button-group">
               <button pButton class="btn btn-info" (click)="open('date', tourList.id)"

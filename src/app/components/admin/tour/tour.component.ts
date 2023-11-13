@@ -99,7 +99,7 @@ export class TourComponent implements OnInit {
   public provinceList: any;
   public districtList: any;
   public wardList: any;
-  public loadingButton$ = this.loadingService.loadingButton$
+  public loadingProgress$ = this.loadingService.loadingProgress$
   public loadingOverLay$ = this.loadingService.loadingOverLay$
 
   host = 'https://provinces.open-api.vn/api/';
@@ -665,24 +665,31 @@ export class TourComponent implements OnInit {
   }
 
   saveDate() {
-    var date: Date = new Date((<HTMLInputElement>document.getElementById('addDate')).value)
-    const tourDate: TourDate = {
-      id: null,
-      initiateDate: date,
-      tour: this.editTour,
-      status: null
-    }
-    this.curdService.post('tour_date', tourDate).subscribe(
-      (response: TourDate) => {
-        this.getTourDateList(this.editTour.id)
-        this.addDateStatus = false
-        this.messageService.clear();
-        this.messageService.add({ key: 'success', severity: 'success', summary: 'Thông Báo', detail: 'Thêm thành công' })
-      },
-      (error: HttpErrorResponse) => {
-        console.log(error.message);
+    var initDate: Date = new Date((<HTMLInputElement>document.getElementById('addDate')).value)
+    var endDate: Date = new Date((<HTMLInputElement>document.getElementById('endDate')).value)
+    if (endDate >= initDate) {
+      const tourDate: TourDate = {
+        id: null,
+        initiateDate: initDate,
+        endDate: endDate,
+        tour: this.editTour,
+        status: null
       }
-    );
+      this.curdService.post('tour_date', tourDate).subscribe(
+        (response: TourDate) => {
+          this.getTourDateList(this.editTour.id)
+          this.addDateStatus = false
+          this.messageService.clear();
+          this.messageService.add({ key: 'success', severity: 'success', summary: 'Thông Báo', detail: 'Thêm thành công' })
+        },
+        (error: HttpErrorResponse) => {
+          console.log(error.message);
+        }
+      );
+    } else {
+      this.messageService.clear();
+      this.messageService.add({ key: 'warn', severity: 'warn', summary: 'Lỗi', detail: 'Ngày xuất phát không được xảy ra trước ngày kết thúc' })
+    }
   }
 
   cancelAddDate() {

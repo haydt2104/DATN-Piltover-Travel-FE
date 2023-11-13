@@ -31,8 +31,9 @@
           <div class="row">
             <div class="col-6">
               <label class="form-label">Thời gian khởi hành:</label>
-              <input #startTime="ngModel" min="{{minDate | date:'yyyy-MM-dd hh:mm:ss'}}" name="startTime"
-                class="form-control" type="datetime-local" ngModel required>
+              <input #startTime="ngModel" min="{{minDate | date:'yyyy-MM-dd hh:mm:ss'}}"
+                max="{{maxDate | date:'yyyy-MM-dd hh:mm:ss'}}" name="startTime" class="form-control"
+                type="datetime-local" ngModel required>
               <small *ngIf="startTime.touched && startTime.invalid">Thời điểm không được bỏ trống</small>
             </div>
             <div class="col-6">

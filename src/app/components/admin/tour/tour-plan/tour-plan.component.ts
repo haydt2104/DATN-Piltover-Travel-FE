@@ -46,6 +46,7 @@ export class TourPlanComponent implements OnInit {
   planList: TourPlan[] = [];
   transportList: Transportation[] = [];
   minDate: Date
+  maxDate: Date
 
   constructor(
     private route: ActivatedRoute,
@@ -96,7 +97,10 @@ export class TourPlanComponent implements OnInit {
       (response: TourDate) => {
         this.currentTourDate = response;
         this.minDate = new Date(this.currentTourDate.initiateDate);
+        this.maxDate = new Date(this.currentTourDate.endDate);
         this.minDate.setHours(this.minDate.getHours() - 7);
+        console.log(this.maxDate);
+
       },
       (error: HttpErrorResponse) => {
         console.log(error.message);

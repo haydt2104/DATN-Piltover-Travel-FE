@@ -18,6 +18,7 @@ import { LoginComponent } from './components/user/authorizations/login/login.com
 import { AuthorizationsComponent } from './components/user/authorizations/authorizations.component';
 import { PostComponent } from './components/user/views/post/post.component';
 import { PostSingleComponent } from './components/user/views/post-single/post-single.component';
+import { CheckoutComponent } from './components/user/views/checkout/checkout.component';
 
 export const Approutes: Routes = [
   {
@@ -101,6 +102,7 @@ export const Approutes: Routes = [
       { path: 'post-single/:id', component: PostSingleComponent },
       { path: 'destination', component: DestinationComponent },
       { path: 'destination-detail/:id', component: DestinationDetailComponent },
+      { path: 'checkout', component: CheckoutComponent },
     ],
   },
   {
