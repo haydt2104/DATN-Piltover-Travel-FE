@@ -8,6 +8,10 @@ import { Observable } from 'rxjs';
 export class TourDateService {
   constructor(private http: HttpClient) { }
 
+  public getTourDateById(id: number): Observable<TourDate> {
+    return this.http.get<TourDate>(`http://localhost:8080/api/tour_date/${id}`);
+  }
+
   public getTourDateByTourId(id: number): Observable<TourDate[]> {
     return this.http.get<TourDate[]>(`http://localhost:8080/api/tour_date?tourId=${id}`);
   }

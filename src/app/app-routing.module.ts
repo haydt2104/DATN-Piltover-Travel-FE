@@ -102,7 +102,13 @@ export const Approutes: Routes = [
       { path: 'post-single/:id', component: PostSingleComponent },
       { path: 'destination', component: DestinationComponent },
       { path: 'destination-detail/:id', component: DestinationDetailComponent },
-      { path: 'checkout', component: CheckoutComponent },
+      {
+        path: 'checkout',
+        loadChildren: () =>
+          import('./components/user/views/checkout/checkout.module').then(
+            (m) => m.CheckoutModule
+          )
+      },
     ],
   },
   {

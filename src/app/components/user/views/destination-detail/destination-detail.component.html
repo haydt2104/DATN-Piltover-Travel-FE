@@ -175,7 +175,7 @@
     </div>
     <div class="modal-body">
       <p-table #dt1 class="table table-responsive table-bordered" *ngIf="tourDateList && tourDateList.length > 0" #dt
-        [value]="tourDateList" sortField="initiateDate" [rows]="10" [showCurrentPageReport]="true" [paginator]="true"
+        [value]="tourDateList" sortField="initiateDate" dataKey="id" [rows]="10" [showCurrentPageReport]="true" [paginator]="true"
         currentPageReportTemplate="Hiển thị từ bảng {first} đến {last} trong tổng {totalRecords} bảng"
         stateStorage="session" stateKey="statedemo-session">
         <ng-template pTemplate="header" class="theader">
@@ -206,9 +206,9 @@
           </tr>
         </ng-template>
         <ng-template pTemplate="body" class="tbody" let-tourDateList let-expanded="expanded">
-          <tr class="text-center">
+          <tr class="text-center" *ngIf="getBookedCustomerNumber(tourDateList.id) < tourDateList.tour.availableSpaces">
             <td>
-              <button type="button" pButton pRipple [pRowToggler]="tourDateList"
+              <button type="button" pButton [pRowToggler]="tourDateList"
                 class="p-button-text p-button-rounded p-button-plain"
                 [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
             </td>
@@ -225,7 +225,7 @@
               {{ currentTour.availableSpaces - getBookedCustomerNumber(tourDateList.id)}}
             </td>
             <td>
-              <button class="btn btn-info" (click)="toCheckOut()">Chọn</button>
+              <button class="btn btn-info" (click)="toCheckOut(tourDateList.id)">Chọn</button>
             </td>
           </tr>
         </ng-template>

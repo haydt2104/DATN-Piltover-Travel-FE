@@ -443,12 +443,24 @@ export class TourComponent implements OnInit {
 
   public autoUpdateTourDateStatus() {
     for (var i = 0; i < this.tourDateList.length; i++) {
-      var dateDif = Math.round(Number(new Date(this.tourDateList[i].initiateDate).getTime()) - Number(new Date().getTime())) / (24 * 60 * 60 * 1000)
+      var dateDif = this.getDateDiffer(this.tourDateList[i].initiateDate)
       if (dateDif < 7 && this.tourDateList[i].status.id != 2) {
         this.tourDateList[i].status = this.statusList.find(status => status.id == 3);
-        this.curdService.put('tour_date', this.tourDateList[i])
+        this.curdService.put('tour_date', this.tourDateList[i]).subscribe(
+          (response) => {
+
+          },
+          (error: HttpErrorResponse) => {
+            alert(error.message);
+          }
+        )
       }
     }
+  }
+
+  public getDateDiffer(date: Date): number {
+    var dateDif = Math.round(Number(new Date(date).getTime()) - Number(new Date().getTime())) / (24 * 60 * 60 * 1000)
+    return dateDif
   }
 
   renderData = (array, select, code) => {

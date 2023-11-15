@@ -352,7 +352,7 @@
                     *ngIf="!editing && tourDateList.status.id == 2 && bookingList && getBooking(tourDateList.id).length > 0"
                     class="btn btn-info" (click)="open('booking',tourDateList.id)" icon="pi pi-book">Booking</button>
                   <button
-                    *ngIf="!editing && tourDateList.status.id != 3 && bookingList && getBooking(tourDateList.id).length == 0"
+                    *ngIf="!editing && tourDateList.status.id != 3 && bookingList && getBooking(tourDateList.id).length == 0 && getDateDiffer(tourDateList.initiateDate) > 7"
                     pButton pRipple type="button" pInitEditableRow icon="pi pi-pencil"
                     (click)="onRowEditInit(tourDateList)" class="btn btn-warning">Sửa</button>
                   <button pButton pRipple *ngIf="!editing && tourDateList.status.id == 1" class="btn btn-danger"

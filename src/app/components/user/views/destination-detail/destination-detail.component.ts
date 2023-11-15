@@ -1,21 +1,20 @@
-import { data } from 'jquery';
-import { HttpErrorResponse } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ButtonModule } from 'primeng/button';
+import { InputTextModule } from 'primeng/inputtext';
 import { TableModule } from 'primeng/table';
+import { Booking } from 'src/app/models/booking.model';
 import { TourDate } from 'src/app/models/tour-date.model';
 import { TourPlan } from 'src/app/models/tour-plan.model';
 import { Tour } from 'src/app/models/tour.model';
+import { BookingService } from 'src/app/services/booking/booking.service';
 import { CurdService } from 'src/app/services/curd.service';
 import { TourDateService } from 'src/app/services/tour/tour-date.service';
 import { TourService } from 'src/app/services/tour/tour.service';
-import { BookingService } from 'src/app/services/booking/booking.service';
-import { Booking } from 'src/app/models/booking.model';
-import { InputTextModule } from 'primeng/inputtext';
 
 
 @Component({
@@ -41,7 +40,7 @@ export class DestinationDetailComponent implements OnInit {
     private tourDateService: TourDateService,
     private bookingService: BookingService,
     private modalService: NgbModal,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
   ) { }
 
   currentTour: Tour
@@ -126,10 +125,11 @@ export class DestinationDetailComponent implements OnInit {
     return this.bookingList.filter(booking => booking.tourDate.id === tourDateId).reduce((sum, booking) => sum + booking.totalPassengers, 0)
   }
 
-  public toCheckOut() {
+  public toCheckOut(dateId: number) {
+    this.modalService.dismissAll()
     this.router.navigate(['/checkout'], {
       queryParams: {
-        data: btoa(JSON.stringify('abc'))
+        data: btoa(JSON.stringify(dateId))
       }
     })
   }

@@ -33,6 +33,8 @@ import { HeaderComponent } from './components/user/layouts/header/header.compone
 import { CheckStatusAccountPipe } from './pipes/check-status-account.pipe';
 import { TestPipePipe } from './pipes/test-pipe.pipe';
 import { CheckoutComponent } from './components/user/views/checkout/checkout.component';
+import { CheckoutSuccessComponent } from './components/user/views/checkout/checkout-success/checkout-success.component';
+import { CheckoutFailedComponent } from './components/user/views/checkout/checkout-failed/checkout-failed.component';
 
 
 @NgModule({
