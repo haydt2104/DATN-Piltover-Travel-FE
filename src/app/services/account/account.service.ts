@@ -44,4 +44,9 @@ export class AccountService {
         })
       );
   }
+
+  public getAccountById(id: number): Observable<Account> {
+    return this.http
+      .get<Account>(this.baseUrl + `api/account/${id}`)
+  }
 }

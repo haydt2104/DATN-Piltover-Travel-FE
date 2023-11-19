@@ -574,8 +574,8 @@ export class TourComponent implements OnInit {
       createTime: new Date(),
       price: {
         id: null,
-        adultPrice: data.value.adult * 1000,
-        childrenPrice: data.value.children * 1000
+        adultPrice: data.value.adult * 1000000,
+        childrenPrice: data.value.children * 1000000
       },
       transport: transport,
       hotel: hotel
@@ -619,8 +619,8 @@ export class TourComponent implements OnInit {
       createTime: this.editTour.createTime,
       price: {
         id: this.editTour.price.id,
-        adultPrice: data.value.adult * 1000,
-        childrenPrice: data.value.children * 1000
+        adultPrice: data.value.adult * 1000000,
+        childrenPrice: data.value.children * 1000000
       },
       transport: transport,
       hotel: hotel

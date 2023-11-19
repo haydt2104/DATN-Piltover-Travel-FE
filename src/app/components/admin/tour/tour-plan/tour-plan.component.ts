@@ -131,6 +131,15 @@ export class TourPlanComponent implements OnInit {
   }
 
   submitAdd(data) {
+    for (var plan of this.planList) {
+      if (new Date(data.value.startTime).getDay() == new Date(plan.startTime).getDay()
+        && new Date(data.value.startTime).getMonth() == new Date(plan.startTime).getMonth()
+        && new Date(data.value.startTime).getFullYear() == new Date(plan.startTime).getFullYear()
+      ) {
+        this.messageService.add({ key: 'error', severity: 'error', summary: 'Thông Báo', detail: 'Ngày này đã tồn tại' });
+        return;
+      }
+    }
     var transport: Transportation = this.transportList.find(transport => transport.id == data.value.transport)
     var plan: TourPlan = {
       id: null,
@@ -143,6 +152,7 @@ export class TourPlanComponent implements OnInit {
     this.curdService.post('tour_plan', plan).subscribe(
       (response: TourPlan) => {
         this.getTourPlansByDateID(this.currentTourDate.id);
+        this.modalService.dismissAll()
         this.messageService.clear();
         this.messageService.add({ key: 'success', severity: 'success', summary: 'Thông Báo', detail: 'Thêm thành công' });
       },

@@ -67,7 +67,7 @@
               <div class="input-group">
                 <input #adultPrice="ngModel" name="adult" id="adult" type="number" class="form-control" ngModel
                   required>
-                <span class="input-group-text" id="basic-addon2">.000 VNĐ</span>
+                <span class="input-group-text" id="basic-addon2">.000.000 VNĐ</span>
               </div>
               <small *ngIf="adultPrice.touched && adultPrice.value < 0">Giá vé người lớn không được là số âm</small>
               <small *ngIf="adultPrice.touched && adultPrice.value < childrenPrice.value && adultPrice.value >= 0">Giá
@@ -79,7 +79,7 @@
               <div class="input-group">
                 <input #childrenPrice="ngModel" name="children" id="children" type="number" class="form-control" ngModel
                   required>
-                <span class="input-group-text" id="basic-addon2">.000 VNĐ</span>
+                <span class="input-group-text" id="basic-addon2">.000.000 VNĐ</span>
               </div>
               <small *ngIf="childrenPrice.touched && childrenPrice.value < 0">Giá vé trẻ em không được là số
                 âm</small>
@@ -173,8 +173,8 @@
               <label class="form-label">Người lớn:</label>
               <div class="input-group">
                 <input #adultPrice="ngModel" name="adult" id="adult" type="number" class="form-control"
-                  ngModel="{{editTour.price.adultPrice/1000}}" required>
-                <span class="input-group-text" id="basic-addon2">.000 VNĐ</span>
+                  ngModel="{{editTour.price.adultPrice/1000000}}" required>
+                <span class="input-group-text" id="basic-addon2">.000.000 VNĐ</span>
               </div>
               <small *ngIf="adultPrice.touched && adultPrice.value < 0">Giá vé người lớn không được là số âm</small>
               <small *ngIf="adultPrice.touched && adultPrice.value < childrenPrice.value && adultPrice.value >= 0">Giá
@@ -185,8 +185,8 @@
               <label class="form-label">Trẻ em:</label>
               <div class="input-group">
                 <input #childrenPrice="ngModel" name="children" id="children" type="number" class="form-control"
-                  ngModel="{{editTour.price.childrenPrice/1000}}" required>
-                <span class="input-group-text" id="basic-addon2">.000 VNĐ</span>
+                  ngModel="{{editTour.price.childrenPrice/1000000}}" required>
+                <span class="input-group-text" id="basic-addon2">.000.000 VNĐ</span>
               </div>
               <small *ngIf="childrenPrice.touched && childrenPrice.value < 0">Giá vé trẻ em không được là số
                 âm</small>

@@ -50,7 +50,6 @@ import { CheckoutFailedComponent } from './components/user/views/checkout/checko
     CheckStatusAccountPipe,
     BookingComponent,
     BookingdetailComponent,
-    CheckoutComponent,
   ],
   imports: [
     CommonModule,
