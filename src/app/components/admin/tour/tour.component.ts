@@ -7,7 +7,7 @@ import {
   ViewChild
 } from '@angular/core';
 import { AngularFireStorage } from '@angular/fire/compat/storage';
-import { FormBuilder, FormControl, FormsModule, NgForm, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormControl, FormsModule, NgForm, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import {
   NgbModal,
@@ -64,9 +64,12 @@ import { CurdService } from './../../../services/curd.service';
   providers: [MessageService]
 })
 export class TourComponent implements OnInit {
-  @ViewChild('addModal') addModal: ElementRef;
-  @ViewChild('editModal') editModal: ElementRef;
+  @ViewChild('addTourModal') addTourModal: ElementRef;
+  @ViewChild('editTourModal') editTourModal: ElementRef;
   @ViewChild('imageModal') imageModal: ElementRef;
+  @ViewChild('hotelModal') hotelModal: ElementRef;
+  @ViewChild('addHotelModal') addHotelModal: ElementRef;
+  @ViewChild('transportModal') transportModal: ElementRef;
   @ViewChild('bookingModal') bookingModal: ElementRef;
   @ViewChild('confirmModal') confirmModal: ElementRef;
   @ViewChild('confirmStatusModal') confirmStatusModal: ElementRef;
@@ -121,15 +124,15 @@ export class TourComponent implements OnInit {
   }
 
   open(content: string, id: number) {
-    if (content == 'add') {
+    if (content == 'addTour') {
       this.callAPIProvince('https://provinces.open-api.vn/api/?depth=1', null);
       this.mainImgUrl = null
       this.modalService
-        .open(this.addModal, {
+        .open(this.addTourModal, {
           ariaLabelledBy: 'modal-basic-title',
           size: 'xl',
         })
-    } else if (content == 'edit') {
+    } else if (content == 'editTour') {
       this.editTour = this.tourList.find((tour) => tour.id == id);
       const provinceAddress = this.editTour.destinationAddress
         .split(',')
@@ -151,7 +154,7 @@ export class TourComponent implements OnInit {
       this.callApiWard('https://provinces.open-api.vn/api/d/' + districtValue + '?depth=2', wardValue);
       this.mainImgUrl = this.editTour.image
       this.modalService
-        .open(this.editModal, {
+        .open(this.editTourModal, {
           ariaLabelledBy: 'modal-basic-title',
           size: 'xl',
         })
@@ -181,6 +184,19 @@ export class TourComponent implements OnInit {
         .open(this.bookingModal, {
           ariaLabelledBy: 'modal-basic-title',
           size: 'xl',
+        })
+    } else if (content == 'hotel') {
+      this.modalService
+        .open(this.hotelModal, {
+          ariaLabelledBy: 'modal-basic-title',
+          size: 'xl',
+        })
+    } else if (content == 'addHotel') {
+      this.callAPIProvince('https://provinces.open-api.vn/api/?depth=1', null);
+      this.modalService
+        .open(this.addHotelModal, {
+          ariaLabelledBy: 'modal-basic-title',
+          size: 'lg',
         })
     }
   }
@@ -554,7 +570,7 @@ export class TourComponent implements OnInit {
     document.querySelector('#hotel').innerHTML = row;
   }
 
-  async submitAdd(data) {
+  async submitAddTour(data) {
     this.loadingService.showOverLay()
     var province = $('#province option:selected').text();
     var district = $('#district option:selected').text();
@@ -599,7 +615,7 @@ export class TourComponent implements OnInit {
     this.mainImgUrl = null;
   }
 
-  async submitEdit(data) {
+  async submitEditTour(data) {
     this.loadingService.showOverLay()
     var transport: Transportation = this.transportList.find(transport => transport.id == data.value.transport)
     var hotel: Hotel = this.hotelList.find(hotel => hotel.id == data.value.hotel)
@@ -648,20 +664,43 @@ export class TourComponent implements OnInit {
     );
   }
 
-  checkValid(type: string, data: NgForm) {
-    const adultPrice = $('#adult').val()
-    const childrenPrice = $('#children').val()
+  submitAddHotel(data) {
+    var province = $('#province option:selected').text();
+    var district = $('#district option:selected').text();
+    var ward = $('#ward option:selected').text();
+    var road = data.value.road;
+    var address = road + ', ' + ward + ', ' + district + ', ' + province;
+    var hotel: Hotel = {
+      id: null,
+      name: data.value.name,
+      price: data.value.price,
+      star: data.value.star,
+      address: address
+    }
+    this.hotelService.addHotel(hotel).subscribe(
+      (response) => {
+        this.getHotelList();
+      },
+      (error) => {
+        console.log(error.message);
+      }
+    )
+  }
 
-    if (type == 'add') {
+  checkValid(content: string, data: NgForm) {
+    if (content == 'tour') {
+      const adultPrice: number = +$('#adult').val()
+      const childrenPrice: number = +$('#children').val()
       if (data.valid && this.mainImgUrl && $('#province').val()
-        && $('#district').val() && $('#ward').val() && adultPrice >= childrenPrice) {
-        return false;
+        && $('#district').val() && $('#ward').val() && adultPrice >= childrenPrice && adultPrice > 0 && childrenPrice > 0) {
+        return false
       } else {
-        return true
+        return true;
       }
     } else {
-      if (data.valid && this.mainImgUrl && $('#province').val()
-        && $('#district').val() && $('#ward').val() && adultPrice >= childrenPrice) {
+      const star: number = +$('#star').val()
+      const price: number = +$('#price').val()
+      if (data.valid && star >= 0 && price > 0) {
         return false
       } else {
         return true;
@@ -700,7 +739,7 @@ export class TourComponent implements OnInit {
       );
     } else {
       this.messageService.clear();
-      this.messageService.add({ key: 'warn', severity: 'warn', summary: 'Lỗi', detail: 'Ngày xuất phát không được xảy ra trước ngày kết thúc' })
+      this.messageService.add({ key: 'warn', severity: 'warn', summary: 'Lỗi', detail: 'Ngày xuất phát không được xảy ra sau ngày kết thúc' })
     }
   }
 

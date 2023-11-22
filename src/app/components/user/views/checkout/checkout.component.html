@@ -15,6 +15,7 @@
 <section class="ftco-section ftco-no-pb contact-section mb-4">
     <div class="container">
         <h1 class="h3 mb-5">Tour - {{tourDate.tour.name}}</h1>
+        <h2>Số lượng còn trống {{tourDate.tour.availableSpaces - getBookedCustomerNumber()}}</h2>
         <h4>
             Ngày Bắt Đầu: {{tourDate.initiateDate |
             date:"dd-MM-yyyy"}} - Ngày Kết Thúc: {{tourDate.endDate |
@@ -34,64 +35,59 @@
         <div class="row">
             <!-- Left -->
             <div class="col-lg-7">
-                <p-card>
-                    <h2 class="h5 px-4 py-3  d-flex justify-content-between align-items-center">
-                        <div class="form-check w-100 collapsed" aria-expanded="false">
-                            <label class="form-check-label pt-1" for="payment1">
-                                Thông Tin Khách Hàng
-                            </label>
-                        </div>
-                    </h2>
-                    <div>
-                        <div class="mb-3">
-                            <label class="form-label">Tên Khách Hàng</label>
-                            <input class="form-control" type="text" [value]="currentUser.fullname" disabled>
-                        </div>
-                        <div class="row">
-                            <div class="col-lg-5">
-                                <div class="mb-3">
-                                    <label class="form-label">Email</label>
-                                    <input type="text" class="form-control" [value]="currentUser.email" disabled>
-                                </div>
+                <h2>
+                    <label class="form-check-label pt-1" for="payment1">
+                        Thông Tin Khách Hàng
+                    </label>
+                </h2>
+                <div>
+                    <div class="mb-3">
+                        <label class="form-label">Tên Khách Hàng</label>
+                        <input class="form-control" type="text" [value]="currentUser.fullname" disabled>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-5">
+                            <div class="mb-3">
+                                <label class="form-label">Email</label>
+                                <input type="text" class="form-control" [value]="currentUser.email" disabled>
                             </div>
-                            <div class="col-lg-4">
-                                <div class="mb-3">
-                                    <label class="form-label">Số Điện Thoại</label>
-                                    <input type="text" class="form-control" [value]="currentUser.phone" disabled>
-                                </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="mb-3">
+                                <label class="form-label">Số Điện Thoại</label>
+                                <input type="text" class="form-control" [value]="currentUser.phone" disabled>
                             </div>
-                            <div class="col-lg-3">
-                                <div class="mb-3">
-                                    <label class="form-label">Ngày Sinh</label>
-                                    <input type="text" class="form-control" [value]="currentUser.birthday" disabled>
-                                </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <div class="mb-3">
+                                <label class="form-label">Ngày Sinh</label>
+                                <input type="text" class="form-control" [value]="currentUser.birthday" disabled>
                             </div>
                         </div>
                     </div>
+                </div>
 
-                    <h2 class="h5 px-4 py-3 d-flex justify-content-between align-items-center">
-                        <div class="form-check w-100 collapsed" aria-expanded="false">
-                            <label class="form-check-label pt-1" for="payment1">
-                                Thông Tin Checkout
-                            </label>
-                        </div>
-                    </h2>
-                    <div class="collapse show">
-                        <div class="mb-3">
-                            <div class="row">
-                                <div class="col-6">
-                                    <label class="form-label">Số Lượng Người Lớn:</label>
-                                    <input class="form-control" type="number" min="0" value="0" id="adult"
-                                        (change)="changeData()">
-                                </div>
-                                <div class="col-6">
-                                    <label class="form-label">Số Lượng Trẻ Em:</label>
-                                    <input class="form-control" type="number" min="0" value="0" id="children"
-                                        (change)="changeData()">
-                                </div>
+                <h2>
+                    <label class="form-check-label pt-1" for="payment1">
+                        Thông Tin Checkout
+                    </label>
+                </h2>
+                <div class="collapse show">
+                    <div class="mb-3">
+                        <div class="row">
+                            <div class="col-6">
+                                <label class="form-label">Số Lượng Người Lớn:</label>
+                                <input class="form-control" type="number" min="0" value="0" id="adult"
+                                    (change)="changeData()">
+                            </div>
+                            <div class="col-6">
+                                <label class="form-label">Số Lượng Trẻ Em:</label>
+                                <input class="form-control" type="number" min="0" value="0" id="children"
+                                    (change)="changeData()">
                             </div>
                         </div>
-                        <!-- <div class="mb-3">
+                    </div>
+                    <!-- <div class="mb-3">
                             <label class="form-label">Khách Sạn:</label>
                             <div class="row">
                                 <div class="col-6">
@@ -135,18 +131,21 @@
                                 </div>
                             </div>
                         </div> -->
-                    </div>
-                </p-card>
+                </div>
+
             </div>
             <!-- Right -->
             <div class="col-lg-5">
                 <div class="card position-sticky top-0">
                     <div class="p-3 bg-light bg-opacity-10">
-                        <h6 class="card-title mb-3">Order Summary</h6>
-                        <div class="d-flex justify-content-between mb-1 small">
+                        <h3 class="card-title mb-3">Order Summary</h3>
+                        <div class="d-flex justify-content-between mb-1">
                             <span>Tổng: </span> <span>{{subTotal | number}} VNĐ</span>
                         </div>
-                        <div *ngIf="discount" class="d-flex justify-content-between mb-1 small">
+                        <div class="d-flex justify-content-between mb-1">
+                            <span>Thuế (8%): </span> <span>{{subTotal*8/100 | number}} VNĐ</span>
+                        </div>
+                        <div *ngIf="discount" class="d-flex justify-content-between mb-1">
                             <span>
                                 Mã Giảm Giá ({{discount.code}})
                             </span>
@@ -154,31 +153,17 @@
                                 -{{subTotal * discount.percentage/100 | number}} VNĐ
                             </span>
                         </div>
-                        <div *ngIf="!discount" class="d-flex justify-content-between mb-1 small">
-                            <span>
-                                <input pInputText type="text" id="discount" placeholder="Mã giảm giá">
-                            </span>
-                            <span>
-                                <button class="btn" (click)="applyDiscount()">Áp Dụng</button>
-                            </span>
+                        <div class="input-group" style="justify-content: right;">
+                            <input type="email" class="input" id="discount" placeholder="Mã giảm giá">
+                            <input class="button--submit" (click)="applyDiscount()" type="submit">
                         </div>
                         <hr>
-                        <div class="d-flex justify-content-between mb-4 small">
+                        <div class="d-flex justify-content-between mb-4">
                             <span>Thành Tiền: </span> <strong class="text-dark">{{total | number}} VNĐ</strong>
                         </div>
-                        <div class="form-check mb-1 small">
-                            <input class="form-check-input" type="checkbox" value="" id="tnc">
-                            <label class="form-check-label" for="tnc">
-                                I agree to the <a href="#">terms and conditions</a>
-                            </label>
-                        </div>
-                        <div class="form-check mb-3 small">
-                            <input class="form-check-input" type="checkbox" value="" id="subscribe">
-                            <label class="form-check-label" for="subscribe">
-                                Get emails about product updates and events. If you change your mind, you can
-                                unsubscribe at any time. <a href="#">Privacy Policy</a>
-                            </label>
-                        </div>
+
+                        <button *ngIf="getDateDiffer(currentDate,tourDate.initiateDate) >= 3"
+                            class="btn btn-primary w-100 mt-2" (click)="toPayment(1)">Đặt Trước</button>
                         <button class="btn btn-primary w-100 mt-2" (click)="toPayment(2)">Paypal</button>
                         <button class="btn btn-primary w-100 mt-2" (click)="toPayment(3)">VNPay</button>
                     </div>

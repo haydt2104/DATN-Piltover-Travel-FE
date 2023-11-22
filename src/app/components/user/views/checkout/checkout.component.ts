@@ -21,6 +21,7 @@ import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { BookingDetail } from 'src/app/models/booking-detail.model';
+import { error } from 'jquery';
 
 
 
@@ -60,15 +61,13 @@ export class CheckoutComponent implements OnInit {
   bookingList: Booking[] = [];
   hotelList: Hotel[] = []
   discountList: Discount[] = [];
+  currentDate: Date = new Date();
 
   adult: number
   children: number
   subTotal: number = 0
   discount: Discount = null
   total: number = 0
-
-  currencyData: any
-
 
   ngOnInit(): void {
     this.route.queryParams.subscribe(params => {
@@ -98,7 +97,6 @@ export class CheckoutComponent implements OnInit {
       }
     ];
 
-    this.getCurrencyAPI();
   }
 
   public getMainData(data: number) {
@@ -112,26 +110,24 @@ export class CheckoutComponent implements OnInit {
     )
     this.tourDateService.getTourDateById(data).subscribe(
       (responseTourDate: TourDate) => {
-        this.bookingService.getBookingsByTourDate(data).subscribe(
-          (responseBooking: Booking[]) => {
-            this.bookingList = responseBooking
-            if (this.getDateDiffer(new Date(), responseTourDate.initiateDate) > 7 && responseTourDate.status.id == 2 && this.getBookedCustomerNumber() < responseTourDate.tour.availableSpaces) {
-              this.tourDate = responseTourDate
-              this.getImage(this.tourDate.tour.id)
-              this.getHotelList()
-            } else {
-              this.router.navigate([''])
-            }
-          },
-          (error: HttpErrorResponse) => {
-            this.router.navigate([''])
-          }
-        )
+        this.tourDate = responseTourDate
+        this.getImage(this.tourDate.tour.id)
+        this.getHotelList()
       },
       (error: HttpErrorResponse) => {
         this.router.navigate([''])
       }
     )
+
+    setInterval(() => this.bookingService.getBookingsByTourDate(data).subscribe(
+      (responseBooking: Booking[]) => {
+        this.bookingList = responseBooking
+        this.updateRemaining();
+      },
+      (error: HttpErrorResponse) => {
+        this.router.navigate([''])
+      }
+    ), 1000)
 
     this.getDiscountList()
   }
@@ -175,17 +171,6 @@ export class CheckoutComponent implements OnInit {
     )
   }
 
-  public getCurrencyAPI() {
-    this.httpClient.get(`https://v6.exchangerate-api.com/v6/4f5333c28a72c8a9ae7a2658/latest/USD`).subscribe(
-      (response) => {
-        this.currencyData = response
-      },
-      (error: HttpErrorResponse) => {
-        console.log(error.message);
-      }
-    )
-  }
-
   isAtobDecodable(data: string): boolean {
     try {
       const decoded = atob(data);
@@ -206,7 +191,13 @@ export class CheckoutComponent implements OnInit {
 
   changeData() {
     this.adult = +$('#adult').val().valueOf()
+    if (this.adult < 0) {
+      this.adult = 0;
+    }
     this.children = +$('#children').val().valueOf()
+    if (this.children < 0) {
+      this.children = 0
+    }
     this.subTotal = this.adult * this.tourDate.tour.price.adultPrice + this.children * this.tourDate.tour.price.childrenPrice
     if (this.discount) {
       this.total = this.subTotal - (this.subTotal * this.discount.percentage / 100) + this.subTotal * 8 / 100
@@ -217,56 +208,86 @@ export class CheckoutComponent implements OnInit {
 
   applyDiscount() {
     this.discount = this.discountList.find(discount => discount.code == $('#discount').val())
-    if (this.discount) {
+    if (this.discount && this.discount.isDelete == false) {
+      this.messageService.clear()
       this.messageService.add({ key: 'success', severity: 'success', summary: 'Thông Báo', detail: 'Thêm mã giảm giá thành công' })
     } else {
+      this.messageService.clear()
       this.messageService.add({ key: 'warn', severity: 'warn', summary: 'Thông Báo', detail: 'Mã giảm giá không hợp lệ' })
     }
+    this.changeData()
   }
 
   toPayment(num: number) {
-    var booking: Booking = {
-      id: null,
-      createUser: this.currentUser,
-      tourDate: this.tourDate,
-      discount: this.discount,
-      totalPrice: this.total,
-      totalPassengers: this.adult + this.children,
-      createTime: new Date(),
-      updateTime: null,
-      updateUser: null,
-      status: null
-    }
+    if (this.adult > 0 || this.children > 0) {
+      var booking: Booking = {
+        id: null,
+        createUser: this.currentUser,
+        tourDate: this.tourDate,
+        discount: this.discount,
+        totalPrice: this.total,
+        totalPassengers: this.adult + this.children,
+        createTime: new Date(),
+        updateTime: null,
+        updateUser: null,
+        status: null
+      }
 
-    var bookingDetail: BookingDetail = {
-      id: null,
-      adult: this.adult,
-      children: this.children,
-      bookingTime: new Date(),
-      surcharge: this.subTotal * 8 / 100,
-      booking: booking
-    }
-    if (num == 2) {
-      booking.totalPrice = booking.totalPrice / this.currencyData.conversion_rates.VND
-      this.httpClient.post('http://localhost:8080/pay', bookingDetail, { responseType: 'text' }).subscribe(
-        (response: string) => {
-          window.location.href = response
-        },
-        (error: HttpErrorResponse) => {
-          console.log(error.message);
-        }
-      )
+      var bookingDetail: BookingDetail = {
+        id: null,
+        adult: this.adult,
+        children: this.children,
+        bookingTime: new Date(),
+        surcharge: this.subTotal * 8 / 100,
+        booking: booking
+      }
+      if (num == 1) {
+        this.httpClient.post('http://localhost:8080/nopay', bookingDetail, { responseType: 'text' }).subscribe(
+          (response: string) => {
+            window.location.href = response
+          },
+          (error: HttpErrorResponse) => {
+            console.log(error.message)
+          }
+        )
+      } else if (num == 2) {
+        this.httpClient.get(`https://v6.exchangerate-api.com/v6/4f5333c28a72c8a9ae7a2658/latest/USD`).subscribe(
+          (response) => {
+            var currencyData: any = response
+            booking.totalPrice = booking.totalPrice / currencyData.conversion_rates.VND
+            this.httpClient.post('http://localhost:8080/paypal', bookingDetail, { responseType: 'text' }).subscribe(
+              (response: string) => {
+                window.location.href = response
+              },
+              (error: HttpErrorResponse) => {
+                console.log(error.message);
+              }
+            )
+          },
+          (error: HttpErrorResponse) => {
+            console.log(error.message);
+          }
+        )
+      } else if (num == 3) {
+        this.httpClient.post('http://localhost:8080/vnpay', bookingDetail, { responseType: 'text' }).subscribe(
+          (response: string) => {
+            window.location.href = response
+          },
+          (error: HttpErrorResponse) => {
+            console.log(error.message);
+          }
+        )
+      }
     } else {
-      this.httpClient.post('http://localhost:8080/submitOrder', bookingDetail, { responseType: 'text' }).subscribe(
-        (response: string) => {
-          window.location.href = response
-        },
-        (error: HttpErrorResponse) => {
-          console.log(error.message);
-        }
-      )
+      this.messageService.clear()
+      this.messageService.add({ key: 'warn', severity: 'warn', summary: 'Thông Báo', detail: 'Vui lòng nhập ít nhất 1 người' })
     }
+  }
 
+  updateRemaining() {
+    if (this.getDateDiffer(this.currentDate, this.tourDate.initiateDate) < 3 || this.tourDate.status.id != 2 || this.getBookedCustomerNumber() == this.tourDate.tour.availableSpaces) {
+      this.router.navigate([''])
+    }
   }
 
 }

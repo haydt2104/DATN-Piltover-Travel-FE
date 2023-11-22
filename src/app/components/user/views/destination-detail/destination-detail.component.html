@@ -1,3 +1,12 @@
+<section class="hero-wrap hero-wrap-2 js-fullheight" style="background-image: url(../assets/images/bg_1.jpg);">
+  <div class="container">
+    <div class="row no-gutters slider-text js-fullheight align-items-end justify-content-center">
+      <div class="col-md-9 ftco-animate pb-5 text-center">
+        <h1 class="mb-0 bread">Chi Tiết Tour</h1>
+      </div>
+    </div>
+  </div>
+</section>
 <main *ngIf="currentTour">
   <!-- Nội dung trang chi tiết tour -->
   <section class="ftco-section ftco-no-pb">
@@ -6,10 +15,10 @@
         <div class="col-md-12">
           <div class="tour-detail-wrap">
             <div class="row">
-              <div class="col-lg-6">
-                <img [src]="currentTour.image" alt="Tour Image"> <!-- Hình ảnh tour -->
+              <div class="col-lg-7">
+                <img [src]="currentTour.image" alt="Tour Image" style="width: 100%;"> <!-- Hình ảnh tour -->
               </div>
-              <div class="col-lg-6">
+              <div class="col-lg-5">
                 <div class="tour-detail-text">
                   <h2>{{currentTour.name}}</h2>
                   <p class="location"><i class="fa fa-map-marker"></i> Điểm đến: {{currentTour.destinationAddress}}</p>
@@ -175,7 +184,8 @@
     </div>
     <div class="modal-body">
       <p-table #dt1 class="table table-responsive table-bordered" *ngIf="tourDateList && tourDateList.length > 0" #dt
-        [value]="tourDateList" sortField="initiateDate" dataKey="id" [rows]="10" [showCurrentPageReport]="true" [paginator]="true"
+        [value]="tourDateList" sortField="initiateDate" dataKey="id" [rows]="10" [showCurrentPageReport]="true"
+        [paginator]="true"
         currentPageReportTemplate="Hiển thị từ bảng {first} đến {last} trong tổng {totalRecords} bảng"
         stateStorage="session" stateKey="statedemo-session">
         <ng-template pTemplate="header" class="theader">

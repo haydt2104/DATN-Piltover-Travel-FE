@@ -87,7 +87,7 @@ export class DestinationDetailComponent implements OnInit {
   public getDateList(id: number) {
     this.tourDateService.getTourDateByTourId(id).subscribe(
       (response) => {
-        this.tourDateList = response.filter(t => t.status.id == 2 && Math.round(Number(new Date(t.initiateDate).getTime()) - Number(new Date().getTime())) / (24 * 60 * 60 * 1000) > 7)
+        this.tourDateList = response.filter(t => t.status.id == 2 && Math.round(Number(new Date(t.initiateDate).getTime()) - Number(new Date().getTime())) / (24 * 60 * 60 * 1000) > 3)
       },
       (error) => {
         console.log(error.message)

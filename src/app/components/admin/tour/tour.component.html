@@ -8,16 +8,19 @@
 <div class="card">
   <div class="card-body">
     <h4 class="card-title">Danh sách Tour</h4>
-    <button pButton icon="pi pi-plus" class="btn btn-success mb-3" (click)="open('add', null)"
-      [hidden]="loadingOverLay$ | async">Thêm Tour</button>
-
+    <div class="button-group">
+      <button pButton icon="pi pi-plus" class="btn btn-success mb-3" (click)="open('addTour', null)"
+        [hidden]="loadingOverLay$ | async">Thêm Tour</button>
+      <button pButton class="btn btn-success mb-3" (click)="open('hotel', null)">Khách Sạn</button>
+      <button pButton class="btn btn-success mb-3">Phương Tiện</button>
+    </div>
     <!-- Add Modal -->
-    <ng-template #addModal let-modal>
+    <ng-template #addTourModal let-modal>
       <div class="modal-header">
         <h4 class="modal-title" id="modal-basic-title">Thêm Tour</h4>
         <button type="button" class="btn-close" aria-label="Close" (click)="modal.close()"></button>
       </div>
-      <form #addForm="ngForm" class="container" (ngSubmit)="submitAdd(addForm)">
+      <form #addTourForm="ngForm" class="container" (ngSubmit)="submitAddTour(addTourForm)">
         <div class="modal-body">
           <label class="form-label">Tên Tour:</label>
           <div class="row">
@@ -113,18 +116,18 @@
         </div>
         <div class="modal-footer">
           <button type="submit" class="btn btn-primary" (click)="modal.close()"
-            [disabled]="checkValid('add',addForm)">Thêm</button>
+            [disabled]="checkValid('tour',addTourForm)">Thêm</button>
         </div>
       </form>
     </ng-template>
 
     <!-- Edit Modal -->
-    <ng-template #editModal let-modal>
+    <ng-template #editTourModal let-modal>
       <div class="modal-header">
         <h4 class="modal-title" id="modal-basic-title">Chỉnh Sửa Tour</h4>
         <button type="button" class="btn-close" aria-label="Close" (click)="modal.close()"></button>
       </div>
-      <form #editForm="ngForm" class="container" (ngSubmit)="submitEdit(editForm)">
+      <form #editTourForm="ngForm" class="container" (ngSubmit)="submitEditTour(editTourForm)">
         <div class="modal-body">
           <label class="form-label">Tên Tour:</label>
           <div class="row">
@@ -222,7 +225,7 @@
         </div>
         <div class="modal-footer">
           <button type="submit" class="btn btn-primary" (click)="modal.close()"
-            [disabled]="checkValid('edit',editForm)">Thay đổi</button>
+            [disabled]="checkValid('tour',editTourForm)">Thay đổi</button>
         </div>
       </form>
     </ng-template>
@@ -398,7 +401,7 @@
             <tr>
               <th pSortableColumn="createUser">Tên Khách Hàng<p-sortIcon field="createUser"></p-sortIcon></th>
               <th pSortableColumn="totalPassengers">Số Khách<p-sortIcon field="totalPassengers"></p-sortIcon></th>
-              <th pSortableColumn="totalPrice">Số Tiền<p-sortIcon field="totalPrice"></p-sortIcon></th>
+              <th pSortableColumn="totalPrice">Tổng Tiền<p-sortIcon field="totalPrice"></p-sortIcon></th>
             </tr>
           </ng-template>
           <ng-template pTemplate="body" class="tbody" let-editBookingList>
@@ -431,6 +434,117 @@
         <button class="btn btn-success" (click)="modal.close()">Hủy bỏ</button>
         <button id="confirmDelete" class="btn btn-danger" (click)="modal.close()">Xác nhận</button>
       </div>
+    </ng-template>
+
+    <!-- Hotel Modal -->
+    <ng-template #hotelModal let-modal>
+      <div class="modal-header">
+        <h4 class="modal-title mr-3" id="modal-basic-title">Danh Sách Khách Sạn</h4>
+        <button class="btn btn-success" (click)="open('addHotel', null)">Thêm Khách Sạn</button>
+        <button id="closeDateModal" type="button" class="btn-close" aria-label="Close" (click)="modal.close()"></button>
+      </div>
+      <div class="modal-body">
+        <p-table #dt3 [value]="hotelList" dataKey="id" [rows]="10" [showCurrentPageReport]="true" [paginator]="true"
+          currentPageReportTemplate="Hiển thị từ bảng {first} đến {last} trong tổng {totalRecords} bảng"
+          [globalFilterFields]="['initiateDate']">
+          <ng-template pTemplate="caption">
+            <div class="flex">
+              <form [formGroup]="formFilter">
+                <span class="p-input-icon-left ml-auto">
+                  <input pInputText type="text" (change)="dt3.filterGlobal(getValueSearch(), 'contains')"
+                    formControlName="search" class="form-control box-shadow-none" placeholder="Tìm kiếm">
+                </span>
+              </form>
+            </div>
+          </ng-template>
+          <ng-template pTemplate="header" class="theader">
+            <tr class="text-center">
+              <th pSortableColumn="name">Tên Khách Sạn<p-sortIcon field="name"></p-sortIcon></th>
+              <th pSortableColumn="price">Giá<p-sortIcon field="price"></p-sortIcon></th>
+              <th pSortableColumn="star">Sao<p-sortIcon field="star"></p-sortIcon></th>
+              <th pSortableColumn="address">Địa Chỉ<p-sortIcon field="address"></p-sortIcon></th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" class="tbody" let-hotelList>
+            <tr>
+              <td>
+                {{hotelList.name}}
+              </td>
+              <td class="text-center">
+                {{hotelList.price}}
+              </td>
+              <td class="text-center">
+                {{hotelList.star}}
+              </td>
+              <td>
+                {{hotelList.address}} VNĐ
+              </td>
+              <div class="button-group">
+                <button pButton class="btn btn-warning">Sửa</button>
+                <button pButton class="btn btn-danger">Xóa</button>
+              </div>
+            </tr>
+          </ng-template>
+        </p-table>
+      </div>
+    </ng-template>
+
+    <!-- Add Hotel Modal -->
+    <ng-template #addHotelModal let-modal>
+      <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">Thêm Khách Sạn</h4>
+        <button type="button" class="btn-close" aria-label="Close" (click)="modal.close()"></button>
+      </div>
+      <form #addHotelForm="ngForm" class="container" (ngSubmit)="submitAddHotel(addHotelForm)">
+        <div class="modal-body">
+          <label class="form-label">Tên Khách Sạn:</label>
+          <div class="row">
+            <input #name="ngModel" name="name" class="form-control" type="text" ngModel required>
+          </div>
+          <label class="form-label">Địa Chỉ:</label>
+          <div class="row">
+            <select #province="ngModel" class="form-control col-md-4" name="province" (change)="provinceChange()"
+              id="province" ngModel required>
+              <option value="">Chọn Tỉnh/Thành Phố</option>
+            </select>
+            <select #district="ngModel" class="form-control col-md-4" name="district" (change)="districtChange()"
+              id="district" ngModel required>
+              <option value="">Chọn Quận/Huyện</option>
+            </select>
+            <select #ward="ngModel" class="form-control col-md-4" name="ward" id="ward" ngModel required>
+              <option value="">Chọn Phường/Xã</option>
+            </select>
+          </div>
+          <label class="form-label">Tên Đường:</label>
+          <div class="row">
+            <input #road="ngModel" class="form-control" name="road" type="text" placeholder="VD: Số 123, Đường ABC"
+              ngModel required>
+          </div>
+          <div class="row">
+            <div class="col-6">
+              <label class="form-label">Số Sao:</label>
+              <input #star="ngModel" name="star" id="star" class="form-control" type="number" min="0" max="5" ngModel
+                required>
+            </div>
+            <div class="col-6">
+              <label class="form-label">Giá Tiền:</label>
+              <div class="input-group">
+                <input #price="ngModel" name="price" id="price" class="form-control" type="number" min="0" ngModel
+                  required>
+                <span class="input-group-text" id="basic-addon2">.000 VNĐ</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary" (click)="modal.close()"
+            [disabled]="checkValid('hotel',addHotelForm)">Thêm</button>
+        </div>
+      </form>
+    </ng-template>
+
+    <ng-template #transportModal let-modal>
+
     </ng-template>
 
     <!-- Main Table -->
@@ -474,7 +588,7 @@
                 icon="pi pi-calendar">Ngày</button>
               <button pButton class="btn btn-primary" (click)="open('image', tourList.id)"
                 icon="pi pi-calendar">Ảnh</button>
-              <button pButton class="btn btn-warning" (click)="open('edit', tourList.id)"
+              <button pButton class="btn btn-warning" (click)="open('editTour', tourList.id)"
                 icon="pi pi-file-edit">Sửa</button>
               <button pButton class="btn btn-success" (click)="updateActive(tourList)" icon="pi pi-eye"
                 *ngIf="tourList.active == false">Hiện</button>

@@ -3,5 +3,6 @@ export interface Discount {
   name: string;
   percentage: number;
   amount: number;
-  code: string
+  code: string;
+  isDelete: boolean
 }
