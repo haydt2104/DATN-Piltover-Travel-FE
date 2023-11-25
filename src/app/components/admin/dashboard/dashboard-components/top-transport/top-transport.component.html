@@ -3,7 +3,7 @@
     <!-- title -->
     <h4 class="card-title">Top 10 doanh thu vận chuyển cao nhất</h4>
     <!-- title -->
-    <div class="table-responsive">
+    <div class="table table-bordered table-light table-striped">
       <table class="table align-middle mb-0">
         <thead>
           <tr>
@@ -52,21 +52,21 @@
         <tbody>
           <tr *ngFor="let ts of TransportRevenue; let i = index">
             <td>
-              <h6 class="mb-0 font-medium text-center">{{ i + 1 }}</h6>
+              <h6 class="mb-0 font-medium">{{ i + 1 }}</h6>
             </td>
             <td>
-              <h6 class="mb-0 font-medium text-center">{{ ts.transport_name }}</h6>
+              <h6 class="mb-0 font-medium">{{ ts.transport_name }}</h6>
             </td>
             <td>
-              <h6 class="mb-0 font-medium text-center">{{ formatCurrency(ts.transport_price) }}</h6>
+              <h6 class="mb-0 font-medium">{{ formatCurrency(ts.transport_price) }}</h6>
             </td>
             <td>
-              <h6 class="mb-0 font-medium text-center">
+              <h6 class="mb-0 font-medium">
                 {{ ts.total_transport_booking }}
               </h6>
             </td>
             <td>
-              <h6 class="mb-0 font-medium text-center">
+              <h6 class="mb-0 font-medium">
                 {{ formatCurrency(ts.total_transport_revenue) }}
               </h6>
             </td>

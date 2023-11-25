@@ -32,6 +32,7 @@ import { FooterComponent } from './components/user/layouts/footer/footer.compone
 import { HeaderComponent } from './components/user/layouts/header/header.component';
 import { CheckStatusAccountPipe } from './pipes/check-status-account.pipe';
 import { TestPipePipe } from './pipes/test-pipe.pipe';
+import { HomeComponent } from './components/user/views/home/home.component';
 
 
 
@@ -40,6 +41,7 @@ import { TestPipePipe } from './pipes/test-pipe.pipe';
     AppComponent,
     SpinnerComponent,
     // LayoutComponent,
+    HomeComponent,
     HeaderComponent,
     FooterComponent,
     AuthorizationsComponent,
