@@ -121,8 +121,8 @@ export class TourPlanComponent implements OnInit {
 
   public getAllTransport() {
     this.curdService.getList('transport').subscribe(
-      (response) => {
-        this.transportList = response;
+      (response: Transportation[]) => {
+        this.transportList = response.filter(transport => transport.isDelete == false);
       },
       (error: HttpErrorResponse) => {
         alert(error.message);

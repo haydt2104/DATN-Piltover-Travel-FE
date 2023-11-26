@@ -3,4 +3,5 @@ export interface Transportation {
   name: string;
   price: number;
   seatingCapacity: number;
+  isDelete: boolean;
 }

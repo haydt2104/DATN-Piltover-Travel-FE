@@ -40,6 +40,7 @@ export class TourPlanDetailComponent implements OnInit {
 
   currentTourPlan: TourPlan = null;
   planDetailList: TourPlanDetail[] = [];
+  tourPlanDate: Date
   constructor(
     private route: ActivatedRoute,
     private tourPlanDetailService: TourPlanDetailService,
@@ -104,23 +105,29 @@ export class TourPlanDetailComponent implements OnInit {
   }
 
   submitAdd(data) {
-    var planDetail: TourPlanDetail = {
-      id: null,
-      startTime: data.value.startTime,
-      endTime: data.value.endTime,
-      description: data.value.description,
-      tourPlan: this.currentTourPlan
-    }
-    this.curdService.post("tour_plan_detail", planDetail).subscribe(
-      (response: TourPlan) => {
-        this.getTourPlanDetailByTourPlanId(this.currentTourPlan.id);
-        this.messageService.clear();
-        this.messageService.add({ key: 'success', severity: 'success', summary: 'Thông Báo', detail: 'Thêm thành công' });
-      },
-      (error: HttpErrorResponse) => {
-        alert(error.message);
-      }
-    )
+    this.tourPlanDate = new Date(this.currentTourPlan.startTime)
+    const [hours, minutes] = data.value.startTime.split(':');
+    const addDate = new Date(this.tourPlanDate.getFullYear(), this.tourPlanDate.getMonth(), this.tourPlanDate.getDate(), +hours, +minutes, 0);
+    console.log(this.tourPlanDate, addDate);
+    
+    // var planDetail: TourPlanDetail = {
+    //   id: null,
+    //   startTime: data.value.startTime,
+    //   endTime: data.value.endTime,
+    //   description: data.value.description,
+    //   tourPlan: this.currentTourPlan
+    // }
+    // this.curdService.post("tour_plan_detail", planDetail).subscribe(
+    //   (response: TourPlan) => {
+    //     this.getTourPlanDetailByTourPlanId(this.currentTourPlan.id);
+    //     this.modalService.dismissAll()
+    //     this.messageService.clear();
+    //     this.messageService.add({ key: 'success', severity: 'success', summary: 'Thông Báo', detail: 'Thêm thành công' });
+    //   },
+    //   (error: HttpErrorResponse) => {
+    //     alert(error.message);
+    //   }
+    // )
   }
 
   clonedProducts: { [s: number]: TourPlanDetail; } = {};

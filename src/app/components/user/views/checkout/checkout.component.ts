@@ -219,7 +219,10 @@ export class CheckoutComponent implements OnInit {
   }
 
   toPayment(num: number) {
-    if (this.adult > 0 || this.children > 0) {
+    if ((this.adult + this.children) > (this.tourDate.tour.availableSpaces - this.getBookedCustomerNumber())) {
+      this.messageService.clear()
+      this.messageService.add({ key: 'warn', severity: 'warn', summary: 'Thông Báo', detail: 'Số Lượng Chỗ Ngồi Không Đủ' })
+    } else if (this.adult > 0 || this.children > 0) {
       var booking: Booking = {
         id: null,
         createUser: this.currentUser,
@@ -232,7 +235,6 @@ export class CheckoutComponent implements OnInit {
         updateUser: null,
         status: null
       }
-
       var bookingDetail: BookingDetail = {
         id: null,
         adult: this.adult,

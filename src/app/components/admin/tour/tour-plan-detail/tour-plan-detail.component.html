@@ -31,15 +31,15 @@
               <label class="form-label">Thời gian kết thúc:</label>
               <input #endTime="ngModel" name="endTime" id="endTime" class="form-control" type="time" ngModel required>
               <small *ngIf="endTime.touched && endTime.invalid">Thời gian kết thúc không được bỏ trống</small>
-              <small *ngIf="endTime.touched && startTime.value  > endTime.value">Thời gian kết thúc phải xảy ra sau thời
+              <small *ngIf="endTime.touched && startTime.value  >= endTime.value">Thời gian kết thúc phải xảy ra sau
+                thời
                 gian bắt
                 đầu</small>
             </div>
           </div>
         </div>
         <div class="modal-footer">
-          <button type="submit" class="btn btn-info" (click)="modal.close('Save click')"
-            [disabled]="checkValid(addForm)">Thêm</button>
+          <button type="submit" class="btn btn-info" [disabled]="checkValid(addForm)">Thêm</button>
         </div>
       </form>
     </ng-template>

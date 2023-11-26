@@ -121,7 +121,7 @@
             <td>
               <p-cellEditor>
                 <ng-template pTemplate="input">
-                  <p-calendar [(ngModel)]="planList.startTime" [minDate]="minDate" [touchUI]="true"
+                  <p-calendar [(ngModel)]="planList.startTime" [minDate]="minDate" [maxDate]="maxDate" [touchUI]="true"
                     [readonlyInput]="true" [showTime]="true" [showIcon]="true"></p-calendar>
                 </ng-template>
                 <ng-template pTemplate="output">

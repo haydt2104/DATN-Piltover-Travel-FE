@@ -69,7 +69,10 @@ export class TourComponent implements OnInit {
   @ViewChild('imageModal') imageModal: ElementRef;
   @ViewChild('hotelModal') hotelModal: ElementRef;
   @ViewChild('addHotelModal') addHotelModal: ElementRef;
+  @ViewChild('editHotelModal') editHotelModal: ElementRef;
   @ViewChild('transportModal') transportModal: ElementRef;
+  @ViewChild('addTransportModal') addTransportModal: ElementRef;
+  @ViewChild('editTransportModal') editTransportModal: ElementRef;
   @ViewChild('bookingModal') bookingModal: ElementRef;
   @ViewChild('confirmModal') confirmModal: ElementRef;
   @ViewChild('confirmStatusModal') confirmStatusModal: ElementRef;
@@ -94,11 +97,14 @@ export class TourComponent implements OnInit {
   public tourDateList: TourDate[] = [];
   public tourImageList: TourImage[] = [];
   public transportList: Transportation[] = [];
+  public availableTransport: Transportation[] = [];
+  public editTransport: Transportation;
   public statusList: Status[] = [];
   public bookingList: Booking[] = [];
   public editTour: Tour;
   public editBookingList: Booking[] = [];
   public hotelList: Hotel[] = []
+  public editHotel: Hotel;
   public provinceList: any;
   public districtList: any;
   public wardList: any;
@@ -195,6 +201,50 @@ export class TourComponent implements OnInit {
       this.callAPIProvince('https://provinces.open-api.vn/api/?depth=1', null);
       this.modalService
         .open(this.addHotelModal, {
+          ariaLabelledBy: 'modal-basic-title',
+          size: 'lg',
+        })
+    } else if (content == 'editHotel') {
+      this.editHotel = this.hotelList.find(hotel => hotel.id == id);
+      const provinceAddress = this.editHotel.address
+        .split(',')
+      [this.editHotel.address.split(',').length - 1].trim();
+      const districtAddress = this.editHotel.address
+        .split(',')
+      [this.editHotel.address.split(',').length - 2].trim();
+      const wardAddress = this.editHotel.address
+        .split(',')
+      [this.editHotel.address.split(',').length - 3].trim();
+      var provinceValue = this.provinceList.find((province) => province.name == provinceAddress).code
+      var districtValue = this.districtList.find((district) => district.name == districtAddress).code
+      var wardValue = this.wardList.find((ward) => ward.name == wardAddress).code
+      this.roadValue = this.editHotel.address
+        .substring(0, this.editHotel.address.indexOf(wardAddress) - 2)
+        .trim();
+      this.callAPIProvince('https://provinces.open-api.vn/api/?depth=1', provinceValue);
+      this.callApiDistrict('https://provinces.open-api.vn/api/p/' + provinceValue + '?depth=2', districtValue);
+      this.callApiWard('https://provinces.open-api.vn/api/d/' + districtValue + '?depth=2', wardValue);
+      this.modalService
+        .open(this.editHotelModal, {
+          ariaLabelledBy: 'modal-basic-title',
+          size: 'xl',
+        })
+    } else if (content == 'transport') {
+      this.modalService
+        .open(this.transportModal, {
+          ariaLabelledBy: 'modal-basic-title',
+          size: 'xl',
+        })
+    } else if (content == 'addTransport') {
+      this.modalService
+        .open(this.addTransportModal, {
+          ariaLabelledBy: 'modal-basic-title',
+          size: 'lg',
+        })
+    } else if (content == 'editTransport') {
+      this.editTransport = this.transportList.find(transport => transport.id == id)
+      this.modalService
+        .open(this.editTransportModal, {
           ariaLabelledBy: 'modal-basic-title',
           size: 'lg',
         })
@@ -302,6 +352,10 @@ export class TourComponent implements OnInit {
       document.querySelector('#confirmDelete').addEventListener('click', (e: Event) => this.deleteImage(id));
     } else if (object == 'tour_date') {
       document.querySelector('#confirmDelete').addEventListener('click', (e: Event) => this.deleteDate(id));
+    } else if (object == 'hotel') {
+      document.querySelector('#confirmDelete').addEventListener('click', (e: Event) => this.deleteHotel(id));
+    } else if (object == 'transport') {
+      document.querySelector('#confirmDelete').addEventListener('click', (e: Event) => this.deleteTransport(id));
     }
   }
 
@@ -339,6 +393,32 @@ export class TourComponent implements OnInit {
     this.curdService.delete('tour_date', id).subscribe(
       (response) => {
         this.getTourDateList(this.editTour.id)
+        this.messageService.clear();
+        this.messageService.add({ key: 'info', severity: 'info', summary: 'Thông Báo', detail: 'Xóa thành công' });
+      },
+      (error: HttpErrorResponse) => {
+        console.log(error.message);
+      }
+    )
+  }
+
+  deleteHotel(id: number) {
+    this.curdService.delete('hotel', id).subscribe(
+      (response) => {
+        this.getHotelList();
+        this.messageService.clear();
+        this.messageService.add({ key: 'info', severity: 'info', summary: 'Thông Báo', detail: 'Xóa thành công' });
+      },
+      (error: HttpErrorResponse) => {
+        console.log(error.message);
+      }
+    )
+  }
+
+  deleteTransport(id: number) {
+    this.curdService.delete('transport', id).subscribe(
+      (response) => {
+        this.getAllTransport();
         this.messageService.clear();
         this.messageService.add({ key: 'info', severity: 'info', summary: 'Thông Báo', detail: 'Xóa thành công' });
       },
@@ -415,8 +495,9 @@ export class TourComponent implements OnInit {
 
   public getAllTransport() {
     this.curdService.getList('transport').subscribe(
-      (response) => {
-        this.transportList = response;
+      (response: Transportation[]) => {
+        this.transportList = response
+        this.availableTransport = response.filter(transport => transport.isDelete == false)
       },
       (error: HttpErrorResponse) => {
         alert(error.message);
@@ -464,7 +545,6 @@ export class TourComponent implements OnInit {
         this.tourDateList[i].status = this.statusList.find(status => status.id == 3);
         this.curdService.put('tour_date', this.tourDateList[i]).subscribe(
           (response) => {
-
           },
           (error: HttpErrorResponse) => {
             alert(error.message);
@@ -529,9 +609,12 @@ export class TourComponent implements OnInit {
     document.querySelector(
       '#ward'
     ).innerHTML = `<option value="">Chọn Phường/Xã</option>`;
-    document.querySelector(
-      '#hotel'
-    ).innerHTML = `<option value="">Chọn Khách Sạn</option>`;
+    var hotel = document.getElementById('hotel')
+    if (hotel) {
+      document.querySelector(
+        '#hotel'
+      ).innerHTML = `<option value="">Chọn Khách Sạn</option>`;
+    }
   }
 
   districtChange() {
@@ -542,9 +625,12 @@ export class TourComponent implements OnInit {
         '#ward'
       ).innerHTML = `<option value="">Chọn Phường/Xã</option>`;
     }
-    document.querySelector(
-      '#hotel'
-    ).innerHTML = `<option value="">Chọn Khách Sạn</option>`;
+    var hotel = document.getElementById('hotel')
+    if (hotel) {
+      document.querySelector(
+        '#hotel'
+      ).innerHTML = `<option value="">Chọn Khách Sạn</option>`;
+    }
   }
 
   wardChange() {
@@ -673,18 +759,83 @@ export class TourComponent implements OnInit {
     var hotel: Hotel = {
       id: null,
       name: data.value.name,
-      price: data.value.price,
+      price: data.value.price * 1000,
       star: data.value.star,
       address: address
     }
     this.hotelService.addHotel(hotel).subscribe(
       (response) => {
+        this.messageService.clear();
+        this.messageService.add({ key: 'success', severity: 'success', summary: 'Thông Báo', detail: 'Thêm thành công' })
         this.getHotelList();
       },
       (error) => {
         console.log(error.message);
       }
     )
+  }
+
+  submitEditHotel(data) {
+    var province = $('#province option:selected').text();
+    var district = $('#district option:selected').text();
+    var ward = $('#ward option:selected').text();
+    var road = data.value.road;
+    var address = road + ', ' + ward + ', ' + district + ', ' + province;
+    var hotel: Hotel = {
+      id: this.editHotel.id,
+      name: data.value.name,
+      price: data.value.price * 1000,
+      star: data.value.star,
+      address: address
+    }
+    this.hotelService.editHotel(hotel).subscribe(
+      (response) => {
+        this.messageService.clear();
+        this.messageService.add({ key: 'info', severity: 'info', summary: 'Thông Báo', detail: 'Cập nhập thành công' })
+        this.getHotelList();
+      },
+      (error) => {
+        console.log(error.message);
+      }
+    )
+  }
+
+  submitAddTransport(data) {
+    var transport: Transportation = {
+      id: null,
+      name: data.value.name,
+      price: data.value.price * 1000,
+      seatingCapacity: data.value.seatingCapacity,
+      isDelete: true
+    }
+    this.curdService.post("transport", transport).subscribe(
+      (response) => {
+        this.messageService.clear();
+        this.messageService.add({ key: 'success', severity: 'success', summary: 'Thông Báo', detail: 'Thêm thành công' })
+        this.getAllTransport();
+      },
+      (error) => {
+        console.log(error.message);
+      })
+  }
+
+  submitEditTransport(data) {
+    var transport: Transportation = {
+      id: this.editTransport.id,
+      name: data.value.name,
+      price: data.value.price * 1000,
+      seatingCapacity: data.value.seatingCapacity,
+      isDelete: data.value.isDelete
+    }
+    this.curdService.put("transport", transport).subscribe(
+      (response) => {
+        this.messageService.clear();
+        this.messageService.add({ key: 'info', severity: 'info', summary: 'Thông Báo', detail: 'Cập nhập thành công' });
+        this.getAllTransport();
+      },
+      (error) => {
+        console.log(error.message);
+      })
   }
 
   checkValid(content: string, data: NgForm) {
@@ -697,10 +848,18 @@ export class TourComponent implements OnInit {
       } else {
         return true;
       }
-    } else {
+    } else if (content == 'hotel') {
       const star: number = +$('#star').val()
       const price: number = +$('#price').val()
-      if (data.valid && star >= 0 && price > 0) {
+      if (data.valid && star >= 0 && price <= 5 && price > 0) {
+        return false
+      } else {
+        return true;
+      }
+    } else {
+      const seatingCapacity: number = +$('#seatingCapacity').val()
+      const price: number = +$('#price').val()
+      if (data.valid && seatingCapacity > 0 && price > 0) {
         return false
       } else {
         return true;
@@ -837,6 +996,24 @@ export class TourComponent implements OnInit {
           console.log(error.message);
         }
       );
+    } else if (object == 'hotel') {
+      for (let tour of this.tourList) {
+        if (tour.hotel.id == id) {
+          this.messageService.clear();
+          this.messageService.add({ key: 'error', severity: 'error', summary: 'Thông Báo', detail: 'Khách Sạn Đang Được Sử Dụng Không Thể Xóa' })
+          return;
+        }
+      }
+      this.confirmDelete("hotel", id);
+    } else if (object == 'transport') {
+      for (let tour of this.tourList) {
+        if (tour.transport.id == id) {
+          this.messageService.clear();
+          this.messageService.add({ key: 'error', severity: 'error', summary: 'Thông Báo', detail: 'Phương Tiện Đang Được Sử Dụng Không Thể Xóa' })
+          return;
+        }
+      }
+      this.confirmDelete("transport", id);
     }
   }
 
