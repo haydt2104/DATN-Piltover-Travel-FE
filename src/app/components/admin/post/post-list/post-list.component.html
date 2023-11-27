@@ -22,7 +22,7 @@
           <th pSortableColumn="createUser.email">Email</th>
           <th pSortableColumn="content">Tiêu đề</th>
           <th pSortableColumn="createTime">Ngày đăng</th>
-          <th pSortableColumn="content">Số Thích</th>
+          <!-- <th pSortableColumn="content">Số Thích</th> -->
           <th></th>
         </tr>
       </ng-template>
@@ -30,10 +30,9 @@
         <tr>
           <td>{{ item.id }}</td>
           <td>{{ item.createUser.email }}</td>
-          <td>{{ item.content }}</td>
+          <td>{{ item.title }}</td>
           <td>{{ item.createTime | date:"HH:mm:ss dd/MM/yyyy" }}</td>
           <!-- <td>{{ likeCount[rowIndex] }}</td> -->
-          <td>{{ this.getLikePost(item.id) }}</td>
           <td>
             <button pButton class="btn btn-info m-1" (click)="getPostById(item.id)"
               [routerLink]="['/admin/manage/post/edit', item.id]"><i class="pi pi-pencil"></i>

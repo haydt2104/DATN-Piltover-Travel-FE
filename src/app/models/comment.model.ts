@@ -3,7 +3,9 @@ import { Post } from "./post.model";
 
 export interface Comment {
   id:number;
-  acc:Account;
+  commentUser:Account;
   post:Post;
+  commentTime: Date;
+  updateTime: Date;
   content:String
 }

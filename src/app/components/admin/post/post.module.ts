@@ -11,6 +11,10 @@ import { ButtonModule } from 'primeng/button';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
+import { AngularFireStorage, AngularFireStorageModule } from '@angular/fire/compat/storage';
+import { AngularFireModule } from '@angular/fire/compat';
+import { FileUploadModule } from 'primeng/fileupload';
+import { environment } from 'src/environments/environment';
 
 const routes: Routes = [
   {path: '', redirectTo: 'list', pathMatch: 'full'},
@@ -41,7 +45,10 @@ const routes: Routes = [
     ButtonModule,
     ConfirmDialogModule,
     ToastModule,
+    FileUploadModule,
     RouterModule.forChild(routes),
+    AngularFireModule.initializeApp(environment.firebaseConfig),
+    AngularFireStorageModule
   ],
   declarations: [
     PostEditComponent,

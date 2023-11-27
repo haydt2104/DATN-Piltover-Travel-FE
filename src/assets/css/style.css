@@ -13892,6 +13892,7 @@ textarea.form-control {
 }
 
 .blog-entry {
+  width: 100%;
   position: relative;
   z-index: 0;
 }

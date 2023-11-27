@@ -18,7 +18,6 @@ import { NavigationComponent } from './components/admin/shared/header/navigation
 import { SidebarComponent } from './components/admin/shared/sidebar/sidebar.component';
 
 import { AngularFireModule } from '@angular/fire/compat';
-import { AngularFireStorageModule } from '@angular/fire/compat/storage';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { environment } from 'src/environments/environment';
 import { Approutes } from './app-routing.module';
@@ -32,6 +31,7 @@ import { FooterComponent } from './components/user/layouts/footer/footer.compone
 import { HeaderComponent } from './components/user/layouts/header/header.component';
 import { CheckStatusAccountPipe } from './pipes/check-status-account.pipe';
 import { TestPipePipe } from './pipes/test-pipe.pipe';
+import { GalleriaModule } from 'primeng/galleria';
 
 
 
@@ -61,8 +61,8 @@ import { TestPipePipe } from './pipes/test-pipe.pipe';
     SidebarComponent,
     NavigationComponent,
     AngularFireModule.initializeApp(environment.firebaseConfig),
-    AngularFireStorageModule,
     MatPaginatorModule,
+    GalleriaModule
   ],
   providers: [
     {
@@ -74,6 +74,6 @@ import { TestPipePipe } from './pipes/test-pipe.pipe';
       useValue: environment.apiUrl,
     },
   ],
-  bootstrap: [AppComponent],
+  bootstrap: [AppComponent]
 })
 export class AppModule { }

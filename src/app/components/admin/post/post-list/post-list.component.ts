@@ -63,10 +63,10 @@ export class PostListComponent implements OnInit {
       reject: (type: ConfirmEventType) => {
         switch (type) {
           case ConfirmEventType.REJECT:
-            this.messageService.add({ severity: 'error', summary: 'Rejected', detail: 'You have rejected' });
+            this.messageService.add({ severity: 'error', summary: 'Hủy bỏ', detail: 'Bạn đã hủy hành động' });
             break;
           case ConfirmEventType.CANCEL:
-            this.messageService.add({ severity: 'warn', summary: 'Cancelled', detail: 'You have cancelled' });
+            // this.messageService.add({ severity: 'warn', summary: 'Hủy ', detail: 'You have cancelled' });
             break;
         }
       }

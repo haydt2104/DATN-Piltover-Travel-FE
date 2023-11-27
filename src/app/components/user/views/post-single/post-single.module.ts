@@ -1,15 +1,17 @@
-import { NgModule } from '@angular/core';
+import { NgModule, NO_ERRORS_SCHEMA } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Routes } from '@angular/router';
+import { RouterModule, Routes } from '@angular/router';
 import { PostSingleComponent } from './post-single.component';
+import { GalleriaModule } from 'primeng/galleria';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { ToastModule } from 'primeng/toast';
+import { ConfirmationService, MessageService } from 'primeng/api';
 
 const routes: Routes = [
   {
     path: '',
-    data: {
-      title: 'Post Single',
-      urls: [{ title: 'Post Single', url: '/post-single' }],
-    },
+    data: [],
     component: PostSingleComponent,
   },
 ];
@@ -19,7 +21,17 @@ const routes: Routes = [
     PostSingleComponent
   ],
   imports: [
-    CommonModule
-  ]
+    CommonModule,
+    FormsModule,
+    RouterModule.forChild(routes),
+    GalleriaModule,
+    ReactiveFormsModule,
+    ConfirmDialogModule,
+    ToastModule,
+  ],
+  providers: [
+    ConfirmationService,
+    MessageService
+  ],
 })
 export class PostSingleModule { }

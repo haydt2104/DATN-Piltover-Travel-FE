@@ -1,8 +1,10 @@
+import { ImageService } from './../../../../services/post/image/image.service';
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { Post } from 'src/app/models/post.model';
+import { PostImage } from 'src/app/models/postimage.model';
 import { PostService } from 'src/app/services/post/post.service';
 
 
@@ -15,10 +17,12 @@ export class PostEditComponent implements OnInit {
 
   formGroup: FormGroup
   post!: Post
+  postImg: PostImage[]
 
   constructor(
     private formBuilder: FormBuilder,
     private postService: PostService,
+    private imgService: ImageService,
     private messageService: MessageService,
     private route: ActivatedRoute,
     private router: Router,
@@ -26,17 +30,16 @@ export class PostEditComponent implements OnInit {
 
   ngOnInit(): void {
     this.formGroup = this.formBuilder.group({
-      id: [''],
-      email: new FormControl(),
-      title: new FormControl(),
-      description: new FormControl(),
-      content: new FormControl(),
-      updateTime: new FormControl()
+      title: new FormControl('', [Validators.required]),
+      description: new FormControl('', [Validators.required]),
+      content: new FormControl('', [Validators.required]),
+      images: new FormControl([])
     })
     const id = this.route.snapshot.paramMap.get('id');
     if (id !== null) {
       const idNumber = parseInt(id)
       this.getPost(idNumber);
+      this.getImg(idNumber)
     }
 
   }
@@ -53,6 +56,12 @@ export class PostEditComponent implements OnInit {
     })
   }
 
+  public getImg(id: number){
+    this.imgService.getImagesByIdPost(id).subscribe((data) => {
+      this.postImg = data
+      console.log(this.postImg)
+    })
+  }
   public savePost() {
     this.postService.updatePostById(this.formGroup.value, this.formGroup.value.id).subscribe(data => {
       this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Cập nhật thành công. Sẽ chuyển hướng sau 3 giây!', life: 3000 });

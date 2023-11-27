@@ -98,7 +98,13 @@ export const Approutes: Routes = [
             (m) => m.PostModule
           )
       },
-      { path: 'post-single/:id', component: PostSingleComponent },
+      {
+        path: 'post-single/:id',
+        loadChildren: () =>
+          import('./components/user/views/post-single/post-single.module').then(
+            (m) => m.PostSingleModule
+          )
+      },
       { path: 'destination', component: DestinationComponent },
       { path: 'destination-detail', component: DestinationDetailComponent },
     ],
