@@ -33,6 +33,8 @@ import { HeaderComponent } from './components/user/layouts/header/header.compone
 import { CheckStatusAccountPipe } from './pipes/check-status-account.pipe';
 import { TestPipePipe } from './pipes/test-pipe.pipe';
 import { HomeComponent } from './components/user/views/home/home.component';
+import { DestinationComponent } from './components/user/views/destination/destination.component';
+import { NgxPaginationModule } from 'ngx-pagination';
 
 
 
@@ -42,6 +44,7 @@ import { HomeComponent } from './components/user/views/home/home.component';
     SpinnerComponent,
     // LayoutComponent,
     HomeComponent,
+    DestinationComponent,
     HeaderComponent,
     FooterComponent,
     AuthorizationsComponent,
@@ -55,6 +58,7 @@ import { HomeComponent } from './components/user/views/home/home.component';
     BrowserModule,
     BrowserAnimationsModule,
     FormsModule,
+    NgxPaginationModule,
     ReactiveFormsModule,
     HttpClientModule,
     NgbModule,

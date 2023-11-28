@@ -12,6 +12,7 @@
     </div>
   </section>
 
+  <!-- Tim kiếm -->
   <section class="ftco-section ftco-no-pb">
     <div class="container">
       <div class="row">
@@ -24,7 +25,8 @@
                     <label for="#">Tìm tên tour</label>
                     <div class="form-field">
                       <div class="icon"><span class="fa fa-search"></span></div>
-                      <input type="text" class="form-control" placeholder="Nhập tên tour">
+                      <input type="text" class="form-control"
+                        placeholder="Nhập tên tour" [(ngModel)]="newTour.tourName" name="tourName">
                     </div>
                   </div>
                 </div>
@@ -33,31 +35,23 @@
                     <label for="#">Ngày khởi hành</label>
                     <div class="form-field">
                       <div class="icon"><span class="fa fa-calendar"></span></div>
-                      <input type="text" class="form-control checkin_date" placeholder="Chọn ngày đi">
+                      <input type="date" class="form-control "
+                        placeholder="Chọn ngày đi" [(ngModel)]="newTour.startDate" name="startDate">
                     </div>
                   </div>
                 </div>
                 <div class="col-lg d-flex">
                   <div class="form-group p-4">
-                    <label for="#">Số ngày</label>
+                    <label for="#">Điểm khởi hành</label>
                     <div class="form-field">
                       <div class="icon"><span class="fa fa-calendar"></span></div>
-                      <select name="" id="" class="form-control">
-                        <option value="">Chọn số ngày</option>
-                        <option value="">1 ngày</option>
-                        <option value="">2 ngày</option>
-                        <option value="">3 ngày</option>
-                        <option value="">4 ngày</option>
-                        <option value="">5 ngày</option>
-                        <option value="">6 ngày</option>
-                        <option value="">7 ngày</option>
-                        <option value="">8 ngày</option>
-                        <option value="">9 ngày</option>
-                        <option value="">10 ngày</option>
-                        <option value="">11 ngày</option>
-                        <option value="">12 ngày</option>
-                        <option value="">13 ngày</option>
-                      </select>
+                      <select name="startAddress" id="startAddress" class="form-control" [(ngModel)]="newTour.startAddress">
+                        <option value="">Chọn điểm khởi hành</option>
+                        <option value="Cần Thơ">Cần Thơ</option>
+                        <option value="Hồ Chí Minh">Tp.Hồ Chí Minh</option>
+                        <option value="Đà Nẵng">Đà Nẵng</option>
+                        <option value="Hà Nội">Hà Nội</option>
+                    </select>
                     </div>
                   </div>
                 </div>
@@ -67,23 +61,23 @@
                     <div class="form-field">
                       <div class="select-wrap">
                         <div class="icon"><span class="fa fa-chevron-down"></span></div>
-                        <select name="" id="" class="form-control">
+                        <select id="priceRange" class="form-control" [(ngModel)]="newTour.priceRange" name="priceRange" (change)="selectPriceRange(newTour.priceRange)">
                           <option value="">Giá</option>
-                          <option value="">Dưới 3 triệu</option>
-                          <option value="">Từ 3 - 7 triệu</option>
-                          <option value="">Từ 7 - 10 triệu</option>
-                          <option value="">Từ 10 đến 15</option>
-                          <option value="">Trên 15</option>
-                        </select>
+                          <option value="Dưới 3 triệu">Dưới 3 triệu</option>
+                          <option value="Từ 3 - 7 triệu">Từ 3 - 7 triệu</option>
+                          <option value="Từ 7 - 10 triệu">Từ 7 - 10 triệu</option>
+                          <option value="Từ 10 đến 15">Từ 10 đến 15</option>
+                          <option value="Trên 15">Trên 15</option>
+                      </select>
                       </div>
                     </div>
                   </div>
                 </div>
-
                 <div class="col-lg d-flex">
                   <div class="form-group d-flex w-100 border-0">
                     <div class="form-field w-100 align-items-center d-flex">
-                      <input type="submit" value="Tìm tour" class="align-self-stretch form-control btn btn-primary">
+                      <input type="submit" value="Tìm tour"
+                           class="align-self-stretch form-control btn btn-primary" (click)="createNewTour()">
                     </div>
                   </div>
                 </div>
@@ -94,199 +88,58 @@
       </div>
     </div>
   </section>
+  <!-- --------- -->
+ <!-- Thông báo khi không tìm thấy dữ liệu tìm kiếm -->
+ <section class="ftco-section" *ngIf="!dataLoaded && searchError">
+  <div class="container">
+    <p>{{ searchError }}</p>
+   </div>
+</section>
+<!-- --------- -->
 
-
-  <section class="ftco-section">
+  <section class="ftco-section" *ngIf="dataLoaded || searchError">
     <div class="container">
+      <!-- Sắp xếp  -->
+      <div class="sort-container" *ngIf="dataLoaded">
+        <label for="sort-select">Sắp xếp theo: </label>
+        <select id="sort-select" (change)="onSortChange($event)" class="custom-select">
+          <option value="">Chọn sắp xếp</option>
+          <option value="lowest">Giá thấp đến cao</option>
+          <option value="highest">Giá cao đến thấp</option>
+          <option value="dateAsc">Ngày gần nhất</option>
+          <option value="dateDesc">Ngày xa nhất</option>
+        </select>
+      </div><br><br><br>
+      <!-- ------- -->
+      <!-- --Load dữ liệu --- -->
       <div class="row">
-        <div class="col-md-4 ftco-animate">
-          <div class="project-wrap">
-            <a href="/destination-detail" class="img" style="background-image: url(../assets/images/destination-1.jpg);">
-              <span class="price">5,390,000đ/người</span>
+        <div class="col-md-4" *ngFor="let tour of HomeTour | paginate: { itemsPerPage: 6, currentPage: currentPage }">
+          <div class="project-wrap" >
+            <a href="#" class="img" [style.background-image]="'url(../assets/images/'+ tour.image + ')'">
+              <span class="price">{{ formatCurrency(tour.adult_price) }}/người</span>
             </a>
             <div class="text p-4">
               <span class="days">2 ngày 3 đêm</span>
-              <h3><a href="#">Nha Trang</a></h3>
-              <p class="location"><span class="fa fa-map-marker"></span> Điểm khởi hành: TP.Hồ Chí
-                Minh</p>
-              <p class="location"><span class="fa fa-bus"></span> Phương tiện: Xe ghế ngồi</p>
-              <p class="location"><span class="fa fa-calendar"></span> Ngày khởi hành: 07/09/2023</p>
+              <h3><a href="#">{{tour.name_Tour}}</a></h3>
+              <br>
+              <p class="location"><span class="fa fa-map-marker"></span> Điểm khởi hành: {{tour.start_address}}</p>
+              <p class="location"><span class="fa fa-bus"></span> Phương tiện: {{tour.transport_Name}}</p>
+              <p class="location"><span class="fa fa-calendar"></span> Ngày khởi hành: {{tour.start_time | date:'dd/MM/yyyy'}}</p>
+              <p class="location"><span class="fa fa-home"></span> Khách sạn: {{tour.hotel_Name}} {{tour.hotel_Star}}*</p>
               <ul>
                 <li><span class="ml-auto"></span><a href="">>> Xem thêm</a></li>
-
-              </ul>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-4 ftco-animate">
-          <div class="project-wrap">
-            <a href="#" class="img" style="background-image: url(../assets/images/destination-2.jpg);">
-              <span class="price">5,390,000đ/người</span>
-            </a>
-            <div class="text p-4">
-              <span class="days">2 ngày 3 đêm</span>
-              <h3><a href="#">Nha Trang</a></h3>
-              <p class="location"><span class="fa fa-map-marker"></span> Điểm khởi hành: TP.Hồ Chí
-                Minh</p>
-              <p class="location"><span class="fa fa-bus"></span> Phương tiện: Xe ghế ngồi</p>
-              <p class="location"><span class="fa fa-calendar"></span> Ngày khởi hành: 07/09/2023</p>
-              <ul>
-                <li><span class="ml-auto"></span><a href="">>> Xem thêm</a></li>
-
-              </ul>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-4 ftco-animate">
-          <div class="project-wrap">
-            <a href="#" class="img" style="background-image: url(../assets/images/destination-3.jpg);">
-              <span class="price">5,390,000đ/người</span>
-            </a>
-            <div class="text p-4">
-              <span class="days">2 ngày 3 đêm</span>
-              <h3><a href="#">Nha Trang</a></h3>
-              <p class="location"><span class="fa fa-map-marker"></span> Điểm khởi hành: TP.Hồ Chí
-                Minh</p>
-              <p class="location"><span class="fa fa-bus"></span> Phương tiện: Xe ghế ngồi</p>
-              <p class="location"><span class="fa fa-calendar"></span> Ngày khởi hành: 07/09/2023</p>
-              <ul>
-                <li><span class="ml-auto"></span><a href="">>> Xem thêm</a></li>
-
-              </ul>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-md-4 ftco-animate">
-          <div class="project-wrap">
-            <a href="#" class="img" style="background-image: url(../assets/images/destination-4.jpg);">
-              <span class="price">5,390,000đ/người</span>
-            </a>
-            <div class="text p-4">
-              <span class="days">2 ngày 3 đêm</span>
-              <h3><a href="#">Nha Trang</a></h3>
-              <p class="location"><span class="fa fa-map-marker"></span> Điểm khởi hành: TP.Hồ Chí
-                Minh</p>
-              <p class="location"><span class="fa fa-bus"></span> Phương tiện: Xe ghế ngồi</p>
-              <p class="location"><span class="fa fa-calendar"></span> Ngày khởi hành: 07/09/2023</p>
-              <ul>
-                <li><span class="ml-auto"></span><a href="">>> Xem thêm</a></li>
-
-              </ul>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-4 ftco-animate">
-          <div class="project-wrap">
-            <a href="#" class="img" style="background-image: url(../assets/images/destination-5.jpg);">
-              <span class="price">5,390,000đ/người</span>
-            </a>
-            <div class="text p-4">
-              <span class="days">2 ngày 3 đêm</span>
-              <h3><a href="#">Nha Trang</a></h3>
-              <p class="location"><span class="fa fa-map-marker"></span> Điểm khởi hành: TP.Hồ Chí
-                Minh</p>
-              <p class="location"><span class="fa fa-bus"></span> Phương tiện: Xe ghế ngồi</p>
-              <p class="location"><span class="fa fa-calendar"></span> Ngày khởi hành: 07/09/2023</p>
-              <ul>
-                <li><span class="ml-auto"></span><a href="">>> Xem thêm</a></li>
-
-              </ul>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-4 ftco-animate">
-          <div class="project-wrap">
-            <a href="#" class="img" style="background-image: url(../assets/images/destination-6.jpg);">
-              <span class="price">5,390,000đ/người</span>
-            </a>
-            <div class="text p-4">
-              <span class="days">2 ngày 3 đêm</span>
-              <h3><a href="#">Nha Trang</a></h3>
-              <p class="location"><span class="fa fa-map-marker"></span> Điểm khởi hành: TP.Hồ Chí
-                Minh</p>
-              <p class="location"><span class="fa fa-bus"></span> Phương tiện: Xe ghế ngồi</p>
-              <p class="location"><span class="fa fa-calendar"></span> Ngày khởi hành: 07/09/2023</p>
-              <ul>
-                <li><span class="ml-auto"></span><a href="">>> Xem thêm</a></li>
-
-              </ul>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-md-4 ftco-animate">
-          <div class="project-wrap">
-            <a href="#" class="img" style="background-image: url(../assets/images/destination-7.jpg);">
-              <span class="price">5,390,000đ/người</span>
-            </a>
-            <div class="text p-4">
-              <span class="days">2 ngày 3 đêm</span>
-              <h3><a href="#">Nha Trang</a></h3>
-              <p class="location"><span class="fa fa-map-marker"></span> Điểm khởi hành: TP.Hồ Chí
-                Minh</p>
-              <p class="location"><span class="fa fa-bus"></span> Phương tiện: Xe ghế ngồi</p>
-              <p class="location"><span class="fa fa-calendar"></span> Ngày khởi hành: 07/09/2023</p>
-              <ul>
-                <li><span class="ml-auto"></span><a href="">>> Xem thêm</a></li>
-
-              </ul>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-4 ftco-animate">
-          <div class="project-wrap">
-            <a href="#" class="img" style="background-image: url(../assets/images/destination-8.jpg);">
-              <span class="price">5,390,000đ/người</span>
-            </a>
-            <div class="text p-4">
-              <span class="days">2 ngày 3 đêm</span>
-              <h3><a href="#">Nha Trang</a></h3>
-              <p class="location"><span class="fa fa-map-marker"></span> Điểm khởi hành: TP.Hồ Chí
-                Minh</p>
-              <p class="location"><span class="fa fa-bus"></span> Phương tiện: Xe ghế ngồi</p>
-              <p class="location"><span class="fa fa-calendar"></span> Ngày khởi hành: 07/09/2023</p>
-              <ul>
-                <li><span class="ml-auto"></span><a href="">>> Xem thêm</a></li>
-
-              </ul>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-4 ftco-animate">
-          <div class="project-wrap">
-            <a href="#" class="img" style="background-image: url(../assets/images/destination-9.jpg);">
-              <span class="price">5,390,000đ/người</span>
-            </a>
-            <div class="text p-4">
-              <span class="days">2 ngày 3 đêm</span>
-              <h3><a href="#">Nha Trang</a></h3>
-              <p class="location"><span class="fa fa-map-marker"></span> Điểm khởi hành: TP.Hồ Chí
-                Minh</p>
-              <p class="location"><span class="fa fa-bus"></span> Phương tiện: Xe ghế ngồi</p>
-              <p class="location"><span class="fa fa-calendar"></span> Ngày khởi hành: 07/09/2023</p>
-              <ul>
-                <li><span class="ml-auto"></span><a href="">>> Xem thêm</a></li>
-
               </ul>
             </div>
           </div>
         </div>
       </div>
+      <!-- ---------- -->
+      <!-- Phân trang -->
       <div class="row mt-5">
         <div class="col text-center">
-          <div class="block-27">
-            <ul>
-              <li><a href="#">&lt;</a></li>
-              <li class="active"><span>1</span></li>
-              <li><a href="#">2</a></li>
-              <li><a href="#">3</a></li>
-              <li><a href="#">4</a></li>
-              <li><a href="#">5</a></li>
-              <li><a href="#">&gt;</a></li>
-            </ul>
-          </div>
+          <pagination-controls (pageChange)="currentPage=$event" [maxSize]="5" [directionLinks]="true" [autoHide]="true" [previousLabel]="'Trước'" [nextLabel]="'Tiếp'"></pagination-controls>
         </div>
       </div>
+     <!-- ---------- -->
     </div>
   </section>

@@ -16,105 +16,6 @@
         </div>
     </div>
 
-    <section class="ftco-section ftco-no-pb ftco-no-pt">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="ftco-search d-flex justify-content-center">
-                        <div class="row">
-                            <div class="col-md-12 nav-link-wrap">
-                                <div class="nav nav-pills text-center" id="v-pills-tab" role="tablist"
-                                    aria-orientation="vertical">
-                                    <a class="nav-link active mr-md-1" id="v-pills-1-tab" data-toggle="pill"
-                                        href="#v-pills-1" role="tab" aria-controls="v-pills-1"
-                                        aria-selected="true">Tìm Tour du lịch</a>
-                                </div>
-                            </div>
-                            <div class="col-md-12 tab-wrap">
-                                <div class="tab-content" id="v-pills-tabContent">
-                                    <div class="tab-pane fade show active" id="v-pills-1" role="tabpanel"
-                                        aria-labelledby="v-pills-nextgen-tab">
-                                        <form action="#" class="search-property-1">
-                                            <div class="row no-gutters">
-                                                <div class="col-md d-flex">
-                                                    <div class="form-group p-4 border-0">
-                                                        <label for="#">Tên tour</label>
-                                                        <div class="form-field">
-                                                            <div class="icon"><span class="fa fa-search"></span>
-                                                            </div>
-                                                            <input type="text" class="form-control"
-                                                                placeholder="Nhập tên tour">
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-md d-flex">
-                                                    <div class="form-group p-4">
-                                                        <label for="#">Ngày khởi hành</label>
-                                                        <div class="form-field">
-                                                            <div class="icon"><span class="fa fa-calendar"></span>
-                                                            </div>
-                                                            <input type="text" class="form-control checkin_date"
-                                                                placeholder="Chọn ngày đi">
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-md d-flex">
-                                                  <div class="form-group p-4">
-                                                      <label for="#">Điểm khởi hành</label>
-                                                      <div class="form-field">
-                                                          <div class="select-wrap">
-                                                              <div class="icon"><span
-                                                                      class="fa fa-chevron-down"></span></div>
-                                                              <select name="" id="" class="form-control">
-                                                                  <option value="">Chọn điểm khởi hành</option>
-                                                                  <option value="">Cần Thơ</option>
-                                                                  <option value="">Tp.Hồ Chí Minh</option>
-                                                                  <option value="">Đà Nẵng</option>
-                                                                  <option value="">Hà Nội</option>
-                                                              </select>
-                                                          </div>
-                                                      </div>
-                                                  </div>
-                                              </div>
-                                                <div class="col-md d-flex">
-                                                    <div class="form-group p-4">
-                                                        <label for="#">Khoảng giá</label>
-                                                        <div class="form-field">
-                                                            <div class="select-wrap">
-                                                                <div class="icon"><span
-                                                                        class="fa fa-chevron-down"></span></div>
-                                                                <select name="" id="" class="form-control">
-                                                                    <option value="">Giá</option>
-                                                                    <option value="">Dưới 3 triệu</option>
-                                                                    <option value="">Từ 3 - 7 triệu</option>
-                                                                    <option value="">Từ 7 - 10 triệu</option>
-                                                                    <option value="">Từ 10 đến 15</option>
-                                                                    <option value="">Trên 15</option>
-                                                                </select>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-md d-flex">
-                                                    <div class="form-group d-flex w-100 border-0">
-                                                        <div class="form-field w-100 align-items-center d-flex">
-                                                            <input type="submit" value="Tìm tour"
-                                                                class="align-self-stretch form-control btn btn-primary">
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </form>
-                                    </div>
-                                  </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-    </section>
-
     <section class="ftco-section img ftco-select-destination" style="background-image: url(../assets/images/bg_3.jpg);">
         <div class="container" style="margin-top: -70px;">
             <div class="row justify-content-center pb-4">
@@ -128,7 +29,7 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="carousel-destination owl-carousel ftco-animate" >
-                        <div class="item" *ngFor="let tour of HomeTour">
+                        <div class="item" *ngFor="let tour of HomeTour;">
                             <div class="project-destination" >
                                 <a href="#" class="img" [style.background-image]="'url(../assets/images/'+ tour.image + ')'">
                                     <div class="text">
@@ -151,8 +52,9 @@
                     <h2 class="mb-4">Book Tour Ngay! Giá Rẻ Trong Ngày</h2>
                 </div>
             </div>
-            <div class="row" >
-                <div class="col-md-4 ftco-animate"  *ngFor="let tour of HomeTour">
+
+            <div class="row">
+                <div class="col-md-4" *ngFor="let tour of displayedTours| paginate: { itemsPerPage: 6, currentPage: currentPage};">
                   <div class="project-wrap">
                     <a href="#" class="img" [style.background-image]="'url(../assets/images/'+ tour.image + ')'">
                       <span class="price">{{ formatCurrency(tour.adult_price) }}/người</span>
@@ -165,7 +67,7 @@
 
                           <p class="location"><span class="fa fa-bus"></span> Phương tiện: {{tour.transport_Name}}</p>
                           <p class="location"><span class="fa fa-calendar"></span> Ngày khởi hành: {{tour.start_time | date:'dd/MM/yyyy'}}</p>
-                          <p class="location"><span class="fa fa-home"></span> Khách sạn: {{tour.hotel_Name}}</p>
+                          <p class="location"><span class="fa fa-home"></span> Khách sạn: {{tour.hotel_Name}} {{tour.hotel_Star}}*</p>
                           <ul>
                               <li><span class="ml-auto"></span><a href="">>> Xem thêm</a></li>
                           </ul>
