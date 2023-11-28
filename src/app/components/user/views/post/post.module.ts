@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
 import { PostComponent } from './post.component';
 import {PaginatorModule} from 'primeng/paginator';
+import { NgxPaginationModule } from 'ngx-pagination';
 
 const routes: Routes = [
   {
@@ -22,6 +23,7 @@ const routes: Routes = [
   imports: [
     CommonModule,
     PaginatorModule,
+    NgxPaginationModule,
     RouterModule.forChild(routes)
   ],
   schemas:[

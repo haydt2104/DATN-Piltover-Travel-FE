@@ -5,6 +5,7 @@ import { PostImage } from 'src/app/models/postimage.model';
 import { ImageService } from 'src/app/services/post/image/image.service';
 import { PostService } from 'src/app/services/post/post.service';
 import { Observable, map } from 'rxjs';
+import { PrimeNGConfig } from 'primeng/api';
 
 @Component({
   selector: 'app-post-list',
@@ -16,41 +17,34 @@ export class PostComponent implements OnInit {
 
   public posts!: Post[];
   public postimg!: PostImage;
-  public pathImg: String[] = [];
+  // public pathImg: String[] = [];
+
+  p: number = 1;
+  itemsPerPage: number = 3;
+  totalItem: any;
   constructor(
     private postService: PostService,
-    private imgService: ImageService) { }
+    private imgService: ImageService,
+    private primengConfig: PrimeNGConfig) { }
   public ngOnInit(): void {
     this.getAllPost();
+    this.primengConfig.ripple = true
   }
-
-  // private getAllPost() {
-  //   this.postService.getAllPosts().subscribe((data) => {
-  //     this.posts = data;
-  //     console.log(this.posts);
-  //   });
-  //   console.log("to be counit...")
-  //   for (let post of this.posts) {
-  //     this.imgService.setThumbnailPost(post.id).subscribe((data) => {
-  //       this.pathImg.push(data.path)
-  //     })
-  //     console.log(post.id)
-  //   }
-  //   console.log(this.pathImg)
-  // }
 
   private async getAllPost() {
     const data = await this.postService.getAllPosts().toPromise();
     this.posts = data;
+    this.totalItem =data.length
     console.log(this.posts);
 
     for (let post of this.posts) {
       const thumbnailPath = await this.imgService.setThumbnailPost(post.id).toPromise();
-      this.pathImg.push(thumbnailPath.path);
-      console.log(post.id);
+      // this.pathImg.push(thumbnailPath.path);
+      post.path = thumbnailPath.path
+      console.log(post.path);
     }
 
-    console.log(this.pathImg);
+    // console.log(this.pathImg);
   }
 
 }

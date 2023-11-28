@@ -18,6 +18,7 @@ export class PostEditComponent implements OnInit {
   formGroup: FormGroup
   post!: Post
   postImg: PostImage[]
+  postId:number
 
   constructor(
     private formBuilder: FormBuilder,
@@ -38,6 +39,7 @@ export class PostEditComponent implements OnInit {
     const id = this.route.snapshot.paramMap.get('id');
     if (id !== null) {
       const idNumber = parseInt(id)
+      this.postId = idNumber;
       this.getPost(idNumber);
       this.getImg(idNumber)
     }
@@ -63,7 +65,7 @@ export class PostEditComponent implements OnInit {
     })
   }
   public savePost() {
-    this.postService.updatePostById(this.formGroup.value, this.formGroup.value.id).subscribe(data => {
+    this.postService.updatePostById(this.formGroup.value, this.postId).subscribe(data => {
       this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Cập nhật thành công. Sẽ chuyển hướng sau 3 giây!', life: 3000 });
       // this.router.navigateByUrl('/admin/manage/post/list');
       setTimeout(() => {

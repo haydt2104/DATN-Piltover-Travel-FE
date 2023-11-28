@@ -14,9 +14,9 @@
  <section class="ftco-section"> <!---->
   <div class="container">
     <div class="row d-flex">
-       <div *ngFor='let item of posts; index as i' class="col-md-4 d-flex "> <!--ftco-animate-->
+       <div *ngFor="let item of posts | paginate: { itemsPerPage: itemsPerPage, currentPage: p }" class="col-md-4 d-flex "> <!--ftco-animate-->
         <div class="blog-entry justify-content-end">
-          <a href="/post-single/{{item.id}}" class="block-20" style="background-image: url('{{pathImg[i]}}');"></a>
+          <a href="/post-single/{{item.id}}" class="block-20" style="background-image: url('{{item.path}}');"></a>
           <div class="text">
             <div class="d-flex align-items-center mb-4 topp">
               <div class="one">
@@ -34,7 +34,8 @@
         </div>
       </div>
     </div>
-    <!-- <p-paginator [rows]="12" [totalRecords]="posts.size" [rowsPerPageOptions]="[12,18,24]"></p-paginator> -->
+    <!-- <p-paginator [rows]="3" [current] [totalRecords]="posts.length" [rowsPerPageOptions]="[3,6,9,12,18,24]"></p-paginator> -->
+    <pagination-controls (pageChange)="p = $event"></pagination-controls>
   </div>
 </section>
 

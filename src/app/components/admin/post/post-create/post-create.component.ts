@@ -61,6 +61,9 @@ export class PostCreateComponent implements OnInit {
       console.log(this.formCreatePost.value)
       this.postService.createPost(this.formCreatePost.value).subscribe(data => {
         this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Thêm mới thành công. Sẽ chuyển hướng sau 3 giây!', life: 3000 });
+        setTimeout(() => {
+          this.router.navigateByUrl('/admin/manage/post/list');
+        }, 3000);
       })
     }
   }

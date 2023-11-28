@@ -13,4 +13,6 @@ export interface Post {
   status: Boolean;
   updateTime: Date;
   updateUser: Account;
+
+  path: String;
 }
