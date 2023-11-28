@@ -20,15 +20,17 @@
               </div>
               <div class="col-lg-5">
                 <div class="tour-detail-text">
-                  <h2>{{currentTour.name}}</h2>
-                  <p class="location"><i class="fa fa-map-marker"></i> Điểm đến: {{currentTour.destinationAddress}}</p>
-                  <p class="location"><i class="fa fa-bus"></i> Phương tiện: {{currentTour.transport.name}}</p>
-                  <p class="price"><i class="fa fa-money"></i> Giá vé:
+                  <h2 style="font-weight: 800; font-size: 25px;">THỌ WIBU {{currentTour.name}}</h2>
+                  <p class="location"><b><i class="fa fa-map-marker"></i> Điểm đến:</b> {{currentTour.destinationAddress}}</p>
+                  <p class="location"><b><i class="fa fa-bus"></i> Phương tiện:</b> {{currentTour.transport.name}}</p>
+                  <p class="price"><b><i class="fa fa-money"></i> Giá vé:</b>
                     Người lớn {{currentTour.price.adultPrice | number}}đ/người | Trẻ em
                     {{currentTour.price.childrenPrice | number}}đ/người</p>
-                  <p class="tour-description">Mô tả về tour du lịch: {{currentTour.description}}</p>
-                  <p class="tour-seats">Số lượng tối đa: {{currentTour.availableSpaces}}</p>
-                  <button class="btn btn-primary" (click)="open(dateListModal)">Đặt tour</button>
+                  <p class="tour-description"><b>Mô tả về tour du lịch:</b> Lorem ipsum dolor sit amet consectetur adipisicing elit. Quae, sit nisi esse, reprehenderit similique voluptas voluptatem laboriosam maiores illum tenetur sunt pariatur eos eum mollitia, saepe quidem dolorum ratione magni! {{currentTour.description}}</p>
+                  <p class="tour-seats"><b>Số lượng tối đa:</b> {{currentTour.availableSpaces}}</p>
+                  <button class="custom-button" (click)="open(dateListModal)"> Đặt tour
+                  </button>
+                  <!-- <button class="btn btn-primary" (click)="open(dateListModal)">Đặt tour</button> -->
                   <!-- <a href="#" class="btn btn-primary"><i class="fa fa-comments"></i> Liên hệ tư vấn</a> -->
                 </div>
               </div>
@@ -43,43 +45,13 @@
   <section class="tour-program">
     <div class="container">
       <div class="row">
-        <div class="col-md-8">
-          <h2>Chương trình Tour</h2>
-          <p>Thêm nội dung chương trình tour ở đây.</p>
+        <div class="col-md-7">
+          <h1 style="font-weight:1000 ;">Chương trình Tour</h1>
+          <p style="font-size: 16px;">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Laudantium maiores quia perspiciatis itaque provident possimus eius eveniet inventore quidem tempore! Magni minus dicta soluta, quia minima sint aspernatur reiciendis tenetur.</p>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-5">
           <!-- Khung cho phần "Lịch sử tour đã xem" -->
-          <div class="card">
-            <div class="card-header text-center">
-              <h5>Lịch sử tour đã xem</h5>
-            </div>
-            <ul class="list-unstyled">
-              <!-- Tour 1 -->
-              <a href="">
-                <li class="media">
-                  <img src="../assets/images/destination-1.jpg" class="mr-3 align-self-center" alt="Tour 1"
-                    style="width: 100px; height: 100px; padding:5px 5px;">
-                  <div class="media-body text-center">
-                    <h5 class="mt-0 mb-1">Tour 1</h5>
-                    <p> 5,390,000đ/người</p>
-                  </div>
-                </li>
-              </a>
-              <br>
-              <!-- Tour 2 -->
-              <a href="">
-                <li class="media">
-                  <img src="../assets/images/destination-2.jpg" class="mr-3 align-self-center" alt="Tour 1"
-                    style="width: 100px; height: 100px; padding:5px 5px;">
-                  <div class="media-body text-center">
-                    <h5 class="mt-0 mb-1">Tour 2</h5>
-                    <p>6,200,000đ/người</p>
-                  </div>
-                </li>
-              </a>
-              <!-- Thêm các tour khác tại đây -->
-            </ul>
-          </div>
+         
         </div>
       </div>
     </div>
@@ -90,7 +62,7 @@
       <div class="row justify-content-center pb-4">
         <div class="col-md-12 heading-section text-center ftco-animate">
 
-          <h2 class="mb-4">Những Tour Khác Có Thể Bạn Sẽ Quan Tâm</h2>
+          <h2 class="mb-4" style="font-size: 30px;">Những Tour Khác Có Thể Bạn Sẽ Quan Tâm</h2>
         </div>
       </div>
       <div class="row">

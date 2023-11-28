@@ -149,8 +149,11 @@
                             <span>
                                 Mã Giảm Giá ({{discount.code}})
                             </span>
-                            <span class="text-danger">
+                            <span class="text-danger" *ngIf="subTotal * discount.percentage/100 <= discount.max">
                                 -{{subTotal * discount.percentage/100 | number}} VNĐ
+                            </span>
+                            <span class="text-danger" *ngIf="subTotal * discount.percentage/100 > discount.max">
+                                -{{discount.max | number}} VNĐ
                             </span>
                         </div>
                         <div class="input-group" style="justify-content: right;">

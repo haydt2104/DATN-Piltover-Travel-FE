@@ -62,6 +62,8 @@ export class CheckoutComponent implements OnInit {
   hotelList: Hotel[] = []
   discountList: Discount[] = [];
   currentDate: Date = new Date();
+  booking: Booking
+  bookingDetail: BookingDetail
 
   adult: number
   children: number
@@ -200,51 +202,69 @@ export class CheckoutComponent implements OnInit {
     }
     this.subTotal = this.adult * this.tourDate.tour.price.adultPrice + this.children * this.tourDate.tour.price.childrenPrice
     if (this.discount) {
-      this.total = this.subTotal - (this.subTotal * this.discount.percentage / 100) + this.subTotal * 8 / 100
+      if (this.subTotal < this.discount.min) {
+        this.discount = null
+      } else if ((this.subTotal * this.discount.percentage / 100) <= this.discount.max) {
+        this.total = this.subTotal - (this.subTotal * this.discount.percentage / 100) + (this.subTotal * 8 / 100)
+      } else {
+        this.total = this.subTotal + (this.subTotal * 8 / 100) - this.discount.max
+      }
     } else {
       this.total = this.subTotal + this.subTotal * 8 / 100
+    }
+    this.booking = {
+      id: null,
+      createUser: this.currentUser,
+      tourDate: this.tourDate,
+      discount: this.discount,
+      totalPrice: this.total,
+      totalPassengers: this.adult + this.children,
+      createTime: new Date(),
+      updateTime: null,
+      updateUser: null,
+      status: null
+    }
+    this.bookingDetail = {
+      id: null,
+      adult: this.adult,
+      children: this.children,
+      bookingTime: new Date(),
+      surcharge: this.subTotal * 8 / 100,
+      booking: this.booking
     }
   }
 
   applyDiscount() {
-    this.discount = this.discountList.find(discount => discount.code == $('#discount').val())
-    if (this.discount && this.discount.isDelete == false) {
+    var dis = this.discountList.find(discount => discount.code == $('#discount').val())
+    if (dis && dis.isDelete == false && this.subTotal >= dis.min) {
+      this.discount = dis
+      this.changeData()
       this.messageService.clear()
       this.messageService.add({ key: 'success', severity: 'success', summary: 'Thông Báo', detail: 'Thêm mã giảm giá thành công' })
+    } else if (dis && dis.isDelete == false && this.subTotal < dis.min) {
+      this.messageService.clear()
+      this.messageService.add({ key: 'warn', severity: 'warn', summary: 'Thông Báo', detail: 'Số tiền phải từ ' + dis.min.toLocaleString() + ' VNĐ để có thể sử dụng được mã giảm giá' })
     } else {
       this.messageService.clear()
       this.messageService.add({ key: 'warn', severity: 'warn', summary: 'Thông Báo', detail: 'Mã giảm giá không hợp lệ' })
     }
-    this.changeData()
   }
 
   toPayment(num: number) {
     if ((this.adult + this.children) > (this.tourDate.tour.availableSpaces - this.getBookedCustomerNumber())) {
       this.messageService.clear()
       this.messageService.add({ key: 'warn', severity: 'warn', summary: 'Thông Báo', detail: 'Số Lượng Chỗ Ngồi Không Đủ' })
-    } else if (this.adult > 0 || this.children > 0) {
-      var booking: Booking = {
-        id: null,
-        createUser: this.currentUser,
-        tourDate: this.tourDate,
-        discount: this.discount,
-        totalPrice: this.total,
-        totalPassengers: this.adult + this.children,
-        createTime: new Date(),
-        updateTime: null,
-        updateUser: null,
-        status: null
-      }
-      var bookingDetail: BookingDetail = {
-        id: null,
-        adult: this.adult,
-        children: this.children,
-        bookingTime: new Date(),
-        surcharge: this.subTotal * 8 / 100,
-        booking: booking
-      }
+    } else if (this.adult < 0 || this.children < 0) {
+      this.messageService.clear()
+      this.messageService.add({ key: 'warn', severity: 'warn', summary: 'Thông Báo', detail: 'Vui lòng nhập ít nhất 1 người' })
+    } else if (this.adult == 0 && this.children > 0) {
+      this.messageService.clear()
+      this.messageService.add({ key: 'warn', severity: 'warn', summary: 'Thông Báo', detail: 'Vui lòng nhập ít nhất 1 người lớn khi có trẻ em' })
+    } else {
       if (num == 1) {
-        this.httpClient.post('http://localhost:8080/nopay', bookingDetail, { responseType: 'text' }).subscribe(
+        this.discount = null;
+        this.changeData();
+        this.httpClient.post('http://localhost:8080/nopay', this.bookingDetail, { responseType: 'text' }).subscribe(
           (response: string) => {
             window.location.href = response
           },
@@ -256,8 +276,8 @@ export class CheckoutComponent implements OnInit {
         this.httpClient.get(`https://v6.exchangerate-api.com/v6/4f5333c28a72c8a9ae7a2658/latest/USD`).subscribe(
           (response) => {
             var currencyData: any = response
-            booking.totalPrice = booking.totalPrice / currencyData.conversion_rates.VND
-            this.httpClient.post('http://localhost:8080/paypal', bookingDetail, { responseType: 'text' }).subscribe(
+            this.booking.totalPrice = this.booking.totalPrice / currencyData.conversion_rates.VND
+            this.httpClient.post('http://localhost:8080/paypal', this.bookingDetail, { responseType: 'text' }).subscribe(
               (response: string) => {
                 window.location.href = response
               },
@@ -271,7 +291,7 @@ export class CheckoutComponent implements OnInit {
           }
         )
       } else if (num == 3) {
-        this.httpClient.post('http://localhost:8080/vnpay', bookingDetail, { responseType: 'text' }).subscribe(
+        this.httpClient.post('http://localhost:8080/vnpay', this.bookingDetail, { responseType: 'text' }).subscribe(
           (response: string) => {
             window.location.href = response
           },
@@ -280,9 +300,6 @@ export class CheckoutComponent implements OnInit {
           }
         )
       }
-    } else {
-      this.messageService.clear()
-      this.messageService.add({ key: 'warn', severity: 'warn', summary: 'Thông Báo', detail: 'Vui lòng nhập ít nhất 1 người' })
     }
   }
 

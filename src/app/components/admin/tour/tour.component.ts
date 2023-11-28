@@ -302,6 +302,7 @@ export class TourComponent implements OnInit {
         }
       );
     } else {
+      this.loadingService.hideButton();
       this.messageService.clear();
       this.messageService.add({ key: 'warn', severity: 'warn', summary: 'Thông Báo', detail: 'Tour chỉ nhận duy nhất file kiểu ảnh và từ 5MB trở xuống' });
     }
@@ -335,6 +336,7 @@ export class TourComponent implements OnInit {
         }
       );
     } else {
+      this.loadingService.hideButton()
       this.messageService.clear();
       this.messageService.add({ key: 'warn', severity: 'warn', summary: 'Thông Báo', detail: 'Tour chỉ nhận duy nhất file kiểu ảnh và từ 5MB trở xuống' });
     }

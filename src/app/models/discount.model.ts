@@ -4,5 +4,7 @@ export interface Discount {
   percentage: number;
   amount: number;
   code: string;
-  isDelete: boolean
+  isDelete: boolean;
+  min: number;
+  max: number;
 }

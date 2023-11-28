@@ -204,7 +204,7 @@ export class TourPlanComponent implements OnInit {
           this.open("confirm", id);
         } else {
           this.messageService.clear();
-          this.messageService.add({ key: 'error', severity: 'error', summary: 'Thông Báo', detail: 'Dữ liệu đã được sử dụng trong bảng khác không thể xóa được' });
+          this.messageService.add({ key: 'error', severity: 'error', summary: 'Thông Báo', detail: 'Kế Hoạch Đã Có Chi Tiết Không Thể Xóa Được' });
         }
       },
       (error: HttpErrorResponse) => {
