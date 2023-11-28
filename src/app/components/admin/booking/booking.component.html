@@ -22,7 +22,17 @@
           <td>{{booking.createUser.email}}</td>
           <td class="text-right">{{booking.totalPrice}} VNĐ</td>
           <td class="text-center">{{booking.tourDate.initiateDate|date:'dd-MM-yyyy'}}</td>
-          <td class="text-center"> <span class="badge bg-secondary">{{booking.status}}</span></td>
+          <td class="text-center" [ngSwitch]="booking.status">
+            <span *ngSwitchCase="0" class="badge bg-secondary">
+              Chưa liên hệ
+            </span>
+            <span *ngSwitchCase="1" class="badge bg-success">
+              Đã liên hệ
+            </span>
+            <span *ngSwitchCase="2" class="badge bg-danger">
+              Đã hủy
+            </span>
+          </td>
           <td class="text-center">
             <button class="btn btn-info" [routerLink]="['/admin/manage/booking/detail/'+booking.id]"><i
                 class="bi bi-card-list"></i></button>

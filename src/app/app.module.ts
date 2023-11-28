@@ -32,6 +32,7 @@ import { FooterComponent } from './components/user/layouts/footer/footer.compone
 import { HeaderComponent } from './components/user/layouts/header/header.component';
 import { CheckStatusAccountPipe } from './pipes/check-status-account.pipe';
 import { TestPipePipe } from './pipes/test-pipe.pipe';
+import { HistoryComponent } from './components/user/views/history/history.component';
 
 
 
@@ -47,6 +48,7 @@ import { TestPipePipe } from './pipes/test-pipe.pipe';
     AccountComponent,
     CheckStatusAccountPipe,
     BookingComponent,
+    HistoryComponent
   ],
   imports: [
     CommonModule,
