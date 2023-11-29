@@ -9,7 +9,7 @@ export const Bookingroutes: Routes = [
     children: [
       { path: '', component: BookingComponent},
 
-      { path: 'detail/:id', component: EditBookingComponent},
+      { path: 'detail/:uid', component: EditBookingComponent},
   ]
   }
 ];

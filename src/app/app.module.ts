@@ -33,6 +33,7 @@ import { CheckStatusAccountPipe } from './pipes/check-status-account.pipe';
 import { TestPipePipe } from './pipes/test-pipe.pipe';
 import { GalleriaModule } from 'primeng/galleria';
 import { HomeComponent } from './components/user/views/home/home.component';
+import { HistoryComponent } from './components/user/views/history/history.component';
 
 
 
@@ -49,6 +50,7 @@ import { HomeComponent } from './components/user/views/home/home.component';
     AccountComponent,
     CheckStatusAccountPipe,
     BookingComponent,
+    HistoryComponent
   ],
   imports: [
     CommonModule,

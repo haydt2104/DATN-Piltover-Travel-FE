@@ -1,5 +1,6 @@
+import { Comment } from './models/comment.model';
 import { PostModule } from './components/admin/post/post.module';
-import { NgModule } from '@angular/core';
+import { NgModule, Component } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
 import { FullComponent } from './components/admin/layouts/full/full.component';
@@ -9,7 +10,6 @@ import { PageNotFoundComponent } from './components/user/views/page-not-found/pa
 import { AboutComponent } from './components/user/views/about/about.component';
 import { ContactComponent } from './components/user/views/contact/contact.component';
 import { HistoryComponent } from './components/user/views/history/history.component';
-import { HistoryDetailComponent } from './components/user/views/history-detail/history-detail.component';
 import { DestinationComponent } from './components/user/views/destination/destination.component';
 import { DestinationDetailComponent } from './components/user/views/destination-detail/destination-detail.component';
 import { ForgotpassComponent } from './components/user/authorizations/forgotpass/forgotpass.component';
@@ -18,6 +18,7 @@ import { LoginComponent } from './components/user/authorizations/login/login.com
 import { AuthorizationsComponent } from './components/user/authorizations/authorizations.component';
 import { PostComponent } from './components/user/views/post/post.component';
 import { PostSingleComponent } from './components/user/views/post-single/post-single.component';
+import { DetailComponent } from './components/user/views/history/detail/detail.component';
 
 export const Approutes: Routes = [
   {
@@ -89,8 +90,14 @@ export const Approutes: Routes = [
       { path: 'home', component: HomeComponent },
       { path: 'about', component: AboutComponent },
       { path: 'contact', component: ContactComponent },
-      { path: 'history', component: HistoryComponent },
-      { path: 'history-detail', component: HistoryDetailComponent },
+      // { path: 'history', component: HistoryComponent },
+      {
+        path: 'history',
+        loadChildren: () =>
+          import('./components/user/views/history/history.module').then(
+            (m) => m.HistoryModule
+          ),
+      },
       {
         path: 'post',
         loadChildren: () =>
