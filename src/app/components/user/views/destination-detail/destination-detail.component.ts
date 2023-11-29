@@ -47,6 +47,7 @@ export class DestinationDetailComponent implements OnInit {
   tourDateList: TourDate[]
   bookingList: Booking[]
   planList: TourPlan[]
+  currentDate: Date = new Date();
 
   ngOnInit(): void {
     this.route.params.subscribe((params) => {
@@ -132,5 +133,10 @@ export class DestinationDetailComponent implements OnInit {
         data: btoa(JSON.stringify(dateId))
       }
     })
+  }
+
+  public getDateDiffer(date1: Date, date2: Date): number {
+    var dateDif: number = Math.round(Number(new Date(date2).getTime()) - Number(new Date(date1).getTime())) / (24 * 60 * 60 * 1000)
+    return dateDif
   }
 }

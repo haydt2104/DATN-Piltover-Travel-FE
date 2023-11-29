@@ -282,7 +282,6 @@
         <pButton pButton class="p-button-danger" icon="pi pi-times" (click)="cancelAddDate()" *ngIf="addDateStatus">
           Hủy</pButton>
         <button id="closeDateModal" type="button" class="btn-close" aria-label="Close" (click)="modal.close()"></button>
-
       </div>
       <div class="modal-body">
         <p-table *ngIf="tourDateList && tourDateList.length > 0" #dt2 [value]="tourDateList" sortField="initiateDate"
@@ -330,7 +329,7 @@
                     <input pInputText type="date" [(ngModel)]="tourDateList.endDate"
                       min="{{tourDateList.initiateDate | date:'yyyy-MM-dd'}}">
                   </ng-template>
-                  <ng-template pTemplate="output">
+                  <ng-template pTemplate="output" class="flex">
                     {{ tourDateList.endDate | date: 'dd-MM-yyyy' }}
                   </ng-template>
                 </p-cellEditor>
@@ -339,7 +338,7 @@
                 <p-cellEditor>
                   <ng-template pTemplate="input">
                     <select class="form-control" [(ngModel)]="tourDateList.status.id" required>
-                      <option *ngFor="let item of statusList" value="{{item.id}}">{{item.name}}</option>
+                      <option *ngFor="let status of statusList" value="{{status.id}}">{{status.name}}</option>
                     </select>
                   </ng-template>
                   <ng-template pTemplate="output">

@@ -913,11 +913,11 @@ export class TourComponent implements OnInit {
   }
 
   onRowEditSave(tourDate: TourDate, index: number) {
-    tourDate.status = this.statusList.find(status => status.id == tourDate.status.id);
     this.tourDateList[index] = tourDate;
     this.curdService.put('tour_date', tourDate).subscribe(
       (response: TourDate) => {
         delete this.clonedProducts[tourDate.id]
+        this.getTourDateList(this.editTour.id)
         this.messageService.clear();
         this.messageService.add({ key: 'info', severity: 'info', summary: 'Thông Báo', detail: 'Cập nhập thành công' })
       },

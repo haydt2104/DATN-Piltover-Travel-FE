@@ -1,27 +1,27 @@
-import { HttpErrorResponse, HttpClient } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { MessageService } from 'primeng/api';
+import { ButtonModule } from 'primeng/button';
+import { CardModule } from 'primeng/card';
 import { CarouselModule } from 'primeng/carousel';
+import { InputTextModule } from 'primeng/inputtext';
+import { RadioButtonModule } from 'primeng/radiobutton';
+import { ToastModule } from 'primeng/toast';
 import { Account } from 'src/app/models/account.model';
+import { BookingDetail } from 'src/app/models/booking-detail.model';
 import { Booking } from 'src/app/models/booking.model';
+import { Discount } from 'src/app/models/discount.model';
 import { Hotel } from 'src/app/models/hotel.model';
 import { TourDate } from 'src/app/models/tour-date.model';
 import { TourImage } from 'src/app/models/tour-img.model';
 import { BookingService } from 'src/app/services/booking/booking.service';
+import { DiscountService } from 'src/app/services/discount/discount.service';
 import { HotelService } from 'src/app/services/hotel/hotel.service';
 import { TourDateService } from 'src/app/services/tour/tour-date.service';
 import { TourImageService } from 'src/app/services/tour/tour-image.service';
 import { AccountService } from './../../../../services/account/account.service';
-import { RadioButtonModule } from 'primeng/radiobutton';
-import { CardModule } from 'primeng/card';
-import { Discount } from 'src/app/models/discount.model';
-import { InputTextModule } from 'primeng/inputtext';
-import { DiscountService } from 'src/app/services/discount/discount.service';
-import { ToastModule } from 'primeng/toast';
-import { MessageService } from 'primeng/api';
-import { ButtonModule } from 'primeng/button';
-import { BookingDetail } from 'src/app/models/booking-detail.model';
-import { error } from 'jquery';
 
 
 
@@ -41,6 +41,7 @@ import { error } from 'jquery';
   providers: [MessageService]
 })
 export class CheckoutComponent implements OnInit {
+  @ViewChild('confirmModal') confirmModal: ElementRef;
   constructor(
     private route: ActivatedRoute,
     private router: Router,
@@ -51,7 +52,8 @@ export class CheckoutComponent implements OnInit {
     private accountService: AccountService,
     private discountService: DiscountService,
     private messageService: MessageService,
-    private httpClient: HttpClient
+    private httpClient: HttpClient,
+    private modalService: NgbModal,
   ) { }
   responsiveOptions: any[] | undefined;
 
@@ -65,8 +67,8 @@ export class CheckoutComponent implements OnInit {
   booking: Booking
   bookingDetail: BookingDetail
 
-  adult: number
-  children: number
+  adult: number = 0
+  children: number = 0
   subTotal: number = 0
   discount: Discount = null
   total: number = 0
@@ -183,7 +185,7 @@ export class CheckoutComponent implements OnInit {
   }
 
   public getDateDiffer(date1: Date, date2: Date): number {
-    var dateDif = Math.round(Number(new Date(date2).getTime()) - Number(new Date(date1).getTime())) / (24 * 60 * 60 * 1000)
+    var dateDif: number = Math.round(Number(new Date(date2).getTime()) - Number(new Date(date1).getTime())) / (24 * 60 * 60 * 1000)
     return dateDif
   }
 
@@ -250,17 +252,19 @@ export class CheckoutComponent implements OnInit {
     }
   }
 
+  openConfirm() {
+    if (this.validate(1) == true) {
+      this.modalService
+        .open(this.confirmModal, {
+          ariaLabelledBy: 'modal-basic-title',
+          size: 'xl',
+        })
+      document.querySelector('#confirm').addEventListener('click', (e: Event) => this.toPayment(1));
+    }
+  }
+
   toPayment(num: number) {
-    if ((this.adult + this.children) > (this.tourDate.tour.availableSpaces - this.getBookedCustomerNumber())) {
-      this.messageService.clear()
-      this.messageService.add({ key: 'warn', severity: 'warn', summary: 'Thông Báo', detail: 'Số Lượng Chỗ Ngồi Không Đủ' })
-    } else if (this.adult < 0 || this.children < 0) {
-      this.messageService.clear()
-      this.messageService.add({ key: 'warn', severity: 'warn', summary: 'Thông Báo', detail: 'Vui lòng nhập ít nhất 1 người' })
-    } else if (this.adult == 0 && this.children > 0) {
-      this.messageService.clear()
-      this.messageService.add({ key: 'warn', severity: 'warn', summary: 'Thông Báo', detail: 'Vui lòng nhập ít nhất 1 người lớn khi có trẻ em' })
-    } else {
+    if (this.validate(num) == true) {
       if (num == 1) {
         this.discount = null;
         this.changeData();
@@ -309,4 +313,25 @@ export class CheckoutComponent implements OnInit {
     }
   }
 
+  validate(num: number): boolean {
+    if ((this.adult + this.children) > (this.tourDate.tour.availableSpaces - this.getBookedCustomerNumber())) {
+      this.messageService.clear()
+      this.messageService.add({ key: 'warn', severity: 'warn', summary: 'Thông Báo', detail: 'Số Lượng Chỗ Ngồi Không Đủ' })
+      return false;
+    } else if (this.adult == 0 && this.children == 0) {
+      this.messageService.clear()
+      this.messageService.add({ key: 'warn', severity: 'warn', summary: 'Thông Báo', detail: 'Vui lòng nhập ít nhất 1 người' })
+      return false;
+    } else if (this.adult == 0 && this.children > 0) {
+      this.messageService.clear()
+      this.messageService.add({ key: 'warn', severity: 'warn', summary: 'Thông Báo', detail: 'Vui lòng nhập ít nhất 1 người lớn khi có trẻ em' })
+      return false;
+    } else if ((this.adult + this.children) > 10 && num == 1) {
+      this.messageService.clear()
+      this.messageService.add({ key: 'warn', severity: 'warn', summary: 'Thông Báo', detail: 'Chức Năng Đặt Trước Chỉ Cho Phép Đặt Từ 10 Người Trở Xuống' })
+      return false;
+    } else {
+      return true;
+    }
+  }
 }

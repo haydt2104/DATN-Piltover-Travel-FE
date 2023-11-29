@@ -20,13 +20,17 @@
               </div>
               <div class="col-lg-5">
                 <div class="tour-detail-text">
-                  <h2 style="font-weight: 800; font-size: 25px;">THỌ WIBU {{currentTour.name}}</h2>
-                  <p class="location"><b><i class="fa fa-map-marker"></i> Điểm đến:</b> {{currentTour.destinationAddress}}</p>
+                  <h2 style="font-weight: 800; font-size: 25px;">{{currentTour.name}}</h2>
+                  <p class="location"><b><i class="fa fa-map-marker"></i> Điểm đến:</b>
+                    {{currentTour.destinationAddress}}</p>
                   <p class="location"><b><i class="fa fa-bus"></i> Phương tiện:</b> {{currentTour.transport.name}}</p>
                   <p class="price"><b><i class="fa fa-money"></i> Giá vé:</b>
                     Người lớn {{currentTour.price.adultPrice | number}}đ/người | Trẻ em
                     {{currentTour.price.childrenPrice | number}}đ/người</p>
-                  <p class="tour-description"><b>Mô tả về tour du lịch:</b> Lorem ipsum dolor sit amet consectetur adipisicing elit. Quae, sit nisi esse, reprehenderit similique voluptas voluptatem laboriosam maiores illum tenetur sunt pariatur eos eum mollitia, saepe quidem dolorum ratione magni! {{currentTour.description}}</p>
+                  <p class="tour-description"><b>Mô tả về tour du lịch:</b> Lorem ipsum dolor sit amet consectetur
+                    adipisicing elit. Quae, sit nisi esse, reprehenderit similique voluptas voluptatem laboriosam
+                    maiores illum tenetur sunt pariatur eos eum mollitia, saepe quidem dolorum ratione magni!
+                    {{currentTour.description}}</p>
                   <p class="tour-seats"><b>Số lượng tối đa:</b> {{currentTour.availableSpaces}}</p>
                   <button class="custom-button" (click)="open(dateListModal)"> Đặt tour
                   </button>
@@ -47,11 +51,13 @@
       <div class="row">
         <div class="col-md-7">
           <h1 style="font-weight:1000 ;">Chương trình Tour</h1>
-          <p style="font-size: 16px;">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Laudantium maiores quia perspiciatis itaque provident possimus eius eveniet inventore quidem tempore! Magni minus dicta soluta, quia minima sint aspernatur reiciendis tenetur.</p>
+          <p style="font-size: 16px;">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Laudantium maiores quia
+            perspiciatis itaque provident possimus eius eveniet inventore quidem tempore! Magni minus dicta soluta, quia
+            minima sint aspernatur reiciendis tenetur.</p>
         </div>
         <div class="col-md-5">
           <!-- Khung cho phần "Lịch sử tour đã xem" -->
-         
+
         </div>
       </div>
     </div>
@@ -188,7 +194,8 @@
           </tr>
         </ng-template>
         <ng-template pTemplate="body" class="tbody" let-tourDateList let-expanded="expanded">
-          <tr class="text-center" *ngIf="getBookedCustomerNumber(tourDateList.id) < tourDateList.tour.availableSpaces">
+          <tr class="text-center"
+            *ngIf="getBookedCustomerNumber(tourDateList.id) < tourDateList.tour.availableSpaces && getDateDiffer(currentDate,tourDateList.initiateDate) > 3">
             <td>
               <button type="button" pButton [pRowToggler]="tourDateList"
                 class="p-button-text p-button-rounded p-button-plain"

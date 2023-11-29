@@ -165,13 +165,50 @@
                             <span>Thành Tiền: </span> <strong class="text-dark">{{total | number}} VNĐ</strong>
                         </div>
 
-                        <button *ngIf="getDateDiffer(currentDate,tourDate.initiateDate) >= 3"
-                            class="btn btn-primary w-100 mt-2" (click)="toPayment(1)">Đặt Trước</button>
-                        <button class="btn btn-primary w-100 mt-2" (click)="toPayment(2)">Paypal</button>
-                        <button class="btn btn-primary w-100 mt-2" (click)="toPayment(3)">VNPay</button>
+                        <button *ngIf="getDateDiffer(currentDate,tourDate.initiateDate) >= 7"
+                            class="btn btn-pre w-100 mt-2" (click)="openConfirm()">Đặt Trước</button>
+                        <button class="btn btn-paypal w-100 mt-2" (click)="toPayment(2)"><img
+                                src="../../../../../assets/images/logos/paypal.png" width="20px" alt="paypal icon">
+                            Paypal</button>
+                        <button class="btn btn-vnpay w-100 mt-2" (click)="toPayment(3)"><img
+                                src="../../../../../assets/images/logos/vnpay.png" width="20px" alt="vnpay icon">
+                            VNPay</button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </section>
+
+<ng-template #confirmModal let-modal>
+    <div class="modal-header">
+        <div class="text-dark">Thông Báo</div>
+        <button id="closeDateModal" type="button" class="btn-close" aria-label="Close" (click)="modal.close()"></button>
+    </div>
+    <div class="modal-body">
+        <div *ngIf="discount">
+            <h4>Mã Giảm Giá [<b>{{discount.code}}</b>] Sẽ Không Được Áp Dụng Nếu Bạn Chọn "Đặt Trước", Bạn Có Muốn Tiếp
+                Tục?
+            </h4>
+            <p *ngIf="subTotal * discount.percentage/100 <= discount.max">Số Tiền Không Được Áp Dụng: <b
+                    class="text-success">{{subTotal *
+                    discount.percentage/100 | number}} VNĐ</b></p>
+            <p *ngIf="subTotal * discount.percentage/100 <= discount.max">Số Tiền Phải Trả Cuối Cùng: <b
+                    class="text-danger">{{total +
+                    (subTotal *discount.percentage/100) | number}} VNĐ </b></p>
+            <p *ngIf="subTotal * discount.percentage/100 > discount.max">Số Tiền Không Được Áp Dụng: <b
+                    class="text-success">{{discount.max |
+                    number}} VNĐ</b></p>
+            <p *ngIf="subTotal * discount.percentage/100 > discount.max">Số Tiền Phải Trả Cuối Cùng: <b
+                    class="text-danger">{{total +
+                    discount.max | number}} VNĐ </b></p>
+        </div>
+        <div>
+            <b>*Lưu ý: Bạn Phải Thanh Toán Số Tiền Trong 3 Ngày Kể Từ Khi Đặt Trước.</b>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-success" (click)="modal.close()">Hủy bỏ</button>
+        <button id="confirm" class="btn btn-danger" (click)="modal.close()">Xác nhận</button>
+    </div>
+</ng-template>
