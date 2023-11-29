@@ -1,14 +1,22 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-
+import { Observable } from 'rxjs';
+import { Hotel } from 'src/app/models/hotel.model';
 @Injectable({
   providedIn: 'root',
 })
 export class HotelService {
-  private API_Url: String = 'http://localhost:8080/api/';
-  constructor(private httpRequest: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
-  getDataHotelFormAPI() {
-    return this.httpRequest.get(this.API_Url + 'hotel/');
+  public getAllHotel(): Observable<Hotel[]> {
+    return this.http.get<Hotel[]>(`http://localhost:8080/api/hotel/all`);
+  }
+
+  public addHotel(hotel: Hotel): Observable<Hotel> {
+    return this.http.post<Hotel>(`http://localhost:8080/api/hotel`, hotel);
+  }
+
+  public editHotel(hotel: Hotel): Observable<Hotel> {
+    return this.http.put<Hotel>(`http://localhost:8080/api/hotel`, hotel);
   }
 }

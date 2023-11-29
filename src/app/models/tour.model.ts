@@ -1,5 +1,5 @@
+import { Hotel } from './hotel.model';
 import { Price } from './price.model';
-import { Status } from './status.model';
 import { Transportation } from './transportation.model';
 
 export interface Tour {
@@ -11,6 +11,7 @@ export interface Tour {
   availableSpaces: number;
   createTime: Date;
   active: boolean;
-  price: Price
-  transport:Transportation
+  price: Price;
+  transport: Transportation;
+  hotel: Hotel;
 }

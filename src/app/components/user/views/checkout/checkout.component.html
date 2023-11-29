@@ -1,0 +1,214 @@
+<p-toast key="success"></p-toast>
+<p-toast key="error"></p-toast>
+<p-toast key="warn"></p-toast>
+<p-toast key="info"></p-toast>
+<section class="hero-wrap hero-wrap-2 js-fullheight" style="background-image: url(../assets/images/bg_1.jpg);">
+    <div class="container">
+        <div class="row no-gutters slider-text js-fullheight align-items-end justify-content-center">
+            <div class="col-md-9 ftco-animate pb-5 text-center">
+                <h1 class="mb-0 bread">Checkout</h1>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="ftco-section ftco-no-pb contact-section mb-4">
+    <div class="container">
+        <h1 class="h3 mb-5">Tour - {{tourDate.tour.name}}</h1>
+        <h2>Số lượng còn trống {{tourDate.tour.availableSpaces - getBookedCustomerNumber()}}</h2>
+        <h4>
+            Ngày Bắt Đầu: {{tourDate.initiateDate |
+            date:"dd-MM-yyyy"}} - Ngày Kết Thúc: {{tourDate.endDate |
+            date:"dd-MM-yyyy"}}
+        </h4>
+        <p-carousel [value]="tourImageList" [numVisible]="3" [numScroll]="1" [responsiveOptions]="responsiveOptions">
+            <ng-template let-image pTemplate="item">
+                <div class="product-item">
+                    <div class="product-item-content">
+                        <div class="mb-3">
+                            <img width="300px" height="150px" [src]="image.path" class="product-image" />
+                        </div>
+                    </div>
+                </div>
+            </ng-template>
+        </p-carousel>
+        <div class="row">
+            <!-- Left -->
+            <div class="col-lg-7">
+                <h2>
+                    <label class="form-check-label pt-1" for="payment1">
+                        Thông Tin Khách Hàng
+                    </label>
+                </h2>
+                <div>
+                    <div class="mb-3">
+                        <label class="form-label">Tên Khách Hàng</label>
+                        <input class="form-control" type="text" [value]="currentUser.fullname" disabled>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-5">
+                            <div class="mb-3">
+                                <label class="form-label">Email</label>
+                                <input type="text" class="form-control" [value]="currentUser.email" disabled>
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="mb-3">
+                                <label class="form-label">Số Điện Thoại</label>
+                                <input type="text" class="form-control" [value]="currentUser.phone" disabled>
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <div class="mb-3">
+                                <label class="form-label">Ngày Sinh</label>
+                                <input type="text" class="form-control" [value]="currentUser.birthday" disabled>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <h2>
+                    <label class="form-check-label pt-1" for="payment1">
+                        Thông Tin Checkout
+                    </label>
+                </h2>
+                <div class="collapse show">
+                    <div class="mb-3">
+                        <div class="row">
+                            <div class="col-6">
+                                <label class="form-label">Số Lượng Người Lớn:</label>
+                                <input class="form-control" type="number" min="0" value="0" id="adult"
+                                    (change)="changeData()">
+                            </div>
+                            <div class="col-6">
+                                <label class="form-label">Số Lượng Trẻ Em:</label>
+                                <input class="form-control" type="number" min="0" value="0" id="children"
+                                    (change)="changeData()">
+                            </div>
+                        </div>
+                    </div>
+                    <!-- <div class="mb-3">
+                            <label class="form-label">Khách Sạn:</label>
+                            <div class="row">
+                                <div class="col-6">
+                                    <input type="radio" name="hotel" id="one" value="default" (change)="changeData()"
+                                        checked>
+                                    <label class="form-check-label" for="one" class="box py-2 first">
+                                        <div class="d-flex align-items-start">
+                                            <div class="course">
+                                                <div class="d-flex align-items-center justify-content-between mb-2">
+                                                    <span class="fw-bold">
+                                                        Mặc Định*
+                                                    </span>
+                                                </div>
+                                                <span>{{tourDate.tour.hotel.name}} - {{tourDate.tour.hotel.price |
+                                                    number}} VNĐ</span>
+                                            </div>
+                                        </div>
+                                    </label>
+                                </div>
+                                <div class="col-6">
+                                    <input type="radio" name="hotel" id="two" value="choice" (change)="changeData()">
+                                    <label class="form-check-label" for="two" class="box py-2 second"
+                                        *ngIf="hotelList.length > 0">
+                                        <div class="d-flex">
+                                            <span class="circle"></span>
+                                            <div class="course">
+                                                <div class="d-flex align-items-center justify-content-between mb-2">
+                                                    <span class="fw-bold">
+                                                        Tự Chọn
+                                                    </span>
+                                                </div>
+                                                <select class="form-select" name="" id="choiceHotel"
+                                                    (change)="changeData()">
+                                                    <option *ngFor="let hotel of hotelList" [value]="hotel.id">
+                                                        {{hotel.name}} - {{hotel.price | number}}VNĐ
+                                                    </option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </label>
+                                </div>
+                            </div>
+                        </div> -->
+                </div>
+
+            </div>
+            <!-- Right -->
+            <div class="col-lg-5">
+                <div class="card position-sticky top-0">
+                    <div class="p-3 bg-light bg-opacity-10">
+                        <h3 class="card-title mb-3">Order Summary</h3>
+                        <div class="d-flex justify-content-between mb-1">
+                            <span>Tổng: </span> <span>{{subTotal | number}} VNĐ</span>
+                        </div>
+                        <div class="d-flex justify-content-between mb-1">
+                            <span>Thuế (8%): </span> <span>{{subTotal*8/100 | number}} VNĐ</span>
+                        </div>
+                        <div *ngIf="discount" class="d-flex justify-content-between mb-1">
+                            <span>
+                                Mã Giảm Giá ({{discount.code}})
+                            </span>
+                            <span class="text-danger" *ngIf="subTotal * discount.percentage/100 <= discount.max">
+                                -{{subTotal * discount.percentage/100 | number}} VNĐ
+                            </span>
+                            <span class="text-danger" *ngIf="subTotal * discount.percentage/100 > discount.max">
+                                -{{discount.max | number}} VNĐ
+                            </span>
+                        </div>
+                        <div class="input-group" style="justify-content: right;">
+                            <input type="email" class="input" id="discount" placeholder="Mã giảm giá">
+                            <input class="button--submit" (click)="applyDiscount()" type="submit">
+                        </div>
+                        <hr>
+                        <div class="d-flex justify-content-between mb-4">
+                            <span>Thành Tiền: </span> <strong class="text-dark">{{total | number}} VNĐ</strong>
+                        </div>
+
+                        <button *ngIf="getDateDiffer(currentDate,tourDate.initiateDate) >= 7"
+                            class="btn btn-pre w-100 mt-2" (click)="openConfirm()">Đặt Trước</button>
+                        <button class="btn btn-paypal w-100 mt-2" (click)="toPayment(2)"><img
+                                src="../../../../../assets/images/logos/paypal.png" width="20px" alt="paypal icon">
+                            Paypal</button>
+                        <button class="btn btn-vnpay w-100 mt-2" (click)="toPayment(3)"><img
+                                src="../../../../../assets/images/logos/vnpay.png" width="20px" alt="vnpay icon">
+                            VNPay</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<ng-template #confirmModal let-modal>
+    <div class="modal-header">
+        <div class="text-dark">Thông Báo</div>
+        <button id="closeDateModal" type="button" class="btn-close" aria-label="Close" (click)="modal.close()"></button>
+    </div>
+    <div class="modal-body">
+        <div *ngIf="discount">
+            <h4>Mã Giảm Giá [<b>{{discount.code}}</b>] Sẽ Không Được Áp Dụng Nếu Bạn Chọn "Đặt Trước", Bạn Có Muốn Tiếp
+                Tục?
+            </h4>
+            <p *ngIf="subTotal * discount.percentage/100 <= discount.max">Số Tiền Không Được Áp Dụng: <b
+                    class="text-success">{{subTotal *
+                    discount.percentage/100 | number}} VNĐ</b></p>
+            <p *ngIf="subTotal * discount.percentage/100 <= discount.max">Số Tiền Phải Trả Cuối Cùng: <b
+                    class="text-danger">{{total +
+                    (subTotal *discount.percentage/100) | number}} VNĐ </b></p>
+            <p *ngIf="subTotal * discount.percentage/100 > discount.max">Số Tiền Không Được Áp Dụng: <b
+                    class="text-success">{{discount.max |
+                    number}} VNĐ</b></p>
+            <p *ngIf="subTotal * discount.percentage/100 > discount.max">Số Tiền Phải Trả Cuối Cùng: <b
+                    class="text-danger">{{total +
+                    discount.max | number}} VNĐ </b></p>
+        </div>
+        <div>
+            <b>*Lưu ý: Bạn Phải Thanh Toán Số Tiền Trong 3 Ngày Kể Từ Khi Đặt Trước.</b>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-success" (click)="modal.close()">Hủy bỏ</button>
+        <button id="confirm" class="btn btn-danger" (click)="modal.close()">Xác nhận</button>
+    </div>
+</ng-template>

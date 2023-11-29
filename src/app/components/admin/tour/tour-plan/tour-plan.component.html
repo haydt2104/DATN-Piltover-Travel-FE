@@ -3,8 +3,8 @@
 
 <div class="card">
   <div class="card-body">
-    <h4 class="card-title">Danh sách Kế Hoạch [<i *ngIf="currentTourDate">{{currentTourDate.initiateDate | date:
-        "dd/MM/yyyy"}}</i>]</h4>
+    <h4 class="card-title">Danh sách Kế Hoạch [ <i *ngIf="currentTourDate">{{currentTourDate.initiateDate | date:
+        "dd/MM/yyyy"}}</i> ]</h4>
     <button *ngIf="currentTourDate && currentTourDate.status.id == 1" pButton icon="pi pi-plus"
       class="btn btn-success mb-3" (click)="open('add', null)">Thêm Kế Hoạch</button>
 
@@ -18,12 +18,12 @@
         <div class="modal-body">
           <div class="row">
             <div class="col-6">
-              <label class="form-label">Vị trí khởi hành:</label>
+              <label class="form-label">Điểm đến:</label>
               <input #startLocation="ngModel" name="startLocation" class="form-control" type="text" ngModel required>
-              <small *ngIf="startLocation.touched && startLocation.invalid">Vị trí không được bỏ trống</small>
+              <small *ngIf="startLocation.touched && startLocation.invalid">Điểm đến không được bỏ trống</small>
             </div>
             <div class="col-6">
-              <label class="form-label">Địa chỉ khởi hành:</label>
+              <label class="form-label">Địa chỉ:</label>
               <input #startAddress="ngModel" name="startAddress" class="form-control" type="text" ngModel required>
               <small *ngIf="startAddress.touched && startAddress.invalid">Địa chỉ không được bỏ trống</small>
             </div>
@@ -31,8 +31,9 @@
           <div class="row">
             <div class="col-6">
               <label class="form-label">Thời gian khởi hành:</label>
-              <input #startTime="ngModel" min="{{minDate | date:'yyyy-MM-dd hh:mm:ss'}}" name="startTime"
-                class="form-control" type="datetime-local" ngModel required>
+              <input #startTime="ngModel" min="{{minDate | date:'yyyy-MM-dd hh:mm:ss'}}"
+                max="{{maxDate | date:'yyyy-MM-dd hh:mm:ss'}}" name="startTime" class="form-control"
+                type="datetime-local" ngModel required>
               <small *ngIf="startTime.touched && startTime.invalid">Thời điểm không được bỏ trống</small>
             </div>
             <div class="col-6">
@@ -46,8 +47,7 @@
           </div>
         </div>
         <div class="modal-footer">
-          <button type="submit" class="btn btn-primary" (click)="modal.close('Save click')"
-            [disabled]="!addForm.valid">Thêm</button>
+          <button type="submit" class="btn btn-primary" [disabled]="!addForm.valid">Thêm</button>
         </div>
       </form>
     </ng-template>
@@ -84,7 +84,7 @@
         </ng-template>
         <ng-template pTemplate="header" class="theader">
           <tr>
-            <th pSortableColumn="startName" style="width:15%">Nơi khởi hành<p-sortIcon field="startName"></p-sortIcon>
+            <th pSortableColumn="startName" style="width:15%">Điểm đến<p-sortIcon field="startName"></p-sortIcon>
             </th>
             <th pSortableColumn="startAddress" style="width:16%">Địa chỉ<p-sortIcon field="startAddress"></p-sortIcon>
             </th>
@@ -121,7 +121,7 @@
             <td>
               <p-cellEditor>
                 <ng-template pTemplate="input">
-                  <p-calendar [(ngModel)]="planList.startTime" [minDate]="minDate" [touchUI]="true"
+                  <p-calendar [(ngModel)]="planList.startTime" [minDate]="minDate" [maxDate]="maxDate" [touchUI]="true"
                     [readonlyInput]="true" [showTime]="true" [showIcon]="true"></p-calendar>
                 </ng-template>
                 <ng-template pTemplate="output">

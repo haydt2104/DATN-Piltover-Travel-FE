@@ -1,7 +1,7 @@
 import { CommonModule, NgFor } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormControl, FormsModule, NgForm, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { MessageService } from 'primeng/api';
@@ -13,7 +13,7 @@ import { ToastModule } from 'primeng/toast';
 import { TourPlanDetail } from 'src/app/models/tour-plan-detail.model';
 import { TourPlan } from 'src/app/models/tour-plan.model';
 import { CurdService } from 'src/app/services/curd.service';
-import { TourPlanDetailService } from 'src/app/services/tour-plan-detail.service';
+import { TourPlanDetailService } from 'src/app/services/tour/tour-plan-detail.service';
 
 @Component({
   selector: 'app-tour-plan-detail',
@@ -38,8 +38,9 @@ export class TourPlanDetailComponent implements OnInit {
   @ViewChild('addModal') addModal: ElementRef;
   @ViewChild('confirmModal') confirmModal: ElementRef;
 
-  currentTourPlan: TourPlan;
-  planDetailList: TourPlanDetail[];
+  currentTourPlan: TourPlan = null;
+  planDetailList: TourPlanDetail[] = [];
+  tourPlanDate: Date
   constructor(
     private route: ActivatedRoute,
     private tourPlanDetailService: TourPlanDetailService,
@@ -69,6 +70,8 @@ export class TourPlanDetailComponent implements OnInit {
     this.curdService.getSpecificObject('tour_plan', tourPlanId).subscribe(
       (response: TourPlan) => {
         this.currentTourPlan = response;
+        this.tourPlanDate = new Date(this.currentTourPlan.startTime);
+        this.tourPlanDate.setHours(this.tourPlanDate.getHours() - 7);
       },
       (error: HttpErrorResponse) => {
         console.log(error.message);
@@ -79,7 +82,7 @@ export class TourPlanDetailComponent implements OnInit {
   public getTourPlanDetailByTourPlanId(planId: number): void {
     this.tourPlanDetailService.getTourPlanDetailsByTourPlanId(planId).subscribe(
       (response: TourPlanDetail[]) => {
-        this.planDetailList = response;
+        this.planDetailList = response;        
       },
       (error: HttpErrorResponse) => {
         console.log(error.message);
@@ -104,26 +107,42 @@ export class TourPlanDetailComponent implements OnInit {
   }
 
   submitAdd(data) {
-    var planDetail: TourPlanDetail = {
-      id: null,
-      startTime: data.value.startTime,
-      endTime: data.value.endTime,
-      description: data.value.description,
-      tourPlan: this.currentTourPlan
-    }
-    this.curdService.post("tour_plan_detail", planDetail).subscribe(
-      (response: TourPlan) => {
-        this.getTourPlanDetailByTourPlanId(this.currentTourPlan.id);
-        this.messageService.clear();
-        this.messageService.add({ key: 'success', severity: 'success', summary: 'Thông Báo', detail: 'Thêm thành công' });
-      },
-      (error: HttpErrorResponse) => {
-        alert(error.message);
+    if (this.checkValidTime(data.value.startTime)) {
+      var planDetail: TourPlanDetail = {
+        id: null,
+        startTime: data.value.startTime,
+        endTime: data.value.endTime,
+        description: data.value.description,
+        tourPlan: this.currentTourPlan
       }
-    )
+      this.curdService.post("tour_plan_detail", planDetail).subscribe(
+        (response: TourPlan) => {
+          this.getTourPlanDetailByTourPlanId(this.currentTourPlan.id);
+          this.modalService.dismissAll()
+          this.messageService.clear();
+          this.messageService.add({ key: 'success', severity: 'success', summary: 'Thông Báo', detail: 'Thêm thành công' });
+        },
+        (error: HttpErrorResponse) => {
+          alert(error.message);
+        }
+      )
+    } else {
+      this.messageService.clear();
+      this.messageService.add({ key: 'error', severity: 'error', summary: 'Thông Báo', detail: 'Vui Lòng Thời Gian Từ ' + this.tourPlanDate.getHours() + ':' + this.tourPlanDate.getMinutes() + ' Về Sau' });
+    }
   }
 
   clonedProducts: { [s: number]: TourPlanDetail; } = {};
+
+  checkValidTime(data) {
+    const [hours, minutes] = data.split(':');
+    const date = new Date(this.tourPlanDate.getFullYear(), this.tourPlanDate.getMonth(), this.tourPlanDate.getDate(), +hours, +minutes, 0);
+    if (date > this.tourPlanDate) {
+      return true;
+    } else {
+      return false;
+    }
+  }
 
 
   onRowEditInit(tourPlanDetail: TourPlanDetail) {
@@ -159,5 +178,13 @@ export class TourPlanDetailComponent implements OnInit {
         alert(error.message);
       }
     )
+  }
+
+  checkValid(data: NgForm) {
+    if (data.valid && $('#startTime').val() < $('#endTime').val()) {
+      return false
+    } else {
+      return true
+    }
   }
 }

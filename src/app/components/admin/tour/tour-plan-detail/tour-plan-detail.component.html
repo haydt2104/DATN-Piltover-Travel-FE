@@ -1,14 +1,16 @@
 <p-toast key="success"></p-toast>
 <p-toast key="error"></p-toast>
-<div class="card">
+<div class="card" *ngIf="currentTourPlan">
   <div class="card-body">
-    <h4 class="card-title">Danh sách Chi Tiết Kế Hoạch</h4>
+    <h4 class="card-title">Danh sách Chi Tiết Kế Hoạch [{{currentTourPlan.startTime | date:'HH:mm dd/MM/yyyy' : "UTC"}}]
+    </h4>
     <button pButton *ngIf="currentTourPlan && currentTourPlan.tourDate.status.id == 1" icon="pi pi-plus"
       class="btn btn-success mb-3" (click)="open('add',null)">Thêm Chi Tiết Kế Hoạch</button>
 
     <ng-template #addModal let-modal>
       <div class="modal-header">
-        <h4 class="modal-title" id="modal-basic-title">Thêm Chi Tiết Kế Hoạch</h4>
+        <h4 class="modal-title" id="modal-basic-title">Thêm Chi Tiết Kế Hoạch
+        </h4>
         <button type="button" class="btn-close" aria-label="Close" (click)="modal.close()"></button>
       </div>
       <form #addForm="ngForm" class="container" (ngSubmit)="submitAdd(addForm)">
@@ -23,21 +25,23 @@
           <div class="row">
             <div class="col-6">
               <label class="form-label">Thời gian bắt đầu:</label>
-              <input #startTime="ngModel" name="startTime" class="form-control" type="time" ngModel required>
+              <input #startTime="ngModel" name="startTime" id="startTime" class="form-control" type="time" ngModel
+                required>
               <small *ngIf="startTime.touched && startTime.invalid">Thời gian bắt đầu không được bỏ trống</small>
-              <small *ngIf="startTime > endTime">Thời gian bắt đầu phải xảy ra trước thời gian kết thúc</small>
             </div>
             <div class="col-6">
               <label class="form-label">Thời gian kết thúc:</label>
-              <input #endTime="ngModel" name="endTime" class="form-control" type="time" ngModel required>
+              <input #endTime="ngModel" name="endTime" id="endTime" class="form-control" type="time" ngModel required>
               <small *ngIf="endTime.touched && endTime.invalid">Thời gian kết thúc không được bỏ trống</small>
-              <small *ngIf="startTime  < endTime">Thời gian kết thúc phải xảy ra sau thời gian bắt đầu</small>
+              <small *ngIf="endTime.touched && startTime.value  >= endTime.value">Thời gian kết thúc phải xảy ra sau
+                thời
+                gian bắt
+                đầu</small>
             </div>
           </div>
         </div>
         <div class="modal-footer">
-          <button type="submit" class="btn btn-info" (click)="modal.close('Save click')"
-            [disabled]="!addForm.valid">Thêm</button>
+          <button type="submit" class="btn btn-info" [disabled]="checkValid(addForm)">Thêm</button>
         </div>
       </form>
     </ng-template>
@@ -100,6 +104,10 @@
                 </ng-template>
                 <ng-template pTemplate="output">
                   {{planDetailList.startTime}}
+                  <p>
+                    <small *ngIf="checkValidTime(planDetailList.startTime) == false">
+                      Thời gian bắt đầu không khớp với lịch trình vui lòng cập nhập lại</small>
+                  </p>
                 </ng-template>
               </p-cellEditor>
             </td>

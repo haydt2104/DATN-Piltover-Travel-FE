@@ -35,6 +35,9 @@ import { GalleriaModule } from 'primeng/galleria';
 import { HomeComponent } from './components/user/views/home/home.component';
 import { HistoryComponent } from './components/user/views/history/history.component';
 
+import { CheckoutComponent } from './components/user/views/checkout/checkout.component';
+import { CheckoutSuccessComponent } from './components/user/views/checkout/checkout-success/checkout-success.component';
+import { CheckoutFailedComponent } from './components/user/views/checkout/checkout-failed/checkout-failed.component';
 
 
 @NgModule({

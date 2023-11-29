@@ -1,16 +1,76 @@
-.ftco-navbar-light .navbar-nav>.nav-item>.nav-link{
-    color: black;
- }
- .ftco-navbar-light .navbar-nav>.nav-item>.nav-link:hover{
-    color: #f15d30;
- }
- .ftco-navbar-light .navbar-brand{
-  color: black;
- }
- .ftco-navbar-light .navbar-brand:hover{
-  color: #f15d30;
- }
- img {
-width: 500px; /* Đặt chiều rộng */
-height: 500px; /* Đặt chiều cao */
+.ftco-navbar-light .navbar-nav>.nav-item>.nav-link {
+   color: black;
+}
+
+.ftco-navbar-light .navbar-nav>.nav-item>.nav-link:hover {
+   color: #f15d30;
+}
+
+.ftco-navbar-light .navbar-brand {
+   color: black;
+}
+
+.ftco-navbar-light .navbar-brand:hover {
+   color: #f15d30;
+}
+
+img {
+   width: 500px;
+   /* Đặt chiều rộng */
+   height: 500px;
+   /* Đặt chiều cao */
+}
+
+.location,
+.price {
+   font-size: 15px;
+}
+
+.custom-button {
+   --color: #f15d30;
+   font-family: inherit;
+   display: inline-block;
+   width: 8em;
+   height: 2.6em;
+   line-height: 2.5em;
+   margin: 20px;
+   position: relative;
+   overflow: hidden;
+   border: 2px solid var(--color);
+   transition: color .5s;
+   z-index: 1;
+   font-size: 17px;
+   border-radius: 6px;
+   font-weight: 500;
+   color: var(--color);
+}
+
+.custom-button:before {
+   content: "";
+   position: absolute;
+   z-index: -1;
+   background: var(--color);
+   height: 150px;
+   width: 200px;
+   border-radius: 50%;
+}
+
+.custom-button:hover {
+   color: #fff;
+}
+
+.custom-button:before {
+   top: 100%;
+   left: 100%;
+   transition: all .7s;
+}
+
+.custom-button:hover:before {
+   top: -30px;
+   left: -30px;
+}
+
+.custom-button:active:before {
+   background: #f15d30;
+   transition: background 0s;
 }

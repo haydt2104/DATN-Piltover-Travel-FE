@@ -13,9 +13,9 @@ import { ToastModule } from 'primeng/toast';
 import { TourDate } from 'src/app/models/tour-date.model';
 import { Transportation } from 'src/app/models/transportation.model';
 import { CurdService } from 'src/app/services/curd.service';
-import { TourPlanService } from 'src/app/services/tour-plan.service';
+import { TourPlanService } from 'src/app/services/tour/tour-plan.service';
 import { TourPlan } from './../../../../models/tour-plan.model';
-import { TourPlanDetailService } from './../../../../services/tour-plan-detail.service';
+import { TourPlanDetailService } from '../../../../services/tour/tour-plan-detail.service';
 
 
 @Component({
@@ -42,10 +42,11 @@ export class TourPlanComponent implements OnInit {
   @ViewChild('addModal') addModal: ElementRef;
   @ViewChild('confirmModal') confirmModal: ElementRef;
 
-  currentTourDate: TourDate;
-  planList: TourPlan[];
-  transportList: Transportation[];
+  currentTourDate: TourDate = null;
+  planList: TourPlan[] = [];
+  transportList: Transportation[] = [];
   minDate: Date
+  maxDate: Date
 
   constructor(
     private route: ActivatedRoute,
@@ -96,7 +97,10 @@ export class TourPlanComponent implements OnInit {
       (response: TourDate) => {
         this.currentTourDate = response;
         this.minDate = new Date(this.currentTourDate.initiateDate);
+        this.maxDate = new Date(this.currentTourDate.endDate);
         this.minDate.setHours(this.minDate.getHours() - 7);
+        console.log(this.maxDate);
+
       },
       (error: HttpErrorResponse) => {
         console.log(error.message);
@@ -117,8 +121,8 @@ export class TourPlanComponent implements OnInit {
 
   public getAllTransport() {
     this.curdService.getList('transport').subscribe(
-      (response) => {
-        this.transportList = response;
+      (response: Transportation[]) => {
+        this.transportList = response.filter(transport => transport.isDelete == false);
       },
       (error: HttpErrorResponse) => {
         alert(error.message);
@@ -127,6 +131,15 @@ export class TourPlanComponent implements OnInit {
   }
 
   submitAdd(data) {
+    for (var plan of this.planList) {
+      if (new Date(data.value.startTime).getDay() == new Date(plan.startTime).getDay()
+        && new Date(data.value.startTime).getMonth() == new Date(plan.startTime).getMonth()
+        && new Date(data.value.startTime).getFullYear() == new Date(plan.startTime).getFullYear()
+      ) {
+        this.messageService.add({ key: 'error', severity: 'error', summary: 'Thông Báo', detail: 'Ngày này đã tồn tại' });
+        return;
+      }
+    }
     var transport: Transportation = this.transportList.find(transport => transport.id == data.value.transport)
     var plan: TourPlan = {
       id: null,
@@ -139,6 +152,7 @@ export class TourPlanComponent implements OnInit {
     this.curdService.post('tour_plan', plan).subscribe(
       (response: TourPlan) => {
         this.getTourPlansByDateID(this.currentTourDate.id);
+        this.modalService.dismissAll()
         this.messageService.clear();
         this.messageService.add({ key: 'success', severity: 'success', summary: 'Thông Báo', detail: 'Thêm thành công' });
       },
@@ -190,7 +204,7 @@ export class TourPlanComponent implements OnInit {
           this.open("confirm", id);
         } else {
           this.messageService.clear();
-          this.messageService.add({ key: 'error', severity: 'error', summary: 'Thông Báo', detail: 'Dữ liệu đã được sử dụng trong bảng khác không thể xóa được' });
+          this.messageService.add({ key: 'error', severity: 'error', summary: 'Thông Báo', detail: 'Kế Hoạch Đã Có Chi Tiết Không Thể Xóa Được' });
         }
       },
       (error: HttpErrorResponse) => {

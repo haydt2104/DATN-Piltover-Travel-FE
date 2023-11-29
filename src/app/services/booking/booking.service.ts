@@ -1,5 +1,5 @@
-import { Injectable, Inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Booking } from 'src/app/models/booking.model';
 @Injectable({
@@ -7,17 +7,28 @@ import { Booking } from 'src/app/models/booking.model';
 })
 export class BookingService {
   private API_Url: String = 'http://localhost:8080/api/';
-  constructor(private httpRequest: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    @Inject('BASE_URL') private baseUrl: string
+  ) { }
+
+  getAllBooking(): Observable<Booking[]> {
+    return this.http.get<Booking[]>(this.baseUrl + 'api/booking/');
+  }
+
+  getBookingsByTourDate(id: number): Observable<Booking[]> {
+    return this.http.get<Booking[]>(this.baseUrl + 'api/booking' + `?tourDateId=${id}`);
+  }
 
   getDataBookingFromAPI() {
-    return this.httpRequest.get(this.API_Url + 'booking/');
+    return this.http.get(this.API_Url + 'booking/');
   }
 
   editBooking(Booking: Booking) {
-    return this.httpRequest.put(this.API_Url + '/edit', Booking);
+    return this.http.put(this.API_Url + '/edit', Booking);
   }
 
-  getHistoryReadAllAPI(){
-    return this.httpRequest.get(this.API_Url +'history/');
+  getHistoryReadAllAPI() {
+    return this.http.get(this.API_Url + 'history/');
   }
 }

@@ -19,6 +19,7 @@ import { AuthorizationsComponent } from './components/user/authorizations/author
 import { PostComponent } from './components/user/views/post/post.component';
 import { PostSingleComponent } from './components/user/views/post-single/post-single.component';
 import { DetailComponent } from './components/user/views/history/detail/detail.component';
+import { CheckoutComponent } from './components/user/views/checkout/checkout.component';
 
 export const Approutes: Routes = [
   {
@@ -113,7 +114,14 @@ export const Approutes: Routes = [
           )
       },
       { path: 'destination', component: DestinationComponent },
-      { path: 'destination-detail', component: DestinationDetailComponent },
+      { path: 'destination-detail/:id', component: DestinationDetailComponent },
+      {
+        path: 'checkout',
+        loadChildren: () =>
+          import('./components/user/views/checkout/checkout.module').then(
+            (m) => m.CheckoutModule
+          )
+      },
     ],
   },
   {

@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Tour } from '../models/tour.model';
+import { Tour } from '../../models/tour.model';
 
 @Injectable({
   providedIn: 'root',
@@ -24,6 +24,7 @@ export class TourService {
   public getTourList(): Observable<Tour[]> {
     return this.http.get<Tour[]>(`http://localhost:8080/api/tour/all`);
   }
+
   public getTourById(id: number): Observable<Tour> {
     return this.http.get<Tour>(`http://localhost:8080/api/tour/${id}`);
   }
