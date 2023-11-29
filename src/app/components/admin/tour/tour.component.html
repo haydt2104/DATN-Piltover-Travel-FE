@@ -402,6 +402,7 @@
               <th pSortableColumn="createUser">Tên Khách Hàng<p-sortIcon field="createUser"></p-sortIcon></th>
               <th pSortableColumn="totalPassengers">Số Khách<p-sortIcon field="totalPassengers"></p-sortIcon></th>
               <th pSortableColumn="totalPrice">Tổng Tiền<p-sortIcon field="totalPrice"></p-sortIcon></th>
+              <th></th>
             </tr>
           </ng-template>
           <ng-template pTemplate="body" class="tbody" let-editBookingList>
@@ -414,6 +415,9 @@
               </td>
               <td>
                 {{editBookingList.totalPrice | number }} VNĐ
+              </td>
+              <td>
+                <button class="btn btn-success">Xác Nhận Đã Thanh Toán</button>
               </td>
             </tr>
           </ng-template>
