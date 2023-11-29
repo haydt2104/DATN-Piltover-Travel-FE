@@ -34,7 +34,7 @@
 
         <div class="pt-5 mt-5">
           <h3 class="mb-5" style="font-size: 20px; font-weight: bold;">{{countCmt}} Comments</h3>
-          <ul class="comment-list" *ngFor="let item of cmt">
+          <ul class="comment-list" *ngFor="let item of cmt ">
             <li class="comment">
               <div class="vcard bio">
                 <img
@@ -42,50 +42,53 @@
                   alt="Image placeholder">
               </div>
               <div class="comment-body">
-                <h3>{{item.commentUser.fullname}}</h3>
-                <div class="meta">{{item.commentTime | date:"dd-MM-yyyy HH:mm:ss"}}
-                  <p *ngIf="item.updateTime != null"> đã chỉnh sửa vào lúc {{item.updateTime | date:"dd-MM-yyyy HH:mm:ss"}}
+                <div class="row" style="margin-bottom: -7px !important;">
+                  <p class="col-10" style="font-weight: bold; font-size: 20px;">{{item.commentUser.fullname}}</p>
+                  <div class="col-2" *ngIf="item.commentUser.id == 1234567890" style="float: right;">
+                    <details class="dropdown">
+                      <summary role="button">
+                        <a class="button">...</a>
+                      </summary>
+                      <ul>
+                        <li><a role="button" (click)="getCommentId(item.id)">Sửa</a></li>
+                        <li><a role="button" (click)="removeCmt(item.id)">Xóa</a></li>
+                      </ul>
+                    </details>
+                  </div>
+                </div>
+
+                <div class="meta" style="color: grey; font-size: 10px">{{item.commentTime | date:"dd-MM-yyyy HH:mm:ss"}}
+                  <p *ngIf="item.updateTime != null" style="color: grey; font-size: 10px;"> đã chỉnh sửa vào lúc
+                    {{item.updateTime | date:"dd-MM-yyyy HH:mm:ss"}}
                   </p>
                 </div>
                 <div *ngIf="item.id == editId else else_Things">
                   <form [formGroup]="editCmt" (ngSubmit)="editComment(item.id)" style="display: flex; float: left;">
                     <input type="text" formControlName="content" [(ngModel)]="item.content">
-                    <button class="btn btn-danger" (click)="setCommentId()" style="margin-left: 5px;"><i class="pi pi-times"
-                      style="color: black"></i></button>
+                    <button class="btn btn-danger" (click)="setCommentId()" style="margin-left: 5px;"><i
+                        class="pi pi-times" style="color: black"></i></button>
                     <button class="btn btn-info" type="submit" style="margin-left: 5px;"><i class="pi pi-check"
                         style="color: black"></i></button>
                     <div class="text-danger" style="font-size: large; margin-left: 10px;">{{message_validition}}</div>
                   </form>
                 </div>
                 <ng-template #else_Things>
-                  <p>{{item.content}}</p>
+                  <p style="font-size: 17px !important;">{{item.content}}</p>
                 </ng-template>
-
-                <div *ngIf="item.commentUser.id == 1234567890" style="float: right;">
-                  <details class="dropdown">
-                    <summary role="button">
-                      <a class="button">...</a>
-                    </summary>
-                    <ul>
-                      <li><a role="button" (click)="getCommentId(item.id)">Sửa</a></li>
-                      <li><a role="button" (click)="removeCmt(item.id)">Xóa</a></li>
-                    </ul>
-                  </details>
-                </div>
               </div>
             </li>
           </ul>
           <!-- END comment-list -->
-          <form [formGroup]="addCmt" (ngSubmit)="saveComment()" style="display: flex; float: left;">
-            <div class="vcard bio">
-              <img
-                src="https://firebasestorage.googleapis.com/v0/b/postimage-duantn.appspot.com/o/avatar.png?alt=media&token=9537d31f-274c-4318-a3a8-cc84565d0473"
-                alt="Image placeholder" width="50px">
-            </div>
-            <input type="text" formControlName="content" placeholder="Add comment">
-            <button class="btn btn-light" type="submit" style="margin-left: 5px;"><i class="pi pi-send"
-                style="color: black"></i></button>
-            <div class="text-danger" style="font-size: large; margin-left: 10px;">{{message_validition}}</div>
+          <form [formGroup]="addCmt" (ngSubmit)="saveComment()" style="display: flex; float: left;width: 100%;">
+              <div class="vcard bio">
+                <img
+                  src="https://firebasestorage.googleapis.com/v0/b/postimage-duantn.appspot.com/o/avatar.png?alt=media&token=9537d31f-274c-4318-a3a8-cc84565d0473"
+                  alt="Image placeholder" width="50px">
+              </div>
+              <input type="text" formControlName="content" placeholder="Add comment" style="width: 80%;">
+              <button class="btn btn-light col-1" type="submit" style="margin-left: 5px;"><i class="pi pi-send"
+                  style="color: black"></i></button>
+              <div class="text-danger" style="font-size: large; margin-left: 10px;">{{message_validition}}</div>
           </form>
         </div>
         <!-- Bảng lựa chọn thông báo khi nhấn nút xóa -->
