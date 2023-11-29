@@ -32,6 +32,7 @@ import { HeaderComponent } from './components/user/layouts/header/header.compone
 import { CheckStatusAccountPipe } from './pipes/check-status-account.pipe';
 import { TestPipePipe } from './pipes/test-pipe.pipe';
 import { GalleriaModule } from 'primeng/galleria';
+import { HomeComponent } from './components/user/views/home/home.component';
 
 
 
@@ -40,6 +41,7 @@ import { GalleriaModule } from 'primeng/galleria';
     AppComponent,
     SpinnerComponent,
     // LayoutComponent,
+    HomeComponent,
     HeaderComponent,
     FooterComponent,
     AuthorizationsComponent,
