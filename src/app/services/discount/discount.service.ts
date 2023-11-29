@@ -7,10 +7,14 @@ import { Discount } from 'src/app/models/discount.model';
   providedIn: 'root',
 })
 export class DiscountService {
-  constructor(private http: HttpClient) {
-  }
+  private API_Url: String = 'http://localhost:8080/api/';
+  constructor(private httpRequest: HttpClient) { }
 
   public getAllDiscount(): Observable<Discount[]> {
-    return this.http.get<Discount[]>(`http://localhost:8080/api/discount/`);
+    return this.httpRequest.get<Discount[]>(`http://localhost:8080/api/discount/`);
+  }
+
+  getDataDiscountFormAPI() {
+    return this.httpRequest.get(this.API_Url + 'discount/');
   }
 }

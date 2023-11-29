@@ -853,7 +853,7 @@ export class TourComponent implements OnInit {
     } else if (content == 'hotel') {
       const star: number = +$('#star').val()
       const price: number = +$('#price').val()
-      if (data.valid && star >= 0 && price <= 5 && price > 0) {
+      if (data.valid && star >= 0 && star <= 5 && price > 0) {
         return false
       } else {
         return true;
