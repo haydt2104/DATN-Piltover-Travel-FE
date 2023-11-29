@@ -1,0 +1,178 @@
+<main>
+  <section class="hero-wrap hero-wrap-2 js-fullheight" style="background-image: url(../assets/images/bg_1.jpg);">
+    <!-- <div class="overlay"></div> -->
+    <div class="container">
+      <div class="row no-gutters slider-text js-fullheight align-items-end justify-content-center">
+        <div class="col-md-9 ftco-animate pb-5 text-center">
+          <p class="breadcrumbs">
+            <span class="mr-2"><a href="/">Trang chủ <i class="fa fa-chevron-right"></i></a></span>
+            <span class="mr-2"><a href="/history">Lịch sử đặt tour <i class="fa fa-chevron-right"></i></a></span>
+            <span class="mr-2"><a href="/history-detail">Chi tiết đặt tour <i
+                  class="fa fa-chevron-right"></i></a></span>
+          </p>
+
+          <h1 class="mb-0 bread">Chi tiết đặt tour</h1>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="ftco-section services-section container">
+    <div class="tab-pane fade show active container-fluid">
+      <div class="cart_inner text-dark" style="min-height: 360px !important;">
+        <div class="table-responsive">
+          <table class="table table-striped">
+            <thead>
+              <tr class="table table-info">
+                <th class="col-md-4 text-center" style="border-right: 1px black solid;" >Nội dung</th>
+                <th class="col-md-8 text-center" >Chi tiết</th>
+              </tr>
+            </thead>
+            <tbody *ngIf="history" >
+              <tr class="table-light">
+                <td>Booking ID:</td>
+                <td>BokNum_{{history.bookingID}}</td>
+              </tr>
+              <tr class="table-light">
+                <td>Tên tour:</td>
+                <td>{{history.tourName}}</td>
+              </tr>
+              <tr class="table-light">
+                <td>Mô tả tour:</td>
+                <td>{{history.tourDescription}}</td>
+              </tr>
+              <tr class="table-light">
+                <td>Trạng thái:</td>
+                <td [ngSwitch]="history.bookingStatus">
+                  <div *ngSwitchCase="0">Chưa liên hệ</div>
+                  <div *ngSwitchCase="1">Đã liên hệ</div>
+                  <div *ngSwitchCase="2">Đã hủy</div>
+                </td>
+              </tr>
+              <tr class="table-light">
+                <td>Ngày lập:</td>
+                <td>{{history.bookDate|date:'dd-MM-yyyy'}}</td>
+              </tr>
+              <tr class="table-light">
+                <td>Nơi bắt đầu:</td>
+                <td>{{history.startAddress}}</td>
+              </tr>
+              <tr class="table-light">
+                <td>Ngày bắt đi:</td>
+                <td>{{history.startDate|date:'dd-MM-yyyy'}}</td>
+              </tr>
+              <tr class="table-light">
+                <td>Thời gian bắt đầu:</td>
+                <td>{{history.startTime}}</td>
+              </tr>
+              <tr class="table-light">
+                <td>Phương tiện di chuyển:</td>
+                <td>{{history.transportName}}</td>
+              </tr>
+              <tr class="table-light">
+                <td>Số lượng người lớn:</td>
+                <td>{{history.adult}}</td>
+              </tr>
+              <tr class="table-light">
+                <td >Số lượng trẻ nhỏ:</td>
+                <td >{{history.children}}</td>
+              </tr>
+              <tr class="table-light">
+                <td >Tên người đặt:</td>
+                <td>{{history.fullname}}</td>
+              </tr>
+              <tr class="table-light">
+                <td >Tổng tiền:</td>
+                <td>{{history.totalPrice|currency:'3':''}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <!-- <nav class="row justify-content-center mt-3">
+        <ul class="pagination">
+          <li class="page-item"> <a class="page-link" href="" ng-click="firstOderShip()"> <span
+                aria-hidden="true">&laquo;</span> </a> </li>
+          <li class="page-item"> <a class="page-link" href="" ng-click="prevOderShip()"> <span
+                aria-hidden="true">&lsaquo;</span> </a> </li>
+          <li class="page-item"> <a class="page-link" href="" ng-click="nextOderShip()"> <span
+                aria-hidden="true">&rsaquo;</span> </a> </li>
+          <li class="page-item"> <a class="page-link" href="" ng-click="lastOderShip()"> <span
+                aria-hidden="true">&raquo;</span> </a> </li>
+        </ul>
+      </nav> -->
+    </div>
+
+    <!-- <form action="" class="container">
+      <div class="card">
+        <div class="card-body">
+          <div class="row">
+            <div class="mb-3 col-sm-12 col-md-6">
+              <label class="form-label">Booking Id: </label>
+              <input class="form-control" type="text" id="id" name="bookingID" disabled="disabled" value="{{history.bookingID}}"/>
+            </div>
+            <div class="mb-3 col-sm-12 col-md-6">
+              <label class="form-label">Tour name: </label>
+              <input class="form-control" type="text" id="tourname" name="tourname" disabled="disabled" value="{{history.tourname}}" />
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="mb-3 col-sm-12 col-md-6">
+              <label class="form-label">Trạng thái: </label>
+              <select class="form-control">
+                <option value="2">Đã hủy</option>
+              </select>
+            </div>
+            <div class="mb-3 col-sm-12 col-md-6">
+              <label for="" class="form-label">Ngày lập:</label>
+              <input class="form-control" type="date" id="bookingTime" name="bookingTime" disabled="disabled"  [(ngModel)]="history.bookDate" />
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="mb-3 col-sm-12 col-md-3">
+              <label for="" class="form-label">Chỗ ở: </label>
+              <input class="form-control" type="text" id="hotelName" name="hotelName" disabled="disabled" />
+            </div>
+            <div class="mb-3 col-sm-12 col-md-3">
+              <label for="" class="form-label">Phương tiện: </label>
+              <input class="form-control" type="text" id="transportName" name="transportName" disabled="disabled" />
+            </div>
+            <div class="mb-3 col-sm-12 col-md-3">
+              <label for="" class="form-label">Số lượng người lớn: </label>
+              <div class="input-group">
+                <input class="form-control" type="number" min="0" aria-describedby="ng1" id="adult" name="adult" />
+                <span class="input-group-text" id="ng1">Người</span>
+              </div>
+            </div>
+            <div class="mb-3 col-sm-12 col-md-3">
+              <label for="" class="form-label">Số lượng trẻ em: </label>
+              <div class="input-group">
+                <input class="form-control" type="number" min="0" aria-describedby="ng2" id="children"
+                  name="children" />
+                <span class="input-group-text" id="ng2">Người</span>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="mb-3 col-sm-12 col-md-4">
+              <label for="" class="form-label">Tổng tiền cơ bản: </label>
+              <input class="form-control" type="text" id="totalPrice" name="totalPrice" disabled="disabled">
+            </div>
+            <div class="mb-3 col-sm-12 col-md-4">
+              <label for="" class="form-label">Mã giảm giá: </label>
+              <select class="form-control" name="discountName">
+                <option value="" class="text-center">--- Chọn ---</option>
+                <option> </option>
+              </select>
+            </div>
+            <div class="mb-3 col-sm-12 col-md-4">
+              <label for="" class="form-label">Tổng tiền thu: </label>
+              <input class="form-control" type="text" id="totalPrice" name="totalPrice" disabled="disabled">
+            </div>
+          </div>
+        </div>
+      </div>
+    </form> -->
+  </section>
+</main>

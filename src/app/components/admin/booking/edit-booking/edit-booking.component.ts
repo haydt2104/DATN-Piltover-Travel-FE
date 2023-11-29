@@ -118,8 +118,8 @@ export class EditBookingComponent implements OnInit {
       (error) => {
         console.log(error);
       };
-
   }
+
   getDiscountList() {
     this.discount.getDataDiscountFormAPI().subscribe((data: Discount[]) => {
       this.discounts = data;
@@ -129,6 +129,7 @@ export class EditBookingComponent implements OnInit {
         console.log(error);
       };
   }
+
   // getHotelList() {
   //   this.hotel.getDataHotelFormAPI().subscribe((data: Hotel[]) => {
   //     this.hotels = data;
@@ -138,8 +139,8 @@ export class EditBookingComponent implements OnInit {
   //       console.log(error);
   //     };
   // }
-
   // editBookingData(){
   //  alert('Booking data');
   // }
+
 }
