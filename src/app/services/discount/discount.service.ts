@@ -1,14 +1,35 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
+import { Discount } from 'src/app/models/discount.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class DiscountService {
-  private API_Url: String = 'http://localhost:8080/api/';
-  constructor(private httpRequest: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    @Inject('BASE_URL') private baseUrl: string
+  ) {}
 
   getDataDiscountFormAPI() {
-    return this.httpRequest.get(this.API_Url + 'discount/');
+    return this.http.get(this.baseUrl + 'api/discount/');
+  }
+
+  ReadAllDiscountsFromAPI(): Observable<any>{
+    return  this.http.get(this.baseUrl+ 'api/discount/getAll');
+  }
+
+  readOneDisountsFromAPI(id:number): Observable<any>{
+    return this.http.get(this.baseUrl+'api/discount/'+id);
+  }
+
+  insertDiscount(data: any): Observable<any> {
+    console.log(data);
+    return this.http.post(`${this.baseUrl}api/discount/insert`, data);
+  }
+
+  deleteDiscount(id:number): Observable<any>{
+    return this.http.delete(`${this.baseUrl}api/discount/delete/`+id);
   }
 }

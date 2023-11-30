@@ -59,6 +59,13 @@ export const Approutes: Routes = [
             (m) => m.BookingModule
           ),
       },
+      {
+        path:'manage/discount',
+        loadChildren: () =>
+        import('./components/admin/discount/discount.module').then(
+          (m) => m.DiscountModule
+        ),
+      },
       // {
       //   path: 'manage/booking/detail:did',
       //   loadChildren: () =>

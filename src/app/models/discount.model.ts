@@ -3,5 +3,9 @@ export interface Discount {
   name?: string;
   percentage?: number;
   amount?: number;
-  code?: string
+  code?: string;
+  min:number;
+  max:number;
+  create_User:number
+  isDelete:boolean;
 }
