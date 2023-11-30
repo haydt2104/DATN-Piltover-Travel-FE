@@ -20,7 +20,7 @@ export class PostComponent implements OnInit {
   // public pathImg: String[] = [];
 
   p: number = 1;
-  itemsPerPage: number = 3;
+  itemsPerPage: number = 9;
   totalItem: any;
   constructor(
     private postService: PostService,

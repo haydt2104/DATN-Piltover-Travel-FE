@@ -19,6 +19,10 @@ export class PostService {
     return this.http.get<Post[]>(this.baseUrl + 'api/post/getAllPosts')
   }
 
+  public getRandomPosts(): Observable<Post[]>{
+    return this.http.get<Post[]>(this.baseUrl + 'api/post/getRandomPosts')
+  }
+
   public getPostById(id: number): Observable<Post>{
     return this.http.get<Post>(this.baseUrl + 'api/post/getPostById/' + id)
   }

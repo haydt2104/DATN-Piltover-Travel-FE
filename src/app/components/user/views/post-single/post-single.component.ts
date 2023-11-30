@@ -26,6 +26,11 @@ export class PostSingleComponent {
   idPost: number
   editId: number
 
+  randomPost: Post[] = []
+
+  p: number = 1;
+  itemsPerPage: number = 10;
+  totalItem: any;
 
   constructor(
     private postService: PostService,
@@ -52,6 +57,7 @@ export class PostSingleComponent {
       postId: new FormControl(this.idPost),
       content: new FormControl('', [Validators.required])
     })
+    this.getRandomPost();
   }
 
   public getPost(id: number) {
@@ -72,6 +78,7 @@ export class PostSingleComponent {
     this.cmtService.getCommentByIdPost(id).subscribe((data) => {
       this.cmt = data
       this.countCmt = this.cmt.length
+      this.totalItem = this.cmt.length
       console.log(this.cmt)
     })
   }
@@ -113,6 +120,16 @@ export class PostSingleComponent {
         }
       }
     });
+  }
+
+  public async getRandomPost(){
+    this.postService.getRandomPosts().subscribe(async (data) => {
+      this.randomPost = data
+      for (let post of this.randomPost) {
+        const thumbnailPath = await this.imgService.setThumbnailPost(post.id).toPromise();
+        post.path = thumbnailPath.path
+      }
+    })
   }
 
   public async getCommentId(id: number) {
