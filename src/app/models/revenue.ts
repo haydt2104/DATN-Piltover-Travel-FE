@@ -33,3 +33,8 @@ export interface TransportRevenue {
   total_transport_revenue: number;
   total_transport_booking: number;
 }
+
+export interface DateRevenue {
+  startDate: String;
+  endDate: String;
+}

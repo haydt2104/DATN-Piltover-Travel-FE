@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {topcard,topcards} from './top-cards-data';
 import { RevenueService } from 'src/app/services/revenue/revenue.service';
-import { Revenue } from 'src/app/models/revenue';
+import { DateRevenue, Revenue } from 'src/app/models/revenue';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 
 @Component({
@@ -19,21 +19,26 @@ export class TopCardsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.getAllRevenue();
     this.route.queryParams.subscribe((params: Params) => {
       this.startDate = params['startDate'] || '2023-01-01';
       this.endDate = params['endDate'] || '2023-12-31';
       // Thực hiện việc lọc dữ liệu dựa trên startDate và endDate ở đây
-
-      this.getAllRevenue();
+      this.getAllRevenueBody();
     });
   }
-  private getAllRevenue(){
-    this.revenueService.getAllRevenue(this.startDate, this.endDate).subscribe((data) =>{
-      this.revenue = data;
-      console.log('Doanh thu: ', this.revenue);
-    });
+
+private getAllRevenueBody() {
+  const dateRange: DateRevenue = {
+    startDate: this.startDate,
+    endDate: this.endDate,
+  };
+
+  this.revenueService.getAllRevenueBody(dateRange).subscribe((data) => {
+    this.revenue = data;
+    console.log('Doanh thu Body: ', this.revenue);
+  });
 }
+
 formatCurrency(value: number): string {
   const formattedValue = new Intl.NumberFormat('vi-VN', {
     style: 'currency',

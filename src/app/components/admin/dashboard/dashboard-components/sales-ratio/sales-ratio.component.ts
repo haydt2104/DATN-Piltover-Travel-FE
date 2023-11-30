@@ -13,7 +13,7 @@ import {
   ApexGrid,
   ApexPlotOptions
 } from 'ng-apexcharts';
-import { MonthRevenue } from 'src/app/models/revenue';
+import { DateRevenue, MonthRevenue } from 'src/app/models/revenue';
 import { RevenueService } from 'src/app/services/revenue/revenue.service';
 
 export type salesChartOptions = {
@@ -129,17 +129,21 @@ export class SalesRatioComponent implements OnInit {
    }
 }
   ngOnInit(): void {
-    this.getMonthRevenue();
     this.route.queryParams.subscribe((params: Params) => {
-      this['startDate'] = params['startDate'] || '';
-      this['endDate'] = params['endDate'] || '';
+      this['startDate'] = params['startDate'] || '2023-01-01';
+      this['endDate'] = params['endDate'] || '2023-12-31';
       // Thực hiện việc lọc dữ liệu dựa trên startDate và endDate ở đây
       this.getMonthRevenue();
     });
   }
 
   private getMonthRevenue() {
-    this.monthrevenueService.getMonthRevenue(this.startDate, this.endDate).subscribe((data) => {
+    const dateRange: DateRevenue = {
+      startDate: this.startDate,
+      endDate: this.endDate,
+    };
+
+    this.monthrevenueService.getMonthRevenueBody(dateRange).subscribe((data) => {
       this.monthrevenue = data;
       console.log('Month Doanh thu: ', this.monthrevenue);
 

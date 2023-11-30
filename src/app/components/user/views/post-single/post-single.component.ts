@@ -1,3 +1,4 @@
+import { LikeService } from 'src/app/services/post/like/like.service';
 import { Component } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -22,15 +23,25 @@ export class PostSingleComponent {
   countCmt: number = 0
   addCmt: FormGroup
   editCmt: FormGroup
+  LikeClick: FormGroup
   message_validition: String
   idPost: number
   editId: number
+  userId: number = 1234567890
+  countLike: number
+  userLike: boolean
 
+  randomPost: Post[] = []
+
+  p: number = 1;
+  itemsPerPage: number = 10;
+  totalItem: any;
 
   constructor(
     private postService: PostService,
     private imgService: ImageService,
     private cmtService: CommentService,
+    private likeService: LikeService,
     private route: ActivatedRoute,
     private router: Router,
     private form: FormBuilder,
@@ -48,10 +59,13 @@ export class PostSingleComponent {
       this.getImg(idNumber);
       this.getComment(idNumber);
     }
+    this.checkLike(this.userId, this.idPost);
+    this.getCountLike(this.idPost)
     this.addCmt = this.form.group({
       postId: new FormControl(this.idPost),
       content: new FormControl('', [Validators.required])
     })
+    this.getRandomPost();
   }
 
   public getPost(id: number) {
@@ -72,6 +86,7 @@ export class PostSingleComponent {
     this.cmtService.getCommentByIdPost(id).subscribe((data) => {
       this.cmt = data
       this.countCmt = this.cmt.length
+      this.totalItem = this.cmt.length
       console.log(this.cmt)
     })
   }
@@ -115,6 +130,16 @@ export class PostSingleComponent {
     });
   }
 
+  public async getRandomPost() {
+    this.postService.getRandomPosts().subscribe(async (data) => {
+      this.randomPost = data
+      for (let post of this.randomPost) {
+        const thumbnailPath = await this.imgService.setThumbnailPost(post.id).toPromise();
+        post.path = thumbnailPath.path
+      }
+    })
+  }
+
   public async getCommentId(id: number) {
     console.log(id)
     this.editId = id
@@ -124,16 +149,47 @@ export class PostSingleComponent {
     })
   }
 
-  public setCommentId(){
+  public setCommentId() {
     this.editId = null
   }
-  public editComment(id: number){
+  public editComment(id: number) {
     this.cmtService.updateComment(id, this.editCmt.value).subscribe((data) => {
       this.messageService.add({ severity: 'success', summary: 'Thành công', detail: 'Bạn đã sửa comment thành công' });
       this.editId = null
-          this.getComment(this.idPost);
+      this.getComment(this.idPost);
     })
   }
+
+  public doLike() {
+    // this.LikeClick = this.form.group({
+    //   postId: new FormControl(this.idPost),
+    //   userId: new FormControl(this.userId)
+    // })
+    console.log('THực thi thao tác bấm nút LIKE')
+    var isLike: boolean
+    if (this.userLike == true) {
+      isLike = false
+    } else if (this.userLike == false) {
+      isLike = true
+    }
+    console.log(isLike)
+    this.likeService.doLike(this.userId, this.idPost, isLike).subscribe((data) => {
+      this.getCountLike(this.idPost)
+      this.checkLike(this.userId, this.idPost)
+    })
+  }
+
+  public getCountLike(postId: number) {
+    this.likeService.getLikePosts(postId).subscribe((data) => {
+      this.countLike = data
+    })
+  }
+  public checkLike(userId: number, postId: number) {
+    this.likeService.checkUserLike(userId, postId).subscribe((data: boolean) => {
+      this.userLike = data
+    })
+  }
+
   validation_message = {
     cmt: [
       { type: 'required', message: 'Vui lòng nhập comment' }

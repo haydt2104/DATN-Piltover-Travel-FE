@@ -1,0 +1,70 @@
+<section class="content">
+  <div class="card p-4">
+    <div class="row justify-content-center">
+      <form class="row g-3 col-md-8" (ngSubmit)="submitForm()" [formGroup]="formGroup">
+        <div class="col-12">
+          <label class="form-label">Tên mã giảm giá:</label>
+          <input type="text" class="form-control" id="name" formControlName="name" name="name" required>
+          <div class="text-danger" *ngFor="let validation of validation_message.name">
+            <small *ngIf="formGroup.get('name')!.value.length==0">
+              {{validation.message}}
+            </small>
+          </div>
+        </div>
+
+        <!-- <div class="col-12">
+          <label class="form-label">Code:</label>
+          <input type="text" class="form-control" id="code" formControlName="code" name="code" required>
+          <small *ngIf="formGroup.get('name')!.value.length==0">
+            <p *ngIf="validation_message">{{validation_message.name}}</p>
+          </small>
+        </div> -->
+
+        <div class="col-12">
+          <label class="form-label">Số phần trăm giảm:</label>
+          <input type="number" class="form-control" placeholder="Example: 5, 10, 10.5, ..." id="percentage"
+            formControlName="percentage" name="percentage" required>
+            <div class="text-danger" *ngFor="let validation of validation_message.percentage">
+              <small *ngIf="formGroup.get('percentage')!.value.length==0">
+                {{validation.message}}
+              </small>
+            </div>
+        </div>
+
+        <div class="col-12">
+          <label class="form-label">Số lượng:</label>
+          <input type="number" class="form-control" id="amount" formControlName="amount" name="amount" required>
+          <div class="text-danger" *ngFor="let validation of validation_message.amount">
+            <small *ngIf="formGroup.get('amount')!.value.length==0">
+              {{validation.message}}
+            </small>
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <label class="form-label">Số tiền để sử dụng:</label>
+          <input type="number" class="form-control" id="min" formControlName="min" name="min" required>
+          <div class="text-danger" *ngFor="let validation of validation_message.min">
+            <small *ngIf="formGroup.get('min')!.value.length==0">
+              {{validation.message}}
+            </small>
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <label class="form-label">Số tiền giảm tối đa</label>
+          <input type="number" class="form-control" id="max" formControlName="max" name="max" required>
+          <div class="text-danger" *ngFor="let validation of validation_message.max">
+            <small *ngIf="formGroup.get('max')!.value.length==0">
+              {{validation.message}}
+            </small>
+          </div>
+        </div>
+
+        <div class="col-12">
+          <button type="submit" class="btn btn-primary">Thêm</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>

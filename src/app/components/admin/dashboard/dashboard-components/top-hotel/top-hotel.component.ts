@@ -1,7 +1,7 @@
 import { NgFor } from '@angular/common';
 import { Component } from '@angular/core';
 import { RevenueService } from 'src/app/services/revenue/revenue.service';
-import { Revenue, HotelRevenue } from 'src/app/models/revenue';
+import { Revenue, HotelRevenue, DateRevenue } from 'src/app/models/revenue';
 import { ActivatedRoute, Params, Router, RouterLink } from '@angular/router';
 
 @Component({
@@ -30,7 +30,11 @@ export class TopHotelComponent {
       });
     }
       private getAllHotelRevenue(){
-        this.hotelService.getHotelRevenue(this.startDate, this.endDate).subscribe((data) =>{
+        const dateRange: DateRevenue = {
+          startDate: this.startDate,
+          endDate: this.endDate,
+        };
+        this.hotelService.getHotelRevenueBody(dateRange).subscribe((data) =>{
           this.HotelRevenue = data;
           console.log('Doanh thu Hotel: ', this.HotelRevenue);
         });

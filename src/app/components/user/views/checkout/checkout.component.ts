@@ -19,11 +19,9 @@ import { TourImage } from 'src/app/models/tour-img.model';
 import { BookingService } from 'src/app/services/booking/booking.service';
 import { DiscountService } from 'src/app/services/discount/discount.service';
 import { HotelService } from 'src/app/services/hotel/hotel.service';
+import { AccountService } from './../../../../services/account/account.service';
 import { TourDateService } from 'src/app/services/tour/tour-date.service';
 import { TourImageService } from 'src/app/services/tour/tour-image.service';
-import { AccountService } from './../../../../services/account/account.service';
-
-
 
 @Component({
   selector: 'app-checkout',
@@ -165,7 +163,7 @@ export class CheckoutComponent implements OnInit {
   }
 
   public getDiscountList() {
-    this.discountService.getAllDiscount().subscribe(
+    this.discountService.ReadAllDiscountsFromAPI().subscribe(
       (response: Discount[]) => {
         this.discountList = response
       },

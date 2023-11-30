@@ -34,10 +34,14 @@ import { TestPipePipe } from './pipes/test-pipe.pipe';
 import { GalleriaModule } from 'primeng/galleria';
 import { HomeComponent } from './components/user/views/home/home.component';
 import { HistoryComponent } from './components/user/views/history/history.component';
+import { DestinationComponent } from './components/user/views/destination/destination.component';
+import { NgxPaginationModule } from 'ngx-pagination';
+import { DiscountComponent } from './components/admin/discount/discount.component';
 
 import { CheckoutComponent } from './components/user/views/checkout/checkout.component';
 import { CheckoutSuccessComponent } from './components/user/views/checkout/checkout-success/checkout-success.component';
 import { CheckoutFailedComponent } from './components/user/views/checkout/checkout-failed/checkout-failed.component';
+import { MessageService } from 'primeng/api';
 
 
 @NgModule({
@@ -46,6 +50,7 @@ import { CheckoutFailedComponent } from './components/user/views/checkout/checko
     SpinnerComponent,
     // LayoutComponent,
     HomeComponent,
+    DestinationComponent,
     HeaderComponent,
     FooterComponent,
     AuthorizationsComponent,
@@ -53,13 +58,15 @@ import { CheckoutFailedComponent } from './components/user/views/checkout/checko
     AccountComponent,
     CheckStatusAccountPipe,
     BookingComponent,
-    HistoryComponent
+    HistoryComponent,
+    DiscountComponent,
   ],
   imports: [
     CommonModule,
     BrowserModule,
     BrowserAnimationsModule,
     FormsModule,
+    NgxPaginationModule,
     ReactiveFormsModule,
     HttpClientModule,
     NgbModule,
@@ -80,6 +87,7 @@ import { CheckoutFailedComponent } from './components/user/views/checkout/checko
       provide: 'BASE_URL',
       useValue: environment.apiUrl,
     },
+    MessageService
   ],
   bootstrap: [AppComponent]
 })

@@ -1,0 +1,42 @@
+<section class="content">
+  <div class="card p-4">
+    <div class="mb-2 d-flex justify-content-between">
+      <h4 class="text-left text-info col-md-3">DANH SÁCH MÃ GIẢM GIÁ</h4>
+      <button class="btn btn-success" [routerLink]="['/admin/manage/discount/insert']">Thêm</button>
+    </div>
+    <div class="table-responsive">
+      <table class="table table-hover table-bordered">
+        <thead class="text-center">
+          <th class="col-md-1">STT</th>
+          <th class="col-md-1">ID</th>
+          <th class="col-md-2">Tên mã</th>
+          <th class="col-md-2">Số phần trăm giảm</th>
+          <th class="col-md-1">Số lượng</th>
+          <th class="col-md-2">Mã định dạng</th>
+          <th class="col-md-1">Trạng thái</th>
+          <th class="col-md-1"></th>
+        </thead>
+        <tbody>
+          <tr *ngFor="let d of discounts, index as i">
+            <td class="text-center">{{i+1}}</td>
+            <td class="text-left">DISC_{{d.id}}</td>
+            <td class="text-left">{{d.name}}</td>
+            <td class="text-center">{{d.percentage}}%</td>
+            <td class="text-center">{{d.amount}}</td>
+            <td class="text-center">{{d.code}}</td>
+            <td class="text-center" [ngSwitch]="d.isDelete">
+              <div *ngSwitchCase="0" class="text-success" >Đang hoạt động</div>
+              <div *ngSwitchCase="1" class="text-danger" >Hết hạn</div>
+            </td>
+            <td class="text-center">
+              <button class="link-warning" (click)="deleteDiscount(d.id)"><i
+                  class="bi bi-trash3" ></i></button>
+            </td>
+          </tr>
+
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+

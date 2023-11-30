@@ -2,7 +2,7 @@ import { NgFor } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import {Product,TopSelling} from './top-selling-data';
 import { RevenueService } from 'src/app/services/revenue/revenue.service';
-import { Revenue, TourRevenue } from 'src/app/models/revenue';
+import { DateRevenue, Revenue, TourRevenue } from 'src/app/models/revenue';
 import { ActivatedRoute, Params, Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 
@@ -35,7 +35,12 @@ export class TopSellingComponent implements OnInit {
       });
   }
   private getAllTourRevenue(){
-    this.tourService.getTourRevenue(this.startDate, this.endDate).subscribe((data) =>{
+    const dateRange: DateRevenue = {
+      startDate: this.startDate,
+      endDate: this.endDate,
+    };
+    
+    this.tourService.getTourRevenueBody(dateRange).subscribe((data) =>{
       this.TourRevenue = data;
       console.log('Doanh thu Tour: ', this.TourRevenue);
     });
