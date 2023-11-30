@@ -32,7 +32,17 @@
         </p-galleria>
 
         <div class="pt-5 mt-5">
-          <h3 class="mb-5" style="font-size: 20px; font-weight: bold;">{{countCmt}} Comments</h3>
+          <button class="Btn" (click)="doLike()">
+            <span class="leftContainer">
+              <i class="pi pi-heart" style="color: white;" *ngIf="userLike == false"></i>
+              <i class="pi pi-heart-fill" style="color: white;" *ngIf="userLike == true"></i>
+              <span class="like">Like</span>
+            </span>
+            <span class="likeCount">
+              {{countLike}}
+            </span>
+          </button>
+          <h3 class="mb-5 col-3" style="font-size: 20px; font-weight: bold;">{{countCmt}} Comments</h3>
           <ul class="comment-list" *ngFor="let item of cmt | paginate: { itemsPerPage: itemsPerPage, currentPage: p }">
             <li class="comment">
               <div class="vcard bio">
@@ -76,7 +86,7 @@
               </div>
             </li>
           </ul>
-          <pagination-controls (pageChange)="p = $event"></pagination-controls>
+          <pagination-controls (pageChange)="p = $event" nextLabel="Sau" previousLabel="Trước"></pagination-controls>
           <!-- END comment-list -->
           <form [formGroup]="addCmt" (ngSubmit)="saveComment()" style="display: flex; float: left;width: 100%;">
             <div class="vcard bio">
@@ -98,8 +108,10 @@
           <div class="text">
             <h3 class="heading"><a href="/post-single/{{item.id}}">{{item.title}}</a></h3>
             <div class="meta">
-              <div><a href="/post-single/{{item.id}}"><span class="fa fa-calendar"></span> {{item.createTime | date:"dd-MM-yyyy"}}</a></div>
-              <div><a href="/post-single/{{item.id}}"><span class="fa fa-user"></span> {{item.createUser.fullname}}</a></div>
+              <div><a href="/post-single/{{item.id}}"><span class="fa fa-calendar"></span> {{item.createTime |
+                  date:"dd-MM-yyyy"}}</a></div>
+              <div><a href="/post-single/{{item.id}}"><span class="fa fa-user"></span> {{item.createUser.fullname}}</a>
+              </div>
               <!-- <div><a href="#"><span class="fa fa-comment"></span> 19</a></div> -->
             </div>
           </div>

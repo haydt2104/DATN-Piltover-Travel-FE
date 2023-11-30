@@ -41,6 +41,7 @@ import { DiscountComponent } from './components/admin/discount/discount.componen
 import { CheckoutComponent } from './components/user/views/checkout/checkout.component';
 import { CheckoutSuccessComponent } from './components/user/views/checkout/checkout-success/checkout-success.component';
 import { CheckoutFailedComponent } from './components/user/views/checkout/checkout-failed/checkout-failed.component';
+import { MessageService } from 'primeng/api';
 
 
 @NgModule({
@@ -86,6 +87,7 @@ import { CheckoutFailedComponent } from './components/user/views/checkout/checko
       provide: 'BASE_URL',
       useValue: environment.apiUrl,
     },
+    MessageService
   ],
   bootstrap: [AppComponent]
 })

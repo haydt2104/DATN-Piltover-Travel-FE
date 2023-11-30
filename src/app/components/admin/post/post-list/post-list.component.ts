@@ -35,12 +35,12 @@ export class PostListComponent implements OnInit {
     });
   }
 
-  public getLikePost(id: number) {
-    this.postService.getLikePosts(id).subscribe((data: number) => {
-      // return this.likeCount[index] = data;
-      return data;
-    });
-  }
+  // public getLikePost(id: number) {
+  //   this.postService.getLikePosts(id).subscribe((data: number) => {
+  //     // return this.likeCount[index] = data;
+  //     return data;
+  //   });
+  // }
 
   public getPostById(id: number) {
     this.postService.getPostById(id).subscribe((data) => {
