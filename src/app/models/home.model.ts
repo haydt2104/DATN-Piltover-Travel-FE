@@ -1,14 +1,14 @@
 export interface HomeTour {
   tourID: number;
-  name_Tour: string;
+  name_tour: string;
   image: string;
   adult_price: number;
   children_price: number;
   start_address: string;
   start_time: string;
-  transport_Name: string;
-  hotel_Name: string;
-  hotel_Star: string;
+  transport_name: string;
+  hotel_name: string;
+  hotel_star: string;
 }
 
 export interface SearchTour {

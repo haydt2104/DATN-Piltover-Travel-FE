@@ -14,7 +14,7 @@ export class DestinationComponent {
   searchError: string = '';
   dataLoaded: boolean = false;
 
-  public  newTour: SearchTour = {
+  public newTour: SearchTour = {
     startDate: '0',
     tourName: '',
     startAddress: '',

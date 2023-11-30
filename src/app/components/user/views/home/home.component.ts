@@ -10,6 +10,7 @@ import { HomeTour, SearchTour } from 'src/app/models/home.model';
 export class HomeComponent implements OnInit{
   public HomeTour!: HomeTour[];
   public currentPage = 1;
+  public current = 1;
   public displayedTours: HomeTour[] = [];
   public toursPerPage = 6;
   constructor(private HomeService: HomeService) {
@@ -45,5 +46,19 @@ formatCurrency(value: number): string {
   }).format(value);
 
   return formattedValue.replace('₫', '') + 'VNĐ';
+}
+goToNextPage() {
+  if (this.current < this.HomeTour.length) {
+    this.current++;
+  } else {
+    this.current = 1;
+  }
+}
+goToPreviousPage() {
+  if (this.current > 1) {
+    this.current--;
+  } else {
+    this.current = this.HomeTour.length;
+  }
 }
 }

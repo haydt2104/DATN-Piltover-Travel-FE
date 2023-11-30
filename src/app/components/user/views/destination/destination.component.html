@@ -92,7 +92,7 @@
  <!-- Thông báo khi không tìm thấy dữ liệu tìm kiếm -->
  <section class="ftco-section" *ngIf="!dataLoaded && searchError">
   <div class="container">
-    <p>{{ searchError }}</p>
+    <p style="text-align: center; font-size: 16px;">{{ searchError }}</p>
    </div>
 </section>
 <!-- --------- -->
@@ -115,19 +115,19 @@
       <div class="row">
         <div class="col-md-4" *ngFor="let tour of HomeTour | paginate: { itemsPerPage: 6, currentPage: currentPage }">
           <div class="project-wrap" >
-            <a href="#" class="img" [style.background-image]="'url(../assets/images/'+ tour.image + ')'">
+            <a href="destination-detail/{{tour.tourID}}" class="img" [style.background-image]="'url('+ tour.image + ')'">
               <span class="price">{{ formatCurrency(tour.adult_price) }}/người</span>
             </a>
             <div class="text p-4">
               <span class="days">2 ngày 3 đêm</span>
-              <h3><a href="#">{{tour.name_Tour}}</a></h3>
+              <h3><a href="destination-detail/{{tour.tourID}}">{{tour.name_tour}}</a></h3>
               <br>
               <p class="location"><span class="fa fa-map-marker"></span> Điểm khởi hành: {{tour.start_address}}</p>
-              <p class="location"><span class="fa fa-bus"></span> Phương tiện: {{tour.transport_Name}}</p>
+              <p class="location"><span class="fa fa-bus"></span> Phương tiện: {{tour.transport_name}}</p>
               <p class="location"><span class="fa fa-calendar"></span> Ngày khởi hành: {{tour.start_time | date:'dd/MM/yyyy'}}</p>
-              <p class="location"><span class="fa fa-home"></span> Khách sạn: {{tour.hotel_Name}} {{tour.hotel_Star}}*</p>
+              <p class="location"><span class="fa fa-home"></span> Khách sạn: {{tour.hotel_name}} {{tour.hotel_star}}*</p>
               <ul>
-                <li><span class="ml-auto"></span><a href="">>> Xem thêm</a></li>
+                <li><span class="ml-auto"></span><a href="destination-detail/{{tour.tourID}}">>> Xem thêm</a></li>
               </ul>
             </div>
           </div>
