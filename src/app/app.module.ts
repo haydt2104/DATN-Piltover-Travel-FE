@@ -36,6 +36,7 @@ import { HomeComponent } from './components/user/views/home/home.component';
 import { HistoryComponent } from './components/user/views/history/history.component';
 import { DestinationComponent } from './components/user/views/destination/destination.component';
 import { NgxPaginationModule } from 'ngx-pagination';
+import { DiscountComponent } from './components/admin/discount/discount.component';
 
 import { CheckoutComponent } from './components/user/views/checkout/checkout.component';
 import { CheckoutSuccessComponent } from './components/user/views/checkout/checkout-success/checkout-success.component';
@@ -56,7 +57,8 @@ import { CheckoutFailedComponent } from './components/user/views/checkout/checko
     AccountComponent,
     CheckStatusAccountPipe,
     BookingComponent,
-    HistoryComponent
+    HistoryComponent,
+    DiscountComponent,
   ],
   imports: [
     CommonModule,

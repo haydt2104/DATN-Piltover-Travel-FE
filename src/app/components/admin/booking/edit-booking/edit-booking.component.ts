@@ -113,7 +113,6 @@ export class EditBookingComponent implements OnInit {
       .subscribe((data: BookingDetail) => {
         this.detailItem = data;
         console.log('data: ', this.detailItem);
-
       }),
       (error) => {
         console.log(error);

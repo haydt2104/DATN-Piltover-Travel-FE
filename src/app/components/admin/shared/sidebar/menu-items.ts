@@ -42,6 +42,16 @@ export const ROUTES: RouteInfo[] = [
     submenu: [],
   },
   {
+    path:'/admin/manage/discount',
+    title: 'Mã giảm giá',
+    icon: 'bi bi-badge-vo',
+    class:'',
+    extralink:false,
+    submenu:[
+
+    ],
+  },
+  {
     path: '/admin/component/alert',
     title: 'Alert',
     icon: 'bi bi-bell',
