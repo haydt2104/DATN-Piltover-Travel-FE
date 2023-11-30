@@ -126,7 +126,7 @@ export class CheckoutComponent implements OnInit {
     setInterval(() => this.bookingService.getBookingsByTourDate(data).subscribe(
       (responseBooking: Booking[]) => {
         this.bookingList = responseBooking
-        this.updateRemaining();
+        this.updateAccessible();
       },
       (error: HttpErrorResponse) => {
         this.router.navigate([''])
@@ -307,7 +307,7 @@ export class CheckoutComponent implements OnInit {
     }
   }
 
-  updateRemaining() {
+  updateAccessible() {
     if (this.getDateDiffer(this.currentDate, this.tourDate.initiateDate) < 3 || this.tourDate.status.id != 2 || this.getBookedCustomerNumber() == this.tourDate.tour.availableSpaces) {
       this.router.navigate([''])
     }
