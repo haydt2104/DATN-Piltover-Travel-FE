@@ -1,1 +1,25 @@
+.left-button,
+.right-button {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+}
 
+.left-button {
+  left: 0;
+}
+
+.right-button {
+  right: 0;
+}
+.left-button button,
+.right-button button {
+    background-color: transparent;
+    border: none;
+    color: #fff;
+
+}
+.left-button button i,
+.right-button button i {
+    font-size: 42px; /* Điều chỉnh kích thước của ký hiệu */
+}

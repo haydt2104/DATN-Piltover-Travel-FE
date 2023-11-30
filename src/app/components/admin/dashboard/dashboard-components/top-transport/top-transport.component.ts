@@ -1,7 +1,7 @@
 import { NgFor } from '@angular/common';
 import { Component } from '@angular/core';
 import { RevenueService } from 'src/app/services/revenue/revenue.service';
-import { Revenue, TransportRevenue } from 'src/app/models/revenue';
+import { DateRevenue, Revenue, TransportRevenue } from 'src/app/models/revenue';
 import { ActivatedRoute, Params, Router, RouterLink } from '@angular/router';
 
 @Component({
@@ -31,7 +31,11 @@ export class TopTransportComponent {
     });
   }
     private getAllTransportRevenue(){
-      this.transportService.getTransportRevenue(this.startDate, this.endDate).subscribe((data) =>{
+      const dateRange: DateRevenue = {
+        startDate: this.startDate,
+        endDate: this.endDate,
+      };
+      this.transportService.getTransportRevenueBody(dateRange).subscribe((data) =>{
         this.TransportRevenue = data;
         console.log('Doanh thu Hotel: ', this.TransportRevenue);
       });

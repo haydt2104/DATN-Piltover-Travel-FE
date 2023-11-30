@@ -34,6 +34,8 @@ import { TestPipePipe } from './pipes/test-pipe.pipe';
 import { GalleriaModule } from 'primeng/galleria';
 import { HomeComponent } from './components/user/views/home/home.component';
 import { HistoryComponent } from './components/user/views/history/history.component';
+import { DestinationComponent } from './components/user/views/destination/destination.component';
+import { NgxPaginationModule } from 'ngx-pagination';
 
 import { CheckoutComponent } from './components/user/views/checkout/checkout.component';
 import { CheckoutSuccessComponent } from './components/user/views/checkout/checkout-success/checkout-success.component';
@@ -46,6 +48,7 @@ import { CheckoutFailedComponent } from './components/user/views/checkout/checko
     SpinnerComponent,
     // LayoutComponent,
     HomeComponent,
+    DestinationComponent,
     HeaderComponent,
     FooterComponent,
     AuthorizationsComponent,
@@ -60,6 +63,7 @@ import { CheckoutFailedComponent } from './components/user/views/checkout/checko
     BrowserModule,
     BrowserAnimationsModule,
     FormsModule,
+    NgxPaginationModule,
     ReactiveFormsModule,
     HttpClientModule,
     NgbModule,
