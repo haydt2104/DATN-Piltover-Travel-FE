@@ -185,7 +185,7 @@ export class TourComponent implements OnInit {
         })
     } else if (content == 'booking') {
       var editDate = this.tourDateList.find((tour) => tour.id == id);
-      this.editBookingList = this.getBooking(editDate.id)
+      this.editBookingList = this.getBooking(editDate.id).filter((booking) => booking.status != 2)
       this.modalService
         .open(this.bookingModal, {
           ariaLabelledBy: 'modal-basic-title',
@@ -521,7 +521,7 @@ export class TourComponent implements OnInit {
   public getBookingList() {
     this.bookingService.getAllBooking().subscribe(
       (response) => {
-        this.bookingList = response;
+        this.bookingList = response.filter((booking) => booking.status != 2);
       },
       (error: HttpErrorResponse) => {
         alert(error.message);
@@ -1030,6 +1030,21 @@ export class TourComponent implements OnInit {
         this.getTourList();
         this.messageService.clear();
         this.messageService.add({ key: 'info', severity: 'info', summary: 'Thông Báo', detail: 'Cập nhập trạng thái thành công' })
+      },
+      (error: HttpErrorResponse) => {
+        console.log(error.message);
+      }
+    )
+  }
+
+  confirmPay(data: Booking, status: number) {
+    data.status = status;
+    this.bookingService.editBooking(data).subscribe(
+      (response) => {
+        if (status == 2) {
+          this.editBookingList.splice(this.editBookingList.findIndex(booking => booking.id === data.id), 1)
+          this.bookingList.splice(this.bookingList.findIndex(booking => booking.id === data.id), 1)
+        }
       },
       (error: HttpErrorResponse) => {
         console.log(error.message);

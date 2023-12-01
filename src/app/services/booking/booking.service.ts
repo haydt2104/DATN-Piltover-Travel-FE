@@ -25,7 +25,7 @@ export class BookingService {
   }
 
   editBooking(Booking: Booking) {
-    return this.http.put(this.API_Url + '/edit', Booking);
+    return this.http.put(this.API_Url + 'booking/edit', Booking);
   }
 
   getHistoryReadAllAPI() {

@@ -123,7 +123,7 @@ export class DestinationDetailComponent implements OnInit {
   }
 
   public getBookedCustomerNumber(tourDateId: number): number {
-    return this.bookingList.filter(booking => booking.tourDate.id === tourDateId).reduce((sum, booking) => sum + booking.totalPassengers, 0)
+    return this.bookingList.filter(booking => booking.tourDate.id === tourDateId && booking.status != 2).reduce((sum, booking) => sum + booking.totalPassengers, 0)
   }
 
   public toCheckOut(dateId: number) {
