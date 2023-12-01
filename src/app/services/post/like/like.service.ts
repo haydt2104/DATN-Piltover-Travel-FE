@@ -26,4 +26,8 @@ export class LikeService {
   public doLike(userId: number, postId: number, isLike: boolean): Observable<Like>{
     return this.http.put<Like>(this.baseUrl + 'api/post/doLike?userId=' + userId + '&postId=' + postId, isLike);
   }
+
+  public likePost(userId: number, postId: number, isLike: boolean): Observable<Like>{
+    return this.http.post<Like>(this.baseUrl + 'api/post/likePost?userId=' + userId + '&postId=' + postId, isLike);
+  }
 }

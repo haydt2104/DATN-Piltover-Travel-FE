@@ -34,7 +34,7 @@
         <div class="pt-5 mt-5">
           <button class="Btn" (click)="doLike()">
             <span class="leftContainer">
-              <i class="pi pi-heart" style="color: white;" *ngIf="userLike == false"></i>
+              <i class="pi pi-heart" style="color: white;" *ngIf="userLike == false  || userLike == null"></i>
               <i class="pi pi-heart-fill" style="color: white;" *ngIf="userLike == true"></i>
               <span class="like">Like</span>
             </span>

@@ -27,7 +27,7 @@ export class PostSingleComponent {
   message_validition: String
   idPost: number
   editId: number
-  userId: number = 1234567890
+  userId: number = 6245835351
   countLike: number
   userLike: boolean
 
@@ -161,22 +161,24 @@ export class PostSingleComponent {
   }
 
   public doLike() {
-    // this.LikeClick = this.form.group({
-    //   postId: new FormControl(this.idPost),
-    //   userId: new FormControl(this.userId)
-    // })
     console.log('THực thi thao tác bấm nút LIKE')
-    var isLike: boolean
     if (this.userLike == true) {
-      isLike = false
+      this.likeService.doLike(this.userId, this.idPost, false).subscribe((data) => {
+        this.getCountLike(this.idPost)
+        this.checkLike(this.userId, this.idPost)
+      })
     } else if (this.userLike == false) {
-      isLike = true
+      this.likeService.doLike(this.userId, this.idPost, true).subscribe((data) => {
+        this.getCountLike(this.idPost)
+        this.checkLike(this.userId, this.idPost)
+      })
+    } else if (this.userLike == null){
+      this.likeService.likePost(this.userId, this.idPost, true).subscribe((data) => {
+        this.getCountLike(this.idPost)
+        this.checkLike(this.userId, this.idPost)
+      })
     }
-    console.log(isLike)
-    this.likeService.doLike(this.userId, this.idPost, isLike).subscribe((data) => {
-      this.getCountLike(this.idPost)
-      this.checkLike(this.userId, this.idPost)
-    })
+
   }
 
   public getCountLike(postId: number) {
