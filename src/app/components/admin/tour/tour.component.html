@@ -402,6 +402,7 @@
               <th pSortableColumn="createUser">Tên Khách Hàng<p-sortIcon field="createUser"></p-sortIcon></th>
               <th pSortableColumn="totalPassengers">Số Khách<p-sortIcon field="totalPassengers"></p-sortIcon></th>
               <th pSortableColumn="totalPrice">Tổng Tiền<p-sortIcon field="totalPrice"></p-sortIcon></th>
+              <th pSortableColumn="status">Trạng Thái<p-sortIcon field="status"></p-sortIcon></th>
               <th></th>
             </tr>
           </ng-template>
@@ -417,7 +418,12 @@
                 {{editBookingList.totalPrice | number }} VNĐ
               </td>
               <td>
-                <button class="btn btn-success">Xác Nhận Đã Thanh Toán</button>
+                <i *ngIf="editBookingList.status == 0" class="text-warning">Chưa Thanh Toán</i>
+                <i *ngIf="editBookingList.status == 1" class="text-success">Đã Thanh Toán</i>
+              </td>
+              <td class="button-group" *ngIf="editBookingList.status == 0">
+                <button class="btn btn-success" (click)="confirmPay(editBookingList, 1)">Đã Thanh Toán</button>
+                <button class="btn btn-danger" (click)="confirmPay(editBookingList, 2)">Hủy</button>
               </td>
             </tr>
           </ng-template>

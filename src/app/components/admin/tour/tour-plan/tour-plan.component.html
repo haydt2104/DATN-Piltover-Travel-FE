@@ -4,6 +4,7 @@
 <div class="card">
   <div class="card-body">
     <h4 class="card-title">Danh sách Kế Hoạch [ <i *ngIf="currentTourDate">{{currentTourDate.initiateDate | date:
+        "dd/MM/yyyy"}}</i> ] - [ <i *ngIf="currentTourDate">{{currentTourDate.endDate | date:
         "dd/MM/yyyy"}}</i> ]</h4>
     <button *ngIf="currentTourDate && currentTourDate.status.id == 1" pButton icon="pi pi-plus"
       class="btn btn-success mb-3" (click)="open('add', null)">Thêm Kế Hoạch</button>
@@ -145,7 +146,7 @@
               </p-cellEditor>
             </td>
             <td class="button-group">
-              <button pButton *ngIf="!editing" [routerLink]="['/admin/tour/plan/'+planList.id]" class="btn btn-info"
+              <button pButton *ngIf="!editing && checkValidDate(currentTourDate,planList) == false" [routerLink]="['/admin/tour/plan/'+planList.id]" class="btn btn-info"
                 icon="pi pi-book">Chi
                 tiết</button>
               <button pButton *ngIf="!editing && currentTourDate.status.id == 1" (click)="onRowEditInit(planList)"
