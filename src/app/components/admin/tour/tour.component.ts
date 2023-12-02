@@ -741,7 +741,7 @@ export class TourComponent implements OnInit {
     }
     this.curdService.put('tour', tour).subscribe(
       (response: Tour) => {
-        this.getTourList();
+        this.tourList[this.tourList.findIndex(a => a.id == tour.id)] = tour
         this.loadingService.hideOverLay()
         this.messageService.clear();
         this.messageService.add({ key: 'info', severity: 'info', summary: 'Thông Báo', detail: 'Cập nhập thành công' })
@@ -763,7 +763,8 @@ export class TourComponent implements OnInit {
       name: data.value.name,
       price: data.value.price * 1000,
       star: data.value.star,
-      address: address
+      address: address,
+      isDelete: false
     }
     this.hotelService.addHotel(hotel).subscribe(
       (response) => {
@@ -788,13 +789,14 @@ export class TourComponent implements OnInit {
       name: data.value.name,
       price: data.value.price * 1000,
       star: data.value.star,
-      address: address
+      address: address,
+      isDelete: data.value.isDelete
     }
     this.hotelService.editHotel(hotel).subscribe(
       (response) => {
+        this.hotelList[this.hotelList.findIndex(a => a.id == hotel.id)] = hotel
         this.messageService.clear();
         this.messageService.add({ key: 'info', severity: 'info', summary: 'Thông Báo', detail: 'Cập nhập thành công' })
-        this.getHotelList();
       },
       (error) => {
         console.log(error.message);
@@ -827,10 +829,11 @@ export class TourComponent implements OnInit {
       name: data.value.name,
       price: data.value.price * 1000,
       seatingCapacity: data.value.seatingCapacity,
-      isDelete: data.value.isDelete
+      isDelete: data.value.isDelete.toLowerCase() === "true"
     }
     this.curdService.put("transport", transport).subscribe(
       (response) => {
+        this.transportList[this.transportList.findIndex(a => a.id == transport.id)] = transport
         this.messageService.clear();
         this.messageService.add({ key: 'info', severity: 'info', summary: 'Thông Báo', detail: 'Cập nhập thành công' });
         this.getAllTransport();
@@ -928,6 +931,7 @@ export class TourComponent implements OnInit {
   }
 
   onRowEditCancel(tourDate: TourDate, index: number) {
+    this.getTourDateList(this.editTour.id)
     this.tourDateList[index] = this.clonedProducts[tourDate.id]
     delete this.clonedProducts[tourDate.id];
   }
@@ -1027,7 +1031,6 @@ export class TourComponent implements OnInit {
     }
     this.curdService.put("tour", tour).subscribe(
       (response: Tour) => {
-        this.getTourList();
         this.messageService.clear();
         this.messageService.add({ key: 'info', severity: 'info', summary: 'Thông Báo', detail: 'Cập nhập trạng thái thành công' })
       },

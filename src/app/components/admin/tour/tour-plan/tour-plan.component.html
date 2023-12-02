@@ -71,7 +71,7 @@
     <div class="table-responsive">
       <p-table #dt1 [value]="planList" dataKey="id" [rows]="10" [paginator]="true" editMode="row"
         currentPageReportTemplate="Hiển thị từ bảng {first} đến {last} trong tổng {totalRecords} bảng"
-        [globalFilterFields]="['startName', 'startAddress', 'transport.name']" [tableStyle]="{'min-width': '100rem'}">
+        [globalFilterFields]="['startName', 'startAddress', 'transport.name']">
         <ng-template pTemplate="caption">
           <div class="flex">
             <form [formGroup]="formFilter">
@@ -84,15 +84,15 @@
           </div>
         </ng-template>
         <ng-template pTemplate="header" class="theader">
-          <tr>
-            <th pSortableColumn="startName" style="width:15%">Điểm đến<p-sortIcon field="startName"></p-sortIcon>
+          <tr class="text-center">
+            <th pSortableColumn="startName" style="width:20%">Điểm đến<p-sortIcon field="startName"></p-sortIcon>
             </th>
             <th pSortableColumn="startAddress" style="width:16%">Địa chỉ<p-sortIcon field="startAddress"></p-sortIcon>
             </th>
             <th pSortableColumn="startTime" style="width:20%">Thời gian khởi hành<p-sortIcon
                 field="startTime"></p-sortIcon>
             </th>
-            <th pSortableColumn="transport.name" style="width:14%">Phương tiện<p-sortIcon
+            <th pSortableColumn="transport.name" style="width:18%">Phương tiện<p-sortIcon
                 field="transport.name"></p-sortIcon></th>
             <th></th>
           </tr>
@@ -146,8 +146,8 @@
               </p-cellEditor>
             </td>
             <td class="button-group">
-              <button pButton *ngIf="!editing && checkValidDate(currentTourDate,planList) == false" [routerLink]="['/admin/tour/plan/'+planList.id]" class="btn btn-info"
-                icon="pi pi-book">Chi
+              <button pButton *ngIf="!editing && checkValidDate(currentTourDate,planList) == false"
+                [routerLink]="['/admin/tour/plan/'+planList.id]" class="btn btn-info" icon="pi pi-book">Chi
                 tiết</button>
               <button pButton *ngIf="!editing && currentTourDate.status.id == 1" (click)="onRowEditInit(planList)"
                 icon="pi pi-pencil" pInitEditableRow class="btn btn-warning">Sửa</button>

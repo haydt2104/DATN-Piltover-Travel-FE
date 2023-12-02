@@ -167,7 +167,8 @@ export class TourPlanDetailComponent implements OnInit {
         this.messageService.add({ key: 'success', severity: 'success', summary: 'Thông Báo', detail: 'Cập nhập thành công' });
       },
       (error: HttpErrorResponse) => {
-        alert(error.message);
+        this.messageService.clear();
+        this.messageService.add({ key: 'error', severity: 'error', summary: 'Lỗi', detail: 'Cập nhập thất bại vui lòng điền đầy đủ dữ liệu' });
       }
     )
   }
