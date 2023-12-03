@@ -15,7 +15,7 @@ export class HistoryComponent implements OnInit {
   constructor(private HistoryService: HistoryService,private BookingService: BookingService) {}
 
   ngOnInit(): void {
-    const userid=1234567890;
+    const userid=2345673452;
     this.getLisHistory(userid);
   }
 
