@@ -273,10 +273,10 @@
           ngày</button>
         <label for="addDate" *ngIf="addDateStatus">Từ</label>
         <input id="addDate" pInputText type="date" [value]="minDate | date:'yyyy-MM-dd'" *ngIf="addDateStatus"
-          min="{{minDate | date:'yyyy-MM-dd'}}">
+          min="{{minDate | date:'yyyy-MM-dd'}}" onkeypress="return false">
         <label for="endDate" *ngIf="addDateStatus">Đến</label>
         <input id="endDate" pInputText type="date" [value]="minDate | date:'yyyy-MM-dd'" *ngIf="addDateStatus"
-          min="{{minDate | date:'yyyy-MM-dd'}}">
+          min="{{minDate | date:'yyyy-MM-dd'}}" onkeypress="return false">
         <pButton pButton class="p-button-success" icon="pi pi-check" (click)="saveDate()" *ngIf="addDateStatus">Thêm
         </pButton>
         <pButton pButton class="p-button-danger" icon="pi pi-times" (click)="cancelAddDate()" *ngIf="addDateStatus">
@@ -316,7 +316,7 @@
                 <p-cellEditor>
                   <ng-template pTemplate="input">
                     <input pInputText type="date" [(ngModel)]="tourDateList.initiateDate"
-                      min="{{minDate | date:'yyyy-MM-dd'}}" max="{{tourDateList.endDate}}">
+                      min="{{minDate | date:'yyyy-MM-dd'}}" max="{{tourDateList.endDate}}" onkeypress="return false">
                   </ng-template>
                   <ng-template pTemplate="output">
                     {{ tourDateList.initiateDate | date: 'dd-MM-yyyy' }}
@@ -327,7 +327,7 @@
                 <p-cellEditor>
                   <ng-template pTemplate="input">
                     <input pInputText type="date" [(ngModel)]="tourDateList.endDate"
-                      min="{{tourDateList.initiateDate | date:'yyyy-MM-dd'}}">
+                      min="{{tourDateList.initiateDate | date:'yyyy-MM-dd'}}" onkeypress="return false">
                   </ng-template>
                   <ng-template pTemplate="output" class="flex">
                     {{ tourDateList.endDate | date: 'dd-MM-yyyy' }}
