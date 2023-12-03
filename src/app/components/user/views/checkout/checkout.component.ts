@@ -163,7 +163,7 @@ export class CheckoutComponent implements OnInit {
   }
 
   public getDiscountList() {
-    this.discountService.getDataDiscountFormAPI().subscribe(
+    this.discountService.ReadAllDiscountsFromAPI().subscribe(
       (response: Discount[]) => {
         this.discountList = response
       },
