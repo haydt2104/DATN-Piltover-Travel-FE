@@ -27,10 +27,6 @@
                   <p class="price"><b><i class="fa fa-money"></i> Giá vé:</b>
                     Người lớn {{currentTour.price.adultPrice | number}}đ/người | Trẻ em
                     {{currentTour.price.childrenPrice | number}}đ/người</p>
-                  <p class="tour-description"><b>Mô tả về tour du lịch:</b> Lorem ipsum dolor sit amet consectetur
-                    adipisicing elit. Quae, sit nisi esse, reprehenderit similique voluptas voluptatem laboriosam
-                    maiores illum tenetur sunt pariatur eos eum mollitia, saepe quidem dolorum ratione magni!
-                    {{currentTour.description}}</p>
                   <p class="tour-seats"><b>Số lượng tối đa:</b> {{currentTour.availableSpaces}}</p>
                   <button class="custom-button" (click)="open(dateListModal)"> Đặt tour
                   </button>
@@ -50,10 +46,8 @@
     <div class="container">
       <div class="row">
         <div class="col-md-7">
-          <h1 style="font-weight:1000 ;">Chương trình Tour</h1>
-          <p style="font-size: 16px;">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Laudantium maiores quia
-            perspiciatis itaque provident possimus eius eveniet inventore quidem tempore! Magni minus dicta soluta, quia
-            minima sint aspernatur reiciendis tenetur.</p>
+          <h1 style="font-weight:1000 ;">Mô Tả Tour</h1>
+          <p style="font-size: 16px;">{{currentTour.description}}</p>
         </div>
         <div class="col-md-5">
           <!-- Khung cho phần "Lịch sử tour đã xem" -->
@@ -63,7 +57,7 @@
     </div>
   </section>
   <br>
-  <section class="ftco-section">
+  <!-- <section class="ftco-section">
     <div class="container">
       <div class="row justify-content-center pb-4">
         <div class="col-md-12 heading-section text-center ftco-animate">
@@ -153,7 +147,7 @@
 
       </div>
     </div>
-  </section>
+  </section> -->
 
   <ng-template #dateListModal let-modal>
     <div class="modal-header">
