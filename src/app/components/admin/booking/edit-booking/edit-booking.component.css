@@ -1,4 +1,4 @@
-input:disabled{
+input:disabled,select:disabled{
   background-color: rgba(142, 130, 130, 0.214)!important;
 }
 
@@ -12,4 +12,31 @@ input::-webkit-inner-spin-button {
 /* Firefox */
 input[type=number] {
   -moz-appearance: textfield;
+}
+
+/* booking.component.scss */
+
+.loading-container {
+  text-align: center;
+}
+
+p {
+  display: inline-block;
+  font-size: 1.2em;
+  margin: 0;
+  position: relative;
+}
+
+.ellipsis {
+  overflow: hidden;
+  position: absolute;
+  width: 0.9em;  /* Độ dài của "..." */
+  white-space: nowrap;
+  animation: ellipsis 1.5s infinite;  /* Thêm hiệu ứng chuyển động */
+}
+
+@keyframes ellipsis {
+  0%, 100% { width: 0; }
+  25%, 75% { width: 0.9em; }  /* Độ dài của "..." */
+  50% { width: 1.8em; }  /* Độ dài của " .." */
 }
