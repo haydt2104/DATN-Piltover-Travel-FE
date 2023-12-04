@@ -50,20 +50,20 @@ export const ROUTES: RouteInfo[] = [
     submenu: [
     ],
   },
-  {
-    path: '/admin/component/pagination',
-    title: 'Pagination',
-    icon: 'bi bi-dice-1',
-    class: '',
-    extralink: false,
-    submenu: [],
-  },
-  {
-    path: '/admin/about',
-    title: 'About',
-    icon: 'bi bi-people',
-    class: '',
-    extralink: false,
-    submenu: [],
-  },
+  // {
+  //   path: '/admin/component/pagination',
+  //   title: 'Pagination',
+  //   icon: 'bi bi-dice-1',
+  //   class: '',
+  //   extralink: false,
+  //   submenu: [],
+  // },
+  // {
+  //   path: '/admin/about',
+  //   title: 'About',
+  //   icon: 'bi bi-people',
+  //   class: '',
+  //   extralink: false,
+  //   submenu: [],
+  // },
 ];
