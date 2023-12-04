@@ -19,6 +19,10 @@ export class AuthInterceptor implements HttpInterceptor {
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
     const token = sessionStorage.getItem('token');
+    // Kiểm tra xem URL của request có nên loại bỏ token hay không
+    if (this.shouldExcludeToken(request.url)) {
+      return next.handle(request);
+    }
 
     if (token) {
       // Clone the request and add the token to the Authorization header
@@ -36,5 +40,10 @@ export class AuthInterceptor implements HttpInterceptor {
       );
     }
     return next.handle(request);
+  }
+
+  private shouldExcludeToken(url: string): boolean {
+    // Kiểm tra xem URL có trùng khớp với URL mà bạn muốn loại bỏ token hay không
+    return url.startsWith('https://provinces.open-api.vn/api/');
   }
 }
