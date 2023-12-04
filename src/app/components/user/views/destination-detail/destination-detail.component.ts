@@ -78,6 +78,9 @@ export class DestinationDetailComponent implements OnInit {
     this.tourService.getTourById(id).subscribe(
       (response) => {
         this.currentTour = response
+        if (this.currentTour.active == false) {
+          window.location.href = "http://localhost:4200/"
+        }
       },
       (error) => {
         console.log(error.message)

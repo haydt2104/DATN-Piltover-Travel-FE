@@ -99,6 +99,12 @@ export class CheckoutComponent implements OnInit {
       }
     ];
 
+    const adult = document.getElementById('adult');
+    adult.addEventListener('input', () => this.changeData())
+
+    const children = document.getElementById('children');
+    children.addEventListener('input', () => this.changeData())
+
   }
 
   public getMainData(data: number) {
@@ -121,15 +127,15 @@ export class CheckoutComponent implements OnInit {
       }
     )
 
-    setInterval(() => this.bookingService.getBookingsByTourDate(data).subscribe(
-      (responseBooking: Booking[]) => {
-        this.bookingList = responseBooking.filter(booking => booking.status != 2)
-        this.updateAccessible();
-      },
-      (error: HttpErrorResponse) => {
-        this.router.navigate([''])
-      }
-    ), 1000)
+    // setInterval(() => this.bookingService.getBookingsByTourDate(data).subscribe(
+    //   (responseBooking: Booking[]) => {
+    //     this.bookingList = responseBooking.filter(booking => booking.status != 2)
+    //     this.updateAccessible();
+    //   },
+    //   (error: HttpErrorResponse) => {
+    //     this.router.navigate([''])
+    //   }
+    // ), 1000)
 
     this.getDiscountList()
   }
