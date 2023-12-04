@@ -27,7 +27,6 @@ export class PostSingleComponent {
   message_validition: String
   idPost: number
   editId: number
-  userId: number = 6245835351
   countLike: number
   userLike: boolean
 
@@ -59,7 +58,7 @@ export class PostSingleComponent {
       this.getImg(idNumber);
       this.getComment(idNumber);
     }
-    this.checkLike(this.userId, this.idPost);
+    this.checkLike(this.idPost);
     this.getCountLike(this.idPost)
     this.addCmt = this.form.group({
       postId: new FormControl(this.idPost),
@@ -71,14 +70,12 @@ export class PostSingleComponent {
   public getPost(id: number) {
     this.postService.getPostById(id).subscribe((data) => {
       this.post = data
-      console.log(this.post)
     })
   }
 
   public getImg(id: number) {
     this.imgService.getImagesByIdPost(id).subscribe((data) => {
       this.imgs = data
-      console.log(this.imgs)
     })
   }
 
@@ -87,7 +84,6 @@ export class PostSingleComponent {
       this.cmt = data
       this.countCmt = this.cmt.length
       this.totalItem = this.cmt.length
-      console.log(this.cmt)
     })
   }
 
@@ -123,7 +119,7 @@ export class PostSingleComponent {
             this.messageService.add({ severity: 'error', summary: 'Hủy bỏ', detail: 'Bạn đã hủy hành động' });
             break;
           case ConfirmEventType.CANCEL:
-            // this.messageService.add({ severity: 'warn', summary: 'Hủy ', detail: 'You have cancelled' });
+            this.messageService.add({ severity: 'warn', summary: 'Hủy ', detail: 'You have cancelled' });
             break;
         }
       }
@@ -141,7 +137,6 @@ export class PostSingleComponent {
   }
 
   public async getCommentId(id: number) {
-    console.log(id)
     this.editId = id
     this.editCmt = this.form.group({
       cmtId: new FormControl(id),
@@ -161,21 +156,20 @@ export class PostSingleComponent {
   }
 
   public doLike() {
-    console.log('THực thi thao tác bấm nút LIKE')
     if (this.userLike == true) {
-      this.likeService.doLike(this.userId, this.idPost, false).subscribe((data) => {
+      this.likeService.doLike(this.idPost, false).subscribe((data) => {
         this.getCountLike(this.idPost)
-        this.checkLike(this.userId, this.idPost)
+        this.checkLike(this.idPost)
       })
     } else if (this.userLike == false) {
-      this.likeService.doLike(this.userId, this.idPost, true).subscribe((data) => {
+      this.likeService.doLike(this.idPost, true).subscribe((data) => {
         this.getCountLike(this.idPost)
-        this.checkLike(this.userId, this.idPost)
+        this.checkLike(this.idPost)
       })
     } else if (this.userLike == null){
-      this.likeService.likePost(this.userId, this.idPost, true).subscribe((data) => {
+      this.likeService.likePost(this.idPost, true).subscribe((data) => {
         this.getCountLike(this.idPost)
-        this.checkLike(this.userId, this.idPost)
+        this.checkLike(this.idPost)
       })
     }
 
@@ -186,8 +180,8 @@ export class PostSingleComponent {
       this.countLike = data
     })
   }
-  public checkLike(userId: number, postId: number) {
-    this.likeService.checkUserLike(userId, postId).subscribe((data: boolean) => {
+  public checkLike(postId: number) {
+    this.likeService.checkUserLike(postId).subscribe((data: boolean) => {
       this.userLike = data
     })
   }
