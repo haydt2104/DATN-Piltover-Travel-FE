@@ -3,7 +3,7 @@ import {
   LocationStrategy,
   PathLocationStrategy,
 } from '@angular/common';
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
@@ -42,7 +42,11 @@ import { CheckoutComponent } from './components/user/views/checkout/checkout.com
 import { CheckoutSuccessComponent } from './components/user/views/checkout/checkout-success/checkout-success.component';
 import { CheckoutFailedComponent } from './components/user/views/checkout/checkout-failed/checkout-failed.component';
 import { MessageService } from 'primeng/api';
-
+import { LoginComponent } from './components/user/authorizations/login/login.component';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { LoadingSpinnerComponent } from './components/user/authorizations/loading-spinner/loading-spinner.component';
+import { LoadingInterceptor } from './loading.interceptor';
+import { AuthInterceptor } from './interceptor/auth.interceptor';
 
 @NgModule({
   declarations: [
@@ -60,6 +64,8 @@ import { MessageService } from 'primeng/api';
     BookingComponent,
     HistoryComponent,
     DiscountComponent,
+    LoginComponent,
+    LoadingSpinnerComponent,
   ],
   imports: [
     CommonModule,
@@ -76,7 +82,8 @@ import { MessageService } from 'primeng/api';
     NavigationComponent,
     AngularFireModule.initializeApp(environment.firebaseConfig),
     MatPaginatorModule,
-    GalleriaModule
+    GalleriaModule,
+    ProgressSpinnerModule,
   ],
   providers: [
     {
@@ -87,8 +94,18 @@ import { MessageService } from 'primeng/api';
       provide: 'BASE_URL',
       useValue: environment.apiUrl,
     },
-    MessageService
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: LoadingInterceptor,
+      multi: true,
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true,
+    },
+    MessageService,
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}
