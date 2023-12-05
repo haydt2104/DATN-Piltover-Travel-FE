@@ -16,7 +16,7 @@ export class HistoryComponent implements OnInit {
 
   ngOnInit(): void {
     const userid=2345673452;
-    this.getLisHistory();
+    this.getLisHistory(userid);
   }
 
   public ReadAllHistory(){
@@ -28,9 +28,9 @@ export class HistoryComponent implements OnInit {
     };
   }
 
-  public getLisHistory(): void {
+  public getLisHistory(uid: number): void {
 
-    this.HistoryService.getHistoryByAccAPI().subscribe((data:Booking[]) => {
+    this.HistoryService.getHistoryByAccAPI(uid).subscribe((data:Booking[]) => {
       this.List = data;
       console.log('Data:', data);
     }),
