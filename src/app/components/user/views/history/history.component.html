@@ -31,7 +31,7 @@
             <tbody>
               <tr *ngFor="let h of List,index as i">
                 <td class="text-center">{{i+1}}</td>
-                <td class="text-center">Tor0{{h.id}}</td>
+                <td class="text-center">BoK_{{h.id}}</td>
                 <td class="text-center">{{h.createTime|date:'dd-MM-yyyy'}}</td>
                 <td class="text-center">{{h.totalPrice}} VNĐ</td>
                 <td class="text-center" [ngSwitch]="h.status">
@@ -40,7 +40,7 @@
                   <div *ngSwitchCase="2" class="text-danger-emphasis">Đã hủy</div>
                 </td>
                 <td>
-                  <a class="btn btn-info" [routerLink]="['/history/detail']" [queryParams]="{id:h.id}">
+                  <a class="btn btn-info" [routerLink]="['/history/detail/'+h.id]">
                     <i><span class="bi bi-plus-circle"></span></i>
                   </a>
                 </td>
