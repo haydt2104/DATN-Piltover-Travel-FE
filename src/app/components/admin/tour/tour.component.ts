@@ -185,7 +185,7 @@ export class TourComponent implements OnInit {
         })
     } else if (content == 'booking') {
       var editDate = this.tourDateList.find((tour) => tour.id == id);
-      this.editBookingList = this.getBooking(editDate.id)
+      this.editBookingList = this.getBooking(editDate.id).filter((booking) => booking.status != 2)
       this.modalService
         .open(this.bookingModal, {
           ariaLabelledBy: 'modal-basic-title',
@@ -521,7 +521,7 @@ export class TourComponent implements OnInit {
   public getBookingList() {
     this.bookingService.getAllBooking().subscribe(
       (response) => {
-        this.bookingList = response;
+        this.bookingList = response.filter((booking) => booking.status != 2);
       },
       (error: HttpErrorResponse) => {
         alert(error.message);
@@ -678,8 +678,8 @@ export class TourComponent implements OnInit {
       createTime: new Date(),
       price: {
         id: null,
-        adultPrice: data.value.adult * 1000000,
-        childrenPrice: data.value.children * 1000000
+        adultPrice: data.value.adult * 1000,
+        childrenPrice: data.value.children * 1000
       },
       transport: transport,
       hotel: hotel
@@ -723,8 +723,8 @@ export class TourComponent implements OnInit {
       createTime: this.editTour.createTime,
       price: {
         id: this.editTour.price.id,
-        adultPrice: data.value.adult * 1000000,
-        childrenPrice: data.value.children * 1000000
+        adultPrice: data.value.adult * 1000,
+        childrenPrice: data.value.children * 1000
       },
       transport: transport,
       hotel: hotel
@@ -741,7 +741,7 @@ export class TourComponent implements OnInit {
     }
     this.curdService.put('tour', tour).subscribe(
       (response: Tour) => {
-        this.getTourList();
+        this.tourList[this.tourList.findIndex(a => a.id == tour.id)] = tour
         this.loadingService.hideOverLay()
         this.messageService.clear();
         this.messageService.add({ key: 'info', severity: 'info', summary: 'Thông Báo', detail: 'Cập nhập thành công' })
@@ -763,7 +763,8 @@ export class TourComponent implements OnInit {
       name: data.value.name,
       price: data.value.price * 1000,
       star: data.value.star,
-      address: address
+      address: address,
+      isDelete: false
     }
     this.hotelService.addHotel(hotel).subscribe(
       (response) => {
@@ -788,13 +789,14 @@ export class TourComponent implements OnInit {
       name: data.value.name,
       price: data.value.price * 1000,
       star: data.value.star,
-      address: address
+      address: address,
+      isDelete: data.value.isDelete
     }
     this.hotelService.editHotel(hotel).subscribe(
       (response) => {
+        this.hotelList[this.hotelList.findIndex(a => a.id == hotel.id)] = hotel
         this.messageService.clear();
         this.messageService.add({ key: 'info', severity: 'info', summary: 'Thông Báo', detail: 'Cập nhập thành công' })
-        this.getHotelList();
       },
       (error) => {
         console.log(error.message);
@@ -827,10 +829,11 @@ export class TourComponent implements OnInit {
       name: data.value.name,
       price: data.value.price * 1000,
       seatingCapacity: data.value.seatingCapacity,
-      isDelete: data.value.isDelete
+      isDelete: data.value.isDelete.toLowerCase() === "true"
     }
     this.curdService.put("transport", transport).subscribe(
       (response) => {
+        this.transportList[this.transportList.findIndex(a => a.id == transport.id)] = transport
         this.messageService.clear();
         this.messageService.add({ key: 'info', severity: 'info', summary: 'Thông Báo', detail: 'Cập nhập thành công' });
         this.getAllTransport();
@@ -928,6 +931,7 @@ export class TourComponent implements OnInit {
   }
 
   onRowEditCancel(tourDate: TourDate, index: number) {
+    this.getTourDateList(this.editTour.id)
     this.tourDateList[index] = this.clonedProducts[tourDate.id]
     delete this.clonedProducts[tourDate.id];
   }
@@ -1027,9 +1031,23 @@ export class TourComponent implements OnInit {
     }
     this.curdService.put("tour", tour).subscribe(
       (response: Tour) => {
-        this.getTourList();
         this.messageService.clear();
         this.messageService.add({ key: 'info', severity: 'info', summary: 'Thông Báo', detail: 'Cập nhập trạng thái thành công' })
+      },
+      (error: HttpErrorResponse) => {
+        console.log(error.message);
+      }
+    )
+  }
+
+  confirmPay(data: Booking, status: number) {
+    data.status = status;
+    this.bookingService.editBooking(data).subscribe(
+      (response) => {
+        if (status == 2) {
+          this.editBookingList.splice(this.editBookingList.findIndex(booking => booking.id === data.id), 1)
+          this.bookingList.splice(this.bookingList.findIndex(booking => booking.id === data.id), 1)
+        }
       },
       (error: HttpErrorResponse) => {
         console.log(error.message);

@@ -19,15 +19,15 @@ export class LikeService {
     return this.http.get<number>(this.baseUrl + 'api/post/getLikePosts/' + id)
   }
 
-  public checkUserLike(userId: number, postId: number): Observable<Boolean>{
-    return this.http.get<boolean>(this.baseUrl + 'api/post/checkUserLike?userId=' + userId + '&postId=' + postId)
+  public checkUserLike(postId: number): Observable<Boolean>{
+    return this.http.get<boolean>(this.baseUrl + 'api/post/checkUserLike?postId=' + postId)
   }
 
-  public doLike(userId: number, postId: number, isLike: boolean): Observable<Like>{
-    return this.http.put<Like>(this.baseUrl + 'api/post/doLike?userId=' + userId + '&postId=' + postId, isLike);
+  public doLike(postId: number, isLike: boolean): Observable<Like>{
+    return this.http.put<Like>(this.baseUrl + 'api/post/doLike?postId=' + postId, isLike);
   }
 
-  public likePost(userId: number, postId: number, isLike: boolean): Observable<Like>{
-    return this.http.post<Like>(this.baseUrl + 'api/post/likePost?userId=' + userId + '&postId=' + postId, isLike);
+  public likePost(postId: number, isLike: boolean): Observable<Like>{
+    return this.http.post<Like>(this.baseUrl + 'api/post/likePost?postId=' + postId, isLike);
   }
 }
