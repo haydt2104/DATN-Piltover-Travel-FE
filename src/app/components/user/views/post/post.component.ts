@@ -35,16 +35,12 @@ export class PostComponent implements OnInit {
     const data = await this.postService.getAllPosts().toPromise();
     this.posts = data;
     this.totalItem =data.length
-    console.log(this.posts);
 
     for (let post of this.posts) {
       const thumbnailPath = await this.imgService.setThumbnailPost(post.id).toPromise();
       // this.pathImg.push(thumbnailPath.path);
       post.path = thumbnailPath.path
-      console.log(post.path);
     }
-
-    // console.log(this.pathImg);
   }
 
 }
