@@ -13,14 +13,14 @@ export class HistoryService {
     @Inject('BASE_URL') private baseUrl: string
   ) {}
 
-  public getHistoryByAccAPI(uid: number): Observable<any> {
-    return this.http.get<Booking>(`${this.baseUrl}api/history/${uid}`);
+  public getHistoryByAccAPI(): Observable<any> {
+    return this.http.get<Booking>(`${this.baseUrl}api/history/getlist`);
   }
 
-  public getDetailHistory(p_uname: String, id: number): Observable<History> {
+  public getDetailHistory(p_bookingid: number): Observable<History> {
 
     return this.http.get<History>(
-      `${this.baseUrl}api/history/${p_uname}/detail?id=${id}`
+      this.baseUrl+'api/history/detail/'+p_bookingid
     );
   }
 }

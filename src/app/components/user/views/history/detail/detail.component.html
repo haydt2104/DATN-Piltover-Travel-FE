@@ -34,15 +34,15 @@
               </tr>
               <tr class="table-light">
                 <td>Tên tour:</td>
-                <td>{{history.tourName}}</td>
+                <td>{{history.tour_name}}</td>
               </tr>
               <tr class="table-light">
                 <td>Mô tả tour:</td>
-                <td>{{history.tourDescription}}</td>
+                <td>{{history.tour_description}}</td>
               </tr>
               <tr class="table-light">
                 <td>Trạng thái:</td>
-                <td [ngSwitch]="history.bookingStatus">
+                <td [ngSwitch]="history.booking_status">
                   <div *ngSwitchCase="0">Chưa liên hệ</div>
                   <div *ngSwitchCase="1">Đã liên hệ</div>
                   <div *ngSwitchCase="2">Đã hủy</div>
@@ -50,23 +50,23 @@
               </tr>
               <tr class="table-light">
                 <td>Ngày lập:</td>
-                <td>{{history.bookDate|date:'dd-MM-yyyy'}}</td>
+                <td>{{history.book_date|date:'dd-MM-yyyy'}}</td>
               </tr>
               <tr class="table-light">
                 <td>Nơi bắt đầu:</td>
-                <td>{{history.startAddress}}</td>
+                <td>{{history.start_address}}</td>
               </tr>
               <tr class="table-light">
                 <td>Ngày bắt đi:</td>
-                <td>{{history.startDate|date:'dd-MM-yyyy'}}</td>
+                <td>{{history.start_date|date:'dd-MM-yyyy'}}</td>
               </tr>
               <tr class="table-light">
                 <td>Thời gian bắt đầu:</td>
-                <td>{{history.startTime}}</td>
+                <td>{{history.start_time}}</td>
               </tr>
               <tr class="table-light">
                 <td>Phương tiện di chuyển:</td>
-                <td>{{history.transportName}}</td>
+                <td>{{history.transport_name}}</td>
               </tr>
               <tr class="table-light">
                 <td>Số lượng người lớn:</td>
@@ -82,7 +82,7 @@
               </tr>
               <tr class="table-light">
                 <td >Tổng tiền:</td>
-                <td>{{history.totalPrice|currency:'3':''}}</td>
+                <td>{{history.total_price|currency:'3':''}}</td>
               </tr>
             </tbody>
           </table>

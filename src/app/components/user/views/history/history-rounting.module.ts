@@ -9,7 +9,7 @@ export const HistoryRounter: Routes = [
     path: '',
     children: [
       { path: '', component: HistoryComponent},
-      { path: 'detail', component: DetailComponent},
+      { path: 'detail/:p_bookingid', component: DetailComponent},
     ]
   }
 ];

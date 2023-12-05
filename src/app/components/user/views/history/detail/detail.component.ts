@@ -10,31 +10,29 @@ import { HistoryService } from 'src/app/services/history/history.service';
   styleUrls: ['./detail.component.scss'],
 })
 export class DetailComponent implements OnInit {
-  history!: History ;
+  history!: History;
 
   constructor(
+    private API_route: ActivatedRoute,
     private ActivatedRoute: ActivatedRoute,
     private router: Router,
     private HistoryService: HistoryService
   ) {}
 
   ngOnInit(): void {
-    this.ActivatedRoute.queryParams.subscribe((params) => {
-      const id = params['id'];
-      const name="Dư Trường Hây";
-      this.getdata(name,id);
-    });
+
+    this.getdata();
   }
 
-  getdata(uname: String, id: number): void {
-    this.HistoryService.getDetailHistory(uname, id).subscribe(
-      (data: History) => {
-        this.history = data;
-        console.log('Data:', data);
-      }
-    ),
-    (error) => {
+  getdata() {
+    const p_bookingid = this.API_route.snapshot.params['p_bookingid'];
+    this.HistoryService.getDetailHistory(p_bookingid).subscribe((data) => {
+      this.history = data;
+      console.log('Data:', data);
+      console.log('this.history:', this.history);
+    }),
+      (error) => {
         console.log('Loi', error);
-    };
+      };
   }
 }
