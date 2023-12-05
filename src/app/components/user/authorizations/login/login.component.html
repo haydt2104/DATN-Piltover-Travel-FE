@@ -60,6 +60,61 @@
                     </div>
                 </div>
             </div>
+          </div>
+          <div class="login-wrap p-4 p-lg-5">
+            <div class="d-flex">
+              <div class="w-100 text-center">
+                <h2 class="mb-4">Đăng nhập</h2>
+              </div>
+
+            </div>
+            <form [formGroup]="formLoginDataReq" (ngSubmit)="onSubmit()" action="#" class="signin-form">
+              <div class="form-group mb-3">
+                <label class="label" for="username"></label>
+                <input name="username" formControlName="username" type="text" class="form-control"
+                  placeholder="Tên đăng nhập">
+                <small *ngIf="!formLoginDataReq.controls.username.valid && this.submitted" class="text-danger">Vui lòng
+                  nhập
+                  email</small>
+              </div>
+              <div class="form-group mb-3">
+                <label class="label" for="password"></label>
+                <input type="password" formControlName="password" name="password" class="form-control"
+                  placeholder="Mật khẩu">
+                <small *ngIf="!formLoginDataReq.controls.password.valid && this.submitted" class="text-danger">Vui lòng
+                  nhập mật khẩu</small>
+              </div>
+              <div class="form-group d-md-flex">
+                <div class="w-50 text-left">
+                  <label class="checkbox-wrap checkbox-primary mb-0">Ghi nhớ mật khẩu
+                    <input type="checkbox" checked>
+                    <span class="checkmark"></span>
+                  </label>
+                </div>
+                <div class="w-50 text-md-right">
+                  <a href="/auth/forgot-pass">Quên mật khẩu?</a>
+                </div>
+              </div>
+              <div class="form-group">
+                <button type="submit" class="form-control btn btn-primary submit px-3" (click)="login()">Đăng
+                  nhập</button>
+              </div>
+
+              <hr>
+              <h5 class="text-center">Đăng nhập bằng</h5>
+              <div class="w-100">
+                <p class="social-media d-flex justify-content-center">
+
+                  <a href="#" class="social-icon d-flex align-items-center justify-content-center"><span
+                      class="fa fa-facebook"></span></a>
+                  <a href="#" class="social-icon d-flex align-items-center justify-content-center"><span
+                      class="fa fa-google"></span></a>
+                </p>
+              </div>
+            </form>
+            <h6 class="text-info text-center"><a href="/home">Quay lại trang chủ</a></h6>
+          </div>
         </div>
+      </div>
     </div>
 </section>

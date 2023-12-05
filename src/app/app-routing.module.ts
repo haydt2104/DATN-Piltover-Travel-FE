@@ -44,7 +44,9 @@ export const Approutes: Routes = [
       {
         path: 'about',
         loadChildren: () =>
-          import('./components/admin/about/about.module').then((m) => m.AboutModule),
+          import('./components/admin/about/about.module').then(
+            (m) => m.AboutModule
+          ),
       },
       {
         path: 'manage/account',
@@ -61,11 +63,11 @@ export const Approutes: Routes = [
           ),
       },
       {
-        path:'manage/discount',
+        path: 'manage/discount',
         loadChildren: () =>
-        import('./components/admin/discount/discount.module').then(
-          (m) => m.DiscountModule
-        ),
+          import('./components/admin/discount/discount.module').then(
+            (m) => m.DiscountModule
+          ),
       },
       // {
       //   path: 'manage/booking/detail:did',
@@ -111,14 +113,14 @@ export const Approutes: Routes = [
         loadChildren: () =>
           import('./components/user/views/post/post.module').then(
             (m) => m.PostModule
-          )
+          ),
       },
       {
         path: 'post-single/:id',
         loadChildren: () =>
           import('./components/user/views/post-single/post-single.module').then(
             (m) => m.PostSingleModule
-          )
+          ),
       },
       { path: 'destination', component: DestinationComponent },
       { path: 'destination-detail/:id', component: DestinationDetailComponent },
@@ -127,12 +129,12 @@ export const Approutes: Routes = [
         loadChildren: () =>
           import('./components/user/views/checkout/checkout.module').then(
             (m) => m.CheckoutModule
-          )
+          ),
       },
     ],
   },
   {
-    path: 'authorization',
+    path: 'auth',
     component: AuthorizationsComponent,
     children: [
       { path: 'login', component: LoginComponent },

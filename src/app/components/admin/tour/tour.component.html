@@ -70,7 +70,7 @@
               <div class="input-group">
                 <input #adultPrice="ngModel" name="adult" id="adult" type="number" class="form-control" ngModel
                   required>
-                <span class="input-group-text" id="basic-addon2">.000.000 VNĐ</span>
+                <span class="input-group-text" id="basic-addon2">.000 VNĐ</span>
               </div>
               <small *ngIf="adultPrice.touched && adultPrice.value < 0">Giá vé người lớn không được là số âm</small>
               <small *ngIf="adultPrice.touched && adultPrice.value < childrenPrice.value && adultPrice.value >= 0">Giá
@@ -82,7 +82,7 @@
               <div class="input-group">
                 <input #childrenPrice="ngModel" name="children" id="children" type="number" class="form-control" ngModel
                   required>
-                <span class="input-group-text" id="basic-addon2">.000.000 VNĐ</span>
+                <span class="input-group-text" id="basic-addon2">.000 VNĐ</span>
               </div>
               <small *ngIf="childrenPrice.touched && childrenPrice.value < 0">Giá vé trẻ em không được là số
                 âm</small>
@@ -177,8 +177,8 @@
               <label class="form-label">Người lớn:</label>
               <div class="input-group">
                 <input #adultPrice="ngModel" name="adult" id="adult" type="number" class="form-control"
-                  ngModel="{{editTour.price.adultPrice/1000000}}" required>
-                <span class="input-group-text" id="basic-addon2">.000.000 VNĐ</span>
+                  ngModel="{{editTour.price.adultPrice/1000}}" required>
+                <span class="input-group-text" id="basic-addon2">.000 VNĐ</span>
               </div>
               <small *ngIf="adultPrice.touched && adultPrice.value < 0">Giá vé người lớn không được là số âm</small>
               <small *ngIf="adultPrice.touched && adultPrice.value < childrenPrice.value && adultPrice.value >= 0">Giá
@@ -189,8 +189,8 @@
               <label class="form-label">Trẻ em:</label>
               <div class="input-group">
                 <input #childrenPrice="ngModel" name="children" id="children" type="number" class="form-control"
-                  ngModel="{{editTour.price.childrenPrice/1000000}}" required>
-                <span class="input-group-text" id="basic-addon2">.000.000 VNĐ</span>
+                  ngModel="{{editTour.price.childrenPrice/1000}}" required>
+                <span class="input-group-text" id="basic-addon2">.000 VNĐ</span>
               </div>
               <small *ngIf="childrenPrice.touched && childrenPrice.value < 0">Giá vé trẻ em không được là số
                 âm</small>
@@ -273,10 +273,10 @@
           ngày</button>
         <label for="addDate" *ngIf="addDateStatus">Từ</label>
         <input id="addDate" pInputText type="date" [value]="minDate | date:'yyyy-MM-dd'" *ngIf="addDateStatus"
-          min="{{minDate | date:'yyyy-MM-dd'}}">
+          min="{{minDate | date:'yyyy-MM-dd'}}" onkeypress="return false">
         <label for="endDate" *ngIf="addDateStatus">Đến</label>
         <input id="endDate" pInputText type="date" [value]="minDate | date:'yyyy-MM-dd'" *ngIf="addDateStatus"
-          min="{{minDate | date:'yyyy-MM-dd'}}">
+          min="{{minDate | date:'yyyy-MM-dd'}}" onkeypress="return false">
         <pButton pButton class="p-button-success" icon="pi pi-check" (click)="saveDate()" *ngIf="addDateStatus">Thêm
         </pButton>
         <pButton pButton class="p-button-danger" icon="pi pi-times" (click)="cancelAddDate()" *ngIf="addDateStatus">
@@ -316,7 +316,7 @@
                 <p-cellEditor>
                   <ng-template pTemplate="input">
                     <input pInputText type="date" [(ngModel)]="tourDateList.initiateDate"
-                      min="{{minDate | date:'yyyy-MM-dd'}}">
+                      min="{{minDate | date:'yyyy-MM-dd'}}" max="{{tourDateList.endDate}}" onkeypress="return false">
                   </ng-template>
                   <ng-template pTemplate="output">
                     {{ tourDateList.initiateDate | date: 'dd-MM-yyyy' }}
@@ -327,7 +327,7 @@
                 <p-cellEditor>
                   <ng-template pTemplate="input">
                     <input pInputText type="date" [(ngModel)]="tourDateList.endDate"
-                      min="{{tourDateList.initiateDate | date:'yyyy-MM-dd'}}">
+                      min="{{tourDateList.initiateDate | date:'yyyy-MM-dd'}}" onkeypress="return false">
                   </ng-template>
                   <ng-template pTemplate="output" class="flex">
                     {{ tourDateList.endDate | date: 'dd-MM-yyyy' }}
@@ -338,7 +338,7 @@
                 <p-cellEditor>
                   <ng-template pTemplate="input">
                     <select class="form-control" [(ngModel)]="tourDateList.status.id" required>
-                      <option *ngFor="let status of statusList" value="{{status.id}}">{{status.name}}</option>
+                      <option *ngFor="let st of statusList" value="{{st.id}}">{{st.name}}</option>
                     </select>
                   </ng-template>
                   <ng-template pTemplate="output">
@@ -402,6 +402,7 @@
               <th pSortableColumn="createUser">Tên Khách Hàng<p-sortIcon field="createUser"></p-sortIcon></th>
               <th pSortableColumn="totalPassengers">Số Khách<p-sortIcon field="totalPassengers"></p-sortIcon></th>
               <th pSortableColumn="totalPrice">Tổng Tiền<p-sortIcon field="totalPrice"></p-sortIcon></th>
+              <th pSortableColumn="status">Trạng Thái<p-sortIcon field="status"></p-sortIcon></th>
               <th></th>
             </tr>
           </ng-template>
@@ -417,7 +418,12 @@
                 {{editBookingList.totalPrice | number }} VNĐ
               </td>
               <td>
-                <button class="btn btn-success">Xác Nhận Đã Thanh Toán</button>
+                <i *ngIf="editBookingList.status == 0" class="text-warning">Chưa Thanh Toán</i>
+                <i *ngIf="editBookingList.status == 1" class="text-success">Đã Thanh Toán</i>
+              </td>
+              <td class="button-group" *ngIf="editBookingList.status == 0">
+                <button class="btn btn-success" (click)="confirmPay(editBookingList, 1)">Đã Thanh Toán</button>
+                <button class="btn btn-danger" (click)="confirmPay(editBookingList, 2)">Hủy</button>
               </td>
             </tr>
           </ng-template>
@@ -449,14 +455,13 @@
       </div>
       <div class="modal-body">
         <p-table #dt3 [value]="hotelList" dataKey="id" [rows]="10" [showCurrentPageReport]="true" [paginator]="true"
-          currentPageReportTemplate="Hiển thị từ bảng {first} đến {last} trong tổng {totalRecords} bảng"
-          [tableStyle]="{'min-width': '80rem'}">
+          currentPageReportTemplate="Hiển thị từ bảng {first} đến {last} trong tổng {totalRecords} bảng">
           <ng-template pTemplate="header" class="theader">
             <tr class="text-center">
-              <th pSortableColumn="name">Tên Khách Sạn<p-sortIcon field="name"></p-sortIcon></th>
-              <th pSortableColumn="price">Giá<p-sortIcon field="price"></p-sortIcon></th>
-              <th pSortableColumn="star">Sao<p-sortIcon field="star"></p-sortIcon></th>
-              <th pSortableColumn="address">Địa Chỉ<p-sortIcon field="address"></p-sortIcon></th>
+              <th pSortableColumn="name" style="width: 25%">Tên Khách Sạn<p-sortIcon field="name"></p-sortIcon></th>
+              <th pSortableColumn="price" style="width: 10%">Giá<p-sortIcon field="price"></p-sortIcon></th>
+              <th pSortableColumn="star" style="width: 10%">Sao<p-sortIcon field="star"></p-sortIcon></th>
+              <th pSortableColumn="address" style="width: 40%">Địa Chỉ<p-sortIcon field="address"></p-sortIcon></th>
               <th></th>
             </tr>
           </ng-template>
@@ -577,14 +582,14 @@
             <small *ngIf="road.touched && road.invalid">Vui Lòng Điền Đầy Đủ Địa Chỉ</small>
           </div>
           <div class="row">
-            <div class="col-6">
+            <div class="col-4">
               <label class="form-label">Số Sao:</label>
-              <input #star="ngModel" name="star" id="star" class="form-control" type="number" ngModel={{editHotel.star}}
-                required>
+              <input #star="ngModel" name="star" id="star" class="form-control" type="number"
+                ngModel="{{editHotel.star}}" required>
               <small *ngIf="star.touched && star.invalid">Vui Lòng Nhập Số Sao</small>
               <small *ngIf="star.touched && star.value < 0 || star.value > 5">Vui Lòng Nhập Số Sao Từ 0 Đến 5</small>
             </div>
-            <div class="col-6">
+            <div class="col-4">
               <label class="form-label">Giá Tiền:</label>
               <div class="input-group">
                 <input #price="ngModel" name="price" id="price" class="form-control" type="number"
@@ -593,6 +598,16 @@
                 <small *ngIf="price.touched && price.invalid">Vui Lòng Giá Tiền</small>
                 <small *ngIf="price.touched && price.valid && price.value <= 0">Vui Lòng Không Nhập Số Bé Hơn Bằng
                   0</small>
+              </div>
+            </div>
+            <div class="col-4">
+              <label class="form-label">Trang Thái:</label>
+              <div class="input-group">
+                <select #isDelete="ngModel" name="isDelete" id="isDelete" class="form-control"
+                  ngModel="{{editHotel.isDelete}}" required="">
+                  <option value=false>Còn Hoạt Động</option>
+                  <option value=true>Ngưng Hoạt Động</option>
+                </select>
               </div>
             </div>
           </div>
@@ -758,9 +773,9 @@
           </div>
         </ng-template>
         <ng-template pTemplate="header" class="theader">
-          <tr>
-            <th pSortableColumn="name" style="width:12%">Tên Tour<p-sortIcon field="name"></p-sortIcon></th>
-            <th pSortableColumn="destinationAddress" style="width:30%">Điểm đến<p-sortIcon
+          <tr class="text-center">
+            <th pSortableColumn="name" style="width:20%">Tên Tour<p-sortIcon field="name"></p-sortIcon></th>
+            <th pSortableColumn="destinationAddress" style="width:20%">Điểm đến<p-sortIcon
                 field="destinationAddress"></p-sortIcon></th>
             <th pSortableColumn="active" style="width:12%">Trạng thái<p-sortIcon field="active"></p-sortIcon></th>
             <th pSortableColumn="availableSpaces" style="width:12%">Số lượng<p-sortIcon
@@ -776,7 +791,7 @@
             <td>{{ tourList.destinationAddress }}</td>
             <td class="text-center">{{ tourList.active ? "Công khai" : "Ẩn"}}</td>
             <td class="text-center">{{ tourList.availableSpaces}}</td>
-            <td>{{ tourList.transport.name}}</td>
+            <td class="text-center">{{ tourList.transport.name}}</td>
             <td class="button-group">
               <button pButton class="btn btn-info" (click)="open('date', tourList.id)"
                 icon="pi pi-calendar">Ngày</button>

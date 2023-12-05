@@ -71,7 +71,6 @@ export class TourPlanDetailComponent implements OnInit {
       (response: TourPlan) => {
         this.currentTourPlan = response;
         this.tourPlanDate = new Date(this.currentTourPlan.startTime);
-        this.tourPlanDate.setHours(this.tourPlanDate.getHours() - 7);
       },
       (error: HttpErrorResponse) => {
         console.log(error.message);
@@ -82,7 +81,7 @@ export class TourPlanDetailComponent implements OnInit {
   public getTourPlanDetailByTourPlanId(planId: number): void {
     this.tourPlanDetailService.getTourPlanDetailsByTourPlanId(planId).subscribe(
       (response: TourPlanDetail[]) => {
-        this.planDetailList = response;        
+        this.planDetailList = response;
       },
       (error: HttpErrorResponse) => {
         console.log(error.message);
@@ -137,8 +136,20 @@ export class TourPlanDetailComponent implements OnInit {
   checkValidTime(data) {
     const [hours, minutes] = data.split(':');
     const date = new Date(this.tourPlanDate.getFullYear(), this.tourPlanDate.getMonth(), this.tourPlanDate.getDate(), +hours, +minutes, 0);
-    if (date > this.tourPlanDate) {
+    if (date >= this.tourPlanDate) {
       return true;
+    } else {
+      return false;
+    }
+  }
+
+  checkValidTime2(data1, data2) {
+    const [hours1, minutes1] = data1.split(':');
+    const [hours2, minutes2] = data2.split(':');
+    const date1 = new Date(this.tourPlanDate.getFullYear(), this.tourPlanDate.getMonth(), this.tourPlanDate.getDate(), +hours1, +minutes1, 0);
+    const date2 = new Date(this.tourPlanDate.getFullYear(), this.tourPlanDate.getMonth(), this.tourPlanDate.getDate(), +hours2, +minutes2, 0);
+    if (date2 > date1) {
+      return true
     } else {
       return false;
     }
@@ -156,7 +167,8 @@ export class TourPlanDetailComponent implements OnInit {
         this.messageService.add({ key: 'success', severity: 'success', summary: 'Thông Báo', detail: 'Cập nhập thành công' });
       },
       (error: HttpErrorResponse) => {
-        alert(error.message);
+        this.messageService.clear();
+        this.messageService.add({ key: 'error', severity: 'error', summary: 'Lỗi', detail: 'Cập nhập thất bại vui lòng điền đầy đủ dữ liệu' });
       }
     )
   }
