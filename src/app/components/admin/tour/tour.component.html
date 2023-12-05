@@ -203,6 +203,7 @@
               <select #transport="ngModel" name="transport" class="form-control" ngModel="{{editTour.transport.id}}"
                 required>
                 <option value="" selected>Chọn phương tiện</option>
+                <option *ngIf="editTour.transport.isDelete == true" value="{{editTour.transport.id}}" disabled>{{editTour.transport.name}}</option>
                 <option *ngFor="let item of availableTransport" value="{{item.id}}">{{item.name}}</option>
               </select>
               <small *ngIf="transport.touched && transport.invalid">Phương tiện không hợp lệ</small>
@@ -757,16 +758,16 @@
 
     <!-- Main Table -->
     <div class="table-responsive">
-      <p-table #dt1 [value]="tourList" sortField="active" [sortOrder]=-1 dataKey="id" [rows]="10"
+      <p-table #dt1 [value]="tourList" sortField="active" dataKey="id" [rows]="5"
         [showCurrentPageReport]="true" [paginator]="true"
         currentPageReportTemplate="Hiển thị từ bảng {first} đến {last} trong tổng {totalRecords} bảng"
-        [globalFilterFields]="['name', 'destinationAddress']" [tableStyle]="{'min-width': '80rem'}">
+        [globalFilterFields]="['name']" [tableStyle]="{'min-width': '80rem'}">
         <ng-template pTemplate="caption">
           <div class="flex">
             <form [formGroup]="formFilter">
               <span class="p-input-icon-left ml-auto">
                 <input pInputText type="text" (change)="dt1.filterGlobal(getValueSearch(), 'contains')"
-                  formControlName="search" class="form-control box-shadow-none" placeholder="Tìm kiếm">
+                  formControlName="search" class="form-control box-shadow-none" placeholder="Tìm kiếm Tour">
               </span>
             </form>
           </div>

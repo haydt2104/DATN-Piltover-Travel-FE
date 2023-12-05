@@ -28,8 +28,10 @@
                     Người lớn {{currentTour.price.adultPrice | number}}đ/người | Trẻ em
                     {{currentTour.price.childrenPrice | number}}đ/người</p>
                   <p class="tour-seats"><b>Số lượng tối đa:</b> {{currentTour.availableSpaces}}</p>
-                  <button class="custom-button" (click)="open(dateListModal)"> Đặt tour
+                  <button *ngIf="currentTour.active" class="custom-button" (click)="open(dateListModal)"> Đặt tour
                   </button>
+                  <i class="text-danger" *ngIf="currentTour.active == false">*Hiện Tour Đã Ngừng Hoạt Động Quý Khách Vui
+                    Lòng Chọn Tour Khác</i>
                   <!-- <button class="btn btn-primary" (click)="open(dateListModal)">Đặt tour</button> -->
                   <!-- <a href="#" class="btn btn-primary"><i class="fa fa-comments"></i> Liên hệ tư vấn</a> -->
                 </div>
@@ -163,11 +165,11 @@
         <ng-template pTemplate="header" class="theader">
           <tr class="text-center">
             <th style="width: 3rem"></th>
-            <th pSortableColumn="initiateDate" style="width:23%">Thời điểm khởi hành<p-sortIcon
+            <th pSortableColumn="initiateDate" style="width:20%">Thời điểm khởi hành<p-sortIcon
                 field="initiateDate"></p-sortIcon></th>
             <th pSortableColumn="endDate" style="width:20%">Thời điểm kết thúc<p-sortIcon field="endDate"></p-sortIcon>
             </th>
-            <th pSortableColumn="passengerNumber" style="width:20%">Số Khách Đã Đặt<p-sortIcon
+            <th pSortableColumn="passengerNumber" style="width:22%">Số Khách Đã Đặt<p-sortIcon
                 field="passengerNumber"></p-sortIcon></th>
             <th pSortableColumn="emptySpace" style="width:25%">Số Lượng Còn Trống<p-sortIcon
                 field="emptySpace"></p-sortIcon></th>

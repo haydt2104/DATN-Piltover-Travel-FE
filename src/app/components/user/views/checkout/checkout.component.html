@@ -14,14 +14,17 @@
 
 <section class="ftco-section ftco-no-pb contact-section mb-4">
     <div class="container">
-        <h1 class="h3 mb-5">Tour - {{tourDate.tour.name}}</h1>
-        <h2>Số lượng còn trống {{tourDate.tour.availableSpaces - getBookedCustomerNumber()}}</h2>
-        <h4>
-            Ngày Bắt Đầu: {{tourDate.initiateDate |
-            date:"dd-MM-yyyy"}} - Ngày Kết Thúc: {{tourDate.endDate |
-            date:"dd-MM-yyyy"}}
-        </h4>
-        <p-carousel [value]="tourImageList" [numVisible]="3" [numScroll]="1" [responsiveOptions]="responsiveOptions">
+        <div *ngIf="tourDate">
+            <h1 class="h3 mb-5">Tour - {{tourDate.tour.name}}</h1>
+            <h2>Số lượng còn trống {{tourDate.tour.availableSpaces - getBookedCustomerNumber()}}</h2>
+            <h4>
+                Ngày Bắt Đầu: {{tourDate.initiateDate |
+                date:"dd-MM-yyyy"}} - Ngày Kết Thúc: {{tourDate.endDate |
+                date:"dd-MM-yyyy"}}
+            </h4>
+        </div>
+        <p-carousel *ngIf="tourImageList" [value]="tourImageList" [numVisible]="3" [numScroll]="1"
+            [responsiveOptions]="responsiveOptions">
             <ng-template let-image pTemplate="item">
                 <div class="product-item">
                     <div class="product-item-content">
@@ -40,7 +43,7 @@
                         Thông Tin Khách Hàng
                     </label>
                 </h2>
-                <div>
+                <div *ngIf="currentUser">
                     <div class="mb-3">
                         <label class="form-label">Tên Khách Hàng</label>
                         <input class="form-control" type="text" [value]="currentUser.fullname" disabled>
@@ -78,12 +81,12 @@
                             <div class="col-6">
                                 <label class="form-label">Số Lượng Người Lớn ({{tourDate.tour.price.adultPrice |
                                     number}} VNĐ):</label>
-                                <input class="form-control" type="number" min="0" value="0" id="adult">
+                                <input class="form-control" type="number" min="0" id="adult" placeholder="0">
                             </div>
                             <div class="col-6">
                                 <label class="form-label">Số Lượng Trẻ Em ({{tourDate.tour.price.childrenPrice |
                                     number}} VNĐ):</label>
-                                <input class="form-control" type="number" min="0" value="0" id="children">
+                                <input class="form-control" type="number" min="0" id="children" placeholder="0">
                             </div>
                         </div>
                     </div>

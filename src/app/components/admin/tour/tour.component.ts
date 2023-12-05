@@ -638,9 +638,15 @@ export class TourComponent implements OnInit {
       && hotel.address.split(',')[hotel.address.split(',').length - 2].trim() == districtName
     ).forEach((item) => {
       if (item.id == code) {
-        row += `<option value="${item.id}" selected>${item.name}</option>`;
+        if (item.isDelete == true) {
+          row += `<option value="${item.id}" selected disabled>${item.name}</option>`;
+        } else {
+          row += `<option value="${item.id}" selected>${item.name}</option>`;
+        }
       } else {
-        row += `<option value="${item.id}">${item.name}</option>`;
+        if (item.isDelete == false) {
+          row += `<option value="${item.id}">${item.name}</option>`;
+        }
       }
     })
     document.querySelector('#hotel').innerHTML = row;

@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -41,6 +41,7 @@ export class DestinationDetailComponent implements OnInit {
     private bookingService: BookingService,
     private modalService: NgbModal,
     private formBuilder: FormBuilder,
+    private httpClient: HttpClient
   ) { }
 
   currentTour: Tour
@@ -69,21 +70,25 @@ export class DestinationDetailComponent implements OnInit {
   })
 
   public open(content) {
-    this.modalService.open(content, {
-      ariaLabelledBy: 'modal-basic-title', size: 'xl',
-    })
+    this.httpClient.get('http://localhost:8080/api/test/username', { responseType: 'text' }).subscribe(
+      (response) => {
+        this.modalService.open(content, {
+          ariaLabelledBy: 'modal-basic-title', size: 'xl',
+        })
+      },
+      (error: HttpErrorResponse) => {
+        window.location.href = "http://localhost:4200/"
+      }
+    )
   }
 
   public getTour(id: number) {
     this.tourService.getTourById(id).subscribe(
       (response) => {
         this.currentTour = response
-        if (this.currentTour.active == false) {
-          window.location.href = "http://localhost:4200/"
-        }
       },
       (error) => {
-        console.log(error.message)
+        window.location.href = "http://localhost:4200/"
       }
     )
   }
