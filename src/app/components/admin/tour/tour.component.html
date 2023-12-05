@@ -38,8 +38,7 @@
               id="district" ngModel required>
               <option value="">Chọn Quận/Huyện</option>
             </select>
-            <select #ward="ngModel" class="form-control col-md-3" name="ward" id="ward" (change)="wardChange()" ngModel
-              required>
+            <select #ward="ngModel" class="form-control col-md-3" name="ward" id="ward" ngModel required>
               <option value="">Chọn Phường/Xã</option>
             </select>
             <select #hotel="ngModel" class="form-control col-md-3" name="hotel" id="hotel" ngModel required>
@@ -146,7 +145,7 @@
               required>
               <option value="">Chọn Quận/Huyện</option>
             </select>
-            <select #ward class="form-control col-md-3" name="ward" (change)="wardChange()" id="ward" required>
+            <select #ward class="form-control col-md-3" name="ward" id="ward" required>
               <option value="">Chọn Phường/Xã</option>
             </select>
             <select #hotel class="form-control col-md-3" name="hotel" id="hotel" ngModel="{{editTour.hotel.id}}"

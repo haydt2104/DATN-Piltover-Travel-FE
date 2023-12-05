@@ -7,7 +7,7 @@ import {
   ViewChild
 } from '@angular/core';
 import { AngularFireStorage } from '@angular/fire/compat/storage';
-import { FormBuilder, FormControl, FormsModule, NgForm, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormsModule, NgForm, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import {
   NgbModal,
@@ -126,7 +126,6 @@ export class TourComponent implements OnInit {
     this.getDistrictData();
     this.getWardData();
     this.getHotelList();
-    this.loadingService.hideOverLay()
   }
 
   open(content: string, id: number) {
@@ -164,7 +163,7 @@ export class TourComponent implements OnInit {
           ariaLabelledBy: 'modal-basic-title',
           size: 'xl',
         })
-      this.callHotel(provinceAddress, districtAddress, wardAddress, this.editTour.hotel.id)
+      this.callHotel(provinceAddress, districtAddress, this.editTour.hotel.id)
     } else if (content == 'image') {
       this.editTour = this.tourList.find((tour) => tour.id == id);
       this.getTourImageList(id);
@@ -502,7 +501,7 @@ export class TourComponent implements OnInit {
         this.availableTransport = response.filter(transport => transport.isDelete == false)
       },
       (error: HttpErrorResponse) => {
-        alert(error.message);
+        console.log(error.message);
       }
     )
   }
@@ -513,7 +512,7 @@ export class TourComponent implements OnInit {
         this.statusList = response;
       },
       (error: HttpErrorResponse) => {
-        alert(error.message);
+        console.log(error.message);
       }
     )
   }
@@ -524,7 +523,7 @@ export class TourComponent implements OnInit {
         this.bookingList = response.filter((booking) => booking.status != 2);
       },
       (error: HttpErrorResponse) => {
-        alert(error.message);
+        console.log(error.message);
       }
     )
   }
@@ -535,7 +534,7 @@ export class TourComponent implements OnInit {
         this.hotelList = response;
       },
       (error: HttpErrorResponse) => {
-        alert(error.message);
+        console.log(error.message);
       }
     )
   }
@@ -549,7 +548,7 @@ export class TourComponent implements OnInit {
           (response) => {
           },
           (error: HttpErrorResponse) => {
-            alert(error.message);
+            console.log(error.message);
           }
         )
       }
@@ -627,27 +626,16 @@ export class TourComponent implements OnInit {
         '#ward'
       ).innerHTML = `<option value="">Chọn Phường/Xã</option>`;
     }
-    var hotel = document.getElementById('hotel')
-    if (hotel) {
-      document.querySelector(
-        '#hotel'
-      ).innerHTML = `<option value="">Chọn Khách Sạn</option>`;
-    }
-  }
-
-  wardChange() {
     var provinceName = $('#province option:selected').text()
     var districtName = $('#district option:selected').text()
-    var wardName = $('#ward option:selected').text()
-    this.callHotel(provinceName, districtName, wardName, null)
+    this.callHotel(provinceName, districtName, null)
   }
 
-  callHotel(provinceName, districtName, wardName, code) {
+  callHotel(provinceName, districtName, code) {
     let row = ' <option disable value="">Chọn Khách Sạn</option>';
     this.hotelList.filter(hotel =>
       hotel.address.split(',')[hotel.address.split(',').length - 1].trim() == provinceName
       && hotel.address.split(',')[hotel.address.split(',').length - 2].trim() == districtName
-      && hotel.address.split(',')[hotel.address.split(',').length - 3].trim() == wardName
     ).forEach((item) => {
       if (item.id == code) {
         row += `<option value="${item.id}" selected>${item.name}</option>`;
@@ -659,7 +647,6 @@ export class TourComponent implements OnInit {
   }
 
   async submitAddTour(data) {
-    this.loadingService.showOverLay()
     var province = $('#province option:selected').text();
     var district = $('#district option:selected').text();
     var ward = $('#ward option:selected').text();
@@ -675,7 +662,7 @@ export class TourComponent implements OnInit {
       image: null,
       availableSpaces: data.value.availableSpaces,
       active: false,
-      createTime: new Date(),
+      createTime: null,
       price: {
         id: null,
         adultPrice: data.value.adult * 1000,
@@ -692,7 +679,6 @@ export class TourComponent implements OnInit {
     this.curdService.post('tour', tour).subscribe(
       (response: Tour) => {
         this.getTourList();
-        this.loadingService.hideOverLay()
         this.messageService.clear();
         this.messageService.add({ key: 'success', severity: 'success', summary: 'Thông Báo', detail: 'Thêm thành công' })
       },
@@ -704,7 +690,6 @@ export class TourComponent implements OnInit {
   }
 
   async submitEditTour(data) {
-    this.loadingService.showOverLay()
     var transport: Transportation = this.transportList.find(transport => transport.id == data.value.transport)
     var hotel: Hotel = this.hotelList.find(hotel => hotel.id == data.value.hotel)
     var province = $('#province option:selected').text();
@@ -742,7 +727,6 @@ export class TourComponent implements OnInit {
     this.curdService.put('tour', tour).subscribe(
       (response: Tour) => {
         this.tourList[this.tourList.findIndex(a => a.id == tour.id)] = tour
-        this.loadingService.hideOverLay()
         this.messageService.clear();
         this.messageService.add({ key: 'info', severity: 'info', summary: 'Thông Báo', detail: 'Cập nhập thành công' })
       },
