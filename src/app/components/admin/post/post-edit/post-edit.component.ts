@@ -43,25 +43,31 @@ export class PostEditComponent implements OnInit {
       this.getPost(idNumber);
       this.getImg(idNumber)
     }
+
   }
 
   onSubmit() {
+
   }
   public getPost(id: number) {
+    console.log("hehe: " + id)
     this.postService.getPostById(id).subscribe((data) => {
       this.formGroup.patchValue(data)
       this.post = data
+      console.log(this.formGroup.patchValue(data))
     })
   }
 
   public getImg(id: number){
     this.imgService.getImagesByIdPost(id).subscribe((data) => {
       this.postImg = data
+      console.log(this.postImg)
     })
   }
   public savePost() {
     this.postService.updatePostById(this.formGroup.value, this.postId).subscribe(data => {
       this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Cập nhật thành công. Sẽ chuyển hướng sau 3 giây!', life: 3000 });
+      // this.router.navigateByUrl('/admin/manage/post/list');
       setTimeout(() => {
         this.router.navigateByUrl('/admin/manage/post/list');
       }, 3000);

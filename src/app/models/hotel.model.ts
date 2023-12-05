@@ -4,5 +4,4 @@ export interface Hotel {
   price: number;
   star: number;
   address: string;
-  isDelete: boolean;
 }

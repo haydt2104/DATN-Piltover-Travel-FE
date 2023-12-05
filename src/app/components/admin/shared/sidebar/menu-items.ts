@@ -42,28 +42,29 @@ export const ROUTES: RouteInfo[] = [
     submenu: [],
   },
   {
-    path: '/admin/manage/discount',
+    path:'/admin/manage/discount',
     title: 'Mã giảm giá',
     icon: 'bi bi-badge-vo',
-    class: '',
-    extralink: false,
-    submenu: [
+    class:'',
+    extralink:false,
+    submenu:[
+
     ],
   },
-  // {
-  //   path: '/admin/component/pagination',
-  //   title: 'Pagination',
-  //   icon: 'bi bi-dice-1',
-  //   class: '',
-  //   extralink: false,
-  //   submenu: [],
-  // },
-  // {
-  //   path: '/admin/about',
-  //   title: 'About',
-  //   icon: 'bi bi-people',
-  //   class: '',
-  //   extralink: false,
-  //   submenu: [],
-  // },
+  {
+    path: '/admin/component/pagination',
+    title: 'Pagination',
+    icon: 'bi bi-dice-1',
+    class: '',
+    extralink: false,
+    submenu: [],
+  },
+  {
+    path: '/admin/about',
+    title: 'About',
+    icon: 'bi bi-people',
+    class: '',
+    extralink: false,
+    submenu: [],
+  },
 ];

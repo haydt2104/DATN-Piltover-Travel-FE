@@ -18,7 +18,6 @@ export class HomeComponent implements OnInit{
 
   ngOnInit(): void {
       this.getAll();
-      this.autoChangeImage();
   }
 
   private getAll(){
@@ -61,11 +60,5 @@ goToPreviousPage() {
   } else {
     this.current = this.HomeTour.length;
   }
-}
-
-autoChangeImage() {
-  setInterval(() => {
-    this.goToNextPage(); // Call the function to move to the next image
-  }, 2000); // Set the interval time (in milliseconds) - 5000ms (5 seconds) in this example
 }
 }

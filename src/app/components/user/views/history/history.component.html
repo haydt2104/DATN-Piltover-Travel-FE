@@ -35,8 +35,8 @@
                 <td class="text-center">{{h.createTime|date:'dd-MM-yyyy'}}</td>
                 <td class="text-center">{{h.totalPrice}} VNĐ</td>
                 <td class="text-center" [ngSwitch]="h.status">
-                  <div *ngSwitchCase="0" class="text-secondary">Chưa thanh toán</div>
-                  <div *ngSwitchCase="1" class="text-success">Đã thanh toán</div>
+                  <div *ngSwitchCase="0" class="text-secondary">Chưa liên hệ</div>
+                  <div *ngSwitchCase="1" class="text-success">Đã liên hệ</div>
                   <div *ngSwitchCase="2" class="text-danger-emphasis">Đã hủy</div>
                 </td>
                 <td>

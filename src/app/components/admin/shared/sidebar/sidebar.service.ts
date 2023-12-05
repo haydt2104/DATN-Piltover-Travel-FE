@@ -3,17 +3,20 @@ import { BehaviorSubject } from 'rxjs';
 import { RouteInfo } from './sidebar.metadata';
 import { ROUTES } from './ROUTES';
 
+
 @Injectable({
-  providedIn: 'root',
+    providedIn: 'root'
 })
 export class VerticalSidebarService {
-  public screenWidth: any;
-  public collapseSidebar: boolean = false;
-  public fullScreen: boolean = false;
 
-  MENUITEMS: RouteInfo[] = ROUTES;
+    public screenWidth: any;
+    public collapseSidebar: boolean = false;
+    public fullScreen: boolean = false;
 
-  items = new BehaviorSubject<RouteInfo[]>(this.MENUITEMS);
+    MENUITEMS: RouteInfo[] = ROUTES;
 
-  constructor() {}
+    items = new BehaviorSubject<RouteInfo[]>(this.MENUITEMS);
+
+    constructor() {
+    }
 }

@@ -76,14 +76,14 @@
                     <div class="mb-3">
                         <div class="row">
                             <div class="col-6">
-                                <label class="form-label">Số Lượng Người Lớn ({{tourDate.tour.price.adultPrice |
-                                    number}} VNĐ):</label>
-                                <input class="form-control" type="number" min="0" value="0" id="adult">
+                                <label class="form-label">Số Lượng Người Lớn:</label>
+                                <input class="form-control" type="number" min="0" value="0" id="adult"
+                                    (change)="changeData()">
                             </div>
                             <div class="col-6">
-                                <label class="form-label">Số Lượng Trẻ Em ({{tourDate.tour.price.childrenPrice |
-                                    number}} VNĐ):</label>
-                                <input class="form-control" type="number" min="0" value="0" id="children">
+                                <label class="form-label">Số Lượng Trẻ Em:</label>
+                                <input class="form-control" type="number" min="0" value="0" id="children"
+                                    (change)="changeData()">
                             </div>
                         </div>
                     </div>

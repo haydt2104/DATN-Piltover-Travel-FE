@@ -14,8 +14,8 @@ import { TourDate } from 'src/app/models/tour-date.model';
 import { Transportation } from 'src/app/models/transportation.model';
 import { CurdService } from 'src/app/services/curd.service';
 import { TourPlanService } from 'src/app/services/tour/tour-plan.service';
-import { TourPlanDetailService } from '../../../../services/tour/tour-plan-detail.service';
 import { TourPlan } from './../../../../models/tour-plan.model';
+import { TourPlanDetailService } from '../../../../services/tour/tour-plan-detail.service';
 
 
 @Component({
@@ -99,8 +99,8 @@ export class TourPlanComponent implements OnInit {
         this.minDate = new Date(this.currentTourDate.initiateDate);
         this.maxDate = new Date(this.currentTourDate.endDate);
         this.minDate.setHours(this.minDate.getHours() - 7);
-        this.maxDate.setHours(this.maxDate.getHours() + 17);
-        this.maxDate.setMinutes(this.maxDate.getMinutes() - 1)
+        console.log(this.maxDate);
+
       },
       (error: HttpErrorResponse) => {
         console.log(error.message);
@@ -112,10 +112,6 @@ export class TourPlanComponent implements OnInit {
     this.tourPlanService.getTourPlansByDateID(tourId).subscribe(
       (response: TourPlan[]) => {
         this.planList = response;
-        for (let plan of this.planList) {
-          plan.startTime = new Date(plan.startTime);
-          plan.startTime.setHours(plan.startTime.getHours() + 7)
-        }
       },
       (error: HttpErrorResponse) => {
         console.log(error.message);
@@ -145,12 +141,11 @@ export class TourPlanComponent implements OnInit {
       }
     }
     var transport: Transportation = this.transportList.find(transport => transport.id == data.value.transport)
-    var date: Date = new Date(Date.parse(data.value.startTime));
     var plan: TourPlan = {
       id: null,
       startName: data.value.startLocation,
       startAddress: data.value.startAddress,
-      startTime: date,
+      startTime: data.value.startTime,
       transport: transport,
       tourDate: this.currentTourDate,
     }
@@ -180,12 +175,12 @@ export class TourPlanComponent implements OnInit {
   }
 
   onRowEditSave(tourPlan: TourPlan, index: number) {
+    tourPlan.startTime.setHours(tourPlan.startTime.getHours() + 7);
     tourPlan.transport = this.transportList.find(transport => transport.id == tourPlan.transport.id);
     this.planList[index] = tourPlan;
     this.curdService.put('tour_plan', tourPlan).subscribe(
       (response) => {
         delete this.clonedProducts[tourPlan.id]
-        this.getTourPlansByDateID(this.currentTourDate.id)
         this.messageService.clear();
         this.messageService.add({ key: 'success', severity: 'success', summary: 'Thông Báo', detail: 'Cập nhập thành công' });
       },
@@ -219,16 +214,9 @@ export class TourPlanComponent implements OnInit {
   }
 
   checkValidDate(tourDate: TourDate, tourPlan: TourPlan) {
-    var startTime: Date = new Date(tourPlan.startTime)
-    startTime.setHours(startTime.getHours() - 7)
-    var initiateDate: Date = new Date(tourDate.initiateDate)
-    initiateDate.setHours(initiateDate.getHours() - 7)
-    var endDate: Date = new Date(tourDate.endDate)
-    endDate.setHours(endDate.getHours() + 17)
-    var dateDif1 = Math.round(Number(startTime.getTime()) - Number(initiateDate.getTime())) / (24 * 60 * 60 * 1000)
-    var dateDif2 = Math.round(Number(startTime.getTime()) - Number(endDate.getTime())) / (24 * 60 * 60 * 1000)
-    if (dateDif1 < 0 || dateDif2 > 0) {
-      return true;
+    var dateDif = Math.round(Number(new Date(tourPlan.startTime).getTime()) - Number(new Date(tourDate.initiateDate).getTime())) / (24 * 60 * 60 * 1000)
+    if (dateDif < 0) {
+      return true
     } else {
       return false;
     }

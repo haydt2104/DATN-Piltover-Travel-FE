@@ -54,8 +54,11 @@ export class PostCreateComponent implements OnInit {
         const uploadTask = await this.storage.upload(fileName,file);
         const path = await uploadTask.ref.getDownloadURL()
         pathImg.push(path);
+        console.log(path)
       }
+      console.log(pathImg)
       this.formCreatePost.patchValue({images: pathImg})
+      console.log(this.formCreatePost.value)
       this.postService.createPost(this.formCreatePost.value).subscribe(data => {
         this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Thêm mới thành công. Sẽ chuyển hướng sau 3 giây!', life: 3000 });
         setTimeout(() => {

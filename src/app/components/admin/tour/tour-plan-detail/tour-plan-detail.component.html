@@ -2,7 +2,7 @@
 <p-toast key="error"></p-toast>
 <div class="card" *ngIf="currentTourPlan">
   <div class="card-body">
-    <h4 class="card-title">Danh sách Chi Tiết Kế Hoạch [{{currentTourPlan.startTime | date:'HH:mm dd/MM/yyyy'}}]
+    <h4 class="card-title">Danh sách Chi Tiết Kế Hoạch [{{currentTourPlan.startTime | date:'HH:mm dd/MM/yyyy' : "UTC"}}]
     </h4>
     <button pButton *ngIf="currentTourPlan && currentTourPlan.tourDate.status.id == 1" icon="pi pi-plus"
       class="btn btn-success mb-3" (click)="open('add',null)">Thêm Chi Tiết Kế Hoạch</button>
@@ -119,10 +119,6 @@
                 </ng-template>
                 <ng-template pTemplate="output">
                   {{planDetailList.endTime}}
-                  <p>
-                    <small *ngIf="checkValidTime2(planDetailList.startTime, planDetailList.endTime) == false">
-                      Thời gian kết thúc phải bắt đầu sau thời gian xuất phát</small>
-                  </p>
                 </ng-template>
               </p-cellEditor>
             </td>
