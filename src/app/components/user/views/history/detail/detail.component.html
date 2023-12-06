@@ -29,19 +29,19 @@
             <tbody *ngIf="history" >
               <tr class="table-light">
                 <td>Booking ID:</td>
-                <td>BokNum_{{history.bookingID}}</td>
+                <td>BokNum_{{history.booking.id}}</td>
               </tr>
               <tr class="table-light">
                 <td>Tên tour:</td>
-                <td>{{history.tour_name}}</td>
+                <td>{{history.booking.tourDate.tour.name}}</td>
               </tr>
               <tr class="table-light">
                 <td>Mô tả tour:</td>
-                <td>{{history.tour_description}}</td>
+                <td>{{history.booking.tourDate.tour.description}}</td>
               </tr>
               <tr class="table-light">
                 <td>Trạng thái:</td>
-                <td [ngSwitch]="history.booking_status">
+                <td [ngSwitch]="history.booking.status">
                   <div *ngSwitchCase="0" class="text-warning">Chưa thanh toán</div>
                   <div *ngSwitchCase="1" class="text-success">Đã thanh toán</div>
                   <div *ngSwitchCase="2" class="text-danger">Đã hủy</div>
@@ -49,23 +49,19 @@
               </tr>
               <tr class="table-light">
                 <td>Ngày lập:</td>
-                <td>{{history.book_date|date:'dd-MM-yyyy'}}</td>
-              </tr>
-              <tr class="table-light">
-                <td>Nơi bắt đầu:</td>
-                <td>{{history.start_address}}</td>
+                <td>{{history.booking.createTime|date:'dd-MM-yyyy'}}</td>
               </tr>
               <tr class="table-light">
                 <td>Ngày bắt đi:</td>
-                <td>{{history.start_date|date:'dd-MM-yyyy'}}</td>
+                <td>{{history.booking.tourDate.initiateDate|date:'dd-MM-yyyy'}}</td>
               </tr>
               <tr class="table-light">
-                <td>Thời gian bắt đầu:</td>
-                <td>{{history.start_time}}</td>
+                <td>Thời gian về:</td>
+                <td>{{history.booking.tourDate.endDate}}</td>
               </tr>
               <tr class="table-light">
                 <td>Phương tiện di chuyển:</td>
-                <td>{{history.transport_name}}</td>
+                <td>{{history.booking.tourDate.tour.transport.name}}</td>
               </tr>
               <tr class="table-light">
                 <td>Số lượng người lớn:</td>
@@ -77,11 +73,11 @@
               </tr>
               <tr class="table-light">
                 <td >Tên người đặt:</td>
-                <td>{{history.fullname}}</td>
+                <td>{{history.booking.createUser.fullname}}</td>
               </tr>
               <tr class="table-light">
                 <td >Tổng tiền:</td>
-                <td>{{history.total_price|currency:'3':''}}</td>
+                <td>{{history.booking.totalPrice|currency:'3':''}}</td>
               </tr>
             </tbody>
           </table>

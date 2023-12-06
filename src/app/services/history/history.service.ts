@@ -2,6 +2,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Booking } from 'src/app/models/booking.model';
+import { BookingDetail } from 'src/app/models/bookingdetail.model';
 import { History } from 'src/app/models/history.model';
 
 @Injectable({
@@ -17,9 +18,9 @@ export class HistoryService {
     return this.http.get<Booking>(`${this.baseUrl}api/user/history/all`);
   }
 
-  public getDetailHistory( id: number): Observable<History> {
+  public getDetailHistory( id: number): Observable<any> {
 
-    return this.http.get<History>(
+    return this.http.get(
       `${this.baseUrl}api/user/history?detail=${id}`
     );
   }

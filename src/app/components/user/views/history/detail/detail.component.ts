@@ -1,7 +1,6 @@
-import { History } from './../../../../../models/history.model';
-import { HttpParams } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { BookingDetail } from 'src/app/models/bookingdetail.model';
 import { HistoryService } from 'src/app/services/history/history.service';
 
 @Component({
@@ -10,7 +9,7 @@ import { HistoryService } from 'src/app/services/history/history.service';
   styleUrls: ['./detail.component.scss'],
 })
 export class DetailComponent implements OnInit {
-  history!: History ;
+  history!: BookingDetail ;
   loading:boolean=true;
 
   constructor(
@@ -28,8 +27,9 @@ export class DetailComponent implements OnInit {
 
   getdata(id: number): void {
     this.HistoryService.getDetailHistory(id).subscribe(
-      (data: History) => {
+      (data: BookingDetail) => {
         this.history = data;
+        console.log(data)
         this.loading=false;
       }
     ),
