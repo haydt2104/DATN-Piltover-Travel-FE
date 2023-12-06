@@ -21,23 +21,23 @@ export class RevenueService {
   }
 
   public getAllRevenueBody(dateRange: DateRevenue): Observable<Revenue[]> {
-    return this.http.post<Revenue[]>( this.baseUrl + 'api/admin/revenue/getAllRevenue', dateRange);
+    return this.http.post<Revenue[]>( this.baseUrl + 'api/revenue/getAllRevenue', dateRange);
   }
 
   public getMonthRevenueBody(dateRange: DateRevenue):Observable<MonthRevenue[]> {
-    return this.http.post<MonthRevenue[]>(this.baseUrl + 'api/admin/revenue/getAllMonthRevenue',dateRange);
+    return this.http.post<MonthRevenue[]>(this.baseUrl + 'api/revenue/getAllMonthRevenue',dateRange);
   }
 
   public getTourRevenueBody(dateRange: DateRevenue): Observable<TourRevenue[]> {
-    return this.http.post<TourRevenue[]>(this.baseUrl + 'api/admin/revenue/getTourRevenue', dateRange);
+    return this.http.post<TourRevenue[]>(this.baseUrl + 'api/revenue/getTourRevenue', dateRange);
   }
 
   public getHotelRevenueBody(dateRange: DateRevenue): Observable<HotelRevenue[]> {
-    return this.http.post<HotelRevenue[]>(this.baseUrl + 'api/admin/revenue/getHotelRevenue', dateRange);
+    return this.http.post<HotelRevenue[]>(this.baseUrl + 'api/revenue/getHotelRevenue', dateRange);
   }
 
   public getTransportRevenueBody(dateRange: DateRevenue): Observable<TransportRevenue[]> {
-    return this.http.post<TransportRevenue[]>(this.baseUrl + 'api/admin/revenue/getTransportRevenue', dateRange);
+    return this.http.post<TransportRevenue[]>(this.baseUrl + 'api/revenue/getTransportRevenue', dateRange);
   }
 
 }
