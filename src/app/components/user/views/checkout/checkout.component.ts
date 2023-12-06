@@ -57,7 +57,7 @@ export class CheckoutComponent implements OnInit {
 
   currentUser: Account;
   tourDate: TourDate;
-  tourImageList: TourImage[] = [];
+  tourImageList: TourImage[];
   bookingList: Booking[] = [];
   hotelList: Hotel[] = []
   discountList: Discount[] = [];
@@ -100,15 +100,15 @@ export class CheckoutComponent implements OnInit {
     ];
 
     const adult = document.getElementById('adult');
-    adult.addEventListener('input', () => this.changeData())
-
     const children = document.getElementById('children');
-    children.addEventListener('input', () => this.changeData())
-
+    if (adult && children) {
+      adult.addEventListener('input', () => this.changeData())
+      children.addEventListener('input', () => this.changeData())
+    }
   }
 
   public getMainData(data: number) {
-    this.accountService.getAccountById(2345673452).subscribe(
+    this.accountService.getCurrentAccount().subscribe(
       (response) => {
         this.currentUser = response;
       },
@@ -120,13 +120,13 @@ export class CheckoutComponent implements OnInit {
       (responseTourDate: TourDate) => {
         this.tourDate = responseTourDate
         this.getImage(this.tourDate.tour.id)
-        this.getHotelList()
+        this.getHotelList();
+        this.getBookingList();
       },
       (error: HttpErrorResponse) => {
         this.router.navigate([''])
       }
     )
-
     // setInterval(() => this.bookingService.getBookingsByTourDate(data).subscribe(
     //   (responseBooking: Booking[]) => {
     //     this.bookingList = responseBooking.filter(booking => booking.status != 2)
@@ -138,6 +138,17 @@ export class CheckoutComponent implements OnInit {
     // ), 1000)
 
     this.getDiscountList()
+  }
+
+  public getBookingList() {
+    this.bookingService.getBookingsByTourDate(this.tourDate.id).subscribe(
+      (responseBooking: Booking[]) => {
+        this.bookingList = responseBooking.filter(booking => booking.status != 2)
+        this.updateAccessible();
+      },
+      (error: HttpErrorResponse) => {
+        this.router.navigate([''])
+      })
   }
 
   public getImage(tourId: number) {
@@ -225,16 +236,16 @@ export class CheckoutComponent implements OnInit {
       discount: this.discount,
       totalPrice: this.total,
       totalPassengers: this.adult + this.children,
-      createTime: new Date(),
+      createTime: null,
       updateTime: null,
-      updateUser: null,
+      updateUser: this.currentUser,
       status: null
     }
     this.bookingDetail = {
       id: null,
       adult: this.adult,
       children: this.children,
-      bookingTime: new Date(),
+      bookingTime: null,
       surcharge: this.subTotal * 8 / 100,
       booking: this.booking
     }

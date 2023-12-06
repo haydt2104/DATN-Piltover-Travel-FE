@@ -7,7 +7,7 @@ import {
   ViewChild
 } from '@angular/core';
 import { AngularFireStorage } from '@angular/fire/compat/storage';
-import { FormBuilder, FormControl, FormsModule, NgForm, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormsModule, NgForm, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import {
   NgbModal,
@@ -126,7 +126,6 @@ export class TourComponent implements OnInit {
     this.getDistrictData();
     this.getWardData();
     this.getHotelList();
-    this.loadingService.hideOverLay()
   }
 
   open(content: string, id: number) {
@@ -164,7 +163,7 @@ export class TourComponent implements OnInit {
           ariaLabelledBy: 'modal-basic-title',
           size: 'xl',
         })
-      this.callHotel(provinceAddress, districtAddress, wardAddress, this.editTour.hotel.id)
+      this.callHotel(provinceAddress, districtAddress, this.editTour.hotel.id)
     } else if (content == 'image') {
       this.editTour = this.tourList.find((tour) => tour.id == id);
       this.getTourImageList(id);
@@ -502,7 +501,7 @@ export class TourComponent implements OnInit {
         this.availableTransport = response.filter(transport => transport.isDelete == false)
       },
       (error: HttpErrorResponse) => {
-        alert(error.message);
+        console.log(error.message);
       }
     )
   }
@@ -513,7 +512,7 @@ export class TourComponent implements OnInit {
         this.statusList = response;
       },
       (error: HttpErrorResponse) => {
-        alert(error.message);
+        console.log(error.message);
       }
     )
   }
@@ -524,7 +523,7 @@ export class TourComponent implements OnInit {
         this.bookingList = response.filter((booking) => booking.status != 2);
       },
       (error: HttpErrorResponse) => {
-        alert(error.message);
+        console.log(error.message);
       }
     )
   }
@@ -535,7 +534,7 @@ export class TourComponent implements OnInit {
         this.hotelList = response;
       },
       (error: HttpErrorResponse) => {
-        alert(error.message);
+        console.log(error.message);
       }
     )
   }
@@ -549,7 +548,7 @@ export class TourComponent implements OnInit {
           (response) => {
           },
           (error: HttpErrorResponse) => {
-            alert(error.message);
+            console.log(error.message);
           }
         )
       }
@@ -627,39 +626,33 @@ export class TourComponent implements OnInit {
         '#ward'
       ).innerHTML = `<option value="">Chọn Phường/Xã</option>`;
     }
-    var hotel = document.getElementById('hotel')
-    if (hotel) {
-      document.querySelector(
-        '#hotel'
-      ).innerHTML = `<option value="">Chọn Khách Sạn</option>`;
-    }
-  }
-
-  wardChange() {
     var provinceName = $('#province option:selected').text()
     var districtName = $('#district option:selected').text()
-    var wardName = $('#ward option:selected').text()
-    this.callHotel(provinceName, districtName, wardName, null)
+    this.callHotel(provinceName, districtName, null)
   }
 
-  callHotel(provinceName, districtName, wardName, code) {
+  callHotel(provinceName, districtName, code) {
     let row = ' <option disable value="">Chọn Khách Sạn</option>';
     this.hotelList.filter(hotel =>
       hotel.address.split(',')[hotel.address.split(',').length - 1].trim() == provinceName
       && hotel.address.split(',')[hotel.address.split(',').length - 2].trim() == districtName
-      && hotel.address.split(',')[hotel.address.split(',').length - 3].trim() == wardName
     ).forEach((item) => {
       if (item.id == code) {
-        row += `<option value="${item.id}" selected>${item.name}</option>`;
+        if (item.isDelete == true) {
+          row += `<option value="${item.id}" selected disabled>${item.name}</option>`;
+        } else {
+          row += `<option value="${item.id}" selected>${item.name}</option>`;
+        }
       } else {
-        row += `<option value="${item.id}">${item.name}</option>`;
+        if (item.isDelete == false) {
+          row += `<option value="${item.id}">${item.name}</option>`;
+        }
       }
     })
     document.querySelector('#hotel').innerHTML = row;
   }
 
   async submitAddTour(data) {
-    this.loadingService.showOverLay()
     var province = $('#province option:selected').text();
     var district = $('#district option:selected').text();
     var ward = $('#ward option:selected').text();
@@ -675,7 +668,7 @@ export class TourComponent implements OnInit {
       image: null,
       availableSpaces: data.value.availableSpaces,
       active: false,
-      createTime: new Date(),
+      createTime: null,
       price: {
         id: null,
         adultPrice: data.value.adult * 1000,
@@ -692,7 +685,6 @@ export class TourComponent implements OnInit {
     this.curdService.post('tour', tour).subscribe(
       (response: Tour) => {
         this.getTourList();
-        this.loadingService.hideOverLay()
         this.messageService.clear();
         this.messageService.add({ key: 'success', severity: 'success', summary: 'Thông Báo', detail: 'Thêm thành công' })
       },
@@ -704,7 +696,6 @@ export class TourComponent implements OnInit {
   }
 
   async submitEditTour(data) {
-    this.loadingService.showOverLay()
     var transport: Transportation = this.transportList.find(transport => transport.id == data.value.transport)
     var hotel: Hotel = this.hotelList.find(hotel => hotel.id == data.value.hotel)
     var province = $('#province option:selected').text();
@@ -742,7 +733,6 @@ export class TourComponent implements OnInit {
     this.curdService.put('tour', tour).subscribe(
       (response: Tour) => {
         this.tourList[this.tourList.findIndex(a => a.id == tour.id)] = tour
-        this.loadingService.hideOverLay()
         this.messageService.clear();
         this.messageService.add({ key: 'info', severity: 'info', summary: 'Thông Báo', detail: 'Cập nhập thành công' })
       },
@@ -849,25 +839,25 @@ export class TourComponent implements OnInit {
       const childrenPrice: number = +$('#children').val()
       if (data.valid && this.mainImgUrl && $('#province').val()
         && $('#district').val() && $('#ward').val() && adultPrice >= childrenPrice && adultPrice > 0 && childrenPrice > 0) {
-        return false
+        return true
       } else {
-        return true;
+        return false;
       }
     } else if (content == 'hotel') {
       const star: number = +$('#star').val()
       const price: number = +$('#price').val()
       if (data.valid && star >= 0 && star <= 5 && price > 0) {
-        return false
+        return true
       } else {
-        return true;
+        return false;
       }
     } else {
       const seatingCapacity: number = +$('#seatingCapacity').val()
       const price: number = +$('#price').val()
       if (data.valid && seatingCapacity > 0 && price > 0) {
-        return false
+        return true
       } else {
-        return true;
+        return false;
       }
     }
   }
@@ -1012,14 +1002,30 @@ export class TourComponent implements OnInit {
       }
       this.confirmDelete("hotel", id);
     } else if (object == 'transport') {
-      for (let tour of this.tourList) {
-        if (tour.transport.id == id) {
-          this.messageService.clear();
-          this.messageService.add({ key: 'error', severity: 'error', summary: 'Thông Báo', detail: 'Phương Tiện Đang Được Sử Dụng Không Thể Xóa' })
-          return;
+      this.tourPlanService.getTourPlans().subscribe(
+        (response: TourPlan[]) => {
+          for (let tour of this.tourList) {
+            if (tour.transport.id == id) {
+              this.messageService.clear();
+              this.messageService.add({ key: 'error', severity: 'error', summary: 'Thông Báo', detail: 'Phương Tiện Đang Được Sử Dụng Không Thể Xóa' })
+              return;
+            }
+          }
+
+          for (let plan of response) {
+            if (plan.transport.id == id) {
+              this.messageService.clear();
+              this.messageService.add({ key: 'error', severity: 'error', summary: 'Thông Báo', detail: 'Phương Tiện Đang Được Sử Dụng Không Thể Xóa' })
+              return;
+            }
+          }
+
+          this.confirmDelete("transport", id);
+        },
+        (error: HttpErrorResponse) => {
+          console.log(error.message);
         }
-      }
-      this.confirmDelete("transport", id);
+      )
     }
   }
 

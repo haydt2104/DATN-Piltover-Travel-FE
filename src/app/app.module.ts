@@ -25,28 +25,25 @@ import { AppComponent } from './app.component';
 import { AccountComponent } from './components/admin/account/account.component';
 import { BookingComponent } from './components/admin/booking/booking.component';
 // import { BookingdetailComponent } from './components/admin/bookingdetail/bookingdetail.component';
+import { NgxPaginationModule } from 'ngx-pagination';
+import { GalleriaModule } from 'primeng/galleria';
+import { DiscountComponent } from './components/admin/discount/discount.component';
 import { SpinnerComponent } from './components/admin/shared/spinner.component';
 import { AuthorizationsComponent } from './components/user/authorizations/authorizations.component';
 import { FooterComponent } from './components/user/layouts/footer/footer.component';
 import { HeaderComponent } from './components/user/layouts/header/header.component';
+import { DestinationComponent } from './components/user/views/destination/destination.component';
+import { HistoryComponent } from './components/user/views/history/history.component';
+import { HomeComponent } from './components/user/views/home/home.component';
 import { CheckStatusAccountPipe } from './pipes/check-status-account.pipe';
 import { TestPipePipe } from './pipes/test-pipe.pipe';
-import { GalleriaModule } from 'primeng/galleria';
-import { HomeComponent } from './components/user/views/home/home.component';
-import { HistoryComponent } from './components/user/views/history/history.component';
-import { DestinationComponent } from './components/user/views/destination/destination.component';
-import { NgxPaginationModule } from 'ngx-pagination';
-import { DiscountComponent } from './components/admin/discount/discount.component';
 
-import { CheckoutComponent } from './components/user/views/checkout/checkout.component';
-import { CheckoutSuccessComponent } from './components/user/views/checkout/checkout-success/checkout-success.component';
-import { CheckoutFailedComponent } from './components/user/views/checkout/checkout-failed/checkout-failed.component';
 import { MessageService } from 'primeng/api';
-import { LoginComponent } from './components/user/authorizations/login/login.component';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { LoadingSpinnerComponent } from './components/user/authorizations/loading-spinner/loading-spinner.component';
-import { LoadingInterceptor } from './loading.interceptor';
+import { LoginComponent } from './components/user/authorizations/login/login.component';
 import { AuthInterceptor } from './interceptor/auth.interceptor';
+import { LoadingInterceptor } from './loading.interceptor';
 
 @NgModule({
   declarations: [
@@ -108,4 +105,4 @@ import { AuthInterceptor } from './interceptor/auth.interceptor';
   ],
   bootstrap: [AppComponent],
 })
-export class AppModule {}
+export class AppModule { }
