@@ -13,11 +13,11 @@ export class DiscountService {
   ) {}
 
   getDataDiscountFormAPI() {
-    return this.http.get(this.baseUrl + 'api/admin/discount/');
+    return this.http.get(this.baseUrl + 'api/discount/');
   }
 
   ReadAllDiscountsFromAPI(): Observable<any>{
-    return  this.http.get(this.baseUrl+ 'api/admin/discount/getAll');
+    return  this.http.get(this.baseUrl+ 'api/discount/getAll');
   }
 
   readOneDisountsFromAPI(id:number): Observable<any>{
