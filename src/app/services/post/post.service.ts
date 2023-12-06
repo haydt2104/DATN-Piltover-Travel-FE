@@ -30,14 +30,14 @@ export class PostService {
 
 
   public updatePostById(data: any, id: any): Observable<any>{
-    return this.http.put<number>(this.baseUrl + 'api/post/admin/updatePost/' + id, data);
+    return this.http.put<number>(this.baseUrl + 'api/admin/post/updatePost/' + id, data);
   }
 
   public createPost(postDTO : any): Observable<any>{
-    return this.http.post<Post>(this.baseUrl+ 'api/post/admin/create', postDTO);
+    return this.http.post<Post>(this.baseUrl+ 'api/admin/post/create', postDTO);
   }
 
   public deletePost(id:number): Observable<Post>{
-    return this.http.get<Post>(this.baseUrl + 'api/post/admin/removePost/' + id)
+    return this.http.get<Post>(this.baseUrl + 'api/admin/post/removePost/' + id)
   }
 }
