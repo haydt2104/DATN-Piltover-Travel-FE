@@ -518,7 +518,7 @@ export class TourComponent implements OnInit {
   }
 
   public getBookingList() {
-    this.bookingService.ReadAllBooking().subscribe(
+    this.bookingService.getAllBooking().subscribe(
       (response) => {
         this.bookingList = response.filter((booking) => booking.status != 2);
       },
@@ -628,11 +628,14 @@ export class TourComponent implements OnInit {
     }
     var provinceName = $('#province option:selected').text()
     var districtName = $('#district option:selected').text()
-    this.callHotel(provinceName, districtName, null)
+    var hotel = document.getElementById('hotel')
+    if (hotel) {
+      this.callHotel(provinceName, districtName, null)
+    }
   }
 
   callHotel(provinceName, districtName, code) {
-    let row = ' <option disable value="">Chọn Khách Sạn</option>';
+    let row = '<option disable value="">Chọn Khách Sạn</option>';
     this.hotelList.filter(hotel =>
       hotel.address.split(',')[hotel.address.split(',').length - 1].trim() == provinceName
       && hotel.address.split(',')[hotel.address.split(',').length - 2].trim() == districtName

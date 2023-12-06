@@ -17,7 +17,7 @@ export class TourPlanService {
 
   public getTourPlansByDateID(tourId: number): Observable<TourPlan[]> {
     return this.http.get<TourPlan[]>(
-      `http://localhost:8080/api/tour_plan?tourDateId=` + tourId
+      `http://localhost:8080/api/admin/tour_plan?tourDateId=` + tourId
     );
   }
 }
