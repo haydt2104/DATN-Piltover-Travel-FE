@@ -1,7 +1,7 @@
 <p-toast key="success"></p-toast>
 <p-toast key="error"></p-toast>
 
-<div class="card">
+<div class="card" *ngIf="currentTourDate">
   <div class="card-body">
     <h4 class="card-title">Danh sách Kế Hoạch [ <i *ngIf="currentTourDate">{{currentTourDate.initiateDate | date:
         "dd/MM/yyyy"}}</i> ] - [ <i *ngIf="currentTourDate">{{currentTourDate.endDate | date:
@@ -137,6 +137,8 @@
               <p-cellEditor>
                 <ng-template pTemplate="input">
                   <select name="transport" class="form-control" [(ngModel)]="planList.transport.id" required>
+                    <option *ngIf="planList.transport.isDelete == true" [value]="planList.transport.id" disabled>
+                      {{planList.transport.name}}</option>
                     <option *ngFor="let item of transportList" value="{{item.id}}">{{item.name}}</option>
                   </select>
                 </ng-template>

@@ -21,15 +21,15 @@ export class CurdService {
   }
 
   public post(object: string, data: any): Observable<any> {
-    const url = `${this.url}/${object}`;
+    const url = `${this.url}/admin/${object}`;
     return this.http.post<any>(url, data);
   }
 
   public put(object: string, data: any): Observable<any> {
-    const url = `${this.url}/${object}`;
+    const url = `${this.url}/admin/${object}`;
     return this.http.put<any>(url, data);
   }
   public delete(object: string, id: number): Observable<void> {
-    return this.http.delete<void>(`${this.url}/${object}/${id}`);
+    return this.http.delete<void>(`${this.url}/admin/${object}/${id}`);
   }
 }
