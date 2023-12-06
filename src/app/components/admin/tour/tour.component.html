@@ -38,8 +38,7 @@
               id="district" ngModel required>
               <option value="">Chọn Quận/Huyện</option>
             </select>
-            <select #ward="ngModel" class="form-control col-md-3" name="ward" id="ward" (change)="wardChange()" ngModel
-              required>
+            <select #ward="ngModel" class="form-control col-md-3" name="ward" id="ward" ngModel required>
               <option value="">Chọn Phường/Xã</option>
             </select>
             <select #hotel="ngModel" class="form-control col-md-3" name="hotel" id="hotel" ngModel required>
@@ -61,8 +60,15 @@
           <div class="row">
             <input #availability="ngModel" class="form-control" name="availableSpaces" type="number" min="10" max="200"
               placeholder="Giới hạn từ 10 đến 200" ngModel required>
-            <small *ngIf="availability.touched && availability.value < 10">Số lượng phải từ 10 trở lên</small>
-            <small *ngIf="availability.touched && availability.value > 200">Số lượng vượt quá 200</small>
+            <small *ngIf="availability.touched && !availability.value">Vui lòng nhập số lượng</small>
+            <small *ngIf="availability.touched && availability.value && availability.value < 0">Vui lòng không nhập số
+              âm</small>
+            <small
+              *ngIf="availability.touched && availability.value && availability.value > 0 && availability.value < 10">Số
+              lượng phải từ 10
+              trở lên</small>
+            <small *ngIf="availability.touched && availability.value && availability.value > 200">Số lượng vượt quá
+              200</small>
           </div>
           <div class="row">
             <div class="col-4">
@@ -72,8 +78,11 @@
                   required>
                 <span class="input-group-text" id="basic-addon2">.000 VNĐ</span>
               </div>
-              <small *ngIf="adultPrice.touched && adultPrice.value < 0">Giá vé người lớn không được là số âm</small>
-              <small *ngIf="adultPrice.touched && adultPrice.value < childrenPrice.value && adultPrice.value >= 0">Giá
+              <small *ngIf="adultPrice.touched && !adultPrice.value">Vui lòng nhập giá vé người lớn</small>
+              <small *ngIf="adultPrice.touched && adultPrice.value && adultPrice.value < 0">Giá vé người lớn không được
+                là số âm</small>
+              <small
+                *ngIf="adultPrice.touched && adultPrice.value && childrenPrice.value && adultPrice.value < childrenPrice.value && adultPrice.value >= 0">Giá
                 vé người lớn không
                 được nhỏ hơn trẻ em</small>
             </div>
@@ -84,10 +93,12 @@
                   required>
                 <span class="input-group-text" id="basic-addon2">.000 VNĐ</span>
               </div>
-              <small *ngIf="childrenPrice.touched && childrenPrice.value < 0">Giá vé trẻ em không được là số
+              <small *ngIf="childrenPrice.touched && !childrenPrice.value">Vui lòng nhập giá vé trẻ em</small>
+              <small *ngIf="childrenPrice.touched && childrenPrice.value && childrenPrice.value < 0">Giá vé trẻ em không
+                được là số
                 âm</small>
               <small
-                *ngIf="childrenPrice.touched && childrenPrice.value > adultPrice.value && childrenPrice.value >= 0">Giá
+                *ngIf="childrenPrice.touched && childrenPrice.value && adultPrice.value && childrenPrice.value > adultPrice.value && childrenPrice.value >= 0">Giá
                 vé trẻ không được
                 lớn hơn giá người lớn</small>
             </div>
@@ -117,7 +128,7 @@
         </div>
         <div class="modal-footer">
           <button type="submit" class="btn btn-primary" (click)="modal.close()"
-            [disabled]="checkValid('tour',addTourForm)">Thêm</button>
+            *ngIf="checkValid('tour',addTourForm)">Thêm</button>
         </div>
       </form>
     </ng-template>
@@ -146,7 +157,7 @@
               required>
               <option value="">Chọn Quận/Huyện</option>
             </select>
-            <select #ward class="form-control col-md-3" name="ward" (change)="wardChange()" id="ward" required>
+            <select #ward class="form-control col-md-3" name="ward" id="ward" required>
               <option value="">Chọn Phường/Xã</option>
             </select>
             <select #hotel class="form-control col-md-3" name="hotel" id="hotel" ngModel="{{editTour.hotel.id}}"
@@ -169,8 +180,15 @@
           <div class="row">
             <input #availability="ngModel" class="form-control" name="availableSpaces" type="number" min="10" max="200"
               placeholder="Giới hạn từ 10 đến 200" ngModel="{{editTour.availableSpaces}}" required>
-            <small *ngIf="availability.touched && availability.value < 10">Số lượng phải từ 10 trở lên</small>
-            <small *ngIf="availability.touched && availability.value > 200">Số lượng vượt quá 200</small>
+            <small *ngIf="availability.touched && !availability.value">Vui lòng nhập số lượng</small>
+            <small *ngIf="availability.touched && availability.value && availability.value < 0">Vui lòng không nhập số
+              âm</small>
+            <small
+              *ngIf="availability.touched && availability.value && availability.value > 0 && availability.value < 10">Số
+              lượng phải từ 10
+              trở lên</small>
+            <small *ngIf="availability.touched && availability.value && availability.value > 200">Số lượng vượt quá
+              200</small>
           </div>
           <div class="row">
             <div class="col-4">
@@ -180,8 +198,11 @@
                   ngModel="{{editTour.price.adultPrice/1000}}" required>
                 <span class="input-group-text" id="basic-addon2">.000 VNĐ</span>
               </div>
-              <small *ngIf="adultPrice.touched && adultPrice.value < 0">Giá vé người lớn không được là số âm</small>
-              <small *ngIf="adultPrice.touched && adultPrice.value < childrenPrice.value && adultPrice.value >= 0">Giá
+              <small *ngIf="adultPrice.touched && !adultPrice.value">Vui lòng nhập giá vé người lớn</small>
+              <small *ngIf="adultPrice.touched && adultPrice.value && adultPrice.value < 0">Giá vé người lớn không được
+                là số âm</small>
+              <small
+                *ngIf="adultPrice.touched && adultPrice.value && childrenPrice.value && adultPrice.value < childrenPrice.value && adultPrice.value >= 0">Giá
                 vé người lớn không
                 được nhỏ hơn trẻ em</small>
             </div>
@@ -192,10 +213,12 @@
                   ngModel="{{editTour.price.childrenPrice/1000}}" required>
                 <span class="input-group-text" id="basic-addon2">.000 VNĐ</span>
               </div>
-              <small *ngIf="childrenPrice.touched && childrenPrice.value < 0">Giá vé trẻ em không được là số
+              <small *ngIf="childrenPrice.touched && !childrenPrice.value">Vui lòng nhập giá vé trẻ em</small>
+              <small *ngIf="childrenPrice.touched && childrenPrice.value && childrenPrice.value < 0">Giá vé trẻ em không
+                được là số
                 âm</small>
               <small
-                *ngIf="childrenPrice.touched && childrenPrice.value > adultPrice.value && childrenPrice.value >= 0">Giá
+                *ngIf="childrenPrice.touched && childrenPrice.value && adultPrice.value && childrenPrice.value > adultPrice.value && childrenPrice.value >= 0">Giá
                 vé trẻ không được
                 lớn hơn giá người lớn</small>
             </div>
@@ -204,6 +227,8 @@
               <select #transport="ngModel" name="transport" class="form-control" ngModel="{{editTour.transport.id}}"
                 required>
                 <option value="" selected>Chọn phương tiện</option>
+                <option *ngIf="editTour.transport.isDelete == true" value="{{editTour.transport.id}}" disabled>
+                  {{editTour.transport.name}}</option>
                 <option *ngFor="let item of availableTransport" value="{{item.id}}">{{item.name}}</option>
               </select>
               <small *ngIf="transport.touched && transport.invalid">Phương tiện không hợp lệ</small>
@@ -226,7 +251,7 @@
         </div>
         <div class="modal-footer">
           <button type="submit" class="btn btn-primary" (click)="modal.close()"
-            [disabled]="checkValid('tour',editTourForm)">Thay đổi</button>
+            *ngIf="checkValid('tour',editTourForm)">Thay đổi</button>
         </div>
       </form>
     </ng-template>
@@ -536,14 +561,14 @@
                 <span class="input-group-text" id="basic-addon2">.000 VNĐ</span>
               </div>
               <small *ngIf="price.touched && price.invalid">Vui Lòng Giá Tiền</small>
-              <small *ngIf="price.touched && price.valid && price.value <= 0">Vui Lòng Không Nhập Số Bé Hơn Bằng
+              <small *ngIf="price.touched && price.valid && price.value < 0">Vui Lòng Không Nhập Số Bé Hơn
                 0</small>
             </div>
           </div>
         </div>
         <div class="modal-footer">
           <button type="submit" class="btn btn-primary" (click)="modal.close()"
-            [disabled]="checkValid('hotel',addHotelForm)">Thêm</button>
+            *ngIf="checkValid('hotel',addHotelForm)">Thêm</button>
         </div>
       </form>
     </ng-template>
@@ -614,7 +639,7 @@
         </div>
         <div class="modal-footer">
           <button type="submit" class="btn btn-primary" (click)="modal.close()"
-            [disabled]="checkValid('hotel',editHotelForm)">Sửa</button>
+            *ngIf="checkValid('hotel',editHotelForm)">Sửa</button>
         </div>
       </form>
     </ng-template>
@@ -693,14 +718,13 @@
                 <span class="input-group-text" id="basic-addon2">.000 VNĐ</span>
               </div>
               <small *ngIf="price.touched && price.invalid">Vui Lòng Giá Tiền</small>
-              <small *ngIf="price.touched && price.valid && price.value <= 0">Vui Lòng Không Nhập Số Bé Hơn Bằng
-                0</small>
+              <small *ngIf="price.touched && price.valid && price.value < 0">Vui Lòng Không Nhập Số Bé Hơn 0</small>
             </div>
           </div>
         </div>
         <div class="modal-footer">
           <button type="submit" class="btn btn-primary" (click)="modal.close()"
-            [disabled]="checkValid('transport',addTransportForm)">Thêm</button>
+            *ngIf="checkValid('transport',addTransportForm)">Thêm</button>
         </div>
       </form>
     </ng-template>
@@ -736,8 +760,7 @@
                 <span class="input-group-text" id="basic-addon2">.000 VNĐ</span>
               </div>
               <small *ngIf="price.touched && price.invalid">Vui Lòng Giá Tiền</small>
-              <small *ngIf="price.touched && price.valid && price.value <= 0">Vui Lòng Không Nhập Số Bé Hơn Bằng
-                0</small>
+              <small *ngIf="price.touched && price.valid && price.value < 0">Vui Lòng Không Nhập Số Bé Hơn 0</small>
             </div>
             <div class="col-4">
               <label class="form-label">Trạng Thái:</label>
@@ -751,23 +774,23 @@
         </div>
         <div class="modal-footer">
           <button type="submit" class="btn btn-primary" (click)="modal.close()"
-            [disabled]="checkValid('transport',editTransportForm)">Sửa</button>
+            *ngIf="checkValid('transport',editTransportForm)">Sửa</button>
         </div>
       </form>
     </ng-template>
 
     <!-- Main Table -->
     <div class="table-responsive">
-      <p-table #dt1 [value]="tourList" sortField="active" [sortOrder]=-1 dataKey="id" [rows]="10"
-        [showCurrentPageReport]="true" [paginator]="true"
+      <p-table #dt1 [value]="tourList" sortField="active" dataKey="id" [rows]="5" [showCurrentPageReport]="true"
+        [paginator]="true"
         currentPageReportTemplate="Hiển thị từ bảng {first} đến {last} trong tổng {totalRecords} bảng"
-        [globalFilterFields]="['name', 'destinationAddress']" [tableStyle]="{'min-width': '80rem'}">
+        [globalFilterFields]="['name']" [tableStyle]="{'min-width': '80rem'}">
         <ng-template pTemplate="caption">
           <div class="flex">
             <form [formGroup]="formFilter">
               <span class="p-input-icon-left ml-auto">
                 <input pInputText type="text" (change)="dt1.filterGlobal(getValueSearch(), 'contains')"
-                  formControlName="search" class="form-control box-shadow-none" placeholder="Tìm kiếm">
+                  formControlName="search" class="form-control box-shadow-none" placeholder="Tìm kiếm Tour">
               </span>
             </form>
           </div>

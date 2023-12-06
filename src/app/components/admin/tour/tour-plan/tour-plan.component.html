@@ -48,7 +48,7 @@
           </div>
         </div>
         <div class="modal-footer">
-          <button type="submit" class="btn btn-primary" [disabled]="!addForm.valid">Thêm</button>
+          <button type="submit" class="btn btn-primary" *ngIf="addForm.valid">Thêm</button>
         </div>
       </form>
     </ng-template>
@@ -72,7 +72,7 @@
       <p-table #dt1 [value]="planList" dataKey="id" [rows]="10" [paginator]="true" editMode="row"
         currentPageReportTemplate="Hiển thị từ bảng {first} đến {last} trong tổng {totalRecords} bảng"
         [globalFilterFields]="['startName', 'startAddress', 'transport.name']">
-        <ng-template pTemplate="caption">
+        <!-- <ng-template pTemplate="caption">
           <div class="flex">
             <form [formGroup]="formFilter">
               <span class="p-input-icon-left ml-auto">
@@ -82,7 +82,7 @@
               </span>
             </form>
           </div>
-        </ng-template>
+        </ng-template> -->
         <ng-template pTemplate="header" class="theader">
           <tr class="text-center">
             <th pSortableColumn="startName" style="width:20%">Điểm đến<p-sortIcon field="startName"></p-sortIcon>
@@ -125,7 +125,7 @@
                   <p-calendar [(ngModel)]="planList.startTime" [minDate]="minDate" [maxDate]="maxDate" [touchUI]="true"
                     [readonlyInput]="true" [showTime]="true" [showIcon]="true"></p-calendar>
                 </ng-template>
-                <ng-template pTemplate="output">
+                <ng-template pTemplate="output" class="text-center">
                   {{ planList.startTime | date:"HH:mm | dd-MM-yyyy" : "UTC"}}
                   <br>
                   <small *ngIf="checkValidDate(currentTourDate,planList)">Ngày hoạt động không khớp với lịch trình vui
@@ -140,7 +140,7 @@
                     <option *ngFor="let item of transportList" value="{{item.id}}">{{item.name}}</option>
                   </select>
                 </ng-template>
-                <ng-template pTemplate="output">
+                <ng-template pTemplate="output" class="text-center">
                   {{ planList.transport.name }}
                 </ng-template>
               </p-cellEditor>
