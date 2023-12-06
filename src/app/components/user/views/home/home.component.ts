@@ -73,7 +73,7 @@ export class HomeComponent implements OnInit {
 
   autoChangeImage() {
     setInterval(() => {
-      this.goToNextPage(); // Call the function to move to the next image
-    }, 2000); // Set the interval time (in milliseconds) - 5000ms (5 seconds) in this example
+      this.goToNextPage();
+    }, 3000);
   }
 }

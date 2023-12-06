@@ -36,7 +36,7 @@
                     <div class="form-field">
                       <div class="icon"><span class="fa fa-calendar"></span></div>
                       <input type="date" class="form-control "
-                        placeholder="Chọn ngày đi" [(ngModel)]="newTour.startDate" name="startDate">
+                        placeholder="Chọn ngày đi" [(ngModel)]="newTour.startDate" name="startDate" min="{{ getCurrentDate() | date: 'yyyy-MM-dd' }}">
                     </div>
                   </div>
                 </div>
@@ -47,10 +47,7 @@
                       <div class="icon"><span class="fa fa-calendar"></span></div>
                       <select name="startAddress" id="startAddress" class="form-control" [(ngModel)]="newTour.startAddress">
                         <option value="">Chọn điểm khởi hành</option>
-                        <option value="Cần Thơ">Cần Thơ</option>
-                        <option value="Hồ Chí Minh">Tp.Hồ Chí Minh</option>
-                        <option value="Đà Nẵng">Đà Nẵng</option>
-                        <option value="Hà Nội">Hà Nội</option>
+                        <option *ngFor="let address of StartAddress" [value]="address.start_address">{{ address.start_address }}</option>
                     </select>
                     </div>
                   </div>
@@ -66,8 +63,8 @@
                           <option value="Dưới 3 triệu">Dưới 3 triệu</option>
                           <option value="Từ 3 - 7 triệu">Từ 3 - 7 triệu</option>
                           <option value="Từ 7 - 10 triệu">Từ 7 - 10 triệu</option>
-                          <option value="Từ 10 đến 15">Từ 10 đến 15</option>
-                          <option value="Trên 15">Trên 15</option>
+                          <option value="Từ 10 đến 15">Từ 10 đến 15 triệu</option>
+                          <option value="Trên 15">Trên 15 triệu</option>
                       </select>
                       </div>
                     </div>

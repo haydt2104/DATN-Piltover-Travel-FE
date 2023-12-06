@@ -1,15 +1,17 @@
-import { NgFor } from '@angular/common';
+import { CommonModule, NgFor } from '@angular/common';
 import { Component } from '@angular/core';
 import { RevenueService } from 'src/app/services/revenue/revenue.service';
 import { Revenue, HotelRevenue, DateRevenue } from 'src/app/models/revenue';
 import { ActivatedRoute, Params, Router, RouterLink } from '@angular/router';
+import { NgxPaginationModule } from 'ngx-pagination';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-top-hotel',
   templateUrl: './top-hotel.component.html',
   styleUrls: ['./top-hotel.component.scss'],
   standalone: true,
-  imports: [NgFor, RouterLink],
+  imports: [NgFor, RouterLink, NgxPaginationModule, FormsModule, CommonModule],
 })
 export class TopHotelComponent {
     public HotelRevenue!: HotelRevenue[];
@@ -17,6 +19,8 @@ export class TopHotelComponent {
     isDescendingOrder: boolean = false;
     public startDate: string = '2023-01-01'; // Ngày bắt đầu
     public endDate: string = '2023-12-31';   // Ngày kết thúc
+    currentPage = 1;
+    originalHotelRevenue: HotelRevenue[] = [];
 
     constructor(private hotelService: RevenueService, private router: Router, private route: ActivatedRoute) {
     }
@@ -36,6 +40,8 @@ export class TopHotelComponent {
         };
         this.hotelService.getHotelRevenueBody(dateRange).subscribe((data) =>{
           this.HotelRevenue = data;
+          this.originalHotelRevenue = data;
+          this.filterHotel();
           console.log('Doanh thu Hotel: ', this.HotelRevenue);
         });
     }
@@ -63,5 +69,26 @@ export class TopHotelComponent {
           currency: 'VND',
         }).format(value);
         return formattedValue.replace('₫', '') + 'VNĐ';
+      }
+
+      searchHotelName: string = '';
+
+      searchHotel() {
+        this.filterHotel();
+      }
+      searchFound: boolean = true;
+      // Hàm lọc dữ liệu theo tên tour
+      filterHotel() {
+        if (this.searchHotelName.trim() === '') {
+          this.HotelRevenue = [...this.originalHotelRevenue]; // Sử dụng spread operator để copy dữ liệu
+        } else {
+          this.HotelRevenue = this.originalHotelRevenue.filter(
+            hotel => hotel.hotel_name.toLowerCase().includes(this.searchHotelName.toLowerCase())
+          );
+        }
+        if (this.HotelRevenue.length === 0) {
+          console.log('Không tìm thấy tên tour.');
+        }
+        this.searchFound = this.HotelRevenue.length > 0;
       }
     }

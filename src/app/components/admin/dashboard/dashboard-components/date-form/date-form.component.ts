@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Output } from '@angular/core';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-date-form',
@@ -19,10 +20,25 @@ export class DateFormComponent {
       adjustedEndDate.setDate(adjustedEndDate.getDate() + 1);
       this.endDate = adjustedEndDate.toISOString().split('T')[0];
     }
-    this.minEndDate = this.startDate;    this.maxStartDate = this.endDate;
+    if (this.startDate < '2023-01-01') {
+      this.startDate = '2023-01-01';
+    }
+    if (this.endDate > '2023-12-31') {
+      this.endDate = '2023-12-31';
+    }
   }
 
   onFilterClick() {
+    if (!this.startDate || !this.endDate) {
+      // Hiển thị thông báo lỗi hoặc thực hiện hành động phù hợp với yêu cầu của bạn
+      console.log('Vui lòng chọn cả ngày bắt đầu và kết thúc.');
+      Swal.fire({
+        icon: 'info',
+        title: 'Chưa chọn ngày lọc',
+        text: 'Vui lòng chọn ngày bắt đầu và kết thúc.',
+    });
+      return; // Ngăn không phát ra sự kiện khi thiếu thông tin
+    } else
     // Emit sự kiện để thông báo về sự thay đổi khoảng thời gian
     this.dateRangeChanged.emit({ startDate: this.startDate, endDate: this.endDate });
   }

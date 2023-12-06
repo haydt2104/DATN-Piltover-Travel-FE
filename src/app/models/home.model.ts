@@ -20,3 +20,7 @@ export interface SearchTour {
   priceRange: string;
 }
 
+export interface StartAddress {
+  start_address: String;
+}
+

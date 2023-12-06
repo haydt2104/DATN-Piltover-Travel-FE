@@ -153,10 +153,11 @@ export class SalesRatioComponent implements OnInit {
       this.monthrevenue.forEach((item) => {
         const monthFromDatabase = item.month; // Lấy giá trị month từ cơ sở dữ liệu
         const parts = monthFromDatabase.split("-");
-
+        // const year = parseInt(parts[0]);
         const month = parseInt(parts[1]); // month sẽ là 1
-        console.log("Tháng:", month);
-
+        // console.log("Tháng:", month);
+        // console.log("Năm:", year);
+        // console.log("dữ liệu tour:", tourData);
         tourData[month -1] = item.total_tour_revenue;
         hotelData[month -1] = item.total_hotel_revenue;
         transportData[month -1] = item.total_transport_revenue;

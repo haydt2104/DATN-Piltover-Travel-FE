@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { HomeTour, SearchTour } from 'src/app/models/home.model';
+import { HomeTour, SearchTour, StartAddress } from 'src/app/models/home.model';
 import { HomeService } from 'src/app/services/home/home.service';
 
 @Component({
@@ -9,18 +9,18 @@ import { HomeService } from 'src/app/services/home/home.service';
 })
 export class DestinationComponent {
   public HomeTour!: HomeTour[];
-  public pagedTourList: HomeTour[] = [];
+  public StartAddress!: StartAddress[];
   public currentPage = 1;
   searchError: string = '';
   dataLoaded: boolean = false;
-
+  tourSuggestions: string[] = [];
   public newTour: SearchTour = {
     startDate: '0',
     tourName: '',
     startAddress: '',
     minPrice: 0,
     maxPrice: -1,
-    priceRange: '', // Ensure 'priceRange' is of type 'string'
+    priceRange: '',
   };
 
   constructor(private HomeService: HomeService) {
@@ -28,6 +28,14 @@ export class DestinationComponent {
 
   ngOnInit(): void {
       this.createNewTour();
+      this.getstartAdress();
+  }
+
+  public getstartAdress(){
+      this.HomeService.getStartAddress().subscribe((response) =>{
+        this.StartAddress = response;
+        console.log('Start Address: ', this.StartAddress);
+      });
   }
 
   createNewTour() {
@@ -42,6 +50,7 @@ export class DestinationComponent {
         // Có dữ liệu từ tìm kiếm
         this.HomeTour = response;
         this.dataLoaded = true;
+        this.currentPage = 1;
       }
     }, error => {
       console.error('Error:', error);
@@ -103,5 +112,10 @@ onSortChange(event: Event) {
     // Sắp xếp theo ngày khởi hành từ cao xuống thấp
     this.HomeTour.sort((a, b) => new Date(b.start_time).getTime() - new Date(a.start_time).getTime());
   }
+}
+getCurrentDate(): string {
+  const currentDate = new Date();
+  const formattedDate = currentDate.toISOString().split('T')[0];
+  return formattedDate;
 }
 }

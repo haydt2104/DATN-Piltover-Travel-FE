@@ -5,6 +5,8 @@ import { RevenueService } from 'src/app/services/revenue/revenue.service';
 import { DateRevenue, Revenue, TourRevenue } from 'src/app/models/revenue';
 import { ActivatedRoute, Params, Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { NgxPaginationModule } from 'ngx-pagination';
+import { FormsModule } from '@angular/forms';
 
 
 @Component({
@@ -12,13 +14,16 @@ import { CommonModule } from '@angular/common';
   templateUrl: './top-selling.component.html',
   styleUrls: ['./top-selling.component.scss'],
   standalone: true,
-  imports: [NgFor, RouterLink, CommonModule],
+  imports: [NgFor, RouterLink, CommonModule, NgxPaginationModule, FormsModule],
 })
 export class TopSellingComponent implements OnInit {
   public TourRevenue!: TourRevenue[];
   currentSortColumn: keyof TourRevenue = 'total_name'; // Đặt giá trị ban đầu ở đây
   isDescendingOrder: boolean = false;
   topSelling:Product[];
+  currentPage = 1;
+  originalTourRevenue: TourRevenue[] = [];
+
   public startDate: string = '2023-01-01'; // Ngày bắt đầu
   public endDate: string = '2023-12-31';   // Ngày kết thúc
 
@@ -34,14 +39,17 @@ export class TopSellingComponent implements OnInit {
         this.getAllTourRevenue();
       });
   }
+
   private getAllTourRevenue(){
     const dateRange: DateRevenue = {
       startDate: this.startDate,
       endDate: this.endDate,
     };
-    
+
     this.tourService.getTourRevenueBody(dateRange).subscribe((data) =>{
       this.TourRevenue = data;
+      this.originalTourRevenue = data;
+      this.filterTour();
       console.log('Doanh thu Tour: ', this.TourRevenue);
     });
 }
@@ -71,5 +79,26 @@ export class TopSellingComponent implements OnInit {
 
     return formattedValue.replace('₫', '') + 'VNĐ';
   }
-}
 
+  searchTourName: string = '';
+
+  // Hàm xử lý tìm kiếm
+  searchTour() {
+    this.filterTour();
+  }
+  searchFound: boolean = true;
+  // Hàm lọc dữ liệu theo tên tour
+  filterTour() {
+    if (this.searchTourName.trim() === '') {
+      this.TourRevenue = [...this.originalTourRevenue]; // Sử dụng spread operator để copy dữ liệu
+    } else {
+      this.TourRevenue = this.originalTourRevenue.filter(
+        tour => tour.total_name.toLowerCase().includes(this.searchTourName.toLowerCase())
+      );
+    }
+    if (this.TourRevenue.length === 0) {
+      console.log('Không tìm thấy tên tour.');
+    }
+    this.searchFound = this.TourRevenue.length > 0;
+  }
+}

@@ -11,3 +11,24 @@ th.clickable {
   font-size: 14px;
   text-align: center;
 }
+/* CSS */
+.sort-container select {
+  padding: 7px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
+  background-color: #fff;
+  color: #333;
+  width: 220px;
+}
+
+.sort-container select:focus {
+  outline: none;
+  border-color: #007bff;
+}
+
+/* Tùy chỉnh màu nền và màu chữ cho option được chọn */
+.sort-container select option:checked {
+  background-color: #007bff;
+  color: #fff;
+}
