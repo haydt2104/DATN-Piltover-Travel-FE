@@ -39,5 +39,4 @@ export class RevenueService {
   public getTransportRevenueBody(dateRange: DateRevenue): Observable<TransportRevenue[]> {
     return this.http.post<TransportRevenue[]>(this.baseUrl + 'api/revenue/getTransportRevenue', dateRange);
   }
-
 }

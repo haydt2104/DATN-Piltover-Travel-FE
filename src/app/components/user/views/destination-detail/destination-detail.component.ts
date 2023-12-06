@@ -110,7 +110,7 @@ export class DestinationDetailComponent implements OnInit {
   }
 
   public getBookingList() {
-    this.bookingService.ReadAllBooking().subscribe(
+    this.bookingService.getAllBooking().subscribe(
       (response) => {
         this.bookingList = response
       },
