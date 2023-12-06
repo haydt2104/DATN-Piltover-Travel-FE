@@ -26,10 +26,10 @@ export class DiscountService {
 
   insertDiscount(data: any): Observable<any> {
     console.log(data);
-    return this.http.post(`${this.baseUrl}api/discount/insert`, data);
+    return this.http.post(`${this.baseUrl}api/admin/discount/insert`, data);
   }
 
   deleteDiscount(id:number): Observable<any>{
-    return this.http.delete(`${this.baseUrl}api/discount/delete/`+id);
+    return this.http.delete(`${this.baseUrl}api/admin/discount/delete/`+id);
   }
 }

@@ -64,7 +64,7 @@
       <p-table #dt1 [value]="planDetailList" dataKey="id" [rows]="10" [paginator]="true" editMode="row"
         currentPageReportTemplate="Hiển thị từ bảng {first} đến {last} trong tổng {totalRecords} bảng"
         [globalFilterFields]="['startName', 'startAddress', 'transport.name']" [tableStyle]="{'min-width': '50rem'}">
-        <ng-template pTemplate="caption">
+        <!-- <ng-template pTemplate="caption">
           <div class="flex">
             <form [formGroup]="formFilter">
               <span class="p-input-icon-left ml-auto">
@@ -74,7 +74,7 @@
               </span>
             </form>
           </div>
-        </ng-template>
+        </ng-template> -->
         <ng-template pTemplate="header" class="theader">
           <tr>
             <th pSortableColumn="description" style="width: 500px;">Mô tả<p-sortIcon field="description"></p-sortIcon>

@@ -7,7 +7,14 @@ import { TourPlan } from '../../models/tour-plan.model';
   providedIn: 'root',
 })
 export class TourPlanService {
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
+
+  public getTourPlans(): Observable<TourPlan[]> {
+    return this.http.get<TourPlan[]>(
+      `http://localhost:8080/api/tour_plan/all`
+    );
+  }
+
   public getTourPlansByDateID(tourId: number): Observable<TourPlan[]> {
     return this.http.get<TourPlan[]>(
       `http://localhost:8080/api/tour_plan?tourDateId=` + tourId

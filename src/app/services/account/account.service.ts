@@ -49,4 +49,9 @@ export class AccountService {
     return this.http
       .get<Account>(this.baseUrl + `api/account/${id}`)
   }
+
+  public getCurrentAccount(): Observable<Account> {
+    return this.http
+      .get<Account>(this.baseUrl + `api/account/currentAccount`)
+  }
 }

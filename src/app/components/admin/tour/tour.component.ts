@@ -839,25 +839,25 @@ export class TourComponent implements OnInit {
       const childrenPrice: number = +$('#children').val()
       if (data.valid && this.mainImgUrl && $('#province').val()
         && $('#district').val() && $('#ward').val() && adultPrice >= childrenPrice && adultPrice > 0 && childrenPrice > 0) {
-        return false
+        return true
       } else {
-        return true;
+        return false;
       }
     } else if (content == 'hotel') {
       const star: number = +$('#star').val()
       const price: number = +$('#price').val()
       if (data.valid && star >= 0 && star <= 5 && price > 0) {
-        return false
+        return true
       } else {
-        return true;
+        return false;
       }
     } else {
       const seatingCapacity: number = +$('#seatingCapacity').val()
       const price: number = +$('#price').val()
       if (data.valid && seatingCapacity > 0 && price > 0) {
-        return false
+        return true
       } else {
-        return true;
+        return false;
       }
     }
   }
@@ -1002,14 +1002,30 @@ export class TourComponent implements OnInit {
       }
       this.confirmDelete("hotel", id);
     } else if (object == 'transport') {
-      for (let tour of this.tourList) {
-        if (tour.transport.id == id) {
-          this.messageService.clear();
-          this.messageService.add({ key: 'error', severity: 'error', summary: 'Thông Báo', detail: 'Phương Tiện Đang Được Sử Dụng Không Thể Xóa' })
-          return;
+      this.tourPlanService.getTourPlans().subscribe(
+        (response: TourPlan[]) => {
+          for (let tour of this.tourList) {
+            if (tour.transport.id == id) {
+              this.messageService.clear();
+              this.messageService.add({ key: 'error', severity: 'error', summary: 'Thông Báo', detail: 'Phương Tiện Đang Được Sử Dụng Không Thể Xóa' })
+              return;
+            }
+          }
+
+          for (let plan of response) {
+            if (plan.transport.id == id) {
+              this.messageService.clear();
+              this.messageService.add({ key: 'error', severity: 'error', summary: 'Thông Báo', detail: 'Phương Tiện Đang Được Sử Dụng Không Thể Xóa' })
+              return;
+            }
+          }
+
+          this.confirmDelete("transport", id);
+        },
+        (error: HttpErrorResponse) => {
+          console.log(error.message);
         }
-      }
-      this.confirmDelete("transport", id);
+      )
     }
   }
 

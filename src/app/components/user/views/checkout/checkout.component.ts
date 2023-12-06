@@ -108,7 +108,7 @@ export class CheckoutComponent implements OnInit {
   }
 
   public getMainData(data: number) {
-    this.accountService.getAccountById(2345673452).subscribe(
+    this.accountService.getCurrentAccount().subscribe(
       (response) => {
         this.currentUser = response;
       },
@@ -236,16 +236,16 @@ export class CheckoutComponent implements OnInit {
       discount: this.discount,
       totalPrice: this.total,
       totalPassengers: this.adult + this.children,
-      createTime: new Date(),
+      createTime: null,
       updateTime: null,
-      updateUser: null,
+      updateUser: this.currentUser,
       status: null
     }
     this.bookingDetail = {
       id: null,
       adult: this.adult,
       children: this.children,
-      bookingTime: new Date(),
+      bookingTime: null,
       surcharge: this.subTotal * 8 / 100,
       booking: this.booking
     }

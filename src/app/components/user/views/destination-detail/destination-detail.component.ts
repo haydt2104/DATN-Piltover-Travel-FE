@@ -9,11 +9,13 @@ import { InputTextModule } from 'primeng/inputtext';
 import { TableModule } from 'primeng/table';
 import { Booking } from 'src/app/models/booking.model';
 import { TourDate } from 'src/app/models/tour-date.model';
+import { TourImage } from 'src/app/models/tour-img.model';
 import { TourPlan } from 'src/app/models/tour-plan.model';
 import { Tour } from 'src/app/models/tour.model';
 import { BookingService } from 'src/app/services/booking/booking.service';
 import { CurdService } from 'src/app/services/curd.service';
 import { TourDateService } from 'src/app/services/tour/tour-date.service';
+import { TourImageService } from 'src/app/services/tour/tour-image.service';
 import { TourService } from 'src/app/services/tour/tour.service';
 
 
@@ -28,7 +30,7 @@ import { TourService } from 'src/app/services/tour/tour.service';
     FormsModule,
     ReactiveFormsModule,
     ButtonModule,
-    InputTextModule
+    InputTextModule,
   ]
 })
 export class DestinationDetailComponent implements OnInit {
@@ -41,14 +43,16 @@ export class DestinationDetailComponent implements OnInit {
     private bookingService: BookingService,
     private modalService: NgbModal,
     private formBuilder: FormBuilder,
-    private httpClient: HttpClient
+    private httpClient: HttpClient,
+    private tourImageService: TourImageService
   ) { }
-
+  responsiveOptions: any[] | undefined;
   currentTour: Tour
   tourDateList: TourDate[]
   bookingList: Booking[]
   planList: TourPlan[]
   currentDate: Date = new Date();
+  tourImageList: TourImage[];
 
   ngOnInit(): void {
     this.route.params.subscribe((params) => {
@@ -86,6 +90,7 @@ export class DestinationDetailComponent implements OnInit {
     this.tourService.getTourById(id).subscribe(
       (response) => {
         this.currentTour = response
+        this.getImage(this.currentTour.id)
       },
       (error) => {
         window.location.href = "http://localhost:4200/"
@@ -124,6 +129,17 @@ export class DestinationDetailComponent implements OnInit {
         console.log(error.message);
       }
     );
+  }
+
+  public getImage(tourId: number) {
+    this.tourImageService.getTourImageByTourId(tourId).subscribe(
+      (response: TourImage[]) => {
+        this.tourImageList = response
+      },
+      (error) => {
+        console.log(error.message)
+      }
+    )
   }
 
   public getPlanByDate(tourDateId: number) {
