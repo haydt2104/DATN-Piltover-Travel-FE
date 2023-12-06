@@ -5,65 +5,75 @@
         <div class="col-12">
           <label class="form-label">Tên mã giảm giá:</label>
           <input type="text" class="form-control" id="name" formControlName="name" name="name" required>
-          <div class="text-danger" *ngFor="let validation of validation_message.name">
-            <small *ngIf="formGroup.get('name')!.value.length==0">
-              {{validation.message}}
-            </small>
-          </div>
-        </div>
 
-        <!-- <div class="col-12">
-          <label class="form-label">Code:</label>
-          <input type="text" class="form-control" id="code" formControlName="code" name="code" required>
-          <small *ngIf="formGroup.get('name')!.value.length==0">
-            <p *ngIf="validation_message">{{validation_message.name}}</p>
+          <small class="text-danger" *ngIf="formGroup.get('name').hasError('required')">
+            Tên mã không được bỏ trống!
           </small>
-        </div> -->
+          <small class="text-danger" *ngIf="formGroup.get('name').hasError('maxlength')">
+            Tên mã không quá 50 ký tự!
+          </small>
+
+        </div>
 
         <div class="col-12">
           <label class="form-label">Số phần trăm giảm:</label>
           <input type="number" class="form-control" placeholder="Example: 5, 10, 10.5, ..." id="percentage"
             formControlName="percentage" name="percentage" required>
-            <div class="text-danger" *ngFor="let validation of validation_message.percentage">
-              <small *ngIf="formGroup.get('percentage')!.value.length==0">
-                {{validation.message}}
-              </small>
-            </div>
+
+            <small class="text-danger" *ngIf="formGroup.get('percentage').hasError('required')">
+            Số phần trăm giảm giá không được bỏ trống!
+          </small>
+          <small class="text-danger"
+            *ngIf="formGroup.get('percentage').hasError('min') || formGroup.get('percentage').hasError('max')">
+            Phần trăm giảm giá chỉ được từ 0 đến 100
+          </small>
+
         </div>
 
         <div class="col-12">
           <label class="form-label">Số lượng:</label>
           <input type="number" class="form-control" id="amount" formControlName="amount" name="amount" required>
-          <div class="text-danger" *ngFor="let validation of validation_message.amount">
-            <small *ngIf="formGroup.get('amount')!.value.length==0">
-              {{validation.message}}
-            </small>
-          </div>
+
+          <small class="text-danger" *ngIf="formGroup.get('amount').hasError('required')">
+            Số lượng không bỏ trống
+          </small>
+          <small *ngIf="formGroup.get('amount').hasError('min')">
+            Số lượng bắt buộc phải lớn hơn hoặc bằng 0
+          </small>
+
         </div>
 
         <div class="col-md-6">
           <label class="form-label">Số tiền để sử dụng:</label>
           <input type="number" class="form-control" id="min" formControlName="min" name="min" required>
-          <div class="text-danger" *ngFor="let validation of validation_message.min">
-            <small *ngIf="formGroup.get('min')!.value.length==0">
-              {{validation.message}}
-            </small>
-          </div>
+
+          <small class="text-danger" *ngIf="formGroup.get('min').hasError('required')">
+            Số tiền tối thiểu không bỏ trống
+          </small>
+          <small class="text-danger" *ngIf="formGroup.get('amount').hasError('min')">
+            Số lượng bắt buộc phải lớn hơn hoặc bằng 0
+          </small>
+
         </div>
 
         <div class="col-md-6">
           <label class="form-label">Số tiền giảm tối đa</label>
           <input type="number" class="form-control" id="max" formControlName="max" name="max" required>
-          <div class="text-danger" *ngFor="let validation of validation_message.max">
-            <small *ngIf="formGroup.get('max')!.value.length==0">
-              {{validation.message}}
-            </small>
-          </div>
+
+          <small class="text-danger" *ngIf="formGroup.get('max').hasError('required')">
+            Số tiền giảm tối đa không bỏ trống
+          </small>
+          <small class="text-danger" *ngIf="formGroup.get('amount').hasError('min')">
+            Số lượng bắt buộc phải lớn hơn hoặc bằng 0
+          </small>
+
         </div>
 
-        <div class="col-12">
-          <button type="submit" class="btn btn-primary">Thêm</button>
+        <div class="col-md-12 d-flex justify-content-end">
+          <button class="btn btn-warning" type="submit" [disabled]="formGroup.invalid">Thêm</button>
+          <a class="btn btn-info ml-2" [routerLink]="['/admin/manage/discount']">Quay lại</a>
         </div>
+
       </form>
     </div>
   </div>

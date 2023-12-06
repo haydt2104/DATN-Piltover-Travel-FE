@@ -3,7 +3,14 @@ import { Discount } from 'src/app/models/discount.model';
 import { Component, OnInit } from '@angular/core';
 import { InputTextModule } from 'primeng/inputtext';
 import { DiscountService } from 'src/app/services/discount/discount.service';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import {
+  AbstractControl,
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-insert-discount',
@@ -19,12 +26,12 @@ export class InsertDiscountComponent implements OnInit {
 
   ngOnInit(): void {
     this.formGroup = this.formBuilder.group({
-      name: new FormControl('', [Validators.required]),
-      percentage: new FormControl('', [Validators.required]),
-      amount: new FormControl('', [Validators.required]),
-      min: new FormControl('', [Validators.required]),
-      max: new FormControl('', [Validators.required]),
-    })
+      name: ['', [Validators.required, Validators.maxLength(50)]],
+      percentage: ['', [Validators.required,Validators.min(0), Validators.max(100)]],
+      amount: ['', [Validators.required,  Validators.min(0)]],
+      min: ['', [Validators.required, Validators.min(0)]],
+      max: ['', [Validators.required, Validators.min(0)]],
+    });
   }
 
   formGroup: FormGroup;
@@ -32,38 +39,44 @@ export class InsertDiscountComponent implements OnInit {
 
   submitForm() {
     if (this.formGroup.invalid) {
-      console.log('Error')
     } else {
-      this.discountService.insertDiscount(this.formGroup.value).subscribe(data => {
-        console.log(this.formGroup.value)
-        console.log("Thêm thành công")
-        this.router.navigateByUrl('/admin/manage/discount')
-
-      }),(error) => {
-        console.log(error);
-      }
+      Swal.fire({
+        title: 'Bạn chắc chắn muốn thêm mã giảm giá chứ!',
+        text: 'Nếu chọn thêm, mã giảm giá của tour sẽ được thêm vào',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Thêm',
+        cancelButtonText: 'Hủy thao tác',
+      }).then((result) => {
+        if (result.value) {
+          this.discountService
+            .insertDiscount(this.formGroup.value)
+            .subscribe((data) => {
+              Swal.fire({
+                title: 'Thêm thành công!',
+                text: 'Quay lại danh sách mã giảm giá sau 3 giây',
+                icon: 'success',
+                timer: 3000,
+                timerProgressBar: true,
+                showCancelButton: false,
+                showConfirmButton: false,
+              }).then(() => {
+                this.router.navigateByUrl('/admin/manage/discount');
+              });
+            }),
+            (error) => {
+              Swal.fire({
+                title: 'Lỗi',
+                text: 'Cập nhật thất bại!',
+                icon: 'error',
+                confirmButtonText: 'OK',
+              });
+            };
+        }else if (result.dismiss === Swal.DismissReason.cancel) {
+          // "No" or closed the dialog
+          Swal.fire('Đã hủy thao tác', 'Dữ liệu không thay đổi', 'info');
+        }
+      });
     }
-
-  }
-  validation_message = {
-    name: [
-      { type: 'required', message: 'không được bỏ trống tên mã' }
-    ],
-    percentage: [
-      { type: 'required', message: 'không được bỏ trống phần trăm giảm' },
-      // { type: 'min', message: 'Phần trăm giảm giá phải lớn hơn hoặc bằng 1' },
-    ],
-    amount: [
-      { type: 'required', message: 'không được bỏ trống số lượng' },
-      // { type: 'min', message: 'Số lượng phải lớn hơn hoặc bằng 1' },
-    ],
-    min: [
-      { type: 'required', message: 'không được bỏ trống giá tối thiểu được dùng' },
-      // { type: 'min-min', message: 'Mức giá tối dùng được phải lớn hơn hoặc bằng 0' },
-    ],
-    max: [
-      { type: 'required', message: 'không được bỏ trống giá tối đa có thể giảm' },
-      // { type: 'min', message: 'Số tiền giảm tối đa phải lớn hơn hoặc bằng 1' },
-    ],
   }
 }

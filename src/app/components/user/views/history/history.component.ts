@@ -15,22 +15,12 @@ export class HistoryComponent implements OnInit {
   constructor(private HistoryService: HistoryService,private BookingService: BookingService) {}
 
   ngOnInit(): void {
-    const userid=2345673452;
-    this.getLisHistory(userid);
+    this.getLisHistory();
   }
 
-  public ReadAllHistory(){
-    this.BookingService.getHistoryReadAllAPI().subscribe((data:Booking[]) => {
-      this.List=data;
-      console.log('Data: ',data);
-    }), (error) => {
-      console.log('ReadAll fail', error);
-    };
-  }
+  public getLisHistory(): void {
 
-  public getLisHistory(uid: number): void {
-
-    this.HistoryService.getHistoryByAccAPI(uid).subscribe((data:Booking[]) => {
+    this.HistoryService.getHistoryByAccAPI().subscribe((data:Booking[]) => {
       this.List = data;
       console.log('Data:', data);
     }),

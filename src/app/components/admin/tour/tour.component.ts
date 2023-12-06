@@ -519,7 +519,7 @@ export class TourComponent implements OnInit {
   }
 
   public getBookingList() {
-    this.bookingService.getAllBooking().subscribe(
+    this.bookingService.ReadAllBooking().subscribe(
       (response) => {
         this.bookingList = response.filter((booking) => booking.status != 2);
       },

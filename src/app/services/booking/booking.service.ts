@@ -13,27 +13,19 @@ export class BookingService {
     @Inject('BASE_URL') private baseUrl: string
   ) { }
 
-  getAllBooking(): Observable<Booking[]> {
-    return this.http.get<Booking[]>(this.baseUrl + 'api/booking/');
+  ReadAllBooking(): Observable<any> {
+    return this.http.get(this.baseUrl + 'api/admin/booking/all');
   }
 
   getBookingsByTourDate(id: number): Observable<Booking[]> {
-    return this.http.get<Booking[]>(this.baseUrl + 'api/booking' + `?tourDateId=${id}`);
-  }
-
-  getDataBookingFromAPI() {
-    return this.http.get(this.API_Url + 'booking/');
+    return this.http.get<Booking[]>(this.baseUrl + 'api/admin/booking' + `?tourDateId=${id}`);
   }
 
   editBooking(Booking: Booking) {
-    return this.http.put(this.API_Url + 'booking/edit', Booking);
-  }
-
-  getHistoryReadAllAPI() {
-    return this.http.get(this.API_Url + 'history/');
+    return this.http.put(this.baseUrl + 'api/admin/booking/edit', Booking);
   }
 
   cancelBooking(bid:number):Observable<void>{
-    return this.http.delete<void>(this.baseUrl + 'api/booking/cancel/'+bid);
+    return this.http.delete<void>(this.baseUrl + 'api/admin/booking/cancel/'+bid);
   }
 }

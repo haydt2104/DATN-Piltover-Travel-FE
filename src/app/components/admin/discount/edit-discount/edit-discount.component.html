@@ -1,26 +1,78 @@
-<p>edit-discount works!</p>
-<p>edit-discount works!</p>
-<p>edit-discount works!</p>
-<p>edit-discount works!</p>
-<p>edit-discount works!</p>
-<p>edit-discount works!</p>
-<p>edit-discount works!</p>
-<p>edit-discount works!</p>
-<p>edit-discount works!</p>
-<p>edit-discount works!</p>
-<p>edit-discount works!</p>
-<p>edit-discount works!</p>
-<p>edit-discount works!</p>
-<p>edit-discount works!</p>
-<p>edit-discount works!</p>
-<p>edit-discount works!</p>
-<p>edit-discount works!</p>
-<p>edit-discount works!</p>
-<p>edit-discount works!</p>
-<p>edit-discount works!</p>
-<p>edit-discount works!</p>
-<p>edit-discount works!</p>
-<p>edit-discount works!</p>
-<p>edit-discount works!</p>
-<p>edit-discount works!</p>
-<p>edit-discount works!</p>
+<section class="content">
+  <div class="card p-4">
+    <div class="row justify-content-center">
+      <form class="row g-3 col-md-8" [formGroup]="formGroup" (ngSubmit)="submitForm()">
+
+        <div class="col-12">
+
+          <label class="form-label" for="name">Name:</label>
+          <input class="form-control" type="text" id="name" formControlName="name">
+          <small class="text-danger" *ngIf="formGroup.get('name').hasError('required')">
+            Tên mã không được bỏ trống!
+          </small>
+          <small class="text-danger" *ngIf="formGroup.get('name').hasError('maxlength')">
+            Tên mã không quá 50 ký tự!
+          </small>
+
+        </div>
+
+        <div class="col-12">
+
+          <label class="form-label" for="percentage">Percentage:</label>
+          <input class="form-control" type="number" id="percentage" formControlName="percentage">
+          <small class="text-danger" *ngIf="formGroup.get('percentage').hasError('required')">
+            Số phần trăm giảm giá không được bỏ trống!
+          </small>
+          <small class="text-danger"
+            *ngIf="formGroup.get('percentage').hasError('min') || formGroup.get('percentage').hasError('max')">
+            Phần trăm giảm giá chỉ được từ 0 đến 100
+          </small>
+
+        </div>
+
+        <div class="col-12">
+
+          <label class="form-label" for="amount">Amount:</label>
+          <input class="form-control" type="number" id="amount" formControlName="amount">
+          <small class="text-danger" *ngIf="formGroup.get('amount').hasError('required')">
+            Số lượng không bỏ trống
+          </small>
+          <small *ngIf="formGroup.get('amount').hasError('min')">
+            Số lượng bắt buộc phải lớn hơn hoặc bằng 0
+          </small>
+
+        </div>
+
+        <div class="col-6">
+
+          <label class="form-label" class="form-label" for="min">Số tiền tối thiểu để dùng:</label>
+          <input class="form-control" type="number" id="min" formControlName="min">
+          <small class="text-danger" *ngIf="formGroup.get('min').hasError('required')">
+            Số tiền tối thiểu không bỏ trống
+          </small>
+          <small class="text-danger" *ngIf="formGroup.get('amount').hasError('min')">
+            Số lượng bắt buộc phải lớn hơn hoặc bằng 0
+          </small>
+
+        </div>
+
+        <div class="col-6">
+
+          <label class="form-label" for="max">Số tiền giảm tối đa:</label>
+          <input class="form-control" type="number" id="max" formControlName="max">
+          <small class="text-danger" *ngIf="formGroup.get('max').hasError('required')">
+            Số tiền giảm tối đa không bỏ trống
+          </small>
+          <small class="text-danger" *ngIf="formGroup.get('amount').hasError('min')">
+            Số lượng bắt buộc phải lớn hơn hoặc bằng 0
+          </small>
+
+        </div>
+        <div class="col-md-12 d-flex justify-content-end">
+          <button class="btn btn-warning" type="submit" [disabled]="formGroup.invalid">Cập nhật</button>
+          <a class="btn btn-info ml-2" [routerLink]="['/admin/manage/discount']">Quay lại</a>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>

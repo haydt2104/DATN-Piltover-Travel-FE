@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { MatPaginator } from '@angular/material/paginator';
+import { tap } from 'rxjs';
 import { Booking } from 'src/app/models/booking.model';
 import { BookingService } from 'src/app/services/booking/booking.service';
 import Swal from 'sweetalert2';
@@ -8,10 +10,16 @@ import Swal from 'sweetalert2';
   templateUrl: './booking.component.html',
   styleUrls: ['./booking.component.scss'],
 })
+// ,AfterViewInit
 export class BookingComponent implements OnInit {
   bookings: Booking[] = [];
   loading: boolean = true;
   bookingStatus1: number;
+
+  page:number=0;
+  itemsPerPage: number = 5;
+  p: number = 1;
+
 
   constructor(private bService: BookingService) {}
 
@@ -20,15 +28,20 @@ export class BookingComponent implements OnInit {
     this.fetchBookingStatus();
   }
 
+
   getAllBooking() {
     this.loading = true;
-    this.bService.getDataBookingFromAPI().subscribe(
+    this.bService.ReadAllBooking().subscribe(
       (data: Booking[]) => {
         this.bookings = data;
-        console.log('Booking: ', this.bookings);
       },
       (error) => {
-        console.error('Error fetching data', error);
+        Swal.fire({
+          title: 'Lỗi',
+          text: 'Không lấy được dữ liệu',
+          icon: 'error',
+          confirmButtonText: 'OK',
+        });
       },
       () => {
         this.loading = false;
@@ -57,7 +70,6 @@ export class BookingComponent implements OnInit {
             if (index !== -1) {
               this.bookings[index].status = 2;
             }
-            console.log('Booking canceled successfully');
             Swal.fire({
               title: 'Hủy thành công!',
               icon: 'success',

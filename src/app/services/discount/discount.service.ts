@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Inject, Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, count } from 'rxjs';
 import { Discount } from 'src/app/models/discount.model';
 
 @Injectable({
@@ -13,23 +13,35 @@ export class DiscountService {
   ) {}
 
   getDataDiscountFormAPI() {
-    return this.http.get(this.baseUrl + 'api/discount/');
+    return this.http.get(this.baseUrl + 'api/admin/discount/');
   }
 
   ReadAllDiscountsFromAPI(): Observable<any>{
-    return  this.http.get(this.baseUrl+ 'api/discount/getAll');
+    return  this.http.get(this.baseUrl+ 'api/admin/discount/getAll');
   }
 
   readOneDisountsFromAPI(id:number): Observable<any>{
-    return this.http.get(this.baseUrl+'api/discount/'+id);
+    return this.http.get(this.baseUrl+'api/admin/discount/'+id);
   }
 
   insertDiscount(data: any): Observable<any> {
-    console.log(data);
-    return this.http.post(`${this.baseUrl}api/discount/insert`, data);
+    return this.http.post(`${this.baseUrl}api/admin/discount/insert`, data);
   }
 
   deleteDiscount(id:number): Observable<any>{
-    return this.http.delete(`${this.baseUrl}api/discount/delete/`+id);
+    return this.http.delete(`${this.baseUrl}api/admin/discount/delete/`+id);
+  }
+
+  updateDiscount(did:number,request: any): Observable<any>{
+    const url = `${this.baseUrl}api/admin/discount/update/${did}`;
+    return this.http.put(url, request);
+  }
+
+  active(did:number):Observable<any>{
+    return this.http.delete(`${this.baseUrl}api/admin/discount/active/${did}`)
+  }
+
+  checkDelete(id:number):Observable<Boolean>{
+    return this.http.get<Boolean>(`${this.baseUrl}api/admin/discount/checkd/`+id)
   }
 }

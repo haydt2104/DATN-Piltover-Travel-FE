@@ -6,8 +6,9 @@
     </div>
     <div class="table-responsive">
       <table class="table table-hover table-bordered">
+        <caption> <pagination-controls (pageChange)="p = $event" nextLabel="Sau"
+            previousLabel="Trước"></pagination-controls></caption>
         <thead class="text-center">
-          <th class="col-md-1">STT</th>
           <th class="col-md-1">ID</th>
           <th class="col-md-2">Tên mã</th>
           <th class="col-md-2">Số phần trăm giảm</th>
@@ -15,23 +16,28 @@
           <th class="col-md-2">Mã định dạng</th>
           <th class="col-md-1">Trạng thái</th>
           <th class="col-md-1"></th>
+          <th class="col-md-1"></th>
         </thead>
         <tbody>
-          <tr *ngFor="let d of discounts, index as i">
-            <td class="text-center">{{i+1}}</td>
+          <tr *ngFor="let d of discounts | paginate: { itemsPerPage: itemsPerPage, currentPage: p }">
             <td class="text-left">DISC_{{d.id}}</td>
             <td class="text-left">{{d.name}}</td>
             <td class="text-center">{{d.percentage}}%</td>
             <td class="text-center">{{d.amount}}</td>
             <td class="text-center">{{d.code}}</td>
             <td class="text-center" [ngSwitch]="d.isDelete">
-              <div *ngSwitchCase="0" class="text-success" >Đang hoạt động</div>
-              <div *ngSwitchCase="1" class="text-danger" >Hết hạn</div>
+              <div *ngSwitchCase="0" class="text-success">Đang hoạt động</div>
+              <div *ngSwitchCase="1" class="text-danger">Hết hạn</div>
             </td>
             <td class="text-center">
-              <button class="link-warning" (click)="deleteDiscount(d.id)"><i
-                  class="bi bi-trash3" ></i></button>
+                <button class="btn btn-danger" (click)="deleteDiscount(d.id)" *ngIf="d.isDelete==false">Khóa</button>
+                <button class="btn btn-success" (click)="activeDiscount(d.id)" *ngIf="d.isDelete==true">Mở</button>
             </td>
+            <td class="text-center">
+              <button class="btn btn-warning" [routerLink]="['/admin/manage/discount/edit/'+d.id]"><i
+                  class="bi bi-wrench"></i></button>
+            </td>
+
           </tr>
 
         </tbody>
@@ -39,4 +45,3 @@
     </div>
   </div>
 </section>
-

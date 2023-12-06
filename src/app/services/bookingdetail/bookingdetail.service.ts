@@ -17,7 +17,7 @@ export class BookingdetailService {
   //API stored "ReadDetailBooking"
   getDetailDataBookingByIdFromAPI(bid: number): Observable<BookingDetail> {
     return this.httpRequest.get<BookingDetail>(
-      this.baseUrl + 'api/booking/detail/' + bid
+      this.baseUrl + 'api/admin/booking/detail/' + bid
     );
   }
 }

@@ -1,6 +1,5 @@
 <main>
   <section class="hero-wrap hero-wrap-2 js-fullheight" style="background-image: url(../assets/images/bg_1.jpg);">
-    <!-- <div class="overlay"></div> -->
     <div class="container">
       <div class="row no-gutters slider-text js-fullheight align-items-end justify-content-center">
         <div class="col-md-9 ftco-animate pb-5 text-center">
@@ -20,7 +19,7 @@
     <div class="tab-pane fade show active container-fluid">
       <div class="cart_inner text-dark" style="min-height: 360px !important;">
         <div class="table-responsive">
-          <table class="table table-striped">
+          <table class="table table-striped " *ngIf="!loading">
             <thead>
               <tr class="table table-info">
                 <th class="col-md-4 text-center" style="border-right: 1px black solid;" >Nội dung</th>
@@ -34,39 +33,39 @@
               </tr>
               <tr class="table-light">
                 <td>Tên tour:</td>
-                <td>{{history.tourName}}</td>
+                <td>{{history.tour_name}}</td>
               </tr>
               <tr class="table-light">
                 <td>Mô tả tour:</td>
-                <td>{{history.tourDescription}}</td>
+                <td>{{history.tour_description}}</td>
               </tr>
               <tr class="table-light">
                 <td>Trạng thái:</td>
-                <td [ngSwitch]="history.bookingStatus">
-                  <div *ngSwitchCase="0">Chưa liên hệ</div>
-                  <div *ngSwitchCase="1">Đã liên hệ</div>
-                  <div *ngSwitchCase="2">Đã hủy</div>
+                <td [ngSwitch]="history.booking_status">
+                  <div *ngSwitchCase="0" class="text-warning">Chưa thanh toán</div>
+                  <div *ngSwitchCase="1" class="text-success">Đã thanh toán</div>
+                  <div *ngSwitchCase="2" class="text-danger">Đã hủy</div>
                 </td>
               </tr>
               <tr class="table-light">
                 <td>Ngày lập:</td>
-                <td>{{history.bookDate|date:'dd-MM-yyyy'}}</td>
+                <td>{{history.book_date|date:'dd-MM-yyyy'}}</td>
               </tr>
               <tr class="table-light">
                 <td>Nơi bắt đầu:</td>
-                <td>{{history.startAddress}}</td>
+                <td>{{history.start_address}}</td>
               </tr>
               <tr class="table-light">
                 <td>Ngày bắt đi:</td>
-                <td>{{history.startDate|date:'dd-MM-yyyy'}}</td>
+                <td>{{history.start_date|date:'dd-MM-yyyy'}}</td>
               </tr>
               <tr class="table-light">
                 <td>Thời gian bắt đầu:</td>
-                <td>{{history.startTime}}</td>
+                <td>{{history.start_time}}</td>
               </tr>
               <tr class="table-light">
                 <td>Phương tiện di chuyển:</td>
-                <td>{{history.transportName}}</td>
+                <td>{{history.transport_name}}</td>
               </tr>
               <tr class="table-light">
                 <td>Số lượng người lớn:</td>
@@ -82,97 +81,15 @@
               </tr>
               <tr class="table-light">
                 <td >Tổng tiền:</td>
-                <td>{{history.totalPrice|currency:'3':''}}</td>
+                <td>{{history.total_price|currency:'3':''}}</td>
               </tr>
             </tbody>
           </table>
         </div>
-      </div>
-      <!-- <nav class="row justify-content-center mt-3">
-        <ul class="pagination">
-          <li class="page-item"> <a class="page-link" href="" ng-click="firstOderShip()"> <span
-                aria-hidden="true">&laquo;</span> </a> </li>
-          <li class="page-item"> <a class="page-link" href="" ng-click="prevOderShip()"> <span
-                aria-hidden="true">&lsaquo;</span> </a> </li>
-          <li class="page-item"> <a class="page-link" href="" ng-click="nextOderShip()"> <span
-                aria-hidden="true">&rsaquo;</span> </a> </li>
-          <li class="page-item"> <a class="page-link" href="" ng-click="lastOderShip()"> <span
-                aria-hidden="true">&raquo;</span> </a> </li>
-        </ul>
-      </nav> -->
-    </div>
-
-    <!-- <form action="" class="container">
-      <div class="card">
-        <div class="card-body">
-          <div class="row">
-            <div class="mb-3 col-sm-12 col-md-6">
-              <label class="form-label">Booking Id: </label>
-              <input class="form-control" type="text" id="id" name="bookingID" disabled="disabled" value="{{history.bookingID}}"/>
-            </div>
-            <div class="mb-3 col-sm-12 col-md-6">
-              <label class="form-label">Tour name: </label>
-              <input class="form-control" type="text" id="tourname" name="tourname" disabled="disabled" value="{{history.tourname}}" />
-            </div>
-          </div>
-
-          <div class="row">
-            <div class="mb-3 col-sm-12 col-md-6">
-              <label class="form-label">Trạng thái: </label>
-              <select class="form-control">
-                <option value="2">Đã hủy</option>
-              </select>
-            </div>
-            <div class="mb-3 col-sm-12 col-md-6">
-              <label for="" class="form-label">Ngày lập:</label>
-              <input class="form-control" type="date" id="bookingTime" name="bookingTime" disabled="disabled"  [(ngModel)]="history.bookDate" />
-            </div>
-          </div>
-
-          <div class="row">
-            <div class="mb-3 col-sm-12 col-md-3">
-              <label for="" class="form-label">Chỗ ở: </label>
-              <input class="form-control" type="text" id="hotelName" name="hotelName" disabled="disabled" />
-            </div>
-            <div class="mb-3 col-sm-12 col-md-3">
-              <label for="" class="form-label">Phương tiện: </label>
-              <input class="form-control" type="text" id="transportName" name="transportName" disabled="disabled" />
-            </div>
-            <div class="mb-3 col-sm-12 col-md-3">
-              <label for="" class="form-label">Số lượng người lớn: </label>
-              <div class="input-group">
-                <input class="form-control" type="number" min="0" aria-describedby="ng1" id="adult" name="adult" />
-                <span class="input-group-text" id="ng1">Người</span>
-              </div>
-            </div>
-            <div class="mb-3 col-sm-12 col-md-3">
-              <label for="" class="form-label">Số lượng trẻ em: </label>
-              <div class="input-group">
-                <input class="form-control" type="number" min="0" aria-describedby="ng2" id="children"
-                  name="children" />
-                <span class="input-group-text" id="ng2">Người</span>
-              </div>
-            </div>
-          </div>
-          <div class="row">
-            <div class="mb-3 col-sm-12 col-md-4">
-              <label for="" class="form-label">Tổng tiền cơ bản: </label>
-              <input class="form-control" type="text" id="totalPrice" name="totalPrice" disabled="disabled">
-            </div>
-            <div class="mb-3 col-sm-12 col-md-4">
-              <label for="" class="form-label">Mã giảm giá: </label>
-              <select class="form-control" name="discountName">
-                <option value="" class="text-center">--- Chọn ---</option>
-                <option> </option>
-              </select>
-            </div>
-            <div class="mb-3 col-sm-12 col-md-4">
-              <label for="" class="form-label">Tổng tiền thu: </label>
-              <input class="form-control" type="text" id="totalPrice" name="totalPrice" disabled="disabled">
-            </div>
-          </div>
+        <div *ngIf="loading">
+          <h2 class="text-center font-weight-bold">Đang tìm kiếm dữ liệu xin vui lòng chờ</h2>
         </div>
       </div>
-    </form> -->
+    </div>
   </section>
 </main>

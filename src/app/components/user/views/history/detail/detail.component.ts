@@ -11,6 +11,7 @@ import { HistoryService } from 'src/app/services/history/history.service';
 })
 export class DetailComponent implements OnInit {
   history!: History ;
+  loading:boolean=true;
 
   constructor(
     private ActivatedRoute: ActivatedRoute,
@@ -21,20 +22,19 @@ export class DetailComponent implements OnInit {
   ngOnInit(): void {
     this.ActivatedRoute.queryParams.subscribe((params) => {
       const id = params['id'];
-      const name="Dư Trường Hây";
-      this.getdata(name,id);
+      this.getdata(id);
     });
   }
 
-  getdata(uname: String, id: number): void {
-    this.HistoryService.getDetailHistory(uname, id).subscribe(
+  getdata(id: number): void {
+    this.HistoryService.getDetailHistory(id).subscribe(
       (data: History) => {
         this.history = data;
-        console.log('Data:', data);
+        this.loading=false;
       }
     ),
     (error) => {
-        console.log('Loi', error);
+      this.loading=true;
     };
   }
 }

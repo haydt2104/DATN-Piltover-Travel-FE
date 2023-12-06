@@ -48,11 +48,11 @@ export class EditBookingComponent implements OnInit {
         this.DiscountName = this.detailItem.booking.discount
           ? this.detailItem.booking.discount.name
           : 'Không có';
-        console.log('dataDetailBooking:', this.detailItem);
+        // console.log('dataDetailBooking:', this.detailItem);
         this.loading = false;
       },
       (error) => {
-        console.error('Error fetching data', error);
+        // console.error('Error fetching data', error);
         this.loading = false;
       }
     );
@@ -91,7 +91,7 @@ export class EditBookingComponent implements OnInit {
               });
             },
             (error) => {
-              console.error('Error cancel: ', error);
+              // console.error('Error cancel: ', error);
               Swal.fire({
                 title: 'Lỗi',
                 text: 'Hủy thất bại!',
