@@ -6,81 +6,66 @@
           <p class="breadcrumbs">
             <span class="mr-2"><a href="/">Trang chủ <i class="fa fa-chevron-right"></i></a></span>
             <span class="mr-2"><a href="/history">Lịch sử đặt tour <i class="fa fa-chevron-right"></i></a></span>
-            <span class="mr-2"><a href="/history-detail">Chi tiết đặt tour <i
-                  class="fa fa-chevron-right"></i></a></span>
+            <span class="mr-2"><a>Chi tiết Booking <i class="fa fa-chevron-right"></i></a></span>
           </p>
-
-          <h1 class="mb-0 bread">Chi tiết đặt tour</h1>
+          <h1 class="mb-0 bread">Chi tiết Booking</h1>
         </div>
       </div>
     </div>
   </section>
   <section class="ftco-section services-section container">
-    <div class="tab-pane fade show active container-fluid">
+    <div class="tab-pane fade show active">
       <div class="cart_inner text-dark" style="min-height: 360px !important;">
-        <div class="table-responsive">
-          <table class="table table-striped " *ngIf="!loading">
-            <thead>
-              <tr class="table table-info">
-                <th class="col-md-4 text-center" style="border-right: 1px black solid;" >Nội dung</th>
-                <th class="col-md-8 text-center" >Chi tiết</th>
-              </tr>
-            </thead>
-            <tbody *ngIf="history" >
-              <tr class="table-light">
-                <td>Booking ID:</td>
-                <td>BokNum_{{history.booking.id}}</td>
-              </tr>
-              <tr class="table-light">
-                <td>Tên tour:</td>
-                <td>{{history.booking.tourDate.tour.name}}</td>
-              </tr>
-              <tr class="table-light">
-                <td>Mô tả tour:</td>
-                <td>{{history.booking.tourDate.tour.description}}</td>
-              </tr>
-              <tr class="table-light">
-                <td>Trạng thái:</td>
-                <td [ngSwitch]="history.booking.status">
-                  <div *ngSwitchCase="0" class="text-warning">Chưa thanh toán</div>
-                  <div *ngSwitchCase="1" class="text-success">Đã thanh toán</div>
-                  <div *ngSwitchCase="2" class="text-danger">Đã hủy</div>
-                </td>
-              </tr>
-              <tr class="table-light">
-                <td>Ngày lập:</td>
-                <td>{{history.booking.createTime|date:'dd-MM-yyyy'}}</td>
-              </tr>
-              <tr class="table-light">
-                <td>Ngày bắt đi:</td>
-                <td>{{history.booking.tourDate.initiateDate|date:'dd-MM-yyyy'}}</td>
-              </tr>
-              <tr class="table-light">
-                <td>Thời gian về:</td>
-                <td>{{history.booking.tourDate.endDate}}</td>
-              </tr>
-              <tr class="table-light">
-                <td>Phương tiện di chuyển:</td>
-                <td>{{history.booking.tourDate.tour.transport.name}}</td>
-              </tr>
-              <tr class="table-light">
-                <td>Số lượng người lớn:</td>
-                <td>{{history.adult}}</td>
-              </tr>
-              <tr class="table-light">
-                <td >Số lượng trẻ nhỏ:</td>
-                <td >{{history.children}}</td>
-              </tr>
-              <tr class="table-light">
-                <td >Tên người đặt:</td>
-                <td>{{history.booking.createUser.fullname}}</td>
-              </tr>
-              <tr class="table-light">
-                <td >Tổng tiền:</td>
-                <td>{{history.booking.totalPrice|currency:'3':''}}</td>
-              </tr>
-            </tbody>
-          </table>
+        <div class="row" *ngIf="history">
+          <h2 class="mb-5 text-center">Thông tin chi tiết</h2>
+          <div class="col-5">
+            <img src="{{history.booking.tourDate.tour.image}}" width="100%">
+          </div>
+          <div class="col-md-7">
+            <ul>
+              <li><span class="font-weight-bold">Mã booking:</span> BokNum_{{history.booking.id}}
+              </li>
+
+              <li><span class="font-weight-bold">Tên tour:</span>
+                {{history.booking.tourDate.tour.name}}</li>
+
+              <li>
+                <span class="font-weight-bold">Chi phí: </span>
+                <span class="text-danger">{{history.booking.totalPrice| number}} VNĐ
+                </span> -
+                <span
+                    [ngSwitch]="history.booking.status">
+                    <span *ngSwitchCase="0" class="text-warning">Chưa thanh toán</span>
+                    <span *ngSwitchCase="1" class="text-success">Đã thanh toán</span>
+                    <span *ngSwitchCase="2" class="text-danger">Đã hủy</span>
+                  </span>
+              </li>
+
+
+
+              <li><span class="font-weight-bold">Ngày khởi hành:</span>
+                {{history.booking.tourDate.initiateDate|date:'dd-MM-yyyy'}}
+              </li>
+
+              <li><span class="font-weight-bold">Ngày ngày kết thúc:</span>
+                {{history.booking.tourDate.endDate|date:'dd-MM-yyyy'}}
+              </li>
+
+              <li><span class="font-weight-bold">Phương tiện di chuyển:</span>
+                {{history.booking.tourDate.tour.transport.name}}
+              </li>
+
+              <li><span class="font-weight-bold">Khách sạn:</span>
+                {{history.booking.tourDate.tour.hotel.name}} ( {{history.booking.tourDate.tour.hotel.address}} )
+              </li>
+
+              <li><span class="font-weight-bold">Người lớn:</span> {{history.adult}} người</li>
+
+              <li><span class="font-weight-bold">Người trẻ em:</span> {{history.children}} người</li>
+              <li><span class="font-weight-bold">Mô tả tour: </span><span>{{history.booking.tourDate.tour.description}}</span>
+              </li>
+            </ul>
+          </div>
         </div>
         <div *ngIf="loading">
           <h2 class="text-center font-weight-bold">Đang tìm kiếm dữ liệu xin vui lòng chờ</h2>

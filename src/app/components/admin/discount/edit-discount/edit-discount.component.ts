@@ -37,7 +37,7 @@ export class EditDiscountComponent implements OnInit {
   }
 
   getDataDiscount(id: number): void {
-    this.discountService.readOneDisountsFromAPI(id).subscribe((data) => {
+    this.discountService.readOneDisountsFromAPI1(id).subscribe((data) => {
       this.Discount = data;
 
       this.formGroup.patchValue({
@@ -47,7 +47,6 @@ export class EditDiscountComponent implements OnInit {
         min: this.Discount.min,
         max: this.Discount.max,
       });
-
       // console.log('Form Group data:', this.formGroup.value);
     }),
       (error) => {

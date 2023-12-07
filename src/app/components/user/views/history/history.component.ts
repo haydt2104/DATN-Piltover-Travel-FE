@@ -14,6 +14,10 @@ export class HistoryComponent implements OnInit {
   List:Booking[] = [];
   constructor(private HistoryService: HistoryService,private BookingService: BookingService) {}
 
+  page: number = 0;
+  itemsPerPage: number = 5;
+  p: number = 1;
+
   ngOnInit(): void {
     this.getLisHistory();
   }

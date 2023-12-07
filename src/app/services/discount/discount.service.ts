@@ -21,9 +21,16 @@ export class DiscountService {
   }
 
   readOneDisountsFromAPI(id:number): Observable<any>{
+    return this.http.get(this.baseUrl+'api/discount/'+id);
+  }
+//
+  readOneDisountsFromAPI1(id:number): Observable<any>{
     return this.http.get(this.baseUrl+'api/admin/discount/'+id);
   }
-
+  ReadAllDiscountsFromAPI1(): Observable<any>{
+    return  this.http.get(this.baseUrl+ 'api/admin/discount/getAll');
+  }
+//
   insertDiscount(data: any): Observable<any> {
     return this.http.post(`${this.baseUrl}api/admin/discount/insert`, data);
   }

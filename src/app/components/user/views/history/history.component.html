@@ -18,22 +18,24 @@
       <div class="cart_inner text-dark" style="min-height: 360px !important;">
         <div class="table-responsive">
           <table class="table table-hover">
+            <caption> <pagination-controls (pageChange)="p = $event" nextLabel="Sau"
+              previousLabel="Trước"></pagination-controls></caption>
             <thead>
               <tr class="table-info">
-                <th class="col-sm-1 text-center">STT</th>
                 <th scope="col" class="text-center">Mã tour</th>
                 <th scope="col" class="text-center">Tổng tiền</th>
                 <th scope="col" class="text-center">Ngày đặt</th>
+                <th scope="col" class="text-center">Ngày đi</th>
                 <th scope="col" class="text-center">Trạng thái</th>
                 <th scope="col"></th>
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let h of List,index as i">
-                <td class="text-center">{{i+1}}</td>
+              <tr *ngFor="let h of List| paginate: { itemsPerPage: itemsPerPage, currentPage: p }">
                 <td class="text-center">Tor0{{h.id}}</td>
-                <td class="text-center">{{h.totalPrice}} VNĐ</td>
+                <td class="text-center">{{h.totalPrice|number}} VNĐ</td>
                 <td class="text-center">{{h.createTime|date:'dd-MM-yyyy'}}</td>
+                <td class="text-center">{{h.tourDate.initiateDate|date:'dd-MM-yyyy'}}</td>
                 <td class="text-center" [ngSwitch]="h.status">
                   <div *ngSwitchCase="0" class="text-secondary">Chưa thanh toán</div>
                   <div *ngSwitchCase="1" class="text-success">Đã thanh toán</div>

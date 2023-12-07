@@ -5,7 +5,7 @@ import { RouterLink, RouterModule } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
 import { DetailComponent } from './detail.component';
 import { BrowserModule } from '@angular/platform-browser';
-
+import { TreeModule } from 'primeng/tree';
 
 
 @NgModule({
@@ -16,6 +16,7 @@ import { BrowserModule } from '@angular/platform-browser';
     CommonModule,
     RouterLink,
     HttpClientModule,
+    TreeModule
   ]
 })
 export class DetailModule { }

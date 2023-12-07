@@ -24,11 +24,11 @@
 
       <tbody *ngIf="!loading">
         <tr *ngFor="let booking of bookings| paginate: { itemsPerPage: itemsPerPage, currentPage: p }">
-          <td class="text-center">{{booking.id}}</td>
+          <td class="text-center">Booking_{{booking.id}}</td>
           <td>{{booking.createUser.fullname}}</td>
           <td class="text-left">{{booking.createUser.phone}}</td>
           <td>{{booking.createUser.email}}</td>
-          <td class="text-right">{{booking.totalPrice}} VNĐ</td>
+          <td class="text-center">{{booking.totalPrice|number}} VNĐ</td>
           <td class="text-center">{{booking.updateTime |date:'dd-MM-yyyy'}}</td>
           <td class="text-center" [ngSwitch]="booking.status">
             <span *ngSwitchCase="0" class="badge bg-secondary">
