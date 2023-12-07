@@ -28,4 +28,16 @@ export class AuthService {
       })
     );
   }
+
+  public signUp(data: any): Observable<any> {
+    return this.http.post(`${this.baseUrl}api/auth/sign-up`, data).pipe(
+      map((response) => {
+        // Xử lý dữ liệu ở đây nếu cần
+        return response;
+      }),
+      catchError((error) => {
+        return throwError(() => error);
+      })
+    );
+  }
 }

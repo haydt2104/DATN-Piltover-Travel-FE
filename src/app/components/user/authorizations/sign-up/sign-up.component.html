@@ -69,7 +69,8 @@
                   placeholder="Nhập lại mật khẩu" required>
                 <small *ngIf="!formSignUpDataReq.controls.password.valid && this.submitted" class="text-danger">Vui lòng
                   nhập lại mật khẩu</small>
-                <small *ngIf="formSignUpDataReq.password !== formSignUpDataReq.confirmPass && this.submitted"
+                <small
+                  *ngIf="formSignUpDataReq.get('password').value !== formSignUpDataReq.get('confirmPass').value && submitted"
                   class="text-danger">Nhập lại mật khẩu chưa chính xác</small>
               </div>
 

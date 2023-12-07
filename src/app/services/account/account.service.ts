@@ -1,3 +1,4 @@
+import { Data } from './../../../../../Vaccine-Management-Angular/c0720g1-vaccine/src/app/dto/data';
 import { Injectable, Inject } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';

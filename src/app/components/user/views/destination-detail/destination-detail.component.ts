@@ -1,7 +1,12 @@
 import { CommonModule } from '@angular/common';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import {
+  FormBuilder,
+  FormControl,
+  FormsModule,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ButtonModule } from 'primeng/button';
@@ -18,7 +23,6 @@ import { TourDateService } from 'src/app/services/tour/tour-date.service';
 import { TourImageService } from 'src/app/services/tour/tour-image.service';
 import { TourService } from 'src/app/services/tour/tour.service';
 
-
 @Component({
   selector: 'app-destination-detail',
   templateUrl: './destination-detail.component.html',
@@ -31,7 +35,7 @@ import { TourService } from 'src/app/services/tour/tour.service';
     ReactiveFormsModule,
     ButtonModule,
     InputTextModule,
-  ]
+  ],
 })
 export class DestinationDetailComponent implements OnInit {
   constructor(
@@ -45,12 +49,12 @@ export class DestinationDetailComponent implements OnInit {
     private formBuilder: FormBuilder,
     private httpClient: HttpClient,
     private tourImageService: TourImageService
-  ) { }
+  ) {}
   responsiveOptions: any[] | undefined;
-  currentTour: Tour
-  tourDateList: TourDate[]
-  bookingList: Booking[]
-  planList: TourPlan[]
+  currentTour: Tour;
+  tourDateList: TourDate[];
+  bookingList: Booking[];
+  planList: TourPlan[];
   currentDate: Date = new Date();
   tourImageList: TourImage[];
 
@@ -70,58 +74,70 @@ export class DestinationDetailComponent implements OnInit {
 
   public formFilter = this.formBuilder.group({
     setRows: new FormControl(5),
-    search: new FormControl('')
-  })
+    search: new FormControl(''),
+  });
 
   public open(content) {
-    this.httpClient.get('http://localhost:8080/api/test/username', { responseType: 'text' }).subscribe(
-      (response) => {
-        this.modalService.open(content, {
-          ariaLabelledBy: 'modal-basic-title', size: 'xl',
-        })
-      },
-      (error: HttpErrorResponse) => {
-        window.location.href = "http://localhost:4200/"
-      }
-    )
+    this.httpClient
+      .get('http://localhost:8080/api/test/username', { responseType: 'text' })
+      .subscribe(
+        (response) => {
+          this.modalService.open(content, {
+            ariaLabelledBy: 'modal-basic-title',
+            size: 'xl',
+          });
+        },
+        (error: HttpErrorResponse) => {
+          this.router.navigateByUrl('/login');
+        }
+      );
   }
 
   public getTour(id: number) {
     this.tourService.getTourById(id).subscribe(
       (response) => {
-        this.currentTour = response
-        this.getImage(this.currentTour.id)
+        this.currentTour = response;
+        this.getImage(this.currentTour.id);
       },
       (error) => {
-        window.location.href = "http://localhost:4200/"
+        window.location.href = 'http://localhost:4200/';
       }
-    )
+    );
   }
 
   public getDateList(id: number) {
     this.tourDateService.getTourDateByTourId(id).subscribe(
       (response) => {
-        this.tourDateList = response.filter(t => t.status.id == 2 && Math.round(Number(new Date(t.initiateDate).getTime()) - Number(new Date().getTime())) / (24 * 60 * 60 * 1000) > 3)
+        this.tourDateList = response.filter(
+          (t) =>
+            t.status.id == 2 &&
+            Math.round(
+              Number(new Date(t.initiateDate).getTime()) -
+                Number(new Date().getTime())
+            ) /
+              (24 * 60 * 60 * 1000) >
+              3
+        );
       },
       (error) => {
-        console.log(error.message)
+        console.log(error.message);
       }
-    )
+    );
   }
 
   public getBookingList() {
     this.bookingService.getAllBooking().subscribe(
       (response) => {
-        this.bookingList = response
+        this.bookingList = response;
       },
       (error) => {
-        console.log(error.message)
+        console.log(error.message);
       }
-    )
+    );
   }
 
   public getTourPlans(): void {
-    this.curdService.getList("tour_plan").subscribe(
+    this.curdService.getList('tour_plan').subscribe(
       (response: TourPlan[]) => {
         this.planList = response;
       },
@@ -134,33 +150,41 @@ export class DestinationDetailComponent implements OnInit {
   public getImage(tourId: number) {
     this.tourImageService.getTourImageByTourId(tourId).subscribe(
       (response: TourImage[]) => {
-        this.tourImageList = response
+        this.tourImageList = response;
       },
       (error) => {
-        console.log(error.message)
+        console.log(error.message);
       }
-    )
+    );
   }
 
   public getPlanByDate(tourDateId: number) {
-    return this.planList.filter(plan => plan.tourDate.id === tourDateId);
+    return this.planList.filter((plan) => plan.tourDate.id === tourDateId);
   }
 
   public getBookedCustomerNumber(tourDateId: number): number {
-    return this.bookingList.filter(booking => booking.tourDate.id === tourDateId && booking.status != 2).reduce((sum, booking) => sum + booking.totalPassengers, 0)
+    return this.bookingList
+      .filter(
+        (booking) => booking.tourDate.id === tourDateId && booking.status != 2
+      )
+      .reduce((sum, booking) => sum + booking.totalPassengers, 0);
   }
 
   public toCheckOut(dateId: number) {
-    this.modalService.dismissAll()
+    this.modalService.dismissAll();
     this.router.navigate(['/checkout'], {
       queryParams: {
-        data: btoa(JSON.stringify(dateId))
-      }
-    })
+        data: btoa(JSON.stringify(dateId)),
+      },
+    });
   }
 
   public getDateDiffer(date1: Date, date2: Date): number {
-    var dateDif: number = Math.round(Number(new Date(date2).getTime()) - Number(new Date(date1).getTime())) / (24 * 60 * 60 * 1000)
-    return dateDif
+    var dateDif: number =
+      Math.round(
+        Number(new Date(date2).getTime()) - Number(new Date(date1).getTime())
+      ) /
+      (24 * 60 * 60 * 1000);
+    return dateDif;
   }
 }
