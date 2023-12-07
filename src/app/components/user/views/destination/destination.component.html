@@ -72,9 +72,8 @@
                 </div>
                 <div class="col-lg d-flex">
                   <div class="form-group d-flex w-100 border-0">
-                    <div class="form-field w-100 align-items-center d-flex">
-                      <input type="submit" value="Tìm tour"
-                           class="align-self-stretch form-control btn btn-primary" (click)="createNewTour()">
+                    <div class="form-field w-100 align-items-center d-flex justify-content-center">
+                      <input type="submit" value="Tìm tour" class="align-self-stretch form-control btn btn-primary custom-btn" (click)="createNewTour()">
                     </div>
                   </div>
                 </div>
@@ -92,22 +91,36 @@
     <p style="text-align: center; font-size: 16px;">{{ searchError }}</p>
    </div>
 </section>
+<br>
+<br>
 <!-- --------- -->
-
+ <!-- -------Tìm kiếm ----- -->
+<div class="sort-container" *ngIf="dataLoaded">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <form action="#" class="search-property-1">
+          <div class="row no-gutters justify-content-start">
+            <div class="col-md-4">
+              <label for="sort-select">Sắp xếp theo:</label>
+              <select id="sort-select" (change)="onSortChange($event)" class="custom-select" style="margin-left: 10px;">
+                <option value="">Chọn sắp xếp</option>
+                <option value="lowest">Giá thấp đến cao</option>
+                <option value="highest">Giá cao đến thấp</option>
+                <option value="dateAsc">Ngày gần nhất</option>
+                <option value="dateDesc">Ngày xa nhất</option>
+              </select>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+ <!-- ------- -->
   <section class="ftco-section" *ngIf="dataLoaded || searchError">
     <div class="container">
-      <!-- Sắp xếp  -->
-      <div class="sort-container" *ngIf="dataLoaded">
-        <label for="sort-select">Sắp xếp theo: </label>
-        <select id="sort-select" (change)="onSortChange($event)" class="custom-select">
-          <option value="">Chọn sắp xếp</option>
-          <option value="lowest">Giá thấp đến cao</option>
-          <option value="highest">Giá cao đến thấp</option>
-          <option value="dateAsc">Ngày gần nhất</option>
-          <option value="dateDesc">Ngày xa nhất</option>
-        </select>
-      </div><br><br><br>
-      <!-- ------- -->
+
       <!-- --Load dữ liệu --- -->
       <div class="row">
         <div class="col-md-4" *ngFor="let tour of HomeTour | paginate: { itemsPerPage: 6, currentPage: currentPage }">

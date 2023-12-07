@@ -32,3 +32,22 @@ th.clickable {
   background-color: #007bff;
   color: #fff;
 }
+
+/* Input with rounded corners */
+.rounded-input {
+  border-radius: 10px;
+  border: 1px solid #ced4da;
+  padding: 5px 10px;
+  width: 100%;
+  position: relative;
+
+}
+.search-icon {
+  position: absolute;
+  top: 50%;
+  right: 25px;
+  transform: translateY(-50%);
+  color: #aaa; /* Change the color as needed */
+  pointer-events: none; /* Ensures the icon doesn't interfere with input */
+}
+

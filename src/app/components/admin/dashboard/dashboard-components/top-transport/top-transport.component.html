@@ -2,13 +2,15 @@
   <div class="card-body">
     <!-- title -->
     <div class="row">
-      <div class="col-md-10">
+      <div class="col-md-9">
         <h4 class="card-title">Doanh thu vận chuyển</h4>
       </div>
-      <div class="col-md-2">
-        <input type="text" [(ngModel)]="searchTransportName" placeholder="Tìm tên vận chuyển..." (input)="searchTransport()">
+      <div class="col-md-3">
+        <input type="text" class="rounded-input" [(ngModel)]="searchTransportName" placeholder="Tìm tên vận chuyển..." (input)="searchTransport()">
+        <span class="fa fa-search search-icon"></span>
       </div>
     </div>
+    <br>
     <!-- title -->
     <div class="table table-bordered table-light table-striped">
       <table class="table align-middle mb-0">
