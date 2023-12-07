@@ -31,7 +31,7 @@ export class BookingComponent implements OnInit {
 
   getAllBooking() {
     this.loading = true;
-    this.bService.getAllBooking1().subscribe(
+    this.bService.getAllBooking().subscribe(
       (data: Booking[]) => {
         this.bookings = data;
       },

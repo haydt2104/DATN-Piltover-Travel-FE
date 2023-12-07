@@ -30,7 +30,7 @@ export class BookingService {
   }
 
   getHistoryReadAllAPI() {
-    return this.http.get(this.API_Url + 'history/');
+    return this.http.get(this.baseUrl + 'api/history/');
   }
 
   cancelBooking(bid: number): Observable<void> {
