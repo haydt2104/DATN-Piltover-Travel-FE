@@ -58,21 +58,25 @@
 <!-- END nav -->
 
 <router-outlet></router-outlet>
+<!--Chat-->
+<div>
+  <button class="open-button" (click)="openForm()">Chat</button>
 
-<button class="open-button" (click)="openForm()">Chat</button>
+  <div class="chat-popup" id="myForm">
+    <form (ngSubmit)="summitForm()" class="form-container">
+      <i class="fa-solid fa-chalkboard-user"></i>
+      <h3>Piltover Travel sẵn lòng giúp đỡ bạn</h3>
 
-<div class="chat-popup" id="myForm">
-  <form (ngSubmit)="summitForm()" class="form-container">
-    <i class="fa-solid fa-chalkboard-user"></i>
-    <h3>Piltover Travel sẵn lòng giúp đỡ bạn</h3>
+      <label>Bạn cần giúp đỡ?</label>
+      <textarea placeholder="Nhập tin nhắn" required></textarea>
 
-    <label>Bạn cần giúp đỡ?</label>
-    <textarea placeholder="Nhập tin nhắn" required></textarea>
-
-    <button type="submit" class="btn">Send</button>
-    <button type="button" class="btn cancel" (click)="closeForm()">Close</button>
-  </form>
+      <button type="submit" class="btn">Send</button>
+      <button type="button" class="btn cancel" (click)="closeForm()">Close</button>
+    </form>
+  </div>
 </div>
+<!--End chat-->
+
 
 <footer class="ftco-footer bg-bottom ftco-no-pt" style="background-image: url(assets/images/bg_3.jpg);">
   <div class="container">

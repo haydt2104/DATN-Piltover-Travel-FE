@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { HeaderComponent } from '../header/header.component';
-import { NgModel } from '@angular/forms';
+import { FormsModule, NgModel, ReactiveFormsModule } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { TokenStorageService } from 'src/app/services/token-storage.service';
 import { ShareService } from 'src/app/services/share.service';
@@ -10,7 +10,7 @@ import { ShareService } from 'src/app/services/share.service';
 @Component({
   selector: 'app-layout',
   standalone: true,
-  imports: [RouterModule, CommonModule],
+  imports: [RouterModule, CommonModule, ReactiveFormsModule, FormsModule],
   templateUrl: './layout.component.html',
   styleUrls: ['./layout.component.scss'],
 })
@@ -83,11 +83,12 @@ export class LayoutComponent implements OnInit {
   }
 
   public summitForm() {
-    this.messageService.add({
-      severity: 'success',
-      summary: 'Thành công',
-      detail: 'Bạn đã sửa comment thành công',
-    });
+    // this.messageService.add({
+    //   severity: 'success',
+    //   summary: 'Thành công',
+    //   detail: 'Bạn đã sửa comment thành công',
+    // });
+    alert('Tính năng này đang phát triển');
   }
 
   public logOut() {
