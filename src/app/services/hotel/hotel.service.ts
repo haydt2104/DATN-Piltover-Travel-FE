@@ -13,10 +13,10 @@ export class HotelService {
   }
 
   public addHotel(hotel: Hotel): Observable<Hotel> {
-    return this.http.post<Hotel>(`http://localhost:8080/api/hotel`, hotel);
+    return this.http.post<Hotel>(`http://localhost:8080/api/admin/hotel`, hotel);
   }
 
   public editHotel(hotel: Hotel): Observable<Hotel> {
-    return this.http.put<Hotel>(`http://localhost:8080/api/hotel`, hotel);
+    return this.http.put<Hotel>(`http://localhost:8080/api/admin/hotel`, hotel);
   }
 }

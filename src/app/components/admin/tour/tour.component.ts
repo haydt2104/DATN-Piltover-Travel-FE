@@ -822,7 +822,7 @@ export class TourComponent implements OnInit {
       name: data.value.name,
       price: data.value.price * 1000,
       seatingCapacity: data.value.seatingCapacity,
-      isDelete: data.value.isDelete.toLowerCase() === "true"
+      isDelete: data.value.isDelete === true
     }
     this.curdService.put("transport", transport).subscribe(
       (response) => {
