@@ -7,6 +7,7 @@ import { Login } from 'src/app/models/login.model';
   providedIn: 'root',
 })
 export class AuthService {
+  isLoggedIn: boolean;
   constructor(
     private http: HttpClient,
     @Inject('BASE_URL') private baseUrl: string

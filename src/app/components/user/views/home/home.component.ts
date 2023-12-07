@@ -8,7 +8,7 @@ import { HomeTour, SearchTour } from 'src/app/models/home.model';
   styleUrls: ['./home.component.scss'],
 })
 export class HomeComponent implements OnInit {
-  public HomeTour!: HomeTour[];
+  public HomeTour: HomeTour[] = [];
   public currentPage = 1;
   public current = 1;
   public displayedTours: HomeTour[] = [];
@@ -17,7 +17,7 @@ export class HomeComponent implements OnInit {
 
   ngOnInit(): void {
     console.log(this.HomeTour == null);
-    if (this.HomeTour == null) {
+    if (this.HomeTour.length < 1) {
       this.getAll();
       this.autoChangeImage();
     }

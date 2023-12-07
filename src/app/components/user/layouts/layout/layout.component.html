@@ -22,20 +22,31 @@
         <!-- End Menu Tour -->
         <li class="nav-item"><a href="/contact" class="nav-link">Liên hệ</a></li>
         <li class="nav-item"><a href="/post" class="nav-link">Bài viết</a></li>
-        <li class="nav-item"><a href="/history" class="nav-link">Lịch sử</a></li>
+        <li class="nav-item" [hidden]="!isLoggedIn"><a href="/history" class="nav-link">Lịch sử</a></li>
         <!-- Tài khoản -->
         <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
+          <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
             aria-expanded="false">
-            Tài khoản
+
+            <b [hidden]="!isLoggedIn">
+              <span>{{accountName}}</span>
+            </b>
+            <b [hidden]="isLoggedIn"><span>Tài khoản</span></b>
           </a>
           <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <li><a class="dropdown-item" routerLink="/auth/login">Đăng nhập</a></li>
-            <li><a class="dropdown-item" routerLink="/auth/sign-up">Đăng ký</a></li>
+            <li><a class="dropdown-item" [hidden]="isLoggedIn" routerLink="/auth/login">Đăng nhập</a></li>
+            <li><a class="dropdown-item" [hidden]="isLoggedIn" routerLink="/auth/sign-up">Đăng ký</a></li>
+
+
+            <li><a class="dropdown-item" [hidden]="!isLoggedIn" routerLink="/auth/forgot-pass">Thay đổi thông tin</a>
+            </li>
+            <li><a class="dropdown-item" [hidden]="!isLoggedIn" *ngIf="['ROLE_ADMIN'].indexOf(role)!==-1"
+                routerLink="/admin/dashboard">Trang quản trị</a></li>
             <li>
               <hr class="dropdown-divider">
             </li>
-            <li><a class="dropdown-item" routerLink="/auth/forgot-pass">Quên mật khẩu</a></li>
+            <li><a class="dropdown-item" [hidden]="isLoggedIn" routerLink="/auth/forgot-pass">Quên mật khẩu</a></li>
+            <li><a class="dropdown-item" (click)="logOut()" [hidden]="!isLoggedIn">Đăng xuất</a></li>
           </ul>
         </li>
         <!--End Tài khoản -->
@@ -110,7 +121,7 @@
               <iframe width="430" height="315" src="https://www.youtube.com/embed/Au6LqK1UH8g?si=Oxomnucb57TFsfyl"
                 title="YouTube video player" frameborder="0"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                allowfullscreen ></iframe>
+                allowfullscreen></iframe>
             </ul>
           </div>
         </div>

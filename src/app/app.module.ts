@@ -44,6 +44,7 @@ import { LoadingSpinnerComponent } from './components/user/authorizations/loadin
 import { LoginComponent } from './components/user/authorizations/login/login.component';
 import { AuthInterceptor } from './interceptor/auth.interceptor';
 import { LoadingInterceptor } from './loading.interceptor';
+import { SignUpComponent } from './components/user/authorizations/sign-up/sign-up.component';
 
 @NgModule({
   declarations: [
@@ -62,6 +63,7 @@ import { LoadingInterceptor } from './loading.interceptor';
     HistoryComponent,
     DiscountComponent,
     LoginComponent,
+    SignUpComponent,
     LoadingSpinnerComponent,
   ],
   imports: [
@@ -105,4 +107,4 @@ import { LoadingInterceptor } from './loading.interceptor';
   ],
   bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

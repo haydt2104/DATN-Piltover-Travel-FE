@@ -34,17 +34,18 @@
   <li class="nav-item" ngbDropdown placement="bottom-end">
     <a ngbDropdownToggle class="nav-link waves-effect waves-dark pro-pic" href="javascript:void(0)"
       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-      <img src="assets/images/users/user1.jpg" alt="user" class="rounded-circle" width="31" />
-      <span class="ms-2">Tài khoản</span>
+      <b [hidden]="!isLoggedIn">
+        <span>{{accountName}}</span>
+      </b>
+      <b [hidden]="isLoggedIn"><span>Tài khoản</span></b>
     </a>
     <div class="dropdown-menu-right" ngbDropdownMenu>
-      <a class="dropdown-item" href="/auth/login">Đăng nhập</a>
+      <a class="dropdown-item" [hidden]="isLoggedIn" routerLink="/auth/login">Đăng nhập</a>
+      <a class="dropdown-item" [hidden]="isLoggedIn" routerLink="/auth/sign-up">Đăng ký</a>
+      <a class="dropdown-item" [hidden]="!isLoggedIn" routerLink="/auth/forgot-pass">Thay đổi thông tin</a>
       <div class="dropdown-divider"></div>
-      <a class="dropdown-item" href="/auth/login">Thay dổi thông tin</a>
-      <a class="dropdown-item" href="/auth/forgot-pass">Quên mật khẩu</a>
-
-      <div class="dropdown-divider"></div>
-      <a class="dropdown-item" href="/auth/sign-up">Đăng xuất</a>
+      <a class="dropdown-item" [hidden]="isLoggedIn" routerLink="/auth/forgot-pass">Quên mật khẩu</a>
+      <a class="dropdown-item" (click)="logOut()" [hidden]="!isLoggedIn">Đăng xuất</a>
     </div>
   </li>
   <!-- ============================================================== -->

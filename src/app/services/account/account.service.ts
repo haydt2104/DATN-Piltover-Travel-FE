@@ -17,7 +17,7 @@ export class AccountService {
 
   public getAllAccounts(): Observable<Account[]> {
     return this.http
-      .get<Account[]>(this.baseUrl + 'api/account/getAllAccount')
+      .get<Account[]>(this.baseUrl + 'api/admin/account/getAllAccount')
       .pipe(
         map((response) => {
           // Xử lý dữ liệu ở đây nếu cần
@@ -33,7 +33,7 @@ export class AccountService {
 
   public createAccount(accountData: Account): Observable<any> {
     return this.http
-      .post(`${this.baseUrl}api/account/createAccount`, accountData)
+      .post(`${this.baseUrl}api/admin/account/createAccount`, accountData)
       .pipe(
         map((response) => {
           // Xử lý dữ liệu ở đây nếu cần
@@ -46,12 +46,12 @@ export class AccountService {
   }
 
   public getAccountById(id: number): Observable<Account> {
-    return this.http
-      .get<Account>(this.baseUrl + `api/account/${id}`)
+    return this.http.get<Account>(this.baseUrl + `api/admin/account/${id}`);
   }
 
   public getCurrentAccount(): Observable<Account> {
-    return this.http
-      .get<Account>(this.baseUrl + `api/account/currentAccount`)
+    return this.http.get<Account>(
+      this.baseUrl + `api/admin/account/currentAccount`
+    );
   }
 }

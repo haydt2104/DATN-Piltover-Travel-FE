@@ -20,11 +20,13 @@ import { PostComponent } from './components/user/views/post/post.component';
 import { PostSingleComponent } from './components/user/views/post-single/post-single.component';
 import { DetailComponent } from './components/user/views/history/detail/detail.component';
 import { CheckoutComponent } from './components/user/views/checkout/checkout.component';
+import { authGuard } from './auth.guard';
 
 export const Approutes: Routes = [
   {
     path: 'admin',
     component: FullComponent,
+    canActivate: [authGuard],
     children: [
       { path: '', redirectTo: '/admin/dashboard', pathMatch: 'full' },
       {
@@ -107,6 +109,7 @@ export const Approutes: Routes = [
           import('./components/user/views/history/history.module').then(
             (m) => m.HistoryModule
           ),
+        canActivate: [authGuard],
       },
       {
         path: 'post',
@@ -130,6 +133,7 @@ export const Approutes: Routes = [
           import('./components/user/views/checkout/checkout.module').then(
             (m) => m.CheckoutModule
           ),
+        canActivate: [authGuard],
       },
     ],
   },

@@ -1,27 +1,45 @@
-
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { HeaderComponent } from '../header/header.component';
 import { NgModel } from '@angular/forms';
 import { MessageService } from 'primeng/api';
+import { TokenStorageService } from 'src/app/services/token-storage.service';
+import { ShareService } from 'src/app/services/share.service';
 
 @Component({
   selector: 'app-layout',
   standalone: true,
-  imports: [
-    RouterModule,
-    CommonModule
-  ],
+  imports: [RouterModule, CommonModule],
   templateUrl: './layout.component.html',
-  styleUrls: ['./layout.component.scss']
-
+  styleUrls: ['./layout.component.scss'],
 })
-export class LayoutComponent implements OnInit{
-  constructor(public router: Router,
-    private messageService: MessageService){}
-  ngOnInit(){
+export class LayoutComponent implements OnInit {
+  public accountName: string;
+  public isLoggedIn: boolean;
+  public role: string;
+  constructor(
+    public router: Router,
+    private messageService: MessageService,
+    private tokenStorageService: TokenStorageService,
+    private shareService: ShareService
+  ) {
+    this.shareService.getClickEvent().subscribe(() => {
+      this.loadHeader();
+    });
+  }
+  ngOnInit() {
     this.loadScripts();
+    this.loadHeader();
+  }
+
+  public loadHeader(): void {
+    if (this.tokenStorageService.getToken()) {
+      this.role = this.tokenStorageService.getUser().roles[0];
+      this.accountName = this.tokenStorageService.getUser().email;
+      console.log('acc: ', this.tokenStorageService.getUser().email);
+    }
+    this.isLoggedIn = this.accountName != null;
   }
 
   loadScripts() {
@@ -54,17 +72,27 @@ export class LayoutComponent implements OnInit{
     });
   }
 
-  public openForm(){
-    const form = document.getElementById("myForm") as HTMLElement;
-    form.style.display = "block";
+  public openForm() {
+    const form = document.getElementById('myForm') as HTMLElement;
+    form.style.display = 'block';
   }
 
-  public closeForm(){
-    const form = document.getElementById("myForm") as HTMLElement;
-    form.style.display = "none";
+  public closeForm() {
+    const form = document.getElementById('myForm') as HTMLElement;
+    form.style.display = 'none';
   }
 
-  public summitForm(){
-    this.messageService.add({ severity: 'success', summary: 'Thành công', detail: 'Bạn đã sửa comment thành công' });
+  public summitForm() {
+    this.messageService.add({
+      severity: 'success',
+      summary: 'Thành công',
+      detail: 'Bạn đã sửa comment thành công',
+    });
+  }
+
+  public logOut() {
+    this.tokenStorageService.signOut();
+    this.loadHeader();
+    this.isLoggedIn = false;
   }
 }

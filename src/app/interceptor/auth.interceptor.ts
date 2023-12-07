@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import {
   HttpRequest,
   HttpHandler,
@@ -9,16 +9,26 @@ import {
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { Router } from '@angular/router';
+import { TokenStorageService } from '../services/token-storage.service';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
-  constructor(private router: Router) {}
+  private excludedUrls: string[] = [
+    'https://provinces.open-api.vn/api/',
+    this.baseUrl + 'api/auth/login',
+  ];
+
+  constructor(
+    private router: Router,
+    private tokenStorageService: TokenStorageService,
+    @Inject('BASE_URL') private baseUrl: string
+  ) {}
 
   intercept(
     request: HttpRequest<any>,
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
-    const token = sessionStorage.getItem('token');
+    const token = this.tokenStorageService.getToken();
     // Kiểm tra xem URL của request có nên loại bỏ token hay không
     if (this.shouldExcludeToken(request.url)) {
       return next.handle(request);
@@ -43,7 +53,7 @@ export class AuthInterceptor implements HttpInterceptor {
   }
 
   private shouldExcludeToken(url: string): boolean {
-    // Kiểm tra xem URL có trùng khớp với URL mà bạn muốn loại bỏ token hay không
-    return url.startsWith('https://provinces.open-api.vn/api/');
+    // Kiểm tra xem URL có trong danh sách URL cần loại bỏ token hay không
+    return this.excludedUrls.some((excludedUrl) => url.startsWith(excludedUrl));
   }
 }
