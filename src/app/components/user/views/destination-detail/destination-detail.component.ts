@@ -22,6 +22,7 @@ import { CurdService } from 'src/app/services/curd.service';
 import { TourDateService } from 'src/app/services/tour/tour-date.service';
 import { TourImageService } from 'src/app/services/tour/tour-image.service';
 import { TourService } from 'src/app/services/tour/tour.service';
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-destination-detail',
@@ -49,14 +50,14 @@ export class DestinationDetailComponent implements OnInit {
     private formBuilder: FormBuilder,
     private httpClient: HttpClient,
     private tourImageService: TourImageService
-  ) {}
+  ) { }
   responsiveOptions: any[] | undefined;
   currentTour: Tour;
   tourDateList: TourDate[];
-  bookingList: Booking[];
   planList: TourPlan[];
   currentDate: Date = new Date();
   tourImageList: TourImage[];
+  bookingData: { tourDateId: number; amount: number }[] = []
 
   ngOnInit(): void {
     this.route.params.subscribe((params) => {
@@ -64,7 +65,6 @@ export class DestinationDetailComponent implements OnInit {
       this.getTour(id);
       this.getDateList(id);
       this.getTourPlans();
-      this.getBookingList();
     });
   }
 
@@ -88,7 +88,7 @@ export class DestinationDetailComponent implements OnInit {
           });
         },
         (error: HttpErrorResponse) => {
-          this.router.navigateByUrl('/login');
+          this.router.navigateByUrl('/auth/login');
         }
       );
   }
@@ -100,12 +100,13 @@ export class DestinationDetailComponent implements OnInit {
         this.getImage(this.currentTour.id);
       },
       (error) => {
-        window.location.href = 'http://localhost:4200/';
+        this.router.navigateByUrl('/');
       }
     );
   }
 
   public getDateList(id: number) {
+    const observables = [];
     this.tourDateService.getTourDateByTourId(id).subscribe(
       (response) => {
         this.tourDateList = response.filter(
@@ -113,22 +114,28 @@ export class DestinationDetailComponent implements OnInit {
             t.status.id == 2 &&
             Math.round(
               Number(new Date(t.initiateDate).getTime()) -
-                Number(new Date().getTime())
+              Number(new Date().getTime())
             ) /
-              (24 * 60 * 60 * 1000) >
-              3
+            (24 * 60 * 60 * 1000) >
+            3
         );
-      },
-      (error) => {
-        console.log(error.message);
-      }
-    );
-  }
-
-  public getBookingList() {
-    this.bookingService.getAllBooking().subscribe(
-      (response) => {
-        this.bookingList = response;
+        for (let i = 0; i < this.tourDateList.length; i++) {
+          const observable = this.bookingService.getNumberCustomerOfTourDateId(this.tourDateList[i].id);
+          observables.push(observable);
+        }
+        forkJoin(observables).subscribe(
+          (responses) => {
+            for (let i = 0; i < this.tourDateList.length; i++) {
+              this.bookingData.push({
+                tourDateId: this.tourDateList[i].id,
+                amount: responses[i]
+              });
+            }
+          },
+          (error) => {
+            console.error('Error:', error);
+          }
+        );
       },
       (error) => {
         console.log(error.message);
@@ -162,12 +169,8 @@ export class DestinationDetailComponent implements OnInit {
     return this.planList.filter((plan) => plan.tourDate.id === tourDateId);
   }
 
-  public getBookedCustomerNumber(tourDateId: number): number {
-    return this.bookingList
-      .filter(
-        (booking) => booking.tourDate.id === tourDateId && booking.status != 2
-      )
-      .reduce((sum, booking) => sum + booking.totalPassengers, 0);
+  public getBookedCustomerNumber(tourDateId: number) {
+    return this.bookingData.find(data => data.tourDateId === tourDateId).amount
   }
 
   public toCheckOut(dateId: number) {

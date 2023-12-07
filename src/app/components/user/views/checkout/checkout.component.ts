@@ -58,8 +58,6 @@ export class CheckoutComponent implements OnInit {
   currentUser: Account;
   tourDate: TourDate;
   tourImageList: TourImage[];
-  bookingList: Booking[] = [];
-  hotelList: Hotel[] = []
   discountList: Discount[] = [];
   currentDate: Date = new Date();
   booking: Booking
@@ -70,6 +68,7 @@ export class CheckoutComponent implements OnInit {
   subTotal: number = 0
   discount: Discount = null
   total: number = 0
+  bookedNumber = 0
 
   ngOnInit(): void {
     this.route.queryParams.subscribe(params => {
@@ -120,8 +119,7 @@ export class CheckoutComponent implements OnInit {
       (responseTourDate: TourDate) => {
         this.tourDate = responseTourDate
         this.getImage(this.tourDate.tour.id)
-        this.getHotelList();
-        this.getBookingList();
+        this.getBookedCustomerNumber()
       },
       (error: HttpErrorResponse) => {
         this.router.navigate([''])
@@ -136,19 +134,7 @@ export class CheckoutComponent implements OnInit {
     //     this.router.navigate([''])
     //   }
     // ), 1000)
-
     this.getDiscountList()
-  }
-
-  public getBookingList() {
-    this.bookingService.getBookingsByTourDate(this.tourDate.id).subscribe(
-      (responseBooking: Booking[]) => {
-        this.bookingList = responseBooking.filter(booking => booking.status != 2)
-        this.updateAccessible();
-      },
-      (error: HttpErrorResponse) => {
-        this.router.navigate([''])
-      })
   }
 
   public getImage(tourId: number) {
@@ -158,23 +144,6 @@ export class CheckoutComponent implements OnInit {
       },
       (error) => {
         console.log(error.message)
-      }
-    )
-  }
-
-  public getHotelList() {
-    this.hotelService.getAllHotel().subscribe(
-      (response: Hotel[]) => {
-        response = response.filter(hotel =>
-          hotel.id != this.tourDate.tour.hotel.id
-          && hotel.address.split(',')[hotel.address.split(',').length - 1].trim() == this.tourDate.tour.destinationAddress.split(',')[hotel.address.split(',').length - 1].trim()
-          && hotel.address.split(',')[hotel.address.split(',').length - 2].trim() == this.tourDate.tour.destinationAddress.split(',')[hotel.address.split(',').length - 2].trim()
-          && hotel.address.split(',')[hotel.address.split(',').length - 3].trim() == this.tourDate.tour.destinationAddress.split(',')[hotel.address.split(',').length - 3].trim()
-        )
-        this.hotelList = response;
-      },
-      (error: HttpErrorResponse) => {
-        alert(error.message);
       }
     )
   }
@@ -204,8 +173,12 @@ export class CheckoutComponent implements OnInit {
     return dateDif
   }
 
-  getBookedCustomerNumber(): number {
-    return this.bookingList.reduce((sum, booking) => sum + booking.totalPassengers, 0)
+  public getBookedCustomerNumber() {
+    this.bookingService.getNumberCustomerOfTourDateId(this.tourDate.id).subscribe(
+      (data) => {
+        this.bookedNumber = data
+        this.updateAccessible()
+      })
   }
 
   changeData() {
@@ -323,13 +296,13 @@ export class CheckoutComponent implements OnInit {
   }
 
   updateAccessible() {
-    if (this.getDateDiffer(this.currentDate, this.tourDate.initiateDate) < 3 || this.tourDate.status.id != 2 || this.getBookedCustomerNumber() == this.tourDate.tour.availableSpaces) {
+    if (this.getDateDiffer(this.currentDate, this.tourDate.initiateDate) < 3 || this.tourDate.status.id != 2 || this.bookedNumber >= this.tourDate.tour.availableSpaces) {
       window.location.href = "http://localhost:4200/"
     }
   }
 
   validate(num: number): boolean {
-    if ((this.adult + this.children) > (this.tourDate.tour.availableSpaces - this.getBookedCustomerNumber())) {
+    if ((this.adult + this.children) > (this.tourDate.tour.availableSpaces - this.bookedNumber)) {
       this.messageService.clear()
       this.messageService.add({ key: 'warn', severity: 'warn', summary: 'Thông Báo', detail: 'Số Lượng Chỗ Ngồi Không Đủ' })
       return false;

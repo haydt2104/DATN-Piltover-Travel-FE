@@ -32,8 +32,6 @@
                   </button>
                   <i class="text-danger" *ngIf="currentTour.active == false">*Hiện Tour Đã Ngừng Hoạt Động Quý Khách Vui
                     Lòng Chọn Tour Khác</i>
-                  <!-- <button class="btn btn-primary" (click)="open(dateListModal)">Đặt tour</button> -->
-                  <!-- <a href="#" class="btn btn-primary"><i class="fa fa-comments"></i> Liên hệ tư vấn</a> -->
                 </div>
               </div>
             </div>
@@ -203,10 +201,10 @@
             <td>
               {{ tourDateList.endDate | date: 'dd-MM-yyyy' }}
             </td>
-            <td>
+            <td class="text-center">
               {{ getBookedCustomerNumber(tourDateList.id)}}
             </td>
-            <td>
+            <td class="text-center">
               {{ currentTour.availableSpaces - getBookedCustomerNumber(tourDateList.id)}}
             </td>
             <td>
