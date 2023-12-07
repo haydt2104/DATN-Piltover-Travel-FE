@@ -29,7 +29,7 @@ export class DiscountComponent implements OnInit {
   }
 
   getDiscountList(): void {
-    this.discount.ReadAllDiscountsFromAPI().subscribe((data: Discount[]) => {
+    this.discount.ReadAllDiscountsFromAPI1().subscribe((data: Discount[]) => {
       this.discounts = data;
     }),
       (error) => {};

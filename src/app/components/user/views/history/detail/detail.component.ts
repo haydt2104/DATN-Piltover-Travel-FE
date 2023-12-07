@@ -29,7 +29,6 @@ export class DetailComponent implements OnInit {
     this.HistoryService.getDetailHistory(id).subscribe(
       (data: BookingDetail) => {
         this.history = data;
-        console.log(data)
         this.loading=false;
       }
     ),
@@ -37,4 +36,5 @@ export class DetailComponent implements OnInit {
       this.loading=true;
     };
   }
+
 }
