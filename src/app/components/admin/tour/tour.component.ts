@@ -822,7 +822,7 @@ export class TourComponent implements OnInit {
       name: data.value.name,
       price: data.value.price * 1000,
       seatingCapacity: data.value.seatingCapacity,
-      isDelete: data.value.isDelete === true
+      isDelete: data.value.isDelete
     }
     this.curdService.put("transport", transport).subscribe(
       (response) => {
@@ -949,7 +949,7 @@ export class TourComponent implements OnInit {
                   this.confirmDelete('tour', id)
                 } else {
                   this.messageService.clear();
-                  this.messageService.add({ key: 'error', severity: 'error', summary: 'Thông Báo', detail: 'Bảng này đang được sử dụng tại những bảng khác không thể xóa được' });
+                  this.messageService.add({ key: 'error', severity: 'error', summary: 'Thông Báo', detail: 'Tour Đang Có Hình Không Thể Xóa Được' });
                 }
               },
               (error: HttpErrorResponse) => {
@@ -958,7 +958,7 @@ export class TourComponent implements OnInit {
             )
           } else {
             this.messageService.clear();
-            this.messageService.add({ key: 'error', severity: 'error', summary: 'Thông Báo', detail: 'Bảng này đang được sử dụng tại những bảng khác không thể xóa được' })
+            this.messageService.add({ key: 'error', severity: 'error', summary: 'Thông Báo', detail: 'Tour Đã Có Ngày Hoạt Động Không Thể Xóa' })
           }
         },
         (error: HttpErrorResponse) => {
@@ -979,7 +979,7 @@ export class TourComponent implements OnInit {
                   this.confirmDelete('tour_date', id)
                 } else {
                   this.messageService.clear();
-                  this.messageService.add({ key: 'error', severity: 'error', summary: 'Thông Báo', detail: 'Bảng này đang được sử dụng tại những bảng khác không thể xóa được' })
+                  this.messageService.add({ key: 'error', severity: 'error', summary: 'Thông Báo', detail: 'Chuyến Đi Đã Khách Đặt Không Thể Xóa' })
                 }
               },
               (error: HttpErrorResponse) => {
@@ -988,7 +988,7 @@ export class TourComponent implements OnInit {
             )
           } else {
             this.messageService.clear();
-            this.messageService.add({ key: 'error', severity: 'error', summary: 'Thông Báo', detail: 'Bảng này đang được sử dụng tại những bảng khác không thể xóa được' })
+            this.messageService.add({ key: 'error', severity: 'error', summary: 'Thông Báo', detail: 'Chuyến Đi Này Đã Có Kế Hoạch Không Thể Xóa' })
           }
         },
         (error: HttpErrorResponse) => {

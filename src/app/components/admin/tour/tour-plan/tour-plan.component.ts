@@ -45,6 +45,7 @@ export class TourPlanComponent implements OnInit {
   currentTourDate: TourDate = null;
   planList: TourPlan[] = [];
   transportList: Transportation[] = [];
+  transportList2: Transportation[] = [];
   minDate: Date
   maxDate: Date
 
@@ -126,7 +127,8 @@ export class TourPlanComponent implements OnInit {
   public getAllTransport() {
     this.curdService.getList('transport').subscribe(
       (response: Transportation[]) => {
-        this.transportList = response.filter(transport => transport.isDelete == false);
+        this.transportList = response
+        this.transportList2 = response.filter(transport => transport.isDelete == false);
       },
       (error: HttpErrorResponse) => {
         alert(error.message);
@@ -181,7 +183,9 @@ export class TourPlanComponent implements OnInit {
 
   onRowEditSave(tourPlan: TourPlan, index: number) {
     tourPlan.transport = this.transportList.find(transport => transport.id == tourPlan.transport.id);
-    this.planList[index] = tourPlan;
+    if (tourPlan.transport == null) {
+      tourPlan.transport = this.transportList.find(transport => transport.id === this.clonedProducts[tourPlan.id].transport.id);
+    }
     this.curdService.put('tour_plan', tourPlan).subscribe(
       (response) => {
         delete this.clonedProducts[tourPlan.id]
@@ -190,6 +194,8 @@ export class TourPlanComponent implements OnInit {
         this.messageService.add({ key: 'success', severity: 'success', summary: 'Thông Báo', detail: 'Cập nhập thành công' });
       },
       (error: HttpErrorResponse) => {
+        this.clonedProducts[tourPlan.id].startTime.setHours(this.clonedProducts[tourPlan.id].startTime.getHours() + 7)
+        this.planList[index] = this.clonedProducts[tourPlan.id]
         this.messageService.clear();
         this.messageService.add({ key: 'error', severity: 'error', summary: 'Lỗi', detail: 'Cập nhập thất bại vui lòng điền đầy đủ dữ liệu' });
       }

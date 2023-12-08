@@ -41,7 +41,7 @@
               <label class="form-label">Phương tiện khởi hành:</label>
               <select #transport="ngModel" name="transport" class="form-control" ngModel required>
                 <option value="" selected>Chọn phương tiện</option>
-                <option *ngFor="let item of transportList" value="{{item.id}}">{{item.name}}</option>
+                <option *ngFor="let item of transportList2" value="{{item.id}}">{{item.name}}</option>
               </select>
               <small *ngIf="transport.touched && transport.invalid">Phương tiện không hợp lệ</small>
             </div>
@@ -139,7 +139,7 @@
                   <select name="transport" class="form-control" [(ngModel)]="planList.transport.id" required>
                     <option *ngIf="planList.transport.isDelete == true" [value]="planList.transport.id" disabled>
                       {{planList.transport.name}}</option>
-                    <option *ngFor="let item of transportList" value="{{item.id}}">{{item.name}}</option>
+                    <option *ngFor="let item of transportList2" value="{{item.id}}">{{item.name}}</option>
                   </select>
                 </ng-template>
                 <ng-template pTemplate="output" class="text-center">

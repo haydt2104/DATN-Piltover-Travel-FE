@@ -49,7 +49,7 @@ export class DestinationDetailComponent implements OnInit {
     private modalService: NgbModal,
     private formBuilder: FormBuilder,
     private httpClient: HttpClient,
-    private tourImageService: TourImageService
+    private tourImageService: TourImageService,
   ) { }
   responsiveOptions: any[] | undefined;
   currentTour: Tour;
