@@ -48,7 +48,7 @@
           </div>
         </div>
         <div class="modal-footer">
-          <button type="submit" class="btn btn-primary" *ngIf="addForm.valid">Thêm</button>
+          <button type="submit" class="btn btn-info" *ngIf="addForm.valid">Thêm</button>
         </div>
       </form>
     </ng-template>
@@ -72,17 +72,6 @@
       <p-table #dt1 [value]="planList" dataKey="id" [rows]="10" [paginator]="true" editMode="row"
         currentPageReportTemplate="Hiển thị từ bảng {first} đến {last} trong tổng {totalRecords} bảng"
         [globalFilterFields]="['startName', 'startAddress', 'transport.name']">
-        <!-- <ng-template pTemplate="caption">
-          <div class="flex">
-            <form [formGroup]="formFilter">
-              <span class="p-input-icon-left ml-auto">
-                <input pInputText type="text" (change)="dt1.filterGlobal(getValueSearch(), 'contains')"
-                  formControlName="search" class="form-control box-shadow-none" placeholder="Tìm kiếm"
-                  aria-label="Example text with button addon" aria-describedby="button-search">
-              </span>
-            </form>
-          </div>
-        </ng-template> -->
         <ng-template pTemplate="header" class="theader">
           <tr class="text-center">
             <th pSortableColumn="startName" style="width:20%">Điểm đến<p-sortIcon field="startName"></p-sortIcon>
@@ -94,6 +83,33 @@
             </th>
             <th pSortableColumn="transport.name" style="width:18%">Phương tiện<p-sortIcon
                 field="transport.name"></p-sortIcon></th>
+            <th></th>
+          </tr>
+          <tr>
+            <th>
+              <p-columnFilter type="text" field="startName"></p-columnFilter>
+            </th>
+            <th>
+              <p-columnFilter type="text" field="startAddress"></p-columnFilter>
+            </th>
+            <th>
+              <p-columnFilter type="text" field="startTime"></p-columnFilter>
+            </th>
+            <th>
+              <p-columnFilter field="transport" matchMode="in" [showMenu]="false">
+                <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                  <p-multiSelect [ngModel]="value" appendTo="body" [options]="transportList" placeholder="Any"
+                    (onChange)="filter($event.value)" optionLabel="name" [maxSelectedLabels]="1"
+                    [selectedItemsLabel]="'{0} items'">
+                    <ng-template let-option pTemplate="item">
+                      <div class="p-multiselect-representative-option">
+                        <span class="ml-1">{{option.name}}</span>
+                      </div>
+                    </ng-template>
+                  </p-multiSelect>
+                </ng-template>
+              </p-columnFilter>
+            </th>
             <th></th>
           </tr>
         </ng-template>

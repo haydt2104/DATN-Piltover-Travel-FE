@@ -127,7 +127,7 @@
           </div>
         </div>
         <div class="modal-footer">
-          <button type="submit" class="btn btn-primary" (click)="modal.close()"
+          <button type="submit" class="btn btn-info" (click)="modal.close()"
             *ngIf="checkValid('tour',addTourForm)">Thêm</button>
         </div>
       </form>
@@ -324,14 +324,27 @@
             </div>
           </ng-template>
           <ng-template pTemplate="header" class="theader">
-            <tr>
-              <th pSortableColumn="initiateDate" style="width:25%">Thời điểm khởi hành<p-sortIcon
+            <tr class="text-center">
+              <th pSortableColumn="initiateDate" style="width:20%">Thời điểm khởi hành<p-sortIcon
                   field="initiateDate"></p-sortIcon></th>
-              <th pSortableColumn="endDate" style="width:25%">Thời điểm kết thúc<p-sortIcon
+              <th pSortableColumn="endDate" style="width:20%">Thời điểm kết thúc<p-sortIcon
                   field="endDate"></p-sortIcon></th>
               <th pSortableColumn="status.name" style="width:20%">Trạng thái<p-sortIcon
                   field="status.name"></p-sortIcon>
+              <th style="width:18%">Giai Đoạn</th>
+              <th></th>
+            </tr>
+            <tr>
+              <th>
+                <p-columnFilter type="text" field="initiateDate"></p-columnFilter>
               </th>
+              <th>
+                <p-columnFilter type="text" field="endDate"></p-columnFilter>
+              </th>
+              <th>
+                <p-columnFilter type="text" field="status.name"></p-columnFilter>
+              </th>
+              <th></th>
               <th></th>
             </tr>
           </ng-template>
@@ -371,19 +384,26 @@
                   </ng-template>
                 </p-cellEditor>
               </td>
+              <td class="text-center">
+                <i *ngIf="dateStatus(tourDateList) == 0" class="text-danger">Chưa Công Khai</i>
+                <i *ngIf="dateStatus(tourDateList) == 1" style="color: blue">Chưa Diễn Ra</i>
+                <i *ngIf="dateStatus(tourDateList) == 2" class="text-warning">Đang Diễn Ra</i>
+                <i *ngIf="dateStatus(tourDateList) == 3" class="text-success">Đã Diễn Ra</i>
+              </td>
               <td>
                 <div class="button-group">
-                  <button pButton pRipple *ngIf="!editing" class="btn btn-info"
+                  <button pButton pRipple *ngIf="!editing" class="btn btn-info btn-sm"
                     [routerLink]="['/admin/tour/date/'+tourDateList.id]" (click)="modal.close()" icon="pi pi-book">Kế
                     Hoạch</button>
                   <button pButton pRipple
                     *ngIf="!editing && tourDateList.status.id == 2 && bookingList && getBooking(tourDateList.id).length > 0"
-                    class="btn btn-info" (click)="open('booking',tourDateList.id)" icon="pi pi-book">Booking</button>
+                    class="btn btn-info btn-sm" (click)="open('booking',tourDateList.id)"
+                    icon="pi pi-book">Booking</button>
                   <button
                     *ngIf="!editing && tourDateList.status.id != 3 && bookingList && getBooking(tourDateList.id).length == 0 && getDateDiffer(tourDateList.initiateDate) > 7"
                     pButton pRipple type="button" pInitEditableRow icon="pi pi-pencil"
-                    (click)="onRowEditInit(tourDateList)" class="btn btn-warning">Sửa</button>
-                  <button pButton pRipple *ngIf="!editing && tourDateList.status.id == 1" class="btn btn-danger"
+                    (click)="onRowEditInit(tourDateList)" class="btn btn-warning btn-sm">Sửa</button>
+                  <button pButton pRipple *ngIf="!editing && tourDateList.status.id == 1" class="btn btn-danger btn-sm"
                     (click)="checkDeleteable('date',tourDateList.id)" icon="pi pi-times-circle">Xóa</button>
                   <button *ngIf="editing" pButton pRipple type="button" pSaveEditableRow icon="pi pi-check"
                     (click)="onRowEditSave(tourDateList, ri)"
@@ -483,10 +503,25 @@
           currentPageReportTemplate="Hiển thị từ bảng {first} đến {last} trong tổng {totalRecords} bảng">
           <ng-template pTemplate="header" class="theader">
             <tr class="text-center">
-              <th pSortableColumn="name" style="width: 25%">Tên Khách Sạn<p-sortIcon field="name"></p-sortIcon></th>
-              <th pSortableColumn="price" style="width: 10%">Giá<p-sortIcon field="price"></p-sortIcon></th>
-              <th pSortableColumn="star" style="width: 10%">Sao<p-sortIcon field="star"></p-sortIcon></th>
-              <th pSortableColumn="address" style="width: 40%">Địa Chỉ<p-sortIcon field="address"></p-sortIcon></th>
+              <th pSortableColumn="name" style="width: 20%">Tên Khách Sạn<p-sortIcon field="name"></p-sortIcon></th>
+              <th pSortableColumn="price" style="width: 20%">Giá<p-sortIcon field="price"></p-sortIcon></th>
+              <th pSortableColumn="star" style="width: 16%">Sao<p-sortIcon field="star"></p-sortIcon></th>
+              <th pSortableColumn="address" style="width: 30%">Địa Chỉ<p-sortIcon field="address"></p-sortIcon></th>
+              <th></th>
+            </tr>
+            <tr>
+              <th>
+                <p-columnFilter type="text" field="name"></p-columnFilter>
+              </th>
+              <th>
+                <p-columnFilter type="text" field="price"></p-columnFilter>
+              </th>
+              <th>
+                <p-columnFilter type="text" field="star"></p-columnFilter>
+              </th>
+              <th>
+                <p-columnFilter type="text" field="address"></p-columnFilter>
+              </th>
               <th></th>
             </tr>
           </ng-template>
@@ -502,11 +537,12 @@
                 {{hotelList.star}}
               </td>
               <td>
-                {{hotelList.address}} VNĐ
+                {{hotelList.address}}
               </td>
               <td class="button-group">
-                <button pButton class="btn btn-warning" (click)="open('editHotel', hotelList.id)">Sửa</button>
-                <button pButton class="btn btn-danger" (click)="checkDeleteable('hotel', hotelList.id)">Xóa</button>
+                <button pButton class="btn btn-warning btn-sm" (click)="open('editHotel', hotelList.id)">Sửa</button>
+                <button pButton class="btn btn-danger btn-sm"
+                  (click)="checkDeleteable('hotel', hotelList.id)">Xóa</button>
               </td>
             </tr>
           </ng-template>
@@ -567,7 +603,7 @@
           </div>
         </div>
         <div class="modal-footer">
-          <button type="submit" class="btn btn-primary" (click)="modal.close()"
+          <button type="submit" class="btn btn-info" (click)="modal.close()"
             *ngIf="checkValid('hotel',addHotelForm)">Thêm</button>
         </div>
       </form>
@@ -656,10 +692,24 @@
           currentPageReportTemplate="Hiển thị từ bảng {first} đến {last} trong tổng {totalRecords} bảng">
           <ng-template pTemplate="header" class="theader">
             <tr class="text-center">
-              <th pSortableColumn="name">Tên Phương Tiện<p-sortIcon field="name"></p-sortIcon></th>
-              <th pSortableColumn="seatingCapacity">Sức Chứa<p-sortIcon field="seatingCapacity"></p-sortIcon></th>
-              <th pSortableColumn="price">Giá<p-sortIcon field="price"></p-sortIcon></th>
-              <th pSortableColumn="isDelete">Trạng Thái<p-sortIcon field="isDelete"></p-sortIcon></th>
+              <th pSortableColumn="name" style="width:25%">Tên Phương Tiện<p-sortIcon field="name"></p-sortIcon></th>
+              <th pSortableColumn="seatingCapacity" style="width:20%">Sức Chứa<p-sortIcon
+                  field="seatingCapacity"></p-sortIcon></th>
+              <th pSortableColumn="price" style="width:20%">Giá<p-sortIcon field="price"></p-sortIcon></th>
+              <th pSortableColumn="isDelete" style="width:20%">Trạng Thái<p-sortIcon field="isDelete"></p-sortIcon></th>
+              <th></th>
+            </tr>
+            <tr>
+              <th>
+                <p-columnFilter type="text" field="name"></p-columnFilter>
+              </th>
+              <th>
+                <p-columnFilter type="text" field="seatingCapacity"></p-columnFilter>
+              </th>
+              <th>
+                <p-columnFilter type="text" field="price"></p-columnFilter>
+              </th>
+              <th></th>
               <th></th>
             </tr>
           </ng-template>
@@ -672,14 +722,15 @@
                 {{transportList.seatingCapacity | number}} Người
               </td>
               <td class="text-center">
-                {{transportList.price | number}}
+                {{transportList.price | number}} VNĐ
               </td>
               <td class="text-center">
                 {{transportList.isDelete ? 'Ngừng Hoạt Động' : 'Còn Hoạt Động'}}
               </td>
               <td class="button-group">
-                <button pButton class="btn btn-warning" (click)="open('editTransport', transportList.id)">Sửa</button>
-                <button pButton class="btn btn-danger"
+                <button pButton class="btn btn-warning btn-sm"
+                  (click)="open('editTransport', transportList.id)">Sửa</button>
+                <button pButton class="btn btn-danger btn-sm"
                   (click)="checkDeleteable('transport', transportList.id)">Xóa</button>
               </td>
             </tr>
@@ -723,7 +774,7 @@
           </div>
         </div>
         <div class="modal-footer">
-          <button type="submit" class="btn btn-primary" (click)="modal.close()"
+          <button type="submit" class="btn btn-info" (click)="modal.close()"
             *ngIf="checkValid('transport',addTransportForm)">Thêm</button>
         </div>
       </form>
@@ -785,16 +836,6 @@
         [paginator]="true"
         currentPageReportTemplate="Hiển thị từ bảng {first} đến {last} trong tổng {totalRecords} bảng"
         [globalFilterFields]="['name']" [tableStyle]="{'min-width': '80rem'}">
-        <ng-template pTemplate="caption">
-          <div class="flex">
-            <form [formGroup]="formFilter">
-              <span class="p-input-icon-left ml-auto">
-                <input pInputText type="text" (change)="dt1.filterGlobal(getValueSearch(), 'contains')"
-                  formControlName="search" class="form-control box-shadow-none" placeholder="Tìm kiếm Tour">
-              </span>
-            </form>
-          </div>
-        </ng-template>
         <ng-template pTemplate="header" class="theader">
           <tr class="text-center">
             <th pSortableColumn="name" style="width:20%">Tên Tour<p-sortIcon field="name"></p-sortIcon></th>
@@ -807,6 +848,49 @@
             </th>
             <th></th>
           </tr>
+          <tr>
+            <th>
+              <p-columnFilter type="text" field="name"></p-columnFilter>
+            </th>
+            <th>
+              <p-columnFilter type="text" field="destinationAddress"></p-columnFilter>
+            </th>
+            <th>
+              <p-columnFilter field="active" matchMode="in" [showMenu]="false">
+                <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                  <p-multiSelect [ngModel]="value" appendTo="body" [options]='[true,false]' placeholder="Any"
+                    (onChange)="filter($event.value)" optionLabel="" [maxSelectedLabels]="1"
+                    [selectedItemsLabel]="'{0} items'">
+                    <ng-template let-option pTemplate="item">
+                      <div class="p-multiselect-representative-option">
+                        <span class="ml-1" *ngIf="option == true">Công Khai</span>
+                        <span class="ml-1" *ngIf="option == false">Ẩn</span>
+                      </div>
+                    </ng-template>
+                  </p-multiSelect>
+                </ng-template>
+              </p-columnFilter>
+            </th>
+            <th>
+              <p-columnFilter type="text" field="availableSpaces"></p-columnFilter>
+            </th>
+            <th>
+              <p-columnFilter field="transport" matchMode="in" [showMenu]="false">
+                <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                  <p-multiSelect [ngModel]="value" appendTo="body" [options]="transportList" placeholder="Any"
+                    (onChange)="filter($event.value)" optionLabel="name" [maxSelectedLabels]="1"
+                    [selectedItemsLabel]="'{0} items'">
+                    <ng-template let-option pTemplate="item">
+                      <div class="p-multiselect-representative-option">
+                        <span class="ml-1">{{option.name}}</span>
+                      </div>
+                    </ng-template>
+                  </p-multiSelect>
+                </ng-template>
+              </p-columnFilter>
+            </th>
+            <th></th>
+          </tr>
         </ng-template>
         <ng-template pTemplate="body" class="tbody" let-tourList>
           <tr>
@@ -816,17 +900,17 @@
             <td class="text-center">{{ tourList.availableSpaces}}</td>
             <td class="text-center">{{ tourList.transport.name}}</td>
             <td class="button-group">
-              <button pButton class="btn btn-info" (click)="open('date', tourList.id)"
+              <button pButton class="btn btn-info btn-sm" (click)="open('date', tourList.id)"
                 icon="pi pi-calendar">Ngày</button>
-              <button pButton class="btn btn-primary" (click)="open('image', tourList.id)"
+              <button pButton class="btn btn-primary btn-sm" (click)="open('image', tourList.id)"
                 icon="pi pi-calendar">Ảnh</button>
-              <button pButton class="btn btn-warning" (click)="open('editTour', tourList.id)"
+              <button pButton class="btn btn-warning btn-sm" (click)="open('editTour', tourList.id)"
                 icon="pi pi-file-edit">Sửa</button>
-              <button pButton class="btn btn-success" (click)="updateActive(tourList)" icon="pi pi-eye"
+              <button pButton class="btn btn-success btn-sm" (click)="updateActive(tourList)" icon="pi pi-eye"
                 *ngIf="tourList.active == false">Hiện</button>
-              <button pButton class="btn btn-danger" (click)="updateActive(tourList)" icon="pi pi-eye-slash"
+              <button pButton class="btn btn-danger btn-sm" (click)="updateActive(tourList)" icon="pi pi-eye-slash"
                 *ngIf="tourList.active != false">ẨN</button>
-              <button pButton class="btn btn-danger" (click)="checkDeleteable('tour',tourList.id)"
+              <button pButton class="btn btn-danger btn-sm" (click)="checkDeleteable('tour',tourList.id)"
                 icon="pi pi-times-circle">Xóa</button>
             </td>
           </tr>

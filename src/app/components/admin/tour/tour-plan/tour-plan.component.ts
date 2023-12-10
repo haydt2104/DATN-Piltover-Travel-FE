@@ -16,6 +16,7 @@ import { CurdService } from 'src/app/services/curd.service';
 import { TourPlanService } from 'src/app/services/tour/tour-plan.service';
 import { TourPlanDetailService } from '../../../../services/tour/tour-plan-detail.service';
 import { TourPlan } from './../../../../models/tour-plan.model';
+import { MultiSelectModule } from 'primeng/multiselect';
 
 
 @Component({
@@ -34,7 +35,8 @@ import { TourPlan } from './../../../../models/tour-plan.model';
     ButtonModule,
     CalendarModule,
     InputTextModule,
-    ToastModule
+    ToastModule,
+    MultiSelectModule
   ],
   providers: [MessageService]
 })

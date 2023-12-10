@@ -42,7 +42,7 @@
           </div>
         </div>
         <div class="modal-footer">
-          <button type="submit" class="btn btn-info" [disabled]="checkValid(addForm)">Thêm</button>
+          <button type="submit" class="btn btn-info" *ngIf="checkValid(addForm)">Thêm</button>
         </div>
       </form>
     </ng-template>
@@ -65,23 +65,24 @@
       <p-table #dt1 [value]="planDetailList" dataKey="id" [rows]="10" [paginator]="true" editMode="row"
         currentPageReportTemplate="Hiển thị từ bảng {first} đến {last} trong tổng {totalRecords} bảng"
         [globalFilterFields]="['startName', 'startAddress', 'transport.name']" [tableStyle]="{'min-width': '50rem'}">
-        <!-- <ng-template pTemplate="caption">
-          <div class="flex">
-            <form [formGroup]="formFilter">
-              <span class="p-input-icon-left ml-auto">
-                <input pInputText type="text" (change)="dt1.filterGlobal(getValueSearch(), 'contains')"
-                  formControlName="search" class="form-control box-shadow-none" placeholder="Tìm kiếm"
-                  aria-label="Example text with button addon" aria-describedby="button-search">
-              </span>
-            </form>
-          </div>
-        </ng-template> -->
         <ng-template pTemplate="header" class="theader">
           <tr>
             <th pSortableColumn="description" style="width: 500px;">Mô tả<p-sortIcon field="description"></p-sortIcon>
             </th>
             <th pSortableColumn="startTime" style="width: 200px;">Từ<p-sortIcon field="startTime"></p-sortIcon></th>
             <th pSortableColumn="endTime" style="width: 200px;">Đến<p-sortIcon field="endTime"></p-sortIcon></th>
+            <th></th>
+          </tr>
+          <tr>
+            <th>
+              <p-columnFilter type="text" field="description"></p-columnFilter>
+            </th>
+            <th>
+              <p-columnFilter type="text" field="startTime"></p-columnFilter>
+            </th>
+            <th>
+              <p-columnFilter type="text" field="endTime"></p-columnFilter>
+            </th>
             <th></th>
           </tr>
         </ng-template>

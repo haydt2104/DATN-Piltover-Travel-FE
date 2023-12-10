@@ -39,6 +39,7 @@ import { TourService } from 'src/app/services/tour/tour.service';
 import { TourImageService } from '../../../services/tour/tour-image.service';
 import { TourDate } from './../../../models/tour-date.model';
 import { CurdService } from './../../../services/curd.service';
+import { MultiSelectModule } from 'primeng/multiselect';
 
 @Component({
   selector: 'app-tour',
@@ -59,7 +60,8 @@ import { CurdService } from './../../../services/curd.service';
     CalendarModule,
     ToastModule,
     ProgressSpinnerModule,
-    ProgressBarModule
+    ProgressBarModule,
+    MultiSelectModule
   ],
   providers: [MessageService]
 })
@@ -552,6 +554,23 @@ export class TourComponent implements OnInit {
           }
         )
       }
+    }
+  }
+
+  public dateStatus(tourDate: TourDate) {
+    let initiateDate = new Date(tourDate.initiateDate)
+    initiateDate.setHours(initiateDate.getHours() - 7)
+    let endDate = new Date(tourDate.endDate)
+    endDate.setHours(endDate.getHours() + 16)
+    endDate.setMinutes(59);
+    if (tourDate.status.id != 2) {
+      return 0;
+    } else if (tourDate.status.id == 2 && new Date().getTime() < initiateDate.getTime()) {
+      return 1;
+    } else if (tourDate.status.id == 2 && new Date().getTime() >= initiateDate.getTime() && new Date().getTime() <= endDate.getTime()) {
+      return 2;
+    } else {
+      return 3;
     }
   }
 

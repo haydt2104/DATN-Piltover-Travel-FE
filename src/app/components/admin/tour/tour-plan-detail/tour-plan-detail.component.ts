@@ -8,6 +8,7 @@ import { MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { CalendarModule } from 'primeng/calendar';
 import { InputTextModule } from 'primeng/inputtext';
+import { MultiSelectModule } from 'primeng/multiselect';
 import { TableModule } from 'primeng/table';
 import { ToastModule } from 'primeng/toast';
 import { TourPlanDetail } from 'src/app/models/tour-plan-detail.model';
@@ -30,7 +31,8 @@ import { TourPlanDetailService } from 'src/app/services/tour/tour-plan-detail.se
     ButtonModule,
     ToastModule,
     CalendarModule,
-    InputTextModule
+    InputTextModule,
+    MultiSelectModule
   ],
   providers: [MessageService]
 })
@@ -205,9 +207,9 @@ export class TourPlanDetailComponent implements OnInit {
 
   checkValid(data: NgForm) {
     if (data.valid && $('#startTime').val() < $('#endTime').val()) {
-      return false
-    } else {
       return true
+    } else {
+      return false
     }
   }
 }
