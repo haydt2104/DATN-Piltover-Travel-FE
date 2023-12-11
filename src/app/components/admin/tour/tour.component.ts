@@ -479,7 +479,6 @@ export class TourComponent implements OnInit {
     this.tourDateService.getTourDateByTourId(id).subscribe(
       (response: TourDate[]) => {
         this.tourDateList = response;
-        setInterval(() => this.autoUpdateTourDateStatus(), 1000)
       },
       (error: HttpErrorResponse) => {
         console.log(error.message);
@@ -544,9 +543,9 @@ export class TourComponent implements OnInit {
   public autoUpdateTourDateStatus() {
     for (var i = 0; i < this.tourDateList.length; i++) {
       var dateDif = this.getDateDiffer(this.tourDateList[i].initiateDate)
-      if (dateDif < 7 && this.tourDateList[i].status.id != 2) {
+      if (dateDif < 7 && this.tourDateList[i].status.id == 1) {
         this.tourDateList[i].status = this.statusList.find(status => status.id == 3);
-        this.curdService.put('tour_date', this.tourDateList[i]).subscribe(
+        this.tourDateService.putTourDate(this.tourDateList[i]).subscribe(
           (response) => {
           },
           (error: HttpErrorResponse) => {
@@ -929,7 +928,7 @@ export class TourComponent implements OnInit {
 
   onRowEditSave(tourDate: TourDate, index: number) {
     this.tourDateList[index] = tourDate;
-    this.curdService.put('tour_date', tourDate).subscribe(
+    this.tourDateService.putTourDate(tourDate).subscribe(
       (response: TourDate) => {
         delete this.clonedProducts[tourDate.id]
         this.getTourDateList(this.editTour.id)

@@ -15,4 +15,8 @@ export class TourDateService {
   public getTourDateByTourId(id: number): Observable<TourDate[]> {
     return this.http.get<TourDate[]>(`http://localhost:8080/api/tour_date?tourId=${id}`);
   }
+
+  public putTourDate(tourDate: TourDate) {
+    return this.http.put(`http://localhost:8080/api/tour_date`, tourDate);
+  }
 }
