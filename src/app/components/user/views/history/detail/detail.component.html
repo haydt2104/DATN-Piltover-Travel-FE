@@ -33,15 +33,12 @@
                 <span class="font-weight-bold">Chi phí: </span>
                 <span class="text-danger">{{history.booking.totalPrice| number}} VNĐ
                 </span> -
-                <span
-                    [ngSwitch]="history.booking.status">
-                    <span *ngSwitchCase="0" class="text-warning">Chưa thanh toán</span>
-                    <span *ngSwitchCase="1" class="text-success">Đã thanh toán</span>
-                    <span *ngSwitchCase="2" class="text-danger">Đã hủy</span>
-                  </span>
+                <span [ngSwitch]="history.booking.status">
+                  <span *ngSwitchCase="0" class="text-warning">Chưa thanh toán</span>
+                  <span *ngSwitchCase="1" class="text-success">Đã thanh toán</span>
+                  <span *ngSwitchCase="2" class="text-danger">Đã hủy</span>
+                </span>
               </li>
-
-
 
               <li><span class="font-weight-bold">Ngày khởi hành:</span>
                 {{history.booking.tourDate.initiateDate|date:'dd-MM-yyyy'}}
@@ -61,8 +58,19 @@
 
               <li><span class="font-weight-bold">Người lớn:</span> {{history.adult}} người</li>
 
-              <li><span class="font-weight-bold">Người trẻ em:</span> {{history.children}} người</li>
-              <li><span class="font-weight-bold">Mô tả tour: </span><span>{{history.booking.tourDate.tour.description}}</span>
+              <li><span class="font-weight-bold">Trẻ em:</span> {{history.children}} người</li>
+              <li><span class="font-weight-bold">Mô tả tour:
+                </span><span>{{history.booking.tourDate.tour.description}}</span>
+              </li>
+
+              <li *ngIf="history.booking.status == 0">
+                <b>Thanh Toán:</b>
+                <button class="btn btn-paypal" (click)="toPayment(1)"><img
+                    src="../../../../../assets/images/logos/paypal.png" width="20px" alt="paypal icon">
+                  Paypal</button>
+                <button class="btn btn-vnpay" (click)="toPayment(2)"><img
+                    src="../../../../../assets/images/logos/vnpay.png" width="20px" alt="vnpay icon">
+                  VNPay</button>
               </li>
             </ul>
           </div>

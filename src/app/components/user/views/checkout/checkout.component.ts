@@ -58,7 +58,6 @@ export class CheckoutComponent implements OnInit {
   currentUser: Account;
   tourDate: TourDate;
   tourImageList: TourImage[];
-  discountList: Discount[] = [];
   currentDate: Date = new Date();
   booking: Booking
   bookingDetail: BookingDetail
@@ -134,7 +133,6 @@ export class CheckoutComponent implements OnInit {
     //     this.router.navigate([''])
     //   }
     // ), 1000)
-    this.getDiscountList()
   }
 
   public getImage(tourId: number) {
@@ -144,17 +142,6 @@ export class CheckoutComponent implements OnInit {
       },
       (error) => {
         console.log(error.message)
-      }
-    )
-  }
-
-  public getDiscountList() {
-    this.discountService.ReadAllDiscountsFromAPI().subscribe(
-      (response: Discount[]) => {
-        this.discountList = response
-      },
-      (error: HttpErrorResponse) => {
-        console.log(error.message);
       }
     )
   }
@@ -225,19 +212,24 @@ export class CheckoutComponent implements OnInit {
   }
 
   applyDiscount() {
-    var dis = this.discountList.find(discount => discount.code == $('#discount').val())
-    if (dis && dis.isDelete == false && this.subTotal >= dis.min) {
-      this.discount = dis
-      this.changeData()
-      this.messageService.clear()
-      this.messageService.add({ key: 'success', severity: 'success', summary: 'Thông Báo', detail: 'Thêm mã giảm giá thành công' })
-    } else if (dis && dis.isDelete == false && this.subTotal < dis.min) {
-      this.messageService.clear()
-      this.messageService.add({ key: 'warn', severity: 'warn', summary: 'Thông Báo', detail: 'Số tiền phải từ ' + dis.min.toLocaleString() + ' VNĐ để có thể sử dụng được mã giảm giá' })
-    } else {
-      this.messageService.clear()
-      this.messageService.add({ key: 'warn', severity: 'warn', summary: 'Thông Báo', detail: 'Mã giảm giá không hợp lệ' })
-    }
+    this.discountService.getDiscountByCode($('#discount').val().toString()).subscribe(
+      (response) => {
+        var dis = response
+        if (dis && dis.isDelete == false && this.subTotal >= dis.min) {
+          this.discount = dis
+          this.changeData()
+          this.messageService.clear()
+          this.messageService.add({ key: 'success', severity: 'success', summary: 'Thông Báo', detail: 'Thêm mã giảm giá thành công' })
+        } else if (dis && dis.isDelete == false && this.subTotal < dis.min) {
+          this.messageService.clear()
+          this.messageService.add({ key: 'info', severity: 'info', summary: 'Thông Báo', detail: 'Số tiền phải từ ' + dis.min.toLocaleString() + ' VNĐ để có thể sử dụng được mã giảm giá' })
+        } else {
+          this.messageService.clear()
+          this.messageService.add({ key: 'warn', severity: 'warn', summary: 'Thông Báo', detail: 'Mã giảm giá không hợp lệ' })
+        }
+      }
+    )
+
   }
 
   openConfirm() {
