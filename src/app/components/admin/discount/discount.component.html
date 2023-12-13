@@ -5,21 +5,53 @@
       <button class="btn btn-success" [routerLink]="['/admin/manage/discount/insert']">Thêm</button>
     </div>
     <div class="table-responsive">
-      <table class="table table-hover table-bordered">
-          <caption> <pagination-controls (pageChange)="p = $event" nextLabel="Sau"
-              previousLabel="Trước"></pagination-controls></caption>
-        <thead class="text-center">
-          <th class="col-md-1">ID</th>
-          <th class="col-md-2">Tên mã</th>
-          <th class="col-md-2">Số phần trăm giảm</th>
-          <th class="col-md-1">Số lượng</th>
-          <th class="col-md-2">Mã định dạng</th>
-          <th class="col-md-1">Trạng thái</th>
-          <th class="col-md-1"></th>
-          <th class="col-md-1"></th>
-        </thead>
-        <tbody>
-          <tr *ngFor="let d of discounts | paginate: { itemsPerPage: itemsPerPage, currentPage: p }">
+      <p-table #dt [value]="discounts" (sortFunction)="customSort($event)" [customSort]="true"
+        [tableStyle]="{'min-width': '80rem'}" [paginator]="true" [rows]="5" [rowsPerPageOptions]="[5, 10, 20]"
+        [showCurrentPageReport]="true"
+        currentPageReportTemplate="Hiển thị từ {first} đến {last} trong tổng {totalRecords} mã giảm giám"
+        [globalFilterFields]="['name', 'percentage', 'amount']">
+
+        <ng-template pTemplate="caption">
+          <div class="flex">
+            <span class="p-input-icon-left ml-auto">
+              <i class="pi pi-search"></i>
+              <!-- <input pInputText type="text" (input)="applyFilterGlobal($event, 'contains')" placeholder="Tìm theo tên" /> -->
+              <input pInputText type="text" (input)="dt.filterGlobal($any($event.target).value, 'contains')"
+                placeholder="Tìm theo tên mã, số phần trăm giảm, số lượng" />
+            </span>
+          </div>
+        </ng-template>
+
+        <ng-template pTemplate="header">
+          <tr>
+            <th pSortableColumn="id" class="text-center">
+              ID
+              <p-sortIcon field="id"></p-sortIcon>
+            </th>
+
+            <th pSortableColumn="name" class="text-center">
+              Tên mã
+              <p-sortIcon field="name"></p-sortIcon>
+            </th>
+            <th pSortableColumn="percentage" class="text-center">
+              Số phần trăm giảm
+              <p-sortIcon field="percentage"></p-sortIcon>
+            </th>
+            <th pSortableColumn="amount" class="text-center ">
+              Số lượng
+              <p-sortIcon field="amount"></p-sortIcon>
+            </th>
+            <th class="text-center">
+              Mã định dạng
+            </th>
+            <th pSortableColumn="isDelete" class="text-center">Trạng thái <p-sortIcon field="isDelete"></p-sortIcon></th>
+            <th class=""></th>
+            <th class=""></th>
+          </tr>
+
+        </ng-template>
+        <ng-template pTemplate="body" let-d>
+          <tr>
             <td class="text-left">DISC_{{d.id}}</td>
             <td class="text-left">{{d.name}}</td>
             <td class="text-center">{{d.percentage}}%</td>
@@ -39,9 +71,13 @@
             </td>
 
           </tr>
-
-        </tbody>
-      </table>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+          <tr>
+            <td colspan="8" class="text-center">Không có kết quả giống với yêu cầu của bạn.</td>
+          </tr>
+        </ng-template>
+      </p-table>
     </div>
   </div>
 </section>
