@@ -3,6 +3,7 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import Swal from 'sweetalert2';
+import { CustomValidators } from 'src/app/components/user/authorizations/validators';
 
 @Component({
   selector: 'app-sign-up',
@@ -19,16 +20,24 @@ export class SignUpComponent implements OnInit {
   ) {}
   ngOnInit(): void {
     this.submitted = false;
-    this.formSignUpDataReq = this.formBuilder.group({
-      email: ['', Validators.required],
-      phone: ['', Validators.required],
-      fullname: ['', Validators.required],
-      birthday: ['2001-01-01', Validators.required],
-      gender: [true, Validators.required],
-      address: ['', Validators.required],
-      password: ['', Validators.required],
-      confirmPass: ['', Validators.required],
-    });
+    this.formSignUpDataReq = this.formBuilder.group(
+      {
+        email: ['', Validators.required],
+        phone: ['', Validators.required],
+        fullname: ['', Validators.required],
+        birthday: ['2001-01-01', Validators.required],
+        gender: [true, Validators.required],
+        address: ['', Validators.required],
+        password: ['', Validators.required],
+        confirmPass: ['', Validators.required],
+      },
+      {
+        validator: CustomValidators.matchPasswordValidator(
+          'password',
+          'confirmPass'
+        ),
+      }
+    );
   }
 
   public signUp() {
