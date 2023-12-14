@@ -313,16 +313,6 @@
           [sortOrder]=-1 dataKey="id" [rows]="10" [showCurrentPageReport]="true" [paginator]="true" editMode="row"
           currentPageReportTemplate="Hiển thị từ bảng {first} đến {last} trong tổng {totalRecords} bảng"
           [globalFilterFields]="['initiateDate']">
-          <ng-template pTemplate="caption">
-            <div class="flex">
-              <form [formGroup]="formFilter">
-                <span class="p-input-icon-left ml-auto">
-                  <input pInputText type="text" (change)="dt2.filterGlobal(getValueSearch(), 'contains')"
-                    formControlName="search" class="form-control box-shadow-none" placeholder="Tìm kiếm">
-                </span>
-              </form>
-            </div>
-          </ng-template>
           <ng-template pTemplate="header" class="theader">
             <tr class="text-center">
               <th pSortableColumn="initiateDate" style="width:20%">Thời điểm khởi hành<p-sortIcon
