@@ -45,6 +45,11 @@ import { LoginComponent } from './components/user/authorizations/login/login.com
 import { AuthInterceptor } from './interceptor/auth.interceptor';
 import { LoadingInterceptor } from './loading.interceptor';
 import { SignUpComponent } from './components/user/authorizations/sign-up/sign-up.component';
+import { TableModule } from 'primeng/table';
+import { MultiSelectModule } from 'primeng/multiselect';
+import { InputTextModule } from 'primeng/inputtext';
+import { SliderModule } from 'primeng/slider';
+import { DropdownModule } from 'primeng/dropdown';
 
 @NgModule({
   declarations: [
@@ -83,6 +88,12 @@ import { SignUpComponent } from './components/user/authorizations/sign-up/sign-u
     MatPaginatorModule,
     GalleriaModule,
     ProgressSpinnerModule,
+    TableModule,
+    MultiSelectModule,
+    InputTextModule,
+    SliderModule,
+    DropdownModule,
+
   ],
   providers: [
     {

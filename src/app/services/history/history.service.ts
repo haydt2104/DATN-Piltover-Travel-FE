@@ -24,4 +24,8 @@ export class HistoryService {
       `${this.baseUrl}api/user/history?detail=${id}`
     );
   }
+
+  cancelBooking(bid: number): Observable<void> {
+    return this.http.delete<void>(this.baseUrl + 'api/admin/booking/cancel/' + bid);
+  }
 }
