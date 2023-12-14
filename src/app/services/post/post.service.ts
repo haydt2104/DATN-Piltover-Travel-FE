@@ -27,7 +27,9 @@ export class PostService {
     return this.http.get<Post>(this.baseUrl + 'api/post/getPostById/' + id)
   }
 
-
+  public getIdUserCmt(): Observable<any>{
+    return this.http.get<any>(this.baseUrl + 'api/post/getIdUserCmt')
+  }
 
   public updatePostById(data: any, id: any): Observable<any>{
     return this.http.put<number>(this.baseUrl + 'api/admin/post/updatePost/' + id, data);
