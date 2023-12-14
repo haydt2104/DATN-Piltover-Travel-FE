@@ -42,10 +42,10 @@ export class BookingService {
   }
 
   getOutDatedList(): Observable<number[]> {
-    return this.http.get<number[]>('http://localhost:8080/api/booking/outdated')
+    return this.http.get<number[]>(`${this.baseUrl}api/booking/outdated`)
   }
 
   editOutDated(list: number[]) {
-    return this.http.put('http://localhost:8080/api/booking/outdated', list);
+    return this.http.put(`${this.baseUrl}api/booking/outdated`, list);
   }
 }
