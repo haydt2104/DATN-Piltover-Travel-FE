@@ -86,6 +86,7 @@ export class AppComponent implements OnInit {
           console.log(error.message);
         }
       )
+      this.currentDate = new Date();
     } else {
       this.currentDate = new Date();
     }
