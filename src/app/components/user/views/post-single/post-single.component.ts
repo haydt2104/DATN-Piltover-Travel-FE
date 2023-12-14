@@ -29,6 +29,7 @@ export class PostSingleComponent {
   editId: number
   countLike: number
   userLike: boolean
+  userCmt: number
 
   randomPost: Post[] = []
 
@@ -64,6 +65,7 @@ export class PostSingleComponent {
       postId: new FormControl(this.idPost),
       content: new FormControl('', [Validators.required])
     })
+    this.getEmailUserCmt();
     this.getRandomPost();
   }
 
@@ -186,6 +188,12 @@ export class PostSingleComponent {
     })
   }
 
+  public getEmailUserCmt(){
+    this.postService.getIdUserCmt().subscribe((data) => {
+      this.userCmt = data
+      console.log(this.userCmt)
+    })
+  }
   validation_message = {
     cmt: [
       { type: 'required', message: 'Vui lòng nhập comment' }

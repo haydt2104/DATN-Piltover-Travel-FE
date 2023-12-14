@@ -50,6 +50,7 @@ import { MultiSelectModule } from 'primeng/multiselect';
 import { InputTextModule } from 'primeng/inputtext';
 import { SliderModule } from 'primeng/slider';
 import { DropdownModule } from 'primeng/dropdown';
+// import { LayoutComponent } from './components/user/layouts/layout/layout.component';
 
 @NgModule({
   declarations: [

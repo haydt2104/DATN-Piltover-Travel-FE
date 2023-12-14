@@ -19,7 +19,7 @@ export class LikeService {
     return this.http.get<number>(this.baseUrl + 'api/post/getLikePosts/' + id)
   }
 
-  public checkUserLike(postId: number): Observable<Boolean>{
+  public checkUserLike(postId: number): Observable<boolean>{
     return this.http.get<boolean>(this.baseUrl + 'api/post/checkUserLike?postId=' + postId)
   }
 
