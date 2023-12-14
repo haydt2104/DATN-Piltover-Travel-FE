@@ -248,7 +248,7 @@ export class CheckoutComponent implements OnInit {
       if (num == 1) {
         this.discount = null;
         this.changeData();
-        this.httpClient.post(`${this.baseUrl}nopay`, this.bookingDetail, { responseType: 'text' }).subscribe(
+        this.httpClient.post(`${this.baseUrl}nopay?fe=${location.origin}`, this.bookingDetail, { responseType: 'text' }).subscribe(
           (response: string) => {
             window.location.href = response
           },
@@ -261,7 +261,7 @@ export class CheckoutComponent implements OnInit {
           (response) => {
             var currencyData: any = response
             this.booking.totalPrice = this.booking.totalPrice / currencyData.conversion_rates.VND
-            this.httpClient.post(`${this.baseUrl}paypal`, this.bookingDetail, { responseType: 'text' }).subscribe(
+            this.httpClient.post(`${this.baseUrl}paypal?fe=${location.origin}`, this.bookingDetail, { responseType: 'text' }).subscribe(
               (response: string) => {
                 window.location.href = response
               },
@@ -275,9 +275,11 @@ export class CheckoutComponent implements OnInit {
           }
         )
       } else if (num == 3) {
-        this.httpClient.post(`${this.baseUrl}vnpay`, this.bookingDetail, { responseType: 'text' }).subscribe(
+        this.httpClient.post(`${this.baseUrl}vnpay?fe=${location.origin}`, this.bookingDetail, { responseType: 'text' }).subscribe(
           (response: string) => {
-            window.location.href = response
+            console.log(response);
+            
+            // window.location.href = response
           },
           (error: HttpErrorResponse) => {
             console.log(error.message);
@@ -289,7 +291,7 @@ export class CheckoutComponent implements OnInit {
 
   updateAccessible() {
     if (this.getDateDiffer(this.currentDate, this.tourDate.initiateDate) < 3 || this.tourDate.status.id != 2 || this.bookedNumber >= this.tourDate.tour.availableSpaces) {
-      window.location.href = "http://localhost:4200/"
+      window.location.href = location.origin
     }
   }
 
