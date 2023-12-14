@@ -35,14 +35,19 @@ export class AuthInterceptor implements HttpInterceptor {
     }
 
     if (token) {
-      // Clone the request and add the token to the Authorization header
+      // Thêm token vào header
       const authReq = request.clone({
         setHeaders: { Authorization: `Bearer ${token}` },
       });
       return next.handle(authReq).pipe(
         catchError((error) => {
-          if (error instanceof HttpErrorResponse && error.status === 403) {
-            // Redirect to the login page on 403 error
+          if (
+            error instanceof HttpErrorResponse &&
+            error.status === 403 &&
+            this.tokenStorageService.getToken()
+          ) {
+            // Trả về login nếu sảy ra lỗi xác thực token
+            this.tokenStorageService.signOut();
             this.router.navigate(['/auth/login']);
           }
           return throwError(error);

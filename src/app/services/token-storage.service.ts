@@ -8,8 +8,10 @@ const USER_KEY = 'auth-user';
 export class TokenStorageService {
   constructor() {}
   signOut() {
-    window.localStorage.clear();
-    window.sessionStorage.clear();
+    window.localStorage.removeItem(TOKEN_KEY);
+    window.sessionStorage.removeItem(TOKEN_KEY);
+    window.localStorage.removeItem(USER_KEY);
+    window.sessionStorage.removeItem(USER_KEY);
   }
 
   public saveTokenLocal(token: string) {

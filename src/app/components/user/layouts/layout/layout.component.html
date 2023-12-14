@@ -3,7 +3,7 @@
 <!-- NAV -->
 <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
   <div class="container">
-    <a class="navbar-brand" href="index.html">Piltover<span>Du lịch khắp nơi</span></a>
+    <a class="navbar-brand" routerLink="/home">Piltover<span>Du lịch khắp nơi</span></a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav"
       aria-expanded="false" aria-label="Toggle navigation">
       <span class="oi oi-menu"></span> Menu
@@ -11,18 +11,18 @@
 
     <div class="collapse navbar-collapse" id="ftco-nav">
       <ul class="navbar-nav ml-auto">
-        <li class="nav-item active"><a href="/" class="nav-link">Trang chủ</a></li>
-        <li class="nav-item"><a href="/about" class="nav-link">Giới thiệu</a></li>
+        <li class="nav-item active"><a routerLink="/home" class="nav-link">Trang chủ</a></li>
+        <li class="nav-item"><a routerLink="/about" class="nav-link">Giới thiệu</a></li>
         <!-- Menu Tour -->
         <li class="nav-item">
-          <a class="nav-link" href="/destination">
+          <a class="nav-link" routerLink="/destination">
             Tour du lịch
           </a>
         </li>
         <!-- End Menu Tour -->
-        <li class="nav-item"><a href="/contact" class="nav-link">Liên hệ</a></li>
-        <li class="nav-item"><a href="/post" class="nav-link">Bài viết</a></li>
-        <li class="nav-item" [hidden]="!isLoggedIn"><a href="/history" class="nav-link">Lịch sử</a></li>
+        <li class="nav-item"><a routerLink="/contact" class="nav-link">Liên hệ</a></li>
+        <li class="nav-item"><a routerLink="/post" class="nav-link">Bài viết</a></li>
+        <li class="nav-item" [hidden]="!isLoggedIn"><a routerLink="/history" class="nav-link">Lịch sử</a></li>
         <!-- Tài khoản -->
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-bs-toggle="dropdown"

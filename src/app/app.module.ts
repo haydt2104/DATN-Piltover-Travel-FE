@@ -50,6 +50,8 @@ import { MultiSelectModule } from 'primeng/multiselect';
 import { InputTextModule } from 'primeng/inputtext';
 import { SliderModule } from 'primeng/slider';
 import { DropdownModule } from 'primeng/dropdown';
+import { AboutComponent } from './components/user/views/about/about.component';
+import { ContactComponent } from './components/user/views/contact/contact.component';
 // import { LayoutComponent } from './components/user/layouts/layout/layout.component';
 
 @NgModule({
@@ -71,6 +73,8 @@ import { DropdownModule } from 'primeng/dropdown';
     LoginComponent,
     SignUpComponent,
     LoadingSpinnerComponent,
+    AboutComponent,
+    ContactComponent,
   ],
   imports: [
     CommonModule,
@@ -94,7 +98,6 @@ import { DropdownModule } from 'primeng/dropdown';
     InputTextModule,
     SliderModule,
     DropdownModule,
-
   ],
   providers: [
     {
