@@ -277,9 +277,7 @@ export class CheckoutComponent implements OnInit {
       } else if (num == 3) {
         this.httpClient.post(`${this.baseUrl}vnpay?fe=${location.origin}`, this.bookingDetail, { responseType: 'text' }).subscribe(
           (response: string) => {
-            console.log(response);
-            
-            // window.location.href = response
+            window.location.href = response
           },
           (error: HttpErrorResponse) => {
             console.log(error.message);
