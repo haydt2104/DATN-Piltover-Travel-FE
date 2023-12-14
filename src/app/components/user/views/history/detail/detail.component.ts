@@ -1,7 +1,6 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Booking } from 'src/app/models/booking.model';
 import { BookingDetail } from 'src/app/models/bookingdetail.model';
 import { HistoryService } from 'src/app/services/history/history.service';
 
@@ -15,6 +14,7 @@ export class DetailComponent implements OnInit {
   loading: boolean = true;
 
   constructor(
+    @Inject('BASE_URL') private baseUrl: string,
     private ActivatedRoute: ActivatedRoute,
     private router: Router,
     private HistoryService: HistoryService,
@@ -46,7 +46,7 @@ export class DetailComponent implements OnInit {
         (response) => {
           var currencyData: any = response
           this.history.booking.totalPrice = this.history.booking.totalPrice / currencyData.conversion_rates.VND
-          this.httpClient.post('http://localhost:8080/paypal', this.history, { responseType: 'text' }).subscribe(
+          this.httpClient.post(`${this.baseUrl}paypal`, this.history, { responseType: 'text' }).subscribe(
             (response: string) => {
               window.location.href = response
             },
@@ -60,7 +60,7 @@ export class DetailComponent implements OnInit {
         }
       )
     } else if (num == 2) {
-      this.httpClient.post('http://localhost:8080/vnpay', this.history, { responseType: 'text' }).subscribe(
+      this.httpClient.post(`${this.baseUrl}vnpay`, this.history, { responseType: 'text' }).subscribe(
         (response: string) => {
           window.location.href = response
         },

@@ -1,5 +1,5 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, Inject, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { MessageService } from 'primeng/api';
@@ -13,15 +13,14 @@ import { Account } from 'src/app/models/account.model';
 import { BookingDetail } from 'src/app/models/booking-detail.model';
 import { Booking } from 'src/app/models/booking.model';
 import { Discount } from 'src/app/models/discount.model';
-import { Hotel } from 'src/app/models/hotel.model';
 import { TourDate } from 'src/app/models/tour-date.model';
 import { TourImage } from 'src/app/models/tour-img.model';
 import { BookingService } from 'src/app/services/booking/booking.service';
 import { DiscountService } from 'src/app/services/discount/discount.service';
 import { HotelService } from 'src/app/services/hotel/hotel.service';
-import { AccountService } from './../../../../services/account/account.service';
 import { TourDateService } from 'src/app/services/tour/tour-date.service';
 import { TourImageService } from 'src/app/services/tour/tour-image.service';
+import { AccountService } from './../../../../services/account/account.service';
 
 @Component({
   selector: 'app-checkout',
@@ -41,6 +40,7 @@ import { TourImageService } from 'src/app/services/tour/tour-image.service';
 export class CheckoutComponent implements OnInit {
   @ViewChild('confirmModal') confirmModal: ElementRef;
   constructor(
+    @Inject('BASE_URL') private baseUrl: string,
     private route: ActivatedRoute,
     private router: Router,
     private tourDateService: TourDateService,
@@ -248,7 +248,7 @@ export class CheckoutComponent implements OnInit {
       if (num == 1) {
         this.discount = null;
         this.changeData();
-        this.httpClient.post('http://localhost:8080/nopay', this.bookingDetail, { responseType: 'text' }).subscribe(
+        this.httpClient.post(`${this.baseUrl}nopay`, this.bookingDetail, { responseType: 'text' }).subscribe(
           (response: string) => {
             window.location.href = response
           },
@@ -261,7 +261,7 @@ export class CheckoutComponent implements OnInit {
           (response) => {
             var currencyData: any = response
             this.booking.totalPrice = this.booking.totalPrice / currencyData.conversion_rates.VND
-            this.httpClient.post('http://localhost:8080/paypal', this.bookingDetail, { responseType: 'text' }).subscribe(
+            this.httpClient.post(`${this.baseUrl}paypal`, this.bookingDetail, { responseType: 'text' }).subscribe(
               (response: string) => {
                 window.location.href = response
               },
@@ -275,7 +275,7 @@ export class CheckoutComponent implements OnInit {
           }
         )
       } else if (num == 3) {
-        this.httpClient.post('http://localhost:8080/vnpay', this.bookingDetail, { responseType: 'text' }).subscribe(
+        this.httpClient.post(`${this.baseUrl}vnpay`, this.bookingDetail, { responseType: 'text' }).subscribe(
           (response: string) => {
             window.location.href = response
           },

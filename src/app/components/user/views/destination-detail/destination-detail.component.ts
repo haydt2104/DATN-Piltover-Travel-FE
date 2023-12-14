@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import {
   FormBuilder,
   FormControl,
@@ -40,6 +40,7 @@ import { forkJoin } from 'rxjs';
 })
 export class DestinationDetailComponent implements OnInit {
   constructor(
+    @Inject('BASE_URL') private baseUrl: string,
     private route: ActivatedRoute,
     private router: Router,
     private curdService: CurdService,
@@ -50,6 +51,7 @@ export class DestinationDetailComponent implements OnInit {
     private formBuilder: FormBuilder,
     private httpClient: HttpClient,
     private tourImageService: TourImageService,
+    
   ) { }
   responsiveOptions: any[] | undefined;
   currentTour: Tour;
@@ -79,7 +81,7 @@ export class DestinationDetailComponent implements OnInit {
 
   public open(content) {
     this.httpClient
-      .get('http://localhost:8080/api/test/username', { responseType: 'text' })
+      .get(`${this.baseUrl}api/test/username`, { responseType: 'text' })
       .subscribe(
         (response) => {
           this.modalService.open(content, {
