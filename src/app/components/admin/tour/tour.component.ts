@@ -330,7 +330,6 @@ export class TourComponent implements OnInit {
           this.loadingService.hideButton()
           this.messageService.clear();
           this.messageService.add({ key: 'info', severity: 'info', summary: 'Thông Báo', detail: 'Cập nhập ảnh thành công' })
-          this.editTour = null
         },
         (error: HttpErrorResponse) => {
           console.log(error.message);
