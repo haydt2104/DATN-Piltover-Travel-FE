@@ -1,3 +1,4 @@
+import { Router } from '@angular/router';
 import { Component, AfterViewInit, EventEmitter, Output } from '@angular/core';
 import { NgbDropdownModule, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ShareService } from 'src/app/services/share.service';
@@ -21,7 +22,8 @@ export class NavigationComponent implements AfterViewInit {
 
   constructor(
     private tokenStorageService: TokenStorageService,
-    private shareService: ShareService
+    private shareService: ShareService,
+    private router: Router
   ) {
     this.shareService.getClickEvent().subscribe(() => {
       this.loadHeader();

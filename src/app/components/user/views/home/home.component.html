@@ -31,7 +31,7 @@
           <!-- Tour content -->
           <div class="item" *ngFor="let tour of HomeTour | paginate: { itemsPerPage: 1, currentPage: current}">
             <div class="project-destination">
-              <a routerLink="destination-detail/{{tour.tourID}}" class="img"
+              <a routerLink="/destination-detail/{{tour.tourID}}" class="img"
                 [style.background-image]="'url('+ tour.image + ')'">
                 <div class="text">
                   <h3>{{tour.name_tour}}</h3>
@@ -67,13 +67,13 @@
         <div class="col-md-4"
           *ngFor="let tour of displayedTours| paginate: { itemsPerPage: 6, currentPage: currentPage};">
           <div class="project-wrap">
-            <a routerLink="destination-detail/{{tour.tourID}}" class="img"
+            <a routerLink="/destination-detail/{{tour.tourID}}" class="img"
               [style.background-image]="'url('+ tour.image + ')'">
               <span class="price">{{ formatCurrency(tour.adult_price) }}/người</span>
             </a>
             <div class="text p-4">
               <span class="days">2 ngày 3 đêm</span>
-              <h3><a routerLink="destination-detail/{{tour.tourID}}">{{tour.name_tour}}</a></h3>
+              <h3><a routerLink="/destination-detail/{{tour.tourID}}">{{tour.name_tour}}</a></h3>
               <br>
               <p class="location"><span class="fa fa-map-marker"></span> Điểm khởi hành: {{tour.start_address}}</p>
 
@@ -83,7 +83,8 @@
               <p class="location"><span class="fa fa-home"></span> Khách sạn: {{tour.hotel_name}} {{tour.hotel_star}}*
               </p>
               <ul>
-                <li><span class="ml-auto"></span><a routerLink="destination-detail/{{tour.tourID}}">>> Xem thêm</a></li>
+                <li><span class="ml-auto"></span><a routerLink="/destination-detail/{{tour.tourID}}">>> Xem thêm</a>
+                </li>
               </ul>
             </div>
           </div>
