@@ -1,5 +1,6 @@
 import {
   CommonModule,
+  HashLocationStrategy,
   LocationStrategy,
   PathLocationStrategy,
 } from '@angular/common';
@@ -85,7 +86,7 @@ import { ContactComponent } from './components/user/views/contact/contact.compon
     ReactiveFormsModule,
     HttpClientModule,
     NgbModule,
-    RouterModule.forRoot(Approutes, { useHash: false }),
+    RouterModule.forRoot(Approutes, { useHash: true }),
     FullComponent,
     SidebarComponent,
     NavigationComponent,
@@ -102,7 +103,7 @@ import { ContactComponent } from './components/user/views/contact/contact.compon
   providers: [
     {
       provide: LocationStrategy,
-      useClass: PathLocationStrategy,
+      useClass: HashLocationStrategy,
     },
     {
       provide: 'BASE_URL',

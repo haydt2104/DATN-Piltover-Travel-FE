@@ -4,8 +4,8 @@
     <div class="row no-gutters slider-text js-fullheight align-items-end justify-content-center">
       <div class="col-md-9 ftco-animate pb-5 text-center">
         <p class="breadcrumbs">
-          <span class="mr-2"><a href="/">Trang chủ <i class="fa fa-chevron-right"></i></a>
-          </span> <span class="mr-2"><a href="/blog">Bài viết <i class="fa fa-chevron-right"></i></a>
+          <span class="mr-2"><a routerLink="/home">Trang chủ <i class="fa fa-chevron-right"></i></a>
+          </span> <span class="mr-2"><a routerLink="/blog">Bài viết <i class="fa fa-chevron-right"></i></a>
           </span> <span>Bài viết chi tiết <i class="fa fa-chevron-right"></i></span>
         </p>
         <h1 class="mb-0 bread">Bài Viết Chi Tiết</h1>
@@ -106,11 +106,12 @@
         <div class="block-21 mb-4 d-flex" *ngFor="let item of randomPost">
           <a class="blog-img mr-4" style="background-image: url('{{item.path}}');"></a>
           <div class="text">
-            <h3 class="heading"><a href="/post-single/{{item.id}}">{{item.title}}</a></h3>
+            <h3 class="heading"><a routerLink="/post-single/{{item.id}}">{{item.title}}</a></h3>
             <div class="meta">
-              <div><a href="/post-single/{{item.id}}"><span class="fa fa-calendar"></span> {{item.createTime |
+              <div><a routerLink="/post-single/{{item.id}}"><span class="fa fa-calendar"></span> {{item.createTime |
                   date:"dd-MM-yyyy"}}</a></div>
-              <div><a href="/post-single/{{item.id}}"><span class="fa fa-user"></span> {{item.createUser.fullname}}</a>
+              <div><a routerLink="/post-single/{{item.id}}"><span class="fa fa-user"></span>
+                  {{item.createUser.fullname}}</a>
               </div>
               <!-- <div><a href="#"><span class="fa fa-comment"></span> 19</a></div> -->
             </div>
