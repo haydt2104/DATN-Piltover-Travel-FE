@@ -294,7 +294,7 @@ export class CheckoutComponent implements OnInit {
           )
           .subscribe(
             (response: string) => {
-              window.location.href = response;
+              this.router.navigateByUrl(response);
             },
             (error: HttpErrorResponse) => {
               console.log(error.message);
@@ -338,9 +338,7 @@ export class CheckoutComponent implements OnInit {
           )
           .subscribe(
             (response: string) => {
-              console.log(response);
-
-              // window.location.href = response
+              window.location.href = response
             },
             (error: HttpErrorResponse) => {
               console.log(error.message);
