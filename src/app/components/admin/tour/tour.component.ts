@@ -752,7 +752,7 @@ export class TourComponent implements OnInit {
     }
     this.curdService.put('tour', tour).subscribe(
       (response: Tour) => {
-        this.tourList[this.tourList.findIndex(a => a.id == tour.id)] = tour
+        this.getTourList();
         this.messageService.clear();
         this.messageService.add({ key: 'info', severity: 'info', summary: 'Thông Báo', detail: 'Cập nhập thành công' })
       },
