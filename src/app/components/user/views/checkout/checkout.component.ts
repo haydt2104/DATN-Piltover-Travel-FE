@@ -1,5 +1,11 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { Component, ElementRef, Inject, OnInit, ViewChild } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  Inject,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { MessageService } from 'primeng/api';
@@ -33,9 +39,9 @@ import { AccountService } from './../../../../services/account/account.service';
     CardModule,
     InputTextModule,
     ToastModule,
-    ButtonModule
+    ButtonModule,
   ],
-  providers: [MessageService]
+  providers: [MessageService],
 })
 export class CheckoutComponent implements OnInit {
   @ViewChild('confirmModal') confirmModal: ElementRef;
@@ -51,31 +57,31 @@ export class CheckoutComponent implements OnInit {
     private discountService: DiscountService,
     private messageService: MessageService,
     private httpClient: HttpClient,
-    private modalService: NgbModal,
-  ) { }
+    private modalService: NgbModal
+  ) {}
   responsiveOptions: any[] | undefined;
 
   currentUser: Account;
   tourDate: TourDate;
   tourImageList: TourImage[];
   currentDate: Date = new Date();
-  booking: Booking
-  bookingDetail: BookingDetail
+  booking: Booking;
+  bookingDetail: BookingDetail;
 
-  adult: number = 0
-  children: number = 0
-  subTotal: number = 0
-  discount: Discount = null
-  total: number = 0
-  bookedNumber = 0
+  adult: number = 0;
+  children: number = 0;
+  subTotal: number = 0;
+  discount: Discount = null;
+  total: number = 0;
+  bookedNumber = 0;
 
   ngOnInit(): void {
-    this.route.queryParams.subscribe(params => {
+    this.route.queryParams.subscribe((params) => {
       if (this.isAtobDecodable(params.data)) {
         var data: number = +atob(params.data);
         this.getMainData(data);
       } else {
-        this.router.navigate([''])
+        this.router.navigate(['']);
       }
     });
 
@@ -83,25 +89,25 @@ export class CheckoutComponent implements OnInit {
       {
         breakpoint: '1400px',
         numVisible: 3,
-        numScroll: 3
+        numScroll: 3,
       },
       {
         breakpoint: '1220px',
         numVisible: 2,
-        numScroll: 2
+        numScroll: 2,
       },
       {
         breakpoint: '1100px',
         numVisible: 1,
-        numScroll: 1
-      }
+        numScroll: 1,
+      },
     ];
 
     const adult = document.getElementById('adult');
     const children = document.getElementById('children');
     if (adult && children) {
-      adult.addEventListener('input', () => this.changeData())
-      children.addEventListener('input', () => this.changeData())
+      adult.addEventListener('input', () => this.changeData());
+      children.addEventListener('input', () => this.changeData());
     }
   }
 
@@ -113,17 +119,17 @@ export class CheckoutComponent implements OnInit {
       (error: HttpErrorResponse) => {
         console.log(error);
       }
-    )
+    );
     this.tourDateService.getTourDateById(data).subscribe(
       (responseTourDate: TourDate) => {
-        this.tourDate = responseTourDate
-        this.getImage(this.tourDate.tour.id)
-        this.getBookedCustomerNumber()
+        this.tourDate = responseTourDate;
+        this.getImage(this.tourDate.tour.id);
+        this.getBookedCustomerNumber();
       },
       (error: HttpErrorResponse) => {
-        this.router.navigate([''])
+        this.router.navigate(['']);
       }
-    )
+    );
     // setInterval(() => this.bookingService.getBookingsByTourDate(data).subscribe(
     //   (responseBooking: Booking[]) => {
     //     this.bookingList = responseBooking.filter(booking => booking.status != 2)
@@ -138,12 +144,12 @@ export class CheckoutComponent implements OnInit {
   public getImage(tourId: number) {
     this.tourImageService.getTourImageByTourId(tourId).subscribe(
       (response: TourImage[]) => {
-        this.tourImageList = response
+        this.tourImageList = response;
       },
       (error) => {
-        console.log(error.message)
+        console.log(error.message);
       }
-    )
+    );
   }
 
   isAtobDecodable(data: string): boolean {
@@ -156,38 +162,52 @@ export class CheckoutComponent implements OnInit {
   }
 
   public getDateDiffer(date1: Date, date2: Date): number {
-    var dateDif: number = Math.round(Number(new Date(date2).getTime()) - Number(new Date(date1).getTime())) / (24 * 60 * 60 * 1000)
-    return dateDif
+    var dateDif: number =
+      Math.round(
+        Number(new Date(date2).getTime()) - Number(new Date(date1).getTime())
+      ) /
+      (24 * 60 * 60 * 1000);
+    return dateDif;
   }
 
   public getBookedCustomerNumber() {
-    this.bookingService.getNumberCustomerOfTourDateId(this.tourDate.id).subscribe(
-      (data) => {
-        this.bookedNumber = data
-        this.updateAccessible()
-      })
+    this.bookingService
+      .getNumberCustomerOfTourDateId(this.tourDate.id)
+      .subscribe((data) => {
+        this.bookedNumber = data;
+        this.updateAccessible();
+      });
   }
 
   changeData() {
-    this.adult = +$('#adult').val().valueOf()
+    this.adult = +$('#adult').val().valueOf();
     if (this.adult < 0) {
       this.adult = 0;
     }
-    this.children = +$('#children').val().valueOf()
+    this.children = +$('#children').val().valueOf();
     if (this.children < 0) {
-      this.children = 0
+      this.children = 0;
     }
-    this.subTotal = this.adult * this.tourDate.tour.price.adultPrice + this.children * this.tourDate.tour.price.childrenPrice
+    this.subTotal =
+      this.adult * this.tourDate.tour.price.adultPrice +
+      this.children * this.tourDate.tour.price.childrenPrice;
     if (this.discount) {
       if (this.subTotal < this.discount.min) {
-        this.discount = null
-      } else if ((this.subTotal * this.discount.percentage / 100) <= this.discount.max) {
-        this.total = this.subTotal - (this.subTotal * this.discount.percentage / 100) + (this.subTotal * 8 / 100)
+        this.discount = null;
+      } else if (
+        (this.subTotal * this.discount.percentage) / 100 <=
+        this.discount.max
+      ) {
+        this.total =
+          this.subTotal -
+          (this.subTotal * this.discount.percentage) / 100 +
+          (this.subTotal * 8) / 100;
       } else {
-        this.total = this.subTotal + (this.subTotal * 8 / 100) - this.discount.max
+        this.total =
+          this.subTotal + (this.subTotal * 8) / 100 - this.discount.max;
       }
     } else {
-      this.total = this.subTotal + this.subTotal * 8 / 100
+      this.total = this.subTotal + (this.subTotal * 8) / 100;
     }
     this.booking = {
       id: null,
@@ -199,47 +219,65 @@ export class CheckoutComponent implements OnInit {
       createTime: null,
       updateTime: null,
       updateUser: this.currentUser,
-      status: null
-    }
+      status: null,
+    };
     this.bookingDetail = {
       id: null,
       adult: this.adult,
       children: this.children,
       bookingTime: null,
-      surcharge: this.subTotal * 8 / 100,
-      booking: this.booking
-    }
+      surcharge: (this.subTotal * 8) / 100,
+      booking: this.booking,
+    };
   }
 
   applyDiscount() {
-    this.discountService.getDiscountByCode($('#discount').val().toString()).subscribe(
-      (response) => {
-        var dis = response
+    this.discountService
+      .getDiscountByCode($('#discount').val().toString())
+      .subscribe((response) => {
+        var dis = response;
         if (dis && dis.isDelete == false && this.subTotal >= dis.min) {
-          this.discount = dis
-          this.changeData()
-          this.messageService.clear()
-          this.messageService.add({ key: 'success', severity: 'success', summary: 'Thông Báo', detail: 'Thêm mã giảm giá thành công' })
+          this.discount = dis;
+          this.changeData();
+          this.messageService.clear();
+          this.messageService.add({
+            key: 'success',
+            severity: 'success',
+            summary: 'Thông Báo',
+            detail: 'Thêm mã giảm giá thành công',
+          });
         } else if (dis && dis.isDelete == false && this.subTotal < dis.min) {
-          this.messageService.clear()
-          this.messageService.add({ key: 'info', severity: 'info', summary: 'Thông Báo', detail: 'Số tiền phải từ ' + dis.min.toLocaleString() + ' VNĐ để có thể sử dụng được mã giảm giá' })
+          this.messageService.clear();
+          this.messageService.add({
+            key: 'info',
+            severity: 'info',
+            summary: 'Thông Báo',
+            detail:
+              'Số tiền phải từ ' +
+              dis.min.toLocaleString() +
+              ' VNĐ để có thể sử dụng được mã giảm giá',
+          });
         } else {
-          this.messageService.clear()
-          this.messageService.add({ key: 'warn', severity: 'warn', summary: 'Thông Báo', detail: 'Mã giảm giá không hợp lệ' })
+          this.messageService.clear();
+          this.messageService.add({
+            key: 'warn',
+            severity: 'warn',
+            summary: 'Thông Báo',
+            detail: 'Mã giảm giá không hợp lệ',
+          });
         }
-      }
-    )
-
+      });
   }
 
   openConfirm() {
     if (this.validate(1) == true) {
-      this.modalService
-        .open(this.confirmModal, {
-          ariaLabelledBy: 'modal-basic-title',
-          size: 'xl',
-        })
-      document.querySelector('#confirm').addEventListener('click', (e: Event) => this.toPayment(1));
+      this.modalService.open(this.confirmModal, {
+        ariaLabelledBy: 'modal-basic-title',
+        size: 'xl',
+      });
+      document
+        .querySelector('#confirm')
+        .addEventListener('click', (e: Event) => this.toPayment(1));
     }
   }
 
@@ -248,67 +286,119 @@ export class CheckoutComponent implements OnInit {
       if (num == 1) {
         this.discount = null;
         this.changeData();
-        this.httpClient.post(`${this.baseUrl}nopay?fe=${location.origin}`, this.bookingDetail, { responseType: 'text' }).subscribe(
-          (response: string) => {
-            window.location.href = response
-          },
-          (error: HttpErrorResponse) => {
-            console.log(error.message)
-          }
-        )
+        this.httpClient
+          .post(
+            `${this.baseUrl}nopay?fe=${location.origin}`,
+            this.bookingDetail,
+            { responseType: 'text' }
+          )
+          .subscribe(
+            (response: string) => {
+              window.location.href = response;
+            },
+            (error: HttpErrorResponse) => {
+              console.log(error.message);
+            }
+          );
       } else if (num == 2) {
-        this.httpClient.get(`https://v6.exchangerate-api.com/v6/4f5333c28a72c8a9ae7a2658/latest/USD`).subscribe(
-          (response) => {
-            var currencyData: any = response
-            this.booking.totalPrice = this.booking.totalPrice / currencyData.conversion_rates.VND
-            this.httpClient.post(`${this.baseUrl}paypal?fe=${location.origin}`, this.bookingDetail, { responseType: 'text' }).subscribe(
-              (response: string) => {
-                window.location.href = response
-              },
-              (error: HttpErrorResponse) => {
-                console.log(error.message);
-              }
-            )
-          },
-          (error: HttpErrorResponse) => {
-            console.log(error.message);
-          }
-        )
+        this.httpClient
+          .get(
+            `https://v6.exchangerate-api.com/v6/4f5333c28a72c8a9ae7a2658/latest/USD`
+          )
+          .subscribe(
+            (response) => {
+              var currencyData: any = response;
+              this.booking.totalPrice =
+                this.booking.totalPrice / currencyData.conversion_rates.VND;
+              this.httpClient
+                .post(
+                  `${this.baseUrl}paypal?fe=${location.origin}`,
+                  this.bookingDetail,
+                  { responseType: 'text' }
+                )
+                .subscribe(
+                  (response: string) => {
+                    window.location.href = response;
+                  },
+                  (error: HttpErrorResponse) => {
+                    console.log(error.message);
+                  }
+                );
+            },
+            (error: HttpErrorResponse) => {
+              console.log(error.message);
+            }
+          );
       } else if (num == 3) {
-        this.httpClient.post(`${this.baseUrl}vnpay?fe=${location.origin}`, this.bookingDetail, { responseType: 'text' }).subscribe(
-          (response: string) => {
-            window.location.href = response
-          },
-          (error: HttpErrorResponse) => {
-            console.log(error.message);
-          }
-        )
+        this.httpClient
+          .post(
+            `${this.baseUrl}vnpay?fe=${location.origin}`,
+            this.bookingDetail,
+            { responseType: 'text' }
+          )
+          .subscribe(
+            (response: string) => {
+              console.log(response);
+
+              // window.location.href = response
+            },
+            (error: HttpErrorResponse) => {
+              console.log(error.message);
+            }
+          );
       }
     }
   }
 
   updateAccessible() {
-    if (this.getDateDiffer(this.currentDate, this.tourDate.initiateDate) < 3 || this.tourDate.status.id != 2 || this.bookedNumber >= this.tourDate.tour.availableSpaces) {
-      window.location.href = location.origin
+    if (
+      this.getDateDiffer(this.currentDate, this.tourDate.initiateDate) < 3 ||
+      this.tourDate.status.id != 2 ||
+      this.bookedNumber >= this.tourDate.tour.availableSpaces
+    ) {
+      window.location.href = location.origin;
     }
   }
 
   validate(num: number): boolean {
-    if ((this.adult + this.children) > (this.tourDate.tour.availableSpaces - this.bookedNumber)) {
-      this.messageService.clear()
-      this.messageService.add({ key: 'warn', severity: 'warn', summary: 'Thông Báo', detail: 'Số Lượng Chỗ Ngồi Không Đủ' })
+    if (
+      this.adult + this.children >
+      this.tourDate.tour.availableSpaces - this.bookedNumber
+    ) {
+      this.messageService.clear();
+      this.messageService.add({
+        key: 'warn',
+        severity: 'warn',
+        summary: 'Thông Báo',
+        detail: 'Số Lượng Chỗ Ngồi Không Đủ',
+      });
       return false;
     } else if (this.adult == 0 && this.children == 0) {
-      this.messageService.clear()
-      this.messageService.add({ key: 'warn', severity: 'warn', summary: 'Thông Báo', detail: 'Vui lòng nhập ít nhất 1 người' })
+      this.messageService.clear();
+      this.messageService.add({
+        key: 'warn',
+        severity: 'warn',
+        summary: 'Thông Báo',
+        detail: 'Vui lòng nhập ít nhất 1 người',
+      });
       return false;
     } else if (this.adult == 0 && this.children > 0) {
-      this.messageService.clear()
-      this.messageService.add({ key: 'warn', severity: 'warn', summary: 'Thông Báo', detail: 'Vui lòng nhập ít nhất 1 người lớn khi có trẻ em' })
+      this.messageService.clear();
+      this.messageService.add({
+        key: 'warn',
+        severity: 'warn',
+        summary: 'Thông Báo',
+        detail: 'Vui lòng nhập ít nhất 1 người lớn khi có trẻ em',
+      });
       return false;
-    } else if ((this.adult + this.children) > 10 && num == 1) {
-      this.messageService.clear()
-      this.messageService.add({ key: 'warn', severity: 'warn', summary: 'Thông Báo', detail: 'Chức Năng Đặt Trước Chỉ Cho Phép Đặt Từ 10 Người Trở Xuống' })
+    } else if (this.adult + this.children > 10 && num == 1) {
+      this.messageService.clear();
+      this.messageService.add({
+        key: 'warn',
+        severity: 'warn',
+        summary: 'Thông Báo',
+        detail: 'Chức Năng Đặt Trước Chỉ Cho Phép Đặt Từ 10 Người Trở Xuống',
+      });
       return false;
     } else {
       return true;
