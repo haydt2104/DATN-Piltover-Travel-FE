@@ -30,15 +30,24 @@
                 <span class="mos">{{item.createTime | date : 'MM'}}</span>
               </div>
             </div>
-            <h3 class="heading"><a routerLink="/post-single/{{item.id}}" [innerHTML]="item.title"></a></h3>
-            <p [innerHTML]="item.description"></p>
+            <h3 class="heading" style="min-height: 40px; max-height: 75px;">
+              <a routerLink="/post-single/{{item.id}}" [innerHTML]="item.title"></a>
+            </h3>
+            <p [innerHTML]="item.description" style="min-height: 200px;
+            max-height: 400px;"></p>
             <p><a routerLink="/post-single/{{item.id}}" class="btn btn-primary">Xem chi tiết</a></p>
           </div>
         </div>
       </div>
     </div>
-    <pagination-controls (pageChange)="p = $event" previousLabel="Trang trước"
-      nextLabel="Trang sau"></pagination-controls>
+    <div class="row mt-5">
+      <div class="col text-center">
+        <pagination-controls (pageChange)="p = $event" previousLabel="Trang trước"
+          nextLabel="Trang sau"></pagination-controls>
+      </div>
+    </div>
+
+
   </div>
 </section>
 
