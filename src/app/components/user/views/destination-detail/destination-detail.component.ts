@@ -1,6 +1,7 @@
+import { TourPlanDetailService } from 'src/app/services/tour/tour-plan-detail.service';
 import { CommonModule } from '@angular/common';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, ElementRef, Inject, OnInit, ViewChild } from '@angular/core';
 import {
   FormBuilder,
   FormControl,
@@ -23,6 +24,7 @@ import { TourDateService } from 'src/app/services/tour/tour-date.service';
 import { TourImageService } from 'src/app/services/tour/tour-image.service';
 import { TourService } from 'src/app/services/tour/tour.service';
 import { forkJoin } from 'rxjs';
+import { TourPlanDetail } from 'src/app/models/tour-plan-detail.model';
 
 @Component({
   selector: 'app-destination-detail',
@@ -39,6 +41,7 @@ import { forkJoin } from 'rxjs';
   ],
 })
 export class DestinationDetailComponent implements OnInit {
+  @ViewChild('planDetailModal') planDetailModal: ElementRef;
   constructor(
     @Inject('BASE_URL') private baseUrl: string,
     private route: ActivatedRoute,
@@ -51,12 +54,13 @@ export class DestinationDetailComponent implements OnInit {
     private formBuilder: FormBuilder,
     private httpClient: HttpClient,
     private tourImageService: TourImageService,
-    
+    private tourPlanDetailService: TourPlanDetailService
   ) { }
   responsiveOptions: any[] | undefined;
   currentTour: Tour;
   tourDateList: TourDate[];
   planList: TourPlan[];
+  planDetailList: TourPlanDetail[] = []
   currentDate: Date = new Date();
   tourImageList: TourImage[];
   bookingData: { tourDateId: number; amount: number }[] = []
@@ -169,6 +173,21 @@ export class DestinationDetailComponent implements OnInit {
 
   public getPlanByDate(tourDateId: number) {
     return this.planList.filter((plan) => plan.tourDate.id === tourDateId);
+  }
+
+  public getPlanDetailByPlan(planId: number) {
+    this.tourPlanDetailService.getTourPlanDetailsByTourPlanId(planId).subscribe(
+      (response) => {
+        this.planDetailList = response
+        this.modalService.open(this.planDetailModal, {
+          ariaLabelledBy: 'modal-basic-title',
+          size: 'xl',
+        });
+      },
+      (error: HttpErrorResponse) => {
+        console.log(error.message);
+      }
+    )
   }
 
   public getBookedCustomerNumber(tourDateId: number) {

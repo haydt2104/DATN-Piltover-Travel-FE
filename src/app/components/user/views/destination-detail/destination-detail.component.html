@@ -236,13 +236,15 @@
                 <p-table sortField="startTime" [value]="getPlanByDate(tourDateList.id)" dataKey="id">
                   <ng-template pTemplate="header">
           <tr class="text-center">
-            <th pSortableColumn="startTime" style="width: 23%;">Thời gian khởi hành<p-sortIcon
+            <th pSortableColumn="startTime" style="width: 22%;">Thời gian khởi hành<p-sortIcon
                 field="startTime"></p-sortIcon></th>
-            <th pSortableColumn="startName" style="width: 30%;">Điểm đến<p-sortIcon field="startName"></p-sortIcon>
+            <th pSortableColumn="startName" style="width: 23%;">Điểm đến<p-sortIcon field="startName"></p-sortIcon>
             </th>
-            <th pSortableColumn="startAddress" style="width: 30%;">Địa chỉ<p-sortIcon field="startAddress"></p-sortIcon>
+            <th pSortableColumn="startAddress" style="width: 23%;">Địa chỉ<p-sortIcon field="startAddress"></p-sortIcon>
             </th>
-            <th pSortableColumn="transport.name">Phương tiện<p-sortIcon field="transport.name"></p-sortIcon></th>
+            <th pSortableColumn="transport.name" style="width: 20%;">Phương tiện<p-sortIcon
+                field="transport.name"></p-sortIcon></th>
+            <th></th>
           </tr>
         </ng-template>
         <ng-template pTemplate="body" let-planList>
@@ -251,6 +253,9 @@
             <td>{{ planList.startName }}</td>
             <td>{{ planList.startAddress }}</td>
             <td>{{ planList.transport.name}}</td>
+            <th>
+              <button class="btn btn-info" (click)="getPlanDetailByPlan(planList.id)">Chi Tiết</button>
+            </th>
           </tr>
         </ng-template>
       </p-table>
@@ -262,5 +267,39 @@
   <h5 *ngIf="tourDateList && tourDateList.length == 0" class="text-center">Hiện Chưa Có Ngày Nào Được Thêm Vào
   </h5>
   </div>
+  </ng-template>
+
+  <ng-template #planDetailModal let-modal>
+    <div class="modal-header">
+      <h2 class="modal-title mr-3" id="modal-basic-title">Chi Tiết Kế Hoạch</h2>
+      <button id="closeDateModal" type="button" class="btn-close" aria-label="Close" (click)="modal.close()"></button>
+    </div>
+    <div class="modal-body">
+      <p-table #dt1 [value]="planDetailList" dataKey="id" [rows]="10" [paginator]="true" editMode="row"
+        currentPageReportTemplate="Hiển thị từ bảng {first} đến {last} trong tổng {totalRecords} bảng"
+        [globalFilterFields]="['startName', 'startAddress', 'transport.name']" [tableStyle]="{'min-width': '50rem'}">
+        <ng-template pTemplate="header" class="theader">
+          <tr>
+            <th pSortableColumn="description" style="width: 500px;">Mô tả<p-sortIcon field="description"></p-sortIcon>
+            </th>
+            <th pSortableColumn="startTime" style="width: 200px;">Từ<p-sortIcon field="startTime"></p-sortIcon></th>
+            <th pSortableColumn="endTime" style="width: 200px;">Đến<p-sortIcon field="endTime"></p-sortIcon></th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" class="tbody" let-planDetailList>
+          <tr [pEditableRow]="planDetailList">
+            <td>
+              {{planDetailList.description}}
+            </td>
+            <td>
+              {{planDetailList.startTime}}
+            </td>
+            <td>
+              {{planDetailList.endTime}}
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
   </ng-template>
 </main>
