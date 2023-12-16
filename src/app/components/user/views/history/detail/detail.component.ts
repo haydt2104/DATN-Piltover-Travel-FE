@@ -82,16 +82,16 @@ export class DetailComponent implements OnInit {
     this.HistoryService.getTourPlan(id).subscribe(
       (data: TourPlan[]) => {
         this.listTourPlan = data;
-       console.log("TourPlan",data);
+      //  console.log("TourPlan",data);
       }
     )
   }
 
   getListTourPlanDetail(id:number){
-    this.HistoryService.getTourPlanTest(id).subscribe(
+    this.HistoryService.getTourPlanDetail(id).subscribe(
       (data: TourPlanDetail[]) => {
         this.listTourPlanDetail = data;
-       console.log("TourPlanDetail",data);
+      //  console.log("TourPlanDetail",data);
       }
     )
   }
@@ -107,12 +107,12 @@ export class DetailComponent implements OnInit {
               window.location.href = response
             },
             (error: HttpErrorResponse) => {
-              console.log(error.message);
+              // console.log(error.message);
             }
           )
         },
         (error: HttpErrorResponse) => {
-          console.log(error.message);
+          // console.log(error.message);
         }
       )
     } else if (num == 2) {
@@ -121,7 +121,7 @@ export class DetailComponent implements OnInit {
           window.location.href = response
         },
         (error: HttpErrorResponse) => {
-          console.log(error.message);
+          // console.log(error.message);
         }
       )
     }

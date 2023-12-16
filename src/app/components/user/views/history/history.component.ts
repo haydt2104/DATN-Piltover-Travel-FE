@@ -74,7 +74,7 @@ export class HistoryComponent implements OnInit {
   cancelBooking(bid: number): void {
     Swal.fire({
       title: 'Bạn chắc chắn muốn hủy booking chứ !',
-      text: 'Nếu chọn tiếp tục, booking của bạn sẽ hủy dùng sẽ hủy',
+      text: 'Nếu chọn tiếp tục, booking của bạn sẽ hủy',
       icon: 'warning',
       showCancelButton: true,
       confirmButtonText: 'Tiếp tục',
