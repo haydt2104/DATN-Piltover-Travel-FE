@@ -28,4 +28,15 @@ export class HistoryService {
   cancelBooking(bid: number): Observable<void> {
     return this.http.delete<void>(this.baseUrl + 'api/admin/booking/cancel/' + bid);
   }
+
+  getTourPlan(id:number):Observable<any>{
+    return this.http.get(
+      `http://localhost:8080/api/user/history/tourplan?detail=${id}`
+    );
+  }
+  getTourPlanTest(id:number):Observable<any>{
+    return this.http.get(
+      `http://localhost:8080/api/user/history/tourplanDetail?detail=${id}`
+    );
+  }
 }

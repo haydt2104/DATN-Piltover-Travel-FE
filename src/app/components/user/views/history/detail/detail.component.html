@@ -59,9 +59,6 @@
               <li><span class="font-weight-bold">Người lớn:</span> {{history.adult}} người</li>
 
               <li><span class="font-weight-bold">Trẻ em:</span> {{history.children}} người</li>
-              <li><span class="font-weight-bold">Mô tả tour:
-                </span><span>{{history.booking.tourDate.tour.description}}</span>
-              </li>
 
               <li *ngIf="history.booking.status == 0">
                 <b>Thanh Toán:</b>
@@ -79,9 +76,34 @@
                   routerLinkActive="router-link-active">Trở lại</button>
               </div>
             </div>
-
           </div>
         </div>
+
+        <div class="row my-3">
+          <p-divider></p-divider>
+        </div>
+
+        <div class="row">
+          <h2 class="mb-1 text-left col-md-12">Lịch trình của tour</h2>
+          <p-accordion [multiple]="true" [activeIndex]="[0]">
+            <div *ngFor="let tp of listTourPlan">
+              <p-accordionTab [header]="tp.startTime| date:'dd/MM/yyyy HH:mm:ss'">
+                <div *ngFor="let tpd of listTourPlanDetail">
+                 <div [hidden]="tp.id != tpd.tourPlan.id">
+                  <p><Strong>Mô tả: </Strong>{{tpd.description}}</p>
+                  <p><Strong>Địa điểm bắt đầu: </Strong>{{tp.startAddress}}</p>
+                  <p><strong>Thời gian bắt đầu: </strong>{{tpd.startTime}}</p>
+                  <p><strong>Thời gian kết thúc: </strong>{{tpd.endTime}}</p>
+                  <p-divider></p-divider>
+                 </div>
+
+                </div>
+
+              </p-accordionTab>
+            </div>
+          </p-accordion>
+        </div>
+
         <div *ngIf="loading">
           <h2 class="text-center font-weight-bold">Đang tìm kiếm dữ liệu xin vui lòng chờ</h2>
         </div>
