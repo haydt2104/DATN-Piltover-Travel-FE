@@ -17,7 +17,7 @@ import { PostService } from 'src/app/services/post/post.service';
 })
 export class PostSingleComponent {
 
-  post!: Post
+  post: Post
   imgs: PostImage[]
   cmt: Comment[]
   countCmt: number = 0
@@ -55,10 +55,10 @@ export class PostSingleComponent {
     if (id !== null) {
       const idNumber = parseInt(id)
       this.idPost = idNumber
-      this.getPost(idNumber);
-      this.getImg(idNumber);
-      this.getComment(idNumber);
     }
+    this.getPost(this.idPost);
+    this.getImg(this.idPost);
+    this.getComment(this.idPost);
     this.checkLike(this.idPost);
     this.getCountLike(this.idPost)
     this.addCmt = this.form.group({
@@ -168,7 +168,7 @@ export class PostSingleComponent {
         this.getCountLike(this.idPost)
         this.checkLike(this.idPost)
       })
-    } else if (this.userLike == null){
+    } else if (this.userLike == null) {
       this.likeService.likePost(this.idPost, true).subscribe((data) => {
         this.getCountLike(this.idPost)
         this.checkLike(this.idPost)
@@ -188,10 +188,9 @@ export class PostSingleComponent {
     })
   }
 
-  public getEmailUserCmt(){
+  public getEmailUserCmt() {
     this.postService.getIdUserCmt().subscribe((data) => {
       this.userCmt = data
-      console.log(this.userCmt)
     })
   }
   validation_message = {

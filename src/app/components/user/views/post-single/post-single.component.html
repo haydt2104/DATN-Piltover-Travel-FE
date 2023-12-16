@@ -18,15 +18,15 @@
   <div class="container">
     <div class="row">
       <div class="col-lg-12 ftco-animate py-md-5 mt-md-5">
-        <h2 class="mb-3">{{post.title}}</h2>
-        <p>{{post.content}}</p>
+        <h2 class="mb-3" [innerHTML]="post.title"></h2>
+        <p [innerHTML]="post.content"></p>
         <p-galleria [value]="imgs" [containerStyle]="{ 'max-width': '100%' }">
           <ng-template pTemplate="item" let-item>
             <img [src]="item.path" style="width: 90%;" />
           </ng-template>
           <ng-template pTemplate="thumbnail" let-item>
             <div class="grid grid-nogutter justify-content-center">
-              <img [src]="item.path" width="20%" />
+              <img [src]="item.path" width="10%" height="50%"/>
             </div>
           </ng-template>
         </p-galleria>

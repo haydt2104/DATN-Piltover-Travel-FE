@@ -30,8 +30,8 @@
                 <span class="mos">{{item.createTime | date : 'MM'}}</span>
               </div>
             </div>
-            <h3 class="heading"><a routerLink="/post-single/{{item.id}}">{{item.title}}</a></h3>
-            <p>{{item.description}}</p>
+            <h3 class="heading"><a routerLink="/post-single/{{item.id}}" [innerHTML]="item.title"></a></h3>
+            <p [innerHTML]="item.description"></p>
             <p><a routerLink="/post-single/{{item.id}}" class="btn btn-primary">Xem chi tiết</a></p>
           </div>
         </div>

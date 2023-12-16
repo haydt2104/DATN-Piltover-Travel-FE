@@ -34,14 +34,14 @@ export class DestinationComponent {
   public getstartAdress(){
       this.HomeService.getStartAddress().subscribe((response) =>{
         this.StartAddress = response;
-        console.log('Start Address: ', this.StartAddress);
+        // console.log('Start Address: ', this.StartAddress);
       });
   }
 
   createNewTour() {
     this.HomeService.createTour(this.newTour).subscribe(response => {
       this.HomeTour = response;
-      console.log('Các tour:', response);
+      // console.log('Các tour:', response);
       if (!response || response.length === 0) {
         // Không có kết quả từ tìm kiếm
         this.searchError = 'Không tìm thấy tour phù hợp.';

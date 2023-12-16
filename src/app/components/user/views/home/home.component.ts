@@ -16,7 +16,7 @@ export class HomeComponent implements OnInit {
   constructor(private HomeService: HomeService) {}
 
   ngOnInit(): void {
-    console.log(this.HomeTour == null);
+    // console.log(this.HomeTour == null);
     if (this.HomeTour.length < 1) {
       this.getAll();
       this.autoChangeImage();
@@ -30,8 +30,8 @@ export class HomeComponent implements OnInit {
         this.HomeTour,
         this.toursPerPage
       );
-      console.log('Các tour: ', this.HomeTour);
-      console.log('Tour ngau nhien: ', this.displayedTours);
+      // console.log('Các tour: ', this.HomeTour);
+      // console.log('Tour ngau nhien: ', this.displayedTours);
     });
   }
   private getRandomTours(tours: HomeTour[], count: number): HomeTour[] {
