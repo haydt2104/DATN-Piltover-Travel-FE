@@ -22,5 +22,13 @@
 .ftco-section {
     padding: 3em 0;
 }
+.project-wrap {
+  display: flex;
+  flex-direction: column;
 
-
+  /* other styles */
+}
+.text {
+  height: 320px; /* Set a fixed height */
+  overflow: hidden; /* Hide overflowing content */
+}

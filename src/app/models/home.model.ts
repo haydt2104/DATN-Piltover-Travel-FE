@@ -24,3 +24,7 @@ export interface StartAddress {
   start_address: String;
 }
 
+export interface Address {
+  name: String;
+}
+

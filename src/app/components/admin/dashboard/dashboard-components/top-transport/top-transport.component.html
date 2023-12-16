@@ -3,10 +3,10 @@
     <!-- title -->
     <div class="row">
       <div class="col-md-9">
-        <h4 class="card-title">Doanh thu vận chuyển</h4>
+        <h4 class="card-title">Doanh thu phương tiện</h4>
       </div>
       <div class="col-md-3">
-        <input type="text" class="rounded-input" [(ngModel)]="searchTransportName" placeholder="Tìm tên vận chuyển..." (input)="searchTransport()">
+        <input type="text" class="rounded-input" [(ngModel)]="searchTransportName" placeholder="Tìm tên phương tiện..." (input)="searchTransport()">
         <span class="fa fa-search search-icon"></span>
       </div>
     </div>
@@ -21,7 +21,7 @@
               class="text-dark font-medium fs-4 text-center clickable"
               (click)="sortBy('transport_name')"
             >
-              Tên vận chuyển
+              Tên phương tiện
               <span class="icon"> <i class="fa fa-sort"></i></span>
             </th>
             <!-- Giá người lớn -->
@@ -29,7 +29,7 @@
               class="text-dark font-medium fs-4 text-center clickable"
               (click)="sortBy('transport_price')"
             >
-              Giá vận chuyển
+              Giá phương tiện
               <span class="icon">
                 <i class="fa fa-sort"></i>
               </span>

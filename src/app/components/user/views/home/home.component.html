@@ -71,20 +71,16 @@
               [style.background-image]="'url('+ tour.image + ')'">
               <span class="price">{{ formatCurrency(tour.adult_price) }}/người</span>
             </a>
-            <div class="text p-4">
+            <div class="text p-4" style=" height: 320px; overflow: hidden;">
               <h3><a routerLink="/destination-detail/{{tour.tourID}}">{{tour.name_tour}}</a></h3>
               <br>
-              <p class="location"><span class="fa fa-map-marker"></span> Điểm khởi hành: {{tour.start_address}}</p>
+              <p class="location"><span class="fa fa-map-marker"></span> Điểm đến: {{tour.start_address}}</p>
 
               <p class="location"><span class="fa fa-bus"></span> Phương tiện: {{tour.transport_name}}</p>
               <p class="location"><span class="fa fa-calendar"></span> Ngày khởi hành: {{tour.start_time |
                 date:'dd/MM/yyyy'}}</p>
               <p class="location"><span class="fa fa-home"></span> Khách sạn: {{tour.hotel_name}} {{tour.hotel_star}}*
               </p>
-              <ul>
-                <li><span class="ml-auto"></span><a routerLink="/destination-detail/{{tour.tourID}}">>> Xem thêm</a>
-                </li>
-              </ul>
             </div>
           </div>
         </div>

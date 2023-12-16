@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { HomeTour, SearchTour, StartAddress } from 'src/app/models/home.model';
+import { Address, HomeTour, SearchTour, StartAddress } from 'src/app/models/home.model';
 
 @Injectable({
   providedIn: 'root'
@@ -26,5 +26,9 @@ export class HomeService {
 
   public getStartAddress(): Observable<StartAddress[]> {
     return this.http.get<StartAddress[]>(this.baseUrl + 'api/home/startAddress');
+  }
+
+  public getStartAddressList(): Observable<Address[]> {
+    return this.http.get<Address[]>('https://provinces.open-api.vn/api/p/');
   }
 }

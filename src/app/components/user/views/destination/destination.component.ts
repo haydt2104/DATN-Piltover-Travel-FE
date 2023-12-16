@@ -1,5 +1,6 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component } from '@angular/core';
-import { HomeTour, SearchTour, StartAddress } from 'src/app/models/home.model';
+import { Address, HomeTour, SearchTour, StartAddress } from 'src/app/models/home.model';
 import { HomeService } from 'src/app/services/home/home.service';
 
 @Component({
@@ -11,6 +12,7 @@ export class DestinationComponent {
   public HomeTour!: HomeTour[];
   public StartAddress!: StartAddress[];
   public currentPage = 1;
+  public provinceList!: Address[];
   searchError: string = '';
   dataLoaded: boolean = false;
   tourSuggestions: string[] = [];
@@ -61,13 +63,6 @@ export class DestinationComponent {
       document.body.appendChild(script);
     });
   }
-  public getstartAdress() {
-    this.HomeService.getStartAddress().subscribe((response) => {
-      this.StartAddress = response;
-      // console.log('Start Address: ', this.StartAddress);
-    });
-  }
-
   createNewTour() {
     this.HomeService.createTour(this.newTour).subscribe(response => {
       this.HomeTour = response;
@@ -147,5 +142,21 @@ export class DestinationComponent {
     const currentDate = new Date();
     const formattedDate = currentDate.toISOString().split('T')[0];
     return formattedDate;
+  }
+
+  public getstartAdress(): void {
+    this.HomeService.getStartAddressList().subscribe(
+      (response) => {
+        this.provinceList = response;
+        console.log("Tinh: " +this.provinceList)
+      },
+      (error: HttpErrorResponse) => {
+        console.log(error.message);
+      }
+    );
+  }
+
+  handleAddressSelection() {
+    console.log('Đã chọn địa chỉ: ', this.newTour.startAddress);
   }
 }
