@@ -30,7 +30,7 @@
         <tr>
           <td>{{ item.id }}</td>
           <td>{{ item.createUser.email }}</td>
-          <td>{{ item.title }}</td>
+          <td [innerHTML]="item.title"></td>
           <td>{{ item.createTime | date:"HH:mm:ss dd/MM/yyyy" }}</td>
           <!-- <td>{{ likeCount[rowIndex] }}</td> -->
           <td>
