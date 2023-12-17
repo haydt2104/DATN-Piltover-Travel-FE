@@ -1,7 +1,10 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Component, Inject, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { data } from 'jquery';
 import { BookingDetail } from 'src/app/models/bookingdetail.model';
+import { TourPlanDetail } from 'src/app/models/tour-plan-detail.model';
+import { TourPlan } from 'src/app/models/tour-plan.model';
 import { HistoryService } from 'src/app/services/history/history.service';
 
 @Component({
@@ -11,7 +14,9 @@ import { HistoryService } from 'src/app/services/history/history.service';
 })
 export class DetailComponent implements OnInit {
   history!: BookingDetail;
+  listTourPlan!:TourPlan[];
   loading: boolean = true;
+  listTourPlanDetail!:TourPlanDetail[];
 
   constructor(
     @Inject('BASE_URL') private baseUrl: string,
@@ -26,6 +31,8 @@ export class DetailComponent implements OnInit {
     this.ActivatedRoute.queryParams.subscribe((params) => {
       const id = params['id'];
       this.getdata(id);
+      this.getListTourPlan(id);
+      this.getListTourPlanDetail(id);
     });
   }
 
@@ -71,6 +78,24 @@ export class DetailComponent implements OnInit {
       };
   }
 
+  getListTourPlan(id:number){
+    this.HistoryService.getTourPlan(id).subscribe(
+      (data: TourPlan[]) => {
+        this.listTourPlan = data;
+      //  console.log("TourPlan",data);
+      }
+    )
+  }
+
+  getListTourPlanDetail(id:number){
+    this.HistoryService.getTourPlanDetail(id).subscribe(
+      (data: TourPlanDetail[]) => {
+        this.listTourPlanDetail = data;
+      //  console.log("TourPlanDetail",data);
+      }
+    )
+  }
+
   toPayment(num: number) {
     if (num == 1) {
       this.httpClient.get(`https://v6.exchangerate-api.com/v6/4f5333c28a72c8a9ae7a2658/latest/USD`).subscribe(
@@ -82,12 +107,12 @@ export class DetailComponent implements OnInit {
               window.location.href = response
             },
             (error: HttpErrorResponse) => {
-              console.log(error.message);
+              // console.log(error.message);
             }
           )
         },
         (error: HttpErrorResponse) => {
-          console.log(error.message);
+          // console.log(error.message);
         }
       )
     } else if (num == 2) {
@@ -96,7 +121,7 @@ export class DetailComponent implements OnInit {
           window.location.href = response
         },
         (error: HttpErrorResponse) => {
-          console.log(error.message);
+          // console.log(error.message);
         }
       )
     }

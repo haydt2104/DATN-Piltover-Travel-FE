@@ -71,7 +71,7 @@ export class BookingComponent implements OnInit {
               this.bookings[index].status = 2;
             }
             Swal.fire({
-              title: 'Hủy thành công!',
+              title: 'Hủy thành công!,mail sẽ được gửi tới người dùng',
               icon: 'success',
               confirmButtonText: 'OK',
             });
