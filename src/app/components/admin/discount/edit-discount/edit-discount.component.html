@@ -5,7 +5,7 @@
 
         <div class="col-12">
 
-          <label class="form-label" for="name">Name:</label>
+          <label class="form-label" for="name">Tên mã giảm giá</label>
           <input class="form-control" type="text" id="name" formControlName="name">
           <small class="text-danger" *ngIf="formGroup.get('name').hasError('required')">
             Tên mã không được bỏ trống!
@@ -18,7 +18,7 @@
 
         <div class="col-12">
 
-          <label class="form-label" for="percentage">Percentage:</label>
+          <label class="form-label" for="percentage">Số phần trăm giảm</label>
           <input class="form-control" type="number" id="percentage" formControlName="percentage">
           <small class="text-danger" *ngIf="formGroup.get('percentage').hasError('required')">
             Số phần trăm giảm giá không được bỏ trống!
@@ -32,7 +32,7 @@
 
         <div class="col-12">
 
-          <label class="form-label" for="amount">Amount:</label>
+          <label class="form-label" for="amount">Số lượng</label>
           <input class="form-control" type="number" id="amount" formControlName="amount">
           <small class="text-danger" *ngIf="formGroup.get('amount').hasError('required')">
             Số lượng không bỏ trống
@@ -45,7 +45,7 @@
 
         <div class="col-6">
 
-          <label class="form-label" class="form-label" for="min">Số tiền tối thiểu để dùng:</label>
+          <label class="form-label" class="form-label" for="min">Số tiền để sử dụng</label>
           <input class="form-control" type="number" id="min" formControlName="min">
           <small class="text-danger" *ngIf="formGroup.get('min').hasError('required')">
             Số tiền tối thiểu không bỏ trống
@@ -58,7 +58,7 @@
 
         <div class="col-6">
 
-          <label class="form-label" for="max">Số tiền giảm tối đa:</label>
+          <label class="form-label" for="max">Số tiền giảm tối đa</label>
           <input class="form-control" type="number" id="max" formControlName="max">
           <small class="text-danger" *ngIf="formGroup.get('max').hasError('required')">
             Số tiền giảm tối đa không bỏ trống
