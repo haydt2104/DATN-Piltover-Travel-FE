@@ -10,12 +10,12 @@
       <div class="card-body">
         <div class="row">
           <div class="mb-3 col-sm-12 col-md-6">
-            <label class="form-label">Booking Id: </label>
+            <label class="form-label">Booking Id </label>
             <input class="form-control" type="text" id="id" name="id" disabled="disabled"
               [ngModel]="detailItem.booking.id" />
           </div>
           <div class="mb-3 col-sm-12 col-md-6">
-            <label class="form-label">Tour name: </label>
+            <label class="form-label">Tour name </label>
             <input class="form-control" type="text" id="tourname" name="tourname" disabled="disabled"
               [ngModel]="detailItem.booking.tourDate.tour.name" />
           </div>
@@ -23,7 +23,7 @@
 
         <div class="row">
           <div class="mb-3 col-sm-12 col-md-6">
-            <label class="form-label">Trạng thái: </label>
+            <label class="form-label">Trạng thái </label>
             <select class="form-control" [ngSwitch]="detailItem.booking.status" disabled="disabled">
               <option *ngSwitchCase="0">Chưa thanh toán</option>
               <option *ngSwitchCase="1">Đã thanh toán</option>
@@ -31,25 +31,25 @@
             </select>
           </div>
           <div class="mb-3 col-sm-12 col-md-6">
-            <label for="" class="form-label">Ngày lập:</label>
-            <input class="form-control" type="date" id="bookingTime" [ngModel]="detailItem.booking.createTime"
-              name="bookingTime" disabled="disabled" />
+            <label for="" class="form-label">Ngày lập</label>
+              <input type="hidden" [(ngModel)]="detailItem.bookingTime" name="bookingTimeHidden" />
+              <input class="form-control" type="text" [value]="detailItem.bookingTime | date:'dd/MM/yyyy - HH:mm:ss'" disabled="disabled" />
           </div>
         </div>
 
         <div class="row">
           <div class="mb-3 col-sm-12 col-md-3">
-            <label for="" class="form-label">Chỗ ở: </label>
+            <label for="" class="form-label">Chỗ ở</label>
             <input class="form-control" type="text" id="hotelName" name="hotelName" disabled="disabled"
               [(ngModel)]="detailItem.booking.tourDate.tour.hotel.name" />
           </div>
           <div class="mb-3 col-sm-12 col-md-3">
-            <label for="" class="form-label">Phương tiện: </label>
+            <label for="" class="form-label">Phương tiện</label>
             <input class="form-control" type="text" id="transportName" name="transportName"
               [ngModel]="detailItem.booking.tourDate.tour.transport.name" disabled="disabled" />
           </div>
           <div class="mb-3 col-sm-12 col-md-3">
-            <label for="" class="form-label">Số lượng người lớn: </label>
+            <label for="" class="form-label">Số lượng người lớn</label>
             <div class="input-group">
               <input class="form-control" type="number" min="0" aria-describedby="ng1" id="adult" name="adult"
                 [ngModel]="detailItem.adult" disabled="disabled" />
@@ -57,7 +57,7 @@
             </div>
           </div>
           <div class="mb-3 col-sm-12 col-md-3">
-            <label for="" class="form-label">Số lượng trẻ em: </label>
+            <label for="" class="form-label">Số lượng trẻ em</label>
             <div class="input-group">
               <input class="form-control" type="number" min="0" aria-describedby="ng2" id="children" name="children"
                 [ngModel]="detailItem.children" disabled="disabled" />
@@ -67,17 +67,17 @@
         </div>
         <div class="row">
           <div class="mb-3 col-sm-12 col-md-4">
-            <label for="" class="form-label">Tổng tiền cơ bản: </label>
+            <label for="" class="form-label">Tổng tiền cơ bản</label>
             <input class="form-control" type="text" id="totalPrice" name="totalPrice" disabled="disabled"
               [ngModel]="Money">
           </div>
           <div class="mb-3 col-sm-12 col-md-4">
-            <label for="" class="form-label">Mã giảm giá: </label>
+            <label for="" class="form-label">Mã giảm giá</label>
             <input class="form-control" name="discountName" [ngModel]="DiscountName" disabled="disabled" />
 
           </div>
           <div class="mb-3 col-sm-12 col-md-4">
-            <label for="" class="form-label">Tổng tiền thu: </label>
+            <label for="" class="form-label">Tổng tiền thu</label>
             <input class="form-control" type="text" id="totalPrice" name="totalPrice" disabled="disabled"
               [ngModel]="detailItem.booking.totalPrice">
           </div>
@@ -92,12 +92,12 @@
       <div class="card-body">
         <div class="row">
           <div class="mb-3 col-sm-12 col-md-6">
-            <label for="" class="form-label">Tên khách hàng: </label>
+            <label for="" class="form-label">Tên khách hàng</label>
             <input type="text" class="form-control" id="customName" name="customName" disabled="disabled"
               [ngModel]="detailItem.booking.createUser.fullname">
           </div>
           <div class="mb-3 col-sm-12 col-md-6">
-            <label for="email" class="form-label">Email:</label>
+            <label for="email" class="form-label">Email</label>
             <input class="form-control" type="email" id="customEmail" name="customEmail" disabled="disabled"
               [ngModel]="detailItem.booking.createUser.email">
           </div>
@@ -105,17 +105,17 @@
         </div>
         <div class="row">
           <div class="mb-3 col-sm-12 col-md-4">
-            <label for="phone" class="form-label">Số điện thoại: </label>
+            <label for="phone" class="form-label">Số điện thoại</label>
             <input class="form-control" type="text" id="customPhone" name="customPhone" disabled="disabled"
               [ngModel]="detailItem.booking.createUser.phone">
           </div>
           <div class="mb-3 col-sm-12 col-md-4">
-            <label for="" class="form-label">Địa chỉ: </label>
+            <label for="" class="form-label">Địa chỉ</label>
             <input class="form-control" type="text" id="customAddress" name="customAddress" disabled="disabled"
               [ngModel]="detailItem.booking.createUser.address">
           </div>
           <div class="mb-3 col-sm-12 col-md-4">
-            <label for="" class="form-label">Ngày đi: </label>
+            <label for="" class="form-label">Ngày đi</label>
             <input class="form-control" type="date" id="initiateDateTour" name="initiateDateTour" disabled="disabled"
               [ngModel]="detailItem.booking.tourDate.initiateDate">
           </div>

@@ -48,7 +48,7 @@ export class EditBookingComponent implements OnInit {
         this.DiscountName = this.detailItem.booking.discount
           ? this.detailItem.booking.discount.name
           : 'Không có';
-        // console.log('dataDetailBooking:', this.detailItem);
+        console.log('dataDetailBooking:', this.detailItem);
         this.loading = false;
       },
       (error) => {

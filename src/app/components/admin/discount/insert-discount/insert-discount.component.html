@@ -3,7 +3,7 @@
     <div class="row justify-content-center">
       <form class="row g-3 col-md-8" (ngSubmit)="submitForm()" [formGroup]="formGroup">
         <div class="col-12">
-          <label class="form-label">Tên mã giảm giá:</label>
+          <label class="form-label">Tên mã giảm giá</label>
           <input type="text" class="form-control" id="name" formControlName="name" name="name" required>
 
           <small class="text-danger" *ngIf="formGroup.get('name').hasError('required')">
@@ -16,7 +16,7 @@
         </div>
 
         <div class="col-12">
-          <label class="form-label">Số phần trăm giảm:</label>
+          <label class="form-label">Số phần trăm giảm</label>
           <input type="number" class="form-control" placeholder="Example: 5, 10, 10.5, ..." id="percentage"
             formControlName="percentage" name="percentage" required>
 
@@ -31,7 +31,7 @@
         </div>
 
         <div class="col-12">
-          <label class="form-label">Số lượng:</label>
+          <label class="form-label">Số lượng</label>
           <input type="number" class="form-control" id="amount" formControlName="amount" name="amount" required>
 
           <small class="text-danger" *ngIf="formGroup.get('amount').hasError('required')">
@@ -44,7 +44,7 @@
         </div>
 
         <div class="col-md-6">
-          <label class="form-label">Số tiền để sử dụng:</label>
+          <label class="form-label">Số tiền để sử dụng</label>
           <input type="number" class="form-control" id="min" formControlName="min" name="min" required>
 
           <small class="text-danger" *ngIf="formGroup.get('min').hasError('required')">
