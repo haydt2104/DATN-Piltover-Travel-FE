@@ -874,7 +874,7 @@ export class TourComponent implements OnInit {
     } else {
       const seatingCapacity: number = +$('#seatingCapacity').val()
       const price: number = +$('#price').val()
-      if (data.valid && seatingCapacity > 0 && price > 0) {
+      if (data.valid && seatingCapacity > 0 && price >= 0) {
         return true
       } else {
         return false;

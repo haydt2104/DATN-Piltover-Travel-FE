@@ -163,7 +163,7 @@ export class TourPlanDetailComponent implements OnInit {
   }
 
   onRowEditSave(tourPlanDetail: TourPlanDetail) {
-    let status = true
+    var status: boolean = true
     if (this.checkValidTime(tourPlanDetail.startTime) == false || this.checkValidTime2(tourPlanDetail.startTime, tourPlanDetail.endTime) == false) {
       console.log("in");
       tourPlanDetail.startTime = this.clonedProducts[tourPlanDetail.id].startTime;
@@ -172,8 +172,8 @@ export class TourPlanDetailComponent implements OnInit {
     }
     this.curdService.put('tour_plan_detail', tourPlanDetail).subscribe(
       (response: TourPlan) => {
-        this.messageService.clear();        
-        if (status = false) {
+        this.messageService.clear();
+        if (status == true) {
           this.messageService.add({ key: 'success', severity: 'success', summary: 'Thông Báo', detail: 'Cập nhật thành công' });
         } else {
           this.messageService.add({ key: 'warn', severity: 'warn', summary: 'Thông Báo', detail: 'Thời Gian Không Khớp Lịch Trình Hệ Thống Chỉ Cập Nhật Mô Tả' });

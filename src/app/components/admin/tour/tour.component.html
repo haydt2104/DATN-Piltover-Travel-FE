@@ -375,10 +375,16 @@
                 </p-cellEditor>
               </td>
               <td class="text-center">
-                <i *ngIf="dateStatus(tourDateList) == 0" class="text-danger">Chưa Công Khai</i>
-                <i *ngIf="dateStatus(tourDateList) == 1" style="color: blue">Chưa Diễn Ra</i>
-                <i *ngIf="dateStatus(tourDateList) == 2" class="text-warning">Đang Diễn Ra</i>
-                <i *ngIf="dateStatus(tourDateList) == 3" class="text-success">Đã Diễn Ra</i>
+                <i *ngIf="tourDateList.status.id == 1" class="text-danger">Chưa Công Khai</i>
+                <i *ngIf="tourDateList.status.id == 3" class="text-danger">Đã Hủy</i>
+                <i *ngIf="dateStatus(tourDateList) == 0 && tourDateList.status.id == 2" class="text-danger">Chưa Công
+                  Khai</i>
+                <i *ngIf="dateStatus(tourDateList) == 1 && tourDateList.status.id == 2" style="color: blue">Chưa Diễn
+                  Ra</i>
+                <i *ngIf="dateStatus(tourDateList) == 2 && tourDateList.status.id == 2" class="text-warning">Đang Diễn
+                  Ra</i>
+                <i *ngIf="dateStatus(tourDateList) == 3 && tourDateList.status.id == 2" class="text-success">Đã Diễn
+                  Ra</i>
               </td>
               <td>
                 <div class="button-group">
