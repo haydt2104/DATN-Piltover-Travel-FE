@@ -1,5 +1,5 @@
 export const environment = {
-  apiUrl: 'http://datn-piltover.us-east-1.elasticbeanstalk.com/',
+  apiUrl: 'http://piltover-env.eba-m9jwpght.us-east-1.elasticbeanstalk.com/',
   production: false,
   firebaseConfig: {
     apiKey: 'AIzaSyBL8oFvS6G9d2dHC-F851vPJUCxmn6KPdY',
