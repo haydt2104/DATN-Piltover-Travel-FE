@@ -102,26 +102,26 @@ export class DetailComponent implements OnInit {
         (response) => {
           var currencyData: any = response
           this.history.booking.totalPrice = this.history.booking.totalPrice / currencyData.conversion_rates.VND
-          this.httpClient.post(`${this.baseUrl}paypal`, this.history, { responseType: 'text' }).subscribe(
+          this.httpClient.post(`${this.baseUrl}paypal?fe=${location.origin}`, this.history, { responseType: 'text' }).subscribe(
             (response: string) => {
               window.location.href = response
             },
             (error: HttpErrorResponse) => {
-              // console.log(error.message);
+              console.log(error.message);
             }
           )
         },
         (error: HttpErrorResponse) => {
-          // console.log(error.message);
+          console.log(error.message);
         }
       )
     } else if (num == 2) {
-      this.httpClient.post(`${this.baseUrl}vnpay`, this.history, { responseType: 'text' }).subscribe(
+      this.httpClient.post(`${this.baseUrl}vnpay?fe=${location.origin}`, this.history, { responseType: 'text' }).subscribe(
         (response: string) => {
           window.location.href = response
         },
         (error: HttpErrorResponse) => {
-          // console.log(error.message);
+          console.log(error.message);
         }
       )
     }
