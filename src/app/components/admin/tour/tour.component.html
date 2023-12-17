@@ -828,7 +828,7 @@
 
     <!-- Main Table -->
     <div class="table-responsive">
-      <p-table #dt1 [value]="tourList" sortField="active" dataKey="id" [rows]="5" [showCurrentPageReport]="true"
+      <p-table #dt1 [value]="tourList" sortField="active" [sortOrder]="-1" dataKey="id" [rows]="5" [showCurrentPageReport]="true"
         [paginator]="true"
         currentPageReportTemplate="Hiển thị từ bảng {first} đến {last} trong tổng {totalRecords} bảng"
         [globalFilterFields]="['name']" [tableStyle]="{'min-width': '80rem'}">
