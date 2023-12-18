@@ -21,6 +21,7 @@ import { PostSingleComponent } from './components/user/views/post-single/post-si
 import { DetailComponent } from './components/user/views/history/detail/detail.component';
 import { CheckoutComponent } from './components/user/views/checkout/checkout.component';
 import { authGuard } from './auth.guard';
+import { ChangeinfoComponent } from './components/user/authorizations/changeinfo/changeinfo.component';
 
 export const Approutes: Routes = [
   {
@@ -144,6 +145,11 @@ export const Approutes: Routes = [
       { path: 'login', component: LoginComponent },
       { path: 'sign-up', component: SignUpComponent },
       { path: 'forgot-pass', component: ForgotpassComponent },
+      {
+        path: 'change-info',
+        component: ChangeinfoComponent,
+        canActivate: [authGuard],
+      },
     ],
   },
   {

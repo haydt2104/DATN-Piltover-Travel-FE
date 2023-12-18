@@ -38,7 +38,7 @@
             <li><a class="dropdown-item" [hidden]="isLoggedIn" routerLink="/auth/sign-up">Đăng ký</a></li>
 
 
-            <li><a class="dropdown-item" [hidden]="!isLoggedIn" routerLink="/auth/forgot-pass">Thay đổi thông tin</a>
+            <li><a class="dropdown-item" [hidden]="!isLoggedIn" routerLink="/auth/change-info">Thay đổi thông tin</a>
             </li>
             <li><a class="dropdown-item" [hidden]="!isLoggedIn" *ngIf="['ROLE_ADMIN'].indexOf(role)!==-1"
                 routerLink="/admin/dashboard">Trang quản trị</a></li>

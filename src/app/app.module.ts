@@ -55,6 +55,7 @@ import { ContactComponent } from './components/user/views/contact/contact.compon
 import { ButtonModule } from 'primeng/button';
 import { LoadingInterceptor } from './loading.interceptor';
 import { AuthInterceptor } from './interceptor/auth.interceptor';
+import { ChangeinfoComponent } from './components/user/authorizations/changeinfo/changeinfo.component';
 // import { LayoutComponent } from './components/user/layouts/layout/layout.component';
 
 @NgModule({
@@ -78,6 +79,7 @@ import { AuthInterceptor } from './interceptor/auth.interceptor';
     LoadingSpinnerComponent,
     AboutComponent,
     ContactComponent,
+    ChangeinfoComponent,
   ],
   imports: [
     CommonModule,

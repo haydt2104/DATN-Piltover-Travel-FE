@@ -17,7 +17,11 @@ export const authGuard: CanActivateFn = (route, state) => {
     }
   }
 
-  if (state.url.includes('checkout') || state.url.includes('history')) {
+  if (
+    state.url.includes('checkout') ||
+    state.url.includes('history') ||
+    state.url.includes('change-info')
+  ) {
     tokenStorageService.getUser().roles.includes('ROLE_USER');
     if (tokenStorageService.getUser().roles.includes('ROLE_USER')) {
       return true;

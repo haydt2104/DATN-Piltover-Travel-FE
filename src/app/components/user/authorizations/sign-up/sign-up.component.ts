@@ -79,6 +79,7 @@ export class SignUpComponent implements OnInit {
   }
 
   public onSubmit(): void {
+    this.submitted = true;
     if (this.formSignUpDataReq.valid) {
       console.log('Form Data: ', this.formSignUpDataReq.value);
     } else {
