@@ -40,12 +40,6 @@
       <b [hidden]="isLoggedIn"><span>Tài khoản</span></b>
     </a>
     <ul class="dropdown-menu-right" ngbDropdownMenu>
-      <li><a class="dropdown-item" [hidden]="isLoggedIn" onclick="this.router.navigateByUrl('/auth/login');"
-          routerLink="/auth/login">Đăng nhập</a></li>
-      <li><a class="dropdown-item" [hidden]="isLoggedIn" routerLink="/auth/sign-up">Đăng ký</a></li>
-      <li><a class="dropdown-item" [hidden]="!isLoggedIn" routerLink="/auth/forgot-pass">Thay đổi thông tin</a></li>
-      <div class="dropdown-divider"></div>
-      <li><a class="dropdown-item" [hidden]="isLoggedIn" routerLink="/auth/forgot-pass">Quên mật khẩu</a></li>
       <li><a class="dropdown-item" (click)="logOut()" [hidden]="!isLoggedIn">Đăng xuất</a></li>
     </ul>
   </li>

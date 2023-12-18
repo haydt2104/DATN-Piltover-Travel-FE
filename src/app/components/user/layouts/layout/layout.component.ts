@@ -1,3 +1,4 @@
+import { AuthService } from 'src/app/services/auth/auth.service';
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
@@ -22,7 +23,8 @@ export class LayoutComponent implements OnInit {
     public router: Router,
     private messageService: MessageService,
     private tokenStorageService: TokenStorageService,
-    private shareService: ShareService
+    private shareService: ShareService,
+    private authService: AuthService
   ) {
     this.shareService.getClickEvent().subscribe(() => {
       this.loadHeader();
@@ -92,8 +94,20 @@ export class LayoutComponent implements OnInit {
   }
 
   public logOut() {
-    this.tokenStorageService.signOut();
-    this.loadHeader();
-    this.isLoggedIn = false;
+    this.authService.logout().subscribe(
+      (response) => {
+        // Xử lý response sau khi logout thành công
+        console.log('Logout successful:', response);
+
+        // Gọi các hàm cần thiết sau khi logout
+        this.tokenStorageService.signOut();
+        this.loadHeader();
+        this.isLoggedIn = false;
+      },
+      (error) => {
+        // Xử lý lỗi nếu có
+        console.error('Logout failed:', error);
+      }
+    );
   }
 }

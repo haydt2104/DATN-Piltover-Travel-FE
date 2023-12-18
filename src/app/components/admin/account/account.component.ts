@@ -1,7 +1,11 @@
+import { error } from 'jquery';
 import { Component, OnInit } from '@angular/core';
 import { AccountService } from 'src/app/services/account/account.service';
 import { Account } from 'src/app/models/account.model';
 import { FormBuilder, FormControl, Validators } from '@angular/forms';
+import Swal from 'sweetalert2';
+import { TableModule } from 'primeng/table';
+import { ButtonModule } from 'primeng/button';
 
 @Component({
   selector: 'app-account',
@@ -21,7 +25,7 @@ export class AccountComponent implements OnInit {
     this.submitted = false;
     this.account = {
       gender: true,
-      active: true,
+      isDelete: false,
     } as Account;
     this.accounts = [{}] as Account[];
 
@@ -36,7 +40,7 @@ export class AccountComponent implements OnInit {
       updateAt: [null],
       errorCount: [null],
       bannedTime: [null],
-      active: [true, Validators.required],
+      isDelete: [false, Validators.required],
     });
   }
 
@@ -68,11 +72,26 @@ export class AccountComponent implements OnInit {
           // Xử lý dữ liệu thành công ở đây
           this.accounts.push(data.newAccount);
           console.log('data', data);
-
+          Swal.fire({
+            position: 'center',
+            icon: 'success',
+            title: 'Tạo tài khoản ADMIN thành công',
+            showConfirmButton: false,
+            timer: 1500,
+          });
           console.log('Create success');
         },
         (error) => {
           // Xử lý lỗi ở đây
+          Swal.fire({
+            position: 'center',
+            icon: 'error',
+            title: 'Tạo tài khoản thất bại',
+            text: error.error.message,
+            showConfirmButton: false,
+            timer: 1500,
+          });
+          console.error('Error: ', error);
           console.error('Error: ', error);
         }
       );
@@ -88,7 +107,7 @@ export class AccountComponent implements OnInit {
   public refreshForm(): void {
     this.account = {
       gender: true,
-      active: true,
+      isDelete: false,
     } as Account;
 
     this.formAccountData.patchValue({
@@ -102,7 +121,7 @@ export class AccountComponent implements OnInit {
       updateAt: null,
       errorCount: null,
       bannedTime: null,
-      active: true,
+      isDelete: false,
     });
     this.submitted = false;
   }
@@ -113,5 +132,57 @@ export class AccountComponent implements OnInit {
     } else {
       console.log('Invalid form');
     }
+  }
+
+  public block(id: number) {
+    const swalWithBootstrapButtons = Swal.mixin({
+      customClass: {
+        confirmButton: 'btn btn-success',
+        cancelButton: 'btn btn-danger',
+      },
+      buttonsStyling: false,
+    });
+    swalWithBootstrapButtons
+      .fire({
+        title: 'Bạn có chắc chắn muốn khóa chứ?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Khóa',
+        cancelButtonText: 'Không',
+      })
+      .then((result) => {
+        if (result.isConfirmed) {
+          this.accountService.blockAccount(id).subscribe(
+            (response) => {
+              const index = this.accounts.findIndex(
+                (account) => account.id === id
+              );
+              this.accounts[index].isDelete = true;
+              swalWithBootstrapButtons.fire({
+                title: 'Đã khóa!',
+                text: response.message,
+                icon: 'success',
+              });
+            },
+            (error) => {
+              // Xử lý lỗi ở đây
+              swalWithBootstrapButtons.fire({
+                title: 'Đã xảy ra lỗi!',
+                text: error.error.message,
+                icon: 'error',
+              });
+              console.error('Error: ', error);
+            }
+          );
+        } else if (
+          /* Read more about handling dismissals below */
+          result.dismiss === Swal.DismissReason.cancel
+        ) {
+          swalWithBootstrapButtons.fire({
+            title: 'Đã hủy',
+            icon: 'error',
+          });
+        }
+      });
   }
 }

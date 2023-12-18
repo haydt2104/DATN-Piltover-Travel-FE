@@ -54,4 +54,10 @@ export class AccountService {
       this.baseUrl + `api/admin/account/currentAccount`
     );
   }
+
+  public blockAccount(id: number): any {
+    return this.http.delete<any>(
+      this.baseUrl + `api/admin/account/block/${id}`
+    );
+  }
 }

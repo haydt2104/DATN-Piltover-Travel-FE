@@ -11,5 +11,5 @@ export interface Account {
   updateAt: Date;
   errorCount: number;
   bannedTime: Date;
-  active: boolean;
+  isDelete: boolean;
 }

@@ -3,6 +3,7 @@ import { Component, AfterViewInit, EventEmitter, Output } from '@angular/core';
 import { NgbDropdownModule, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ShareService } from 'src/app/services/share.service';
 import { TokenStorageService } from 'src/app/services/token-storage.service';
+import { AuthService } from 'src/app/services/auth/auth.service';
 
 declare var $: any;
 
@@ -23,7 +24,8 @@ export class NavigationComponent implements AfterViewInit {
   constructor(
     private tokenStorageService: TokenStorageService,
     private shareService: ShareService,
-    private router: Router
+    private router: Router,
+    private authService: AuthService
   ) {
     this.shareService.getClickEvent().subscribe(() => {
       this.loadHeader();
@@ -40,9 +42,22 @@ export class NavigationComponent implements AfterViewInit {
   }
 
   public logOut() {
-    this.tokenStorageService.signOut();
-    this.loadHeader();
-    this.isLoggedIn = false;
+    this.authService.logout().subscribe(
+      (response) => {
+        // Xử lý response sau khi logout thành công
+        console.log('Logout successful:', response);
+
+        // Gọi các hàm cần thiết sau khi logout
+        this.tokenStorageService.signOut();
+        this.loadHeader();
+        this.isLoggedIn = false;
+        this.router.navigateByUrl('/auth/login');
+      },
+      (error) => {
+        // Xử lý lỗi nếu có
+        console.error('Logout failed:', error);
+      }
+    );
   }
 
   ngAfterViewInit() {

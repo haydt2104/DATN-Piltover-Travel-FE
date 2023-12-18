@@ -43,8 +43,7 @@ import { MessageService } from 'primeng/api';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { LoadingSpinnerComponent } from './components/user/authorizations/loading-spinner/loading-spinner.component';
 import { LoginComponent } from './components/user/authorizations/login/login.component';
-import { AuthInterceptor } from './interceptor/auth.interceptor';
-import { LoadingInterceptor } from './loading.interceptor';
+
 import { SignUpComponent } from './components/user/authorizations/sign-up/sign-up.component';
 import { TableModule } from 'primeng/table';
 import { MultiSelectModule } from 'primeng/multiselect';
@@ -53,6 +52,9 @@ import { SliderModule } from 'primeng/slider';
 import { DropdownModule } from 'primeng/dropdown';
 import { AboutComponent } from './components/user/views/about/about.component';
 import { ContactComponent } from './components/user/views/contact/contact.component';
+import { ButtonModule } from 'primeng/button';
+import { LoadingInterceptor } from './loading.interceptor';
+import { AuthInterceptor } from './interceptor/auth.interceptor';
 // import { LayoutComponent } from './components/user/layouts/layout/layout.component';
 
 @NgModule({
@@ -99,6 +101,7 @@ import { ContactComponent } from './components/user/views/contact/contact.compon
     InputTextModule,
     SliderModule,
     DropdownModule,
+    ButtonModule,
   ],
   providers: [
     {

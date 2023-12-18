@@ -60,33 +60,37 @@ export class LoginComponent implements OnInit {
           this.formLoginDataReq.reset();
           this.shareService.sendClickEvent();
           this.loading = false;
-          setTimeout(() => {
-            Swal.fire({
-              position: 'center',
-              icon: 'success',
-              title: 'Đăng nhập thành công',
-              text: 'Bạn sẽ được chuyển hướng đến trang chủ',
-              showConfirmButton: false,
-              timer: 1500,
-            }).then(() => {
-              // Thực hiện chuyển hướng sau khi hiển thị SweetAlert
+          Swal.fire({
+            position: 'center',
+            icon: 'success',
+            title: 'Đăng nhập thành công',
+            showConfirmButton: false,
+            timer: 1500,
+          }).then(() => {
+            // Thực hiện chuyển hướng sau khi hiển thị SweetAlert
+            console.log(
+              'IS ADMIN',
+              this.tokenStorageService.getUser().roles[0] === 'ROLE_ADMIN'
+            );
+
+            if (this.tokenStorageService.getUser().roles[0] === 'ROLE_ADMIN') {
+              this.router.navigateByUrl('/admin/dashboard');
+            } else {
               this.router.navigateByUrl('/');
-            });
-          }, 2000);
+            }
+          });
         },
         (error) => {
           // Xử lý lỗi từ API (hiển thị thông báo lỗi, đăng nhập không thành công, v.v.)
           console.error('Login failed', error);
-          setTimeout(() => {
-            Swal.fire({
-              position: 'center',
-              icon: 'error',
-              title: 'Đăng nhập thất bại',
-              text: 'Tên đăng nhập hoặc mật khẩu chưa chính xác',
-              showConfirmButton: false,
-              timer: 1500,
-            });
-          }, 2000);
+          Swal.fire({
+            position: 'center',
+            icon: 'error',
+            title: 'Đăng nhập thất bại',
+            text: 'Tên đăng nhập hoặc mật khẩu chưa chính xác',
+            showConfirmButton: false,
+            timer: 1500,
+          });
           this.loading = false;
         }
       );

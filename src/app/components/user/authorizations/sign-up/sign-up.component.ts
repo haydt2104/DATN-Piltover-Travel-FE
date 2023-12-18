@@ -49,33 +49,29 @@ export class SignUpComponent implements OnInit {
         (data) => {
           // Xử lý dữ liệu thành công ở đây
           console.log('data', data);
-          setTimeout(() => {
-            Swal.fire({
-              position: 'center',
-              icon: 'success',
-              title: 'Đăng ký thành công',
-              text: 'Bạn sẽ được chuyển hướng đến trang đăng nhập',
-              showConfirmButton: false,
-              timer: 1500,
-            }).then(() => {
-              // Thực hiện chuyển hướng sau khi hiển thị SweetAlert
-              this.router.navigateByUrl('/auth/login');
-            });
-          }, 2000);
+          Swal.fire({
+            position: 'center',
+            icon: 'success',
+            title: 'Đăng ký thành công',
+            text: 'Bạn sẽ được chuyển hướng đến trang đăng nhập',
+            showConfirmButton: false,
+            timer: 1500,
+          }).then(() => {
+            // Thực hiện chuyển hướng sau khi hiển thị SweetAlert
+            this.router.navigateByUrl('/auth/login');
+          });
           console.log('Create success');
         },
         (error) => {
           // Xử lý lỗi ở đây
-          setTimeout(() => {
-            Swal.fire({
-              position: 'center',
-              icon: 'error',
-              title: 'Đăng ký thất bại',
-              text: error.error.message,
-              showConfirmButton: false,
-              timer: 1500,
-            });
-          }, 2000);
+          Swal.fire({
+            position: 'center',
+            icon: 'error',
+            title: 'Đăng ký thất bại',
+            text: error.error.message,
+            showConfirmButton: false,
+            timer: 1500,
+          });
           console.error('Error: ', error);
         }
       );

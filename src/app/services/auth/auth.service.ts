@@ -40,4 +40,18 @@ export class AuthService {
       })
     );
   }
+
+  public logout(): Observable<any> {
+    const logoutUrl = `${this.baseUrl}api/auth/logout`;
+
+    return this.http.get(logoutUrl).pipe(
+      map((response) => {
+        // Xử lý dữ liệu ở đây nếu cần
+        return response;
+      }),
+      catchError((error) => {
+        return throwError(() => error);
+      })
+    );
+  }
 }

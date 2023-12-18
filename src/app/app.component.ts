@@ -3,8 +3,8 @@ import { TourDate } from './models/tour-date.model';
 import { CurdService } from './services/curd.service';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Status } from './models/status.model';
-import { TourDateService } from './services/tour/tour-date.service';
 import { BookingService } from './services/booking/booking.service';
+import { TourDateService } from './services/tour/tour-date.service';
 
 @Component({
   selector: 'app-root',
@@ -19,7 +19,7 @@ export class AppComponent implements OnInit {
     private tourDateService: TourDateService,
     private bookingService: BookingService,
     private httpClient: HttpClient
-  ) { }
+  ) {}
 
   currentDate = new Date();
 
@@ -29,14 +29,15 @@ export class AppComponent implements OnInit {
   }
 
   public getTourDate() {
-    this.curdService.getList("tour_date").subscribe(
+    this.curdService.getList('tour_date').subscribe(
       (response: TourDate[]) => {
         this.tourDateList = response;
-        setInterval(() => this.autoUpdateTourDateStatus(), 1000)
+        setInterval(() => this.autoUpdateTourDateStatus(), 1000);
       },
       (error: HttpErrorResponse) => {
         console.log(error.message);
-      })
+      }
+    );
   }
 
   public getAllStatus() {
@@ -48,44 +49,48 @@ export class AppComponent implements OnInit {
       (error: HttpErrorResponse) => {
         console.log(error.message);
       }
-    )
+    );
   }
 
   public autoUpdateTourDateStatus() {
     for (var i = 0; i < this.tourDateList.length; i++) {
-      var dateDif = this.getDateDiffer(this.tourDateList[i].initiateDate)
+      var dateDif = this.getDateDiffer(this.tourDateList[i].initiateDate);
       if (dateDif < 7 && this.tourDateList[i].status.id == 1) {
-        this.tourDateList[i].status = this.statusList.find(status => status.id == 3);
+        this.tourDateList[i].status = this.statusList.find(
+          (status) => status.id == 3
+        );
         this.tourDateService.putTourDate(this.tourDateList[i]).subscribe(
-          (response) => {
-          },
+          (response) => {},
           (error: HttpErrorResponse) => {
             console.log(error.message);
           }
-        )
+        );
       }
     }
   }
   public getDateDiffer(date: Date): number {
-    var dateDif = Math.round(Number(new Date(date).getTime()) - Number(new Date().getTime())) / (24 * 60 * 60 * 1000)
-    return dateDif
+    var dateDif =
+      Math.round(
+        Number(new Date(date).getTime()) - Number(new Date().getTime())
+      ) /
+      (24 * 60 * 60 * 1000);
+    return dateDif;
   }
   public checkDate() {
-    if (this.currentDate.getDay() != (new Date()).getDay()) {
+    if (this.currentDate.getDay() != new Date().getDay()) {
       this.bookingService.getOutDatedList().subscribe(
         (response: number[]) => {
           this.bookingService.editOutDated(response).subscribe(
-            (response) => {
-            },
+            (response) => {},
             (error: HttpErrorResponse) => {
               console.log(error.message);
             }
-          )
+          );
         },
         (error: HttpErrorResponse) => {
           console.log(error.message);
         }
-      )
+      );
       this.currentDate = new Date();
     } else {
       this.currentDate = new Date();
