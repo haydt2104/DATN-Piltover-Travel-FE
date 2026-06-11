@@ -166,7 +166,7 @@ export class DestinationDetailComponent implements OnInit {
                 tourDateId: this.tourDateList[i].id,
                 amount: responses[i]
               });
-            }
+            }            
           },
           (error) => {
             console.error('Error:', error);
@@ -221,7 +221,11 @@ export class DestinationDetailComponent implements OnInit {
   }
 
   public getBookedCustomerNumber(tourDateId: number) {
-    return this.bookingData.find(data => data.tourDateId === tourDateId).amount
+    if (this.bookingData.length > 0) {
+      return this.bookingData.find(data => data.tourDateId === tourDateId).amount
+    } else {
+      return 0
+    }
   }
 
   public toCheckOut(dateId: number) {
